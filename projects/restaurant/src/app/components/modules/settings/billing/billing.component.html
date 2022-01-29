@@ -1,0 +1,207 @@
+<app-module-topnav [headings]="navHeading"></app-module-topnav>
+
+<div class="container">
+
+    <div class="row">
+        <div class="col-md-8">
+
+            <div class="row billing-form">
+                <div class="col-md-9">
+
+                    <h3 class="mb-3">Subscription Details</h3>
+
+                    <div class="row mb-2">
+                        <div class="col-md-4"><label>Subscription Type :</label></div>
+                        <div class="col-md-8">
+                            <smart-drop-down-list #subscriptionDropDownListReference class="w-100"
+                            (change)="setSubscription($event)">
+                                <smart-list-item *ngFor="let subscription of subscriptionSource" [value]="subscription">{{subscription}}</smart-list-item>
+                            </smart-drop-down-list>
+                        </div>
+                    </div>
+
+                    <div class="row mb-2">
+                        <div class="col-md-4"><label>Billing Frequency :</label></div>
+                        <div class="col-md-8">
+                            <smart-drop-down-list #frequencyDropDownListReference class="w-100"
+                            (change)="setFrequency($event)">
+                                <smart-list-item *ngFor="let frequency of frequencySource" [value]="frequency">{{frequency}}</smart-list-item>
+                            </smart-drop-down-list>
+                        </div>
+                    </div>
+
+                    <div class="row mb-2">
+                        <div class="col-md-4"><label>No. of Users :</label></div>
+                        <div class="col-md-4">
+                            <smart-numeric-text-box #usersNumericTextBoxReference class="w-100"
+                            [spinButtons]="true" [spinButtonsPosition]="'right'" [spinButtonsStep]="usersTextBoxIncrement">
+                            </smart-numeric-text-box>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <hr />
+
+            <!-- TODO: delete! component no longer being used -->
+
+            <!-- paymetn form component -->
+
+            <!-- <app-payment-form #paymentFormCompnentReference></app-payment-form> -->
+
+            <div class="row billing-form">
+                <div class="col-md-9">
+
+                    <h3 class="mb-3">Billing Details</h3>
+
+                    <div class="row mb-2">
+                        <div class="col-md-4"><label>First Name :</label></div>
+                        <div class="col-md-8">
+                            <smart-input #firstNameInputReference class="w-100"></smart-input>
+                        </div>
+                    </div>
+
+                    <div class="row mb-2">
+                        <div class="col-md-4"><label>Last Name :</label></div>
+                        <div class="col-md-8">
+                            <smart-input #lastNamerInputReference class="w-100"></smart-input>
+                        </div>
+                    </div>
+
+                    <div class="row mb-2">
+                        <div class="col-md-4"><label>Email :</label></div>
+                        <div class="col-md-8">
+                            <smart-input #emailInputReference class="w-100"></smart-input>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="row my-4">
+                <div class="col-md-9">
+                    <smart-button #buttonReference class="float-end page-control-button" (click)="saveSubscription()">Save</smart-button>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-md-4">
+
+            <div class="row mb-3">
+                <div class="col">
+                    <smart-button #buttonReference class="float-right" routerLink="/home/settings/payments-history">Billing History</smart-button>
+                </div>
+            </div>
+
+            <div class="card shadow">
+                <div class="card-body">
+
+                    <p class="h4">Billing Summary</p>
+
+                    <hr />
+
+                    <div *ngIf="selectedSubscription=='Individual'">
+                        <p class="h5 mb-2">Individual Subscription</p>
+                        <p class="m-0">Single User</p>
+                        <p class="m-0">Free Upgrades</p>
+                        <p class="m-0">1GB Storage</p>
+                    </div>
+                    <div *ngIf="selectedSubscription=='Small Team'">
+                        <p class="h5 mb-2">Small Team Subscription</p>
+                        <p class="m-0">10 Users</p>
+                        <p class="m-0">Free Upgrades</p>
+                        <p class="m-0">Technical Support</p>
+                        <p class="m-0">50GB Storage</p>
+                    </div>
+                    <div *ngIf="selectedSubscription=='Large Team'">
+                        <p class="h5 mb-2">Large Team Subscription</p>
+                        <p class="m-0">50 Users</p>
+                        <p class="m-0">Free Upgrades</p>
+                        <p class="m-0">Technical Support</p>
+                        <p class="m-0">2TB Storage</p>
+                    </div>
+                    <div *ngIf="selectedSubscription=='Comprehensive'">
+                        <p class="h5 mb-2">Comprehensive Subscription</p>
+                        <p class="m-0">Single User</p>
+                        <p class="m-0">Free Upgrades</p>
+                        <p class="m-0">Technical Support</p>
+                        <p class="m-0">Unlimited Storage</p>
+                        <p class="m-0">Customized Functions</p>
+                    </div>
+
+                    <br />
+
+                    <div *ngIf="selectedSubscription=='Individual'">
+                        <p class="h5"><strong>Free</strong></p>
+                    </div>
+                    <div *ngIf="selectedSubscription=='Small Team'">
+                        <div *ngIf="selectedFrequency=='Monthly'">
+                            <p class="h5 mb-2">Monthly Plan</p>
+                            <p class="h4 m-0"><strong>$19.99</strong></p>
+                        </div>
+                        <div *ngIf="selectedFrequency=='Yearly'">
+                            <p class="h5 mb-2">Yearly Plan</p>
+                            <p class="h4 m-0"><strong>$199.99</strong></p>
+                            <p class="m-0">Save $39.89 per 10 Users</p>
+                        </div>
+                    </div>
+                    <div *ngIf="selectedSubscription=='Large Team'">
+                        <div *ngIf="selectedFrequency=='Monthly'">
+                            <p class="h5 mb-2">Monthly Plan</p>
+                            <p class="h4 m-0"><strong>$74.99</strong></p>
+                        </div>
+                        <div *ngIf="selectedFrequency=='Yearly'">
+                            <p class="h5 mb-2">Yearly Plan</p>
+                            <p class="h4 m-0"><strong>$749.99</strong></p>
+                            <p class="m-0">Save $149.89 per 50 Users</p>
+                        </div>
+                    </div>
+                    <div *ngIf="selectedSubscription=='Comprehensive'">
+                        <button class="btn btn-primary">Contact Us</button>
+                    </div>
+
+                    <br />
+
+                    <div *ngIf="selectedSubscription=='Small Team'">
+                        <div *ngIf="selectedFrequency=='Monthly'">
+                            <p class="mb-2">Total Bill :</p>
+                            <p class="h3 m-0">
+                                ${{19.99 * (usersNumericTextBox.value / 10)}} / month
+                            </p>
+                        </div>
+                        <div *ngIf="selectedFrequency=='Yearly'">
+                            <p class="mb-2">Total Bill :</p>
+                            <p class="h3 m-0">
+                                ${{199.99 * (usersNumericTextBox.value / 10)}} / year
+                            </p>
+                        </div>
+                    </div>
+                    <div *ngIf="selectedSubscription=='Large Team'">
+                        <div *ngIf="selectedFrequency=='Monthly'">
+                            <p class="mb-2">Total Bill :</p>
+                            <p class="h3 m-0">
+                                ${{74.99 * (usersNumericTextBox.value / 50)}} / month
+                            </p>
+                        </div>
+                        <div *ngIf="selectedFrequency=='Yearly'">
+                            <p class="mb-2">Total Bill :</p>
+                            <p class="h3 m-0">
+                                ${{749.99 * (usersNumericTextBox.value / 50)}} / year
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- connection error prompt component -->
+
+<app-connection-toast #connectionToastComponentReference></app-connection-toast>

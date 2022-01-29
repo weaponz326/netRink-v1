@@ -1,0 +1,68 @@
+<button [hidden]="true" #openButtonElementReference data-bs-toggle="modal" data-bs-target="#selectNoteModal">
+    Launch demo modal
+</button>
+
+<div class="modal fade select-table-modal" id="selectNoteModal" tabindex="-1" aria-labelledby="selectNoteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header bg-light">
+                <span class="modal-title" id="selectNoteModalLabel">Select Personal Note</span>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <table class="table table-bordered table-sm w-100 page-table">
+                    <thead>
+                        <tr class="bg-light">
+                            <th width="50%">
+                                Subject
+                                <app-table-sorting #subjectSortingComponentReference
+                                [sortField]="'subject'" (sortDirection)="sortTable($event)"
+                                ></app-table-sorting>
+                            </th>
+                            <th width="25%">
+                                Created At
+                                <app-table-sorting #createdAtSortingComponentReference
+                                [sortField]="'created_at'" (sortDirection)="sortTable($event)"
+                                ></app-table-sorting>
+                            </th>
+                            <th width="25%">
+                                Last Updated
+                                <app-table-sorting #updatedAtSortingComponentReference
+                                [sortField]="'updated_at'" (sortDirection)="sortTable($event)"
+                                ></app-table-sorting>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let data of notesGridData" (dblclick)="selectRow(data)" class="table-pointer">
+                            <td>{{data?.subject}}</td>
+                            <td>{{data?.created_at | date}}</td>
+                            <td>{{data?.updated_at | date}}</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr class="bg-light">
+                            <td colspan="3">
+                                <app-table-pagination #tablePaginationComponentReference
+                                [currentPage]="currentPage" [totalPages]="totalPages" (pageSelected)="getNotes($event, 10, '')"
+                                ></app-table-pagination>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <button [hidden]="true" #closeButtonElementReference data-bs-toggle="modal" data-bs-target="#selectNoteModal">
+                Launch demo modal
+            </button>
+
+
+        </div>
+    </div>
+</div>
+
+<!-- connection error toast component -->
+
+<app-connection-toast #connectionToastComponentReference></app-connection-toast>

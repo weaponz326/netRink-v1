@@ -1,0 +1,59 @@
+<app-module-topnav [headings]="navHeading" [showPrint]="true" (print)="onPrint()"></app-module-topnav>
+
+<div class="container">
+
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <button class="btn btn-secondary page-add-btn" (click)="newBudget.openModal()">New Budget</button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-7">
+
+            <table class="table table-bordered table-sm w-100 page-table">
+                <thead>
+                    <tr class="bg-light">
+                        <th width="60%">
+                            Budget Name
+                            <app-table-sorting #budgetNameSortingComponentReference
+                            [sortField]="'budget_name'" (sortDirection)="sortTable($event)"
+                            ></app-table-sorting>
+                        </th>
+                        <th width="40%">
+                            Budget Type
+                            <app-table-sorting #budgetTypeSortingComponentReference
+                            [sortField]="'budget_type'" (sortDirection)="sortTable($event)"
+                            ></app-table-sorting>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let data of budgetGridData" (dblclick)="viewBudget(data.id)" class="table-pointer">
+                        <td>{{data?.budget_name}}</td>
+                        <td>{{data?.budget_type}}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr class="bg-light">
+                        <td colspan="2">
+                            <app-table-pagination #tablePaginationComponentReference
+                            [currentPage]="currentPage" [totalPages]="totalPages" (pageSelected)="getBudgets($event, 20, '')"
+                            ></app-table-pagination>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- new budget modal component -->
+
+<app-new-budget #newBudgetComponentReference></app-new-budget>
+
+<!-- connection error toast component -->
+
+<app-connection-toast #connectionToastComponentReference></app-connection-toast>

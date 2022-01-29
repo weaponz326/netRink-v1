@@ -1,0 +1,59 @@
+<app-module-topnav [headings]="navHeading" [showPrint]="true" (print)="onPrint()"></app-module-topnav>
+
+<div class="container">
+
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <button class="btn btn-secondary page-add-btn" (click)="newTaskGroup.openModal()">New Task Group</button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-7">
+
+            <table class="table table-bordered table-sm w-100 page-table">
+                <thead>
+                    <tr class="bg-light">
+                        <th width="65%">
+                            Task Group Name
+                            <app-table-sorting #taskGroupSortingComponentReference
+                            [sortField]="'task_group'" (sortDirection)="sortTable($event)"
+                            ></app-table-sorting>
+                        </th>
+                        <th width="35%">
+                            Created At
+                            <app-table-sorting #createdAtSortingComponentReference
+                            [sortField]="'created_at'" (sortDirection)="sortTable($event)"
+                            ></app-table-sorting>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let data of taskGroupsGridData" (dblclick)="viewTaskGroup(data.id)" class="table-pointer">
+                        <td>{{data?.task_group}}</td>
+                        <td>{{data?.created_at | date}}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr class="bg-light">
+                        <td colspan="2">
+                            <app-table-pagination #tablePaginationComponentReference
+                            [currentPage]="currentPage" [totalPages]="totalPages" (pageSelected)="getTaskGroups($event, 20, '')"
+                            ></app-table-pagination>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- new task group modal component -->
+
+<app-new-task-group #newTaskGroupComponentReference></app-new-task-group>
+
+<!-- connection error toast component -->
+
+<app-connection-toast #connectionToastComponentReference></app-connection-toast>

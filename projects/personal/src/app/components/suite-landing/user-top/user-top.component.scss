@@ -1,0 +1,11 @@
+@import url('../../../../../../application/src/assets/styles/landing.css');
+
+tr{
+  cursor: pointer;
+}
+
+td{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

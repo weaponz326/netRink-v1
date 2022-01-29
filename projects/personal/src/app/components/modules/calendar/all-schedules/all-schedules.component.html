@@ -1,0 +1,59 @@
+<app-module-topnav [headings]="navHeading" [showPrint]="true" (print)="onPrint()"></app-module-topnav>
+
+<div class="container">
+
+    <div class="row">
+        <div class="col-md-9">
+
+            <table class="table table-bordered table-sm w-100 page-table">
+                <thead>
+                    <tr class="bg-light">
+                        <th width="35%">
+                            Schedule
+                            <app-table-sorting #scheduleNameSortingComponentReference
+                            [sortField]="'schedule_name'" (sortDirection)="sortTable($event)"
+                            ></app-table-sorting>
+                        </th>
+                        <th width="23%">
+                            Start Date
+                            <app-table-sorting #startDateSortingComponentReference
+                            [sortField]="'start_date'" (sortDirection)="sortTable($event)"
+                            ></app-table-sorting>
+                        </th>
+                        <th width="23%">
+                            End Date
+                            <app-table-sorting #endDateSortingComponentReference
+                            [sortField]="'endDate'" (sortDirection)="sortTable($event)"
+                            ></app-table-sorting>
+                        </th>
+                        <th width="19%">
+                            Status
+                            <app-table-sorting #statusSortingComponentReference
+                            [sortField]="'status'" (sortDirection)="sortTable($event)"
+                            ></app-table-sorting>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let data of schedulesGridData">
+                        <td>{{data?.schedule_name}}</td>
+                        <td>{{data?.start_date | date}}</td>
+                        <td>{{data?.end_date | date}}</td>
+                        <td>{{data?.status}}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr class="bg-light">
+                        <td colspan="4">
+                            <app-table-pagination #tablePaginationComponentReference
+                            [currentPage]="currentPage" [totalPages]="totalPages" (pageSelected)="getAllSchedules($event, 20, '')"
+                            ></app-table-pagination>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+
+        </div>
+    </div>
+
+</div>
