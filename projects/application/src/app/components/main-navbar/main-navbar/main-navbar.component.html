@@ -4,7 +4,7 @@
         <a class="navbar-brand" [routerLink]="'/'">{{navBrand}}</a>
 
         <div *ngIf="!isForms">
-            <div *ngIf="this.isLogin; then loggedinBlock else notLoggedinBlock"></div>
+            <div *ngIf="this.isLoggedIn; then loggedinBlock else notLoggedinBlock"></div>
 
             <ng-template #notLoggedinBlock>
                 <div class="d-flex auth-btns">

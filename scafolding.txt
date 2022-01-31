@@ -144,8 +144,8 @@
 						- select task group (C)
 						- select task item (C)
 		+ services
-			- auth api (S)
-            - pdf print
+            - auth (S)
+            - pdf print (S)
 			+ modules
 				- portal api (S)
 				- settings api (S)
@@ -161,13 +161,15 @@
 				- accounts print (S)
 				- tasks print (S)
 		+ models
-			- portal model
-			- settings model
-			- calendar model
-			- budget model
-			- notes model
-			- accounts model
-			- tasks model
+            - user model (I)
+            + modules
+                - portal model (I)
+                - settings model (I)
+                - calendar model (I)
+                - budget model (I)
+                - notes model (I)
+                - accounts model (I)
+                - tasks model (I)
 		+ guards
 			- auth (G)
             + modules

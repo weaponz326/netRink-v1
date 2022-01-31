@@ -11,4 +11,15 @@ export const environment = {
   hotelUrl: "https://hotel-api.netrink.com/",
   shopUrl: "https://shop-api.netrink.com/",
   productionUrl: "https://production-api.netrink.com/",
+
+  firebase: {
+    apiKey: "xxxxxxxx-xxxxxxxx",
+    authDomain: "xxxxxxxxxxxxxxxxxxxxxxxx",
+    databaseURL: "xxxxxxxxxxxxxxxxxxxxxxxx",
+    projectId: "xxxxxxxx",
+    storageBucket: "xxxxxxxx",
+    messagingSenderId: "xxxxxx",
+    appId: "xxxxx",
+    measurementId: "xxxxxxxxxxxxxxxx"
+  }
 };

@@ -6,6 +6,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
+// import { AngularFireModule } from "@angular/fire";
+// import { AngularFireAuthModule } from "@angular/fire/auth";
+// import { AngularFirestoreModule } from '@angular/fire/firestore';
+
+import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
@@ -22,6 +27,9 @@ import { AppComponent } from './app.component';
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
+    // AngularFireModule.initializeApp(environment.firebase),
+    // AngularFireAuthModule,
+    // AngularFirestoreModule,
     AppRoutingModule,
   ],
   providers: [{provide: LocationStrategy, useClass: HashLocationStrategy}],

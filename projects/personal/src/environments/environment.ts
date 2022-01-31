@@ -15,6 +15,17 @@ export const environment = {
   hotelUrl: "http://localhost:8007/",               // url for hotel backend
   shopUrl: "http://localhost:8008/",                // url for shop backend
   productionUrl: "http://localhost:8009/",          // url for production backend
+
+  firebase: {
+    apiKey: "xxxxxxxx-xxxxxxxx",
+    authDomain: "xxxxxxxxxxxxxxxxxxxxxxxx",
+    databaseURL: "xxxxxxxxxxxxxxxxxxxxxxxx",
+    projectId: "xxxxxxxx",
+    storageBucket: "xxxxxxxx",
+    messagingSenderId: "xxxxxx",
+    appId: "xxxxx",
+    measurementId: "xxxxxxxxxxxxxxxx"
+  }
 };
 
 /*
