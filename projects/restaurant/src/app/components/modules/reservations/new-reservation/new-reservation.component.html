@@ -1,20 +1,29 @@
-<app-module-topnav [headings]="navHeading"></app-module-topnav>
+<button [hidden]="true" #buttonElementReference data-bs-toggle="modal" data-bs-target="#newReservationModal">
+    Launch demo modal
+</button>
 
-<div class="container">
+<div class="modal fade form-modal" id="newReservationModal" tabindex="-1" aria-labelledby="newReservationModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
 
-    <!-- reservation page form -->
+            <div class="modal-header bg-light">
+                <span class="modal-title" id="newReservationModalLabel">Add New Reservation</span>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
 
-    <app-reservation-form #reservationFormComponentReference></app-reservation-form>
+            <div class="modal-body">
 
-    <div class="row page-form">
-        <div class="col-md-6">
-            <smart-button #cancelButtonReference class="page-control-button float-end ms-1" routerLink="/home/reservations/all-reservations">Cancel</smart-button>
-            <smart-button #saveButtonReference class="page-control-button float-end ms-1" (click)="saveReservation()">Save</smart-button>
+                <!-- item form component -->
+
+                <app-reservation-form #reservationFormComponentReference></app-reservation-form>
+
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-secondary modal-form-btn" data-bs-dismiss="modal" (click)="saveReservation()">Save</button>
+                <button class="btn btn-sm btn-secondary modal-form-btn" data-bs-dismiss="modal">Cancel</button>
+            </div>
+
         </div>
     </div>
-
 </div>
-
-<!-- connection error prompt component -->
-
-<app-connection-toast #connectionToastComponentReference></app-connection-toast>

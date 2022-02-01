@@ -1,9 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { ButtonComponent } from 'smart-webcomponents-angular/button';
-
 import { CustomersApiService } from 'projects/restaurant/src/app/services/modules/customers-api/customers-api.service';
+
 import { CustomerFormComponent } from '../customer-form/customer-form.component';
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 
@@ -27,6 +26,8 @@ export class NewCustomerComponent implements OnInit {
     { text: "New Customer", url: "/home/customers/new-customer" },
   ];
 
+  isCustomerSaving = false;
+
   ngOnInit(): void {
   }
 
@@ -35,29 +36,33 @@ export class NewCustomerComponent implements OnInit {
 
     var customerData = {
       account: localStorage.getItem('restaurant_id'),
-      customer_code: this.customerForm.customerCodeInput.value,
-      phone: this.customerForm.phoneInput.value,
-      email: this.customerForm.emailInput.value,
-      address: this.customerForm.addressTextBox.value,
-      state: this.customerForm.stateInput.value,
-      city: this.customerForm.cityInput.value,
-      post_code: this.customerForm.postCodeInput.value,
-      allergies: this.customerForm.allergiesTextBox.value,
-      preferences: this.customerForm.preferencesTextBox.value,
+      customer_code: this.customerForm.customerForm.controls.customerCode.value,
+      customer_name: this.customerForm.customerForm.controls.customerName.value,
+      customer_type: this.customerForm.customerForm.controls.customerType.value,
+      phone: this.customerForm.customerForm.controls.phone.value,
+      email: this.customerForm.customerForm.controls.email.value,
+      address: this.customerForm.customerForm.controls.address.value,
+      state: this.customerForm.customerForm.controls.state.value,
+      city: this.customerForm.customerForm.controls.city.value,
+      allergies: this.customerForm.customerForm.controls.allergies.value,
+      preferences: this.customerForm.customerForm.controls.preferences.value,
     }
 
     console.log(customerData);
+    this.isCustomerSaving = true;
 
     this.customersApi.postCustomer(customerData)
       .subscribe(
         res => {
           console.log(res);
+          this.isCustomerSaving = false;
 
           sessionStorage.setItem('restaurant_customer_id', res.id);
           this.router.navigateByUrl('/suite/customers/view-customer');
         },
         err => {
           console.log(err);
+          this.isCustomerSaving = false;
           this.connectionToast.openToast();
         }
       )

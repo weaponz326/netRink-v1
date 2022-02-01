@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+
 
 @Component({
   selector: 'app-delivery-form',
@@ -9,7 +11,23 @@ export class DeliveryFormComponent implements OnInit {
 
   constructor() { }
 
+  deliveryForm: FormGroup = new FormGroup({});
+
+  selectedOrderId: any;
+
   ngOnInit(): void {
+    this.initItemForm();
+  }
+
+  initItemForm(){
+    this.deliveryForm = new FormGroup({
+      deliveryCode: new FormControl(''),
+      deliveryDate: new FormControl(''),
+      orderCode: new FormControl(''),
+      customerName: new FormControl(''),
+      deliveryLocation: new FormControl(''),
+      deliveryStatus: new FormControl(''),
+    })
   }
 
 }

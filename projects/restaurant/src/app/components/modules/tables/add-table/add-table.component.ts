@@ -1,9 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { ButtonComponent } from 'smart-webcomponents-angular/button';
-
 import { TablesApiService } from 'projects/restaurant/src/app/services/modules/tables-api/tables-api.service';
+
 import { TableFormComponent } from '../table-form/table-form.component';
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 
@@ -27,6 +26,8 @@ export class AddTableComponent implements OnInit {
     { text: "Add Table", url: "/home/tables/add-table" },
   ];
 
+  isTableSaving = false;
+
   ngOnInit(): void {
   }
 
@@ -35,25 +36,28 @@ export class AddTableComponent implements OnInit {
 
     var tableData = {
       account: localStorage.getItem('restaurant_id'),
-      table_number: this.tableForm.tableNumberInput.value,
-      table_type: this.tableForm.tableTypeInput.value,
-      capacity: this.tableForm.capacityNumericTextBox.value,
-      location: this.tableForm.locationInput.value,
-      table_status: this.tableForm.tableStatusDropDownList.value,
+      table_number: this.tableForm.tableForm.controls.tableNumber.value,
+      table_type: this.tableForm.tableForm.controls.tableType.value,
+      capacity: this.tableForm.tableForm.controls.capacity.value,
+      location: this.tableForm.tableForm.controls.location.value,
+      table_status: this.tableForm.tableForm.controls.tableStatus.value,
     }
 
     console.log(tableData);
+    this.isTableSaving = true;
 
     this.tablesApi.postTable(tableData)
       .subscribe(
         res => {
           console.log(res);
+          this.isTableSaving = false;
 
           sessionStorage.setItem('restaurant_table_id', res.id);
           this.router.navigateByUrl('/suite/tables/view-table');
         },
         err => {
           console.log(err);
+          this.isTableSaving = false;
           this.connectionToast.openToast();
         }
       )

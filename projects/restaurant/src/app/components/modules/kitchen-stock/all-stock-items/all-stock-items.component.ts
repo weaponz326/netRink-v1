@@ -137,7 +137,6 @@ export class AllStockItemsComponent implements OnInit {
         res => {
           console.log(res);
           this.itemsGridData.splice(this.deleteIndex, 1);
-          this.itemsGridData.splice(this.deleteIndex, 1);
         },
         err => {
           console.log(err);

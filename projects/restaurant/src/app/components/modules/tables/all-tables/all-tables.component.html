@@ -4,15 +4,54 @@
 
     <div class="row mb-3">
         <div class="col-md-12">
-            <smart-button #addTableButtonReference routerLink="/home/tables/add-table">Add Table</smart-button>
+            <button class="btn btn-secondary page-add-btn" routerLink="/home/tables/add-table">Add New Table</button>
         </div>
     </div>
 
     <div class="row">
         <div class="col-md-7">
-            <smart-grid #tablesGridReference class="w-100"
-            [dataSource]="dataSource" [columns]="columns" [sorting]="sorting" [editing]="editing">
-            </smart-grid>
+
+            <table class="table table-bordered table-sm w-100 page-table">
+                <thead>
+                    <tr class="bg-light">
+                        <th width="30%">
+                            Table No.
+                            <app-table-sorting #tableNumberSortingComponentReference
+                            [sortField]="'table_number'" (sortDirection)="sortTable($event)"
+                            ></app-table-sorting>
+                        </th>
+                        <th width="35%">
+                            Table Type
+                            <app-table-sorting #tableTypeSortingComponentReference
+                            [sortField]="'table_type'" (sortDirection)="sortTable($event)"
+                            ></app-table-sorting>
+                        </th>
+                        <th width="35%">
+                            Table Status
+                            <app-table-sorting #tableStatusSortingComponentReference
+                            [sortField]="'table_status'" (sortDirection)="sortTable($event)"
+                            ></app-table-sorting>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let data of tablesGridData" (dblclick)="viewTable(data.id)" class="table-pointer">
+                        <td>{{data?.table_number}}</td>
+                        <td>{{data?.table_type}}</td>
+                        <td>{{data?.table_status}}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr class="bg-light">
+                        <td colspan="3">
+                            <app-table-pagination #tablePaginationComponentReference
+                            [currentPage]="currentPage" [totalPages]="totalPages" (pageSelected)="getTables()"
+                            ></app-table-pagination>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+
         </div>
     </div>
 

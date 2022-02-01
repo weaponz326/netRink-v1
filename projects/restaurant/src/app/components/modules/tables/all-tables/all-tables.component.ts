@@ -1,10 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-
-import { ButtonComponent } from 'smart-webcomponents-angular/button';
-import { GridComponent, GridColumn, DataAdapter, Smart } from 'smart-webcomponents-angular/grid';
+import { Router } from '@angular/router';
 
 import { TablesApiService } from 'projects/restaurant/src/app/services/modules/tables-api/tables-api.service';
+
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
+import { TablePaginationComponent } from 'projects/personal/src/app/components/module-utilities/table-pagination/table-pagination.component'
+import { TableSortingComponent } from 'projects/personal/src/app/components/module-utilities/table-sorting/table-sorting.component'
 
 
 @Component({
@@ -14,25 +15,32 @@ import { ConnectionToastComponent } from 'projects/personal/src/app/components/m
 })
 export class AllTablesComponent implements OnInit {
 
-  constructor(private tablesApi: TablesApiService) { }
-
-  @ViewChild('addMenuTableButtonReference', { read: ButtonComponent, static: false }) addTableButton!: ButtonComponent;
-  @ViewChild('tablesGridReference', { read: GridComponent, static: false }) tablesGrid!: GridComponent;
+  constructor(
+    private router: Router,
+    private tablesApi: TablesApiService
+  ) { }
 
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
+  @ViewChild('tablePaginationComponentReference', { read: TablePaginationComponent, static: false }) tablePagination!: TablePaginationComponent;
+  @ViewChild('tableNumberSortingComponentReference', { read: TableSortingComponent, static: false }) tableNumberSorting!: TableSortingComponent;
+  @ViewChild('tableTypeSortingComponentReference', { read: TableSortingComponent, static: false }) tableTypeSorting!: TableSortingComponent;
+  @ViewChild('tableStatusSortingComponentReference', { read: TableSortingComponent, static: false }) tableStatusSorting!: TableSortingComponent;
 
   navHeading: any[] = [
     { text: "All Tables", url: "/home/tables/all-tables" },
   ];
 
-  sorting = { enabled: true }
-  filtering = { enabled: true }
-  dataSource = [];
-  columns: GridColumn[] = <GridColumn[]>[];
-  editing = {}
+  tablesGridData: any[] = [];
+
+  currentPage = 0;
+  totalPages = 0;
+  totalItems = 0;
 
   ngOnInit(): void {
-    this.initGrid();
+  }
+
+  ngAfterViewInit(): void {
+    this.getTables();
   }
 
   getTables(){
@@ -40,7 +48,10 @@ export class AllTablesComponent implements OnInit {
       .subscribe(
         res => {
           console.log(res);
-          this.dataSource = res;
+          this.tablesGridData = res;
+          this.currentPage = res.current_page;
+          this.totalPages = res.total_pages;
+          this.totalItems = res.count;
         },
         err => {
           console.log(err);
@@ -49,25 +60,26 @@ export class AllTablesComponent implements OnInit {
       )
   }
 
-  initGrid(){
-    this.dataSource = new Smart.DataAdapter (
-      <DataAdapter>{
-        id: 'id',
-        dataSource: this.getTables(),
-        dataFields:[
-          'id: string',
-          'table_number: string',
-          'table_type: string',
-          'table_status: string',
-        ]
-      }
-    );
+  viewTable(tableId: any){
+    console.log(tableId);
+    sessionStorage.setItem('restaurant_table_id', tableId);
 
-    this.columns = <GridColumn[]>[
-      { label: "Table Number", dataField: "table_number", width: "30%" },
-      { label: "Table Type", dataField: "table_type", width: "35%" },
-      { label: "Table Status", dataField: "table_status", width: "35%" },
-    ]
+    this.router.navigateByUrl('/home/tables/view-table');
+  }
+
+  sortTable(field: any){
+    console.log(field);
+    this.getTables();
+
+    if((field == 'table_number') || (field == "-table_number")){
+      this.tableNumberSorting.resetSort();
+    }
+    else if((field == 'table_type') || (field == "-table_type")){
+      this.tableTypeSorting.resetSort();
+    }
+    else if((field == 'table_status') || (field == "-table_status")){
+      this.tableStatusSorting.resetSort();
+    }
   }
 
   onPrint(){

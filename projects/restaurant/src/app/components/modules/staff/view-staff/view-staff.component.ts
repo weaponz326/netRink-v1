@@ -113,7 +113,7 @@ export class ViewStaffComponent implements OnInit {
     this.deleteModal.openModal();
   }
 
-  deleteMenuGroup(){
+  deleteStaff(){
     this.isStaffDeleting = true;
 
     this.staffApi.deleteStaff()

@@ -1,11 +1,14 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { ButtonComponent } from 'smart-webcomponents-angular/button';
-import { GridComponent, GridColumn, DataAdapter, Smart } from 'smart-webcomponents-angular/grid';
-
 import { DeliveriesApiService } from 'projects/restaurant/src/app/services/modules/deliveries-api/deliveries-api.service';
+
+import { NewDeliveryComponent } from '../new-delivery/new-delivery.component'
+import { EditDeliveryComponent } from '../edit-delivery/edit-delivery.component'
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
+import { TablePaginationComponent } from 'projects/personal/src/app/components/module-utilities/table-pagination/table-pagination.component'
+import { TableSortingComponent } from 'projects/personal/src/app/components/module-utilities/table-sorting/table-sorting.component'
+import { DeleteModalComponent } from 'projects/personal/src/app/components/module-utilities/delete-modal/delete-modal.component'
 
 
 @Component({
@@ -20,23 +23,35 @@ export class AllDeliveriesComponent implements OnInit {
     private deliveriesApi: DeliveriesApiService
   ) { }
 
-  @ViewChild('newDeliveryButtonReference', { read: ButtonComponent, static: false }) newDeliveryButton!: ButtonComponent;
-  @ViewChild('deliveriesGridReference', { read: GridComponent, static: false }) deliveriesGrid!: GridComponent;
-
+  @ViewChild('newDeliveryComponentReference', { read: NewDeliveryComponent, static: false }) newDelivery!: NewDeliveryComponent;
+  @ViewChild('editDeliveryComponentReference', { read: EditDeliveryComponent, static: false }) editDelivery!: EditDeliveryComponent;
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
+  @ViewChild('tablePaginationComponentReference', { read: TablePaginationComponent, static: false }) tablePagination!: TablePaginationComponent;
+  @ViewChild('deliveryCodeSortingComponentReference', { read: TableSortingComponent, static: false }) deliveryCodeSorting!: TableSortingComponent;
+  @ViewChild('deliveryDateSortingComponentReference', { read: TableSortingComponent, static: false }) deliveryDateSorting!: TableSortingComponent;
+  @ViewChild('orderCodeSortingComponentReference', { read: TableSortingComponent, static: false }) orderCodeSorting!: TableSortingComponent;
+  @ViewChild('deliveryLocationSortingComponentReference', { read: TableSortingComponent, static: false }) deliveryLocationSorting!: TableSortingComponent;
+  @ViewChild('deliveryStatusSortingComponentReference', { read: TableSortingComponent, static: false }) deliveryStatusSorting!: TableSortingComponent;
+  @ViewChild('deleteModalComponentReference', { read: DeleteModalComponent, static: false }) deleteModal!: DeleteModalComponent;
 
   navHeading: any[] = [
     { text: "All Deliveries", url: "/home/deliveries/all-deliveries" },
   ];
 
-  sorting = { enabled: true }
-  filtering = { enabled: true }
-  dataSource = [];
-  columns: GridColumn[] = <GridColumn[]>[];
-  editing = {}
+  deliveriesGridData: any[] = [];
+
+  currentPage = 0;
+  totalPages = 0;
+  totalDeliveries = 0;
+
+  deleteId = "";
+  deleteIndex = 0;
 
   ngOnInit(): void {
-    this.initGrid();
+  }
+
+  ngAfterViewInit(): void {
+    this.getDeliveries();
   }
 
   getDeliveries(){
@@ -44,7 +59,10 @@ export class AllDeliveriesComponent implements OnInit {
       .subscribe(
         res => {
           console.log(res);
-          this.dataSource = res;
+          this.deliveriesGridData = res;
+          this.currentPage = res.current_page;
+          this.totalPages = res.total_pages;
+          this.totalDeliveries = res.count;
         },
         err => {
           console.log(err);
@@ -53,27 +71,90 @@ export class AllDeliveriesComponent implements OnInit {
       )
   }
 
-  initGrid(){
-    this.dataSource = new Smart.DataAdapter (
-      <DataAdapter>{
-        id: 'id',
-        dataSource: this.getDeliveries(),
-        dataFields:[
-          'id: string',
-          'delivery_code: string',
-          'customer_name: string',
-          'delivery_date: string',
-          'delivery_status: string',
-        ]
-      }
-    );
+  sortTable(field: any){
+    console.log(field);
+    this.getDeliveries();
 
-    this.columns = <GridColumn[]>[
-      { label: "Delivery ID", dataField: "delivery_code", width: "20%" },
-      { label: "Customer Name", dataField: "customer_name", width: "40%" },
-      { label: "Delivery Date", dataField: "delivery_date", width: "20%" },
-      { label: "Delivery Status", dataField: "delivery_status", width: "20%" },
-    ]
+    if((field == 'delivery_code') || (field == "-delivery_code")){
+      this.deliveryCodeSorting.resetSort();
+    }
+    else if((field == 'delivery_date') || (field == "-delivery_date")){
+      this.deliveryDateSorting.resetSort();
+    }
+    else if((field == 'order_id') || (field == "-order_id")){
+      this.orderCodeSorting.resetSort();
+    }
+    else if((field == 'delivery_location') || (field == "-delivery_location")){
+      this.deliveryLocationSorting.resetSort();
+    }
+    else if((field == 'delivery_status') || (field == "-delivery_status")){
+      this.deliveryStatusSorting.resetSort();
+    }
+  }
+
+  postDelivery(data: any){
+    console.log(data);
+
+    this.deliveriesApi.postDelivery(data)
+      .subscribe(
+        res => {
+          console.log(res);
+
+          if(res.id){
+            this.deliveriesGridData.push(res);
+            this.newDelivery.resetForm();
+          }
+        },
+        err => {
+          console.log(err);
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  putDelivery(data: any){
+    console.log(data);
+
+    this.deliveriesApi.putDelivery(data.id, data)
+      .subscribe(
+        res => {
+          console.log(res);
+
+          if(res.id){
+            this.deliveriesGridData[data.index] = res;
+          }
+        },
+        err => {
+          console.log(err);
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  deleteDelivery(){
+    this.deliveriesApi.deleteDelivery(this.deleteId)
+      .subscribe(
+        res => {
+          console.log(res);
+          this.deliveriesGridData.splice(this.deleteIndex, 1);
+        },
+        err => {
+          console.log(err);
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  openEditDelivery(index: any){
+    console.log(index);
+    this.editDelivery.openModal(index, this.deliveriesGridData[index]);
+  }
+
+  confirmDelete(e: any){
+    this.deleteIndex = e.index;
+    this.deleteId = e.id;
+
+    this.deleteModal.openModal();
   }
 
   onPrint(){

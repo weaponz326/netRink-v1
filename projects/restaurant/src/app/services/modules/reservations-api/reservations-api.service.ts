@@ -34,12 +34,12 @@ export class ReservationsApiService {
     return this.http.get(this.restaurantUrl + "module-reservations/reservation/" + sessionStorage.getItem("restaurant_reservation_id"));
   }
 
-  public putReservation(reservationData: any): Observable<any>{
-    return this.http.put(this.restaurantUrl + "module-reservations/reservation/" + sessionStorage.getItem("restaurant_reservation_id"), reservationData);
+  public putReservation(reservationId: any, reservationData: any): Observable<any>{
+    return this.http.put(this.restaurantUrl + "module-reservations/reservation/" + reservationId, reservationData);
   }
 
-  public deleteReservation(): Observable<any>{
-    return this.http.delete(this.restaurantUrl + "module-reservations/reservation/" + sessionStorage.getItem("restaurant_reservation_id"));
+  public deleteReservation(reservationId: any): Observable<any>{
+    return this.http.delete(this.restaurantUrl + "module-reservations/reservation/" + reservationId);
   }
 
   // dashboard

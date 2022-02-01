@@ -1,11 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit, ViewChild, Output, EventEmitter, ElementRef } from '@angular/core';
 
-import { ButtonComponent } from 'smart-webcomponents-angular/button';
-
-import { ReservationsApiService } from 'projects/restaurant/src/app/services/modules/reservations-api/reservations-api.service';
 import { ReservationFormComponent } from '../reservation-form/reservation-form.component';
-import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 
 
 @Component({
@@ -15,51 +10,44 @@ import { ConnectionToastComponent } from 'projects/personal/src/app/components/m
 })
 export class NewReservationComponent implements OnInit {
 
-  constructor(
-    private router: Router,
-    private reservationsApi: ReservationsApiService
-  ) { }
+  constructor() { }
+
+  @Output() saveReservationEvent = new EventEmitter<any>();
+
+  @ViewChild('buttonElementReference', { read: ElementRef, static: false }) buttonElement!: ElementRef;
 
   @ViewChild('reservationFormComponentReference', { read: ReservationFormComponent, static: false }) reservationForm!: ReservationFormComponent;
-  @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
-
-  navHeading: any[] = [
-    { text: "New Reservation", url: "/home/reservations/new-reservation" },
-  ];
 
   ngOnInit(): void {
   }
 
-  saveReservation(){
-    console.log('u are saving a new reservation');
+  openModal(){
+    this.buttonElement.nativeElement.click();
+  }
 
-    var reservationData = {
-      account: localStorage.getItem('restaurant_id'),
-      customer: this.reservationForm.selectedCustomerId,
-      reservation_code: this.reservationForm.reservationCodeInput.value,
-      reservation_date: this.reservationForm.reservationDateTimePicker.value,
-      customer_name: this.reservationForm.customerNameInput.value,
-      number_guests: this.reservationForm.numberGuestsNumericTextBox.value,
-      number_tables: this.reservationForm.numberTablesNumericTextBox.value,
-      arrival_date: this.reservationForm.arrivalDateTimePicker.value,
-      reservation_status: this.reservationForm.reservationStatusDropDownList.value,
+  saveReservation(){
+    let data = {
+      account: localStorage.getReservation('restaurant_id'),
+      reservation_code: this.reservationForm.reservationForm.controls.reservationCode.value,
+      reservation_date: this.reservationForm.reservationForm.controls.reservationDate.value,
+      customer_name: this.reservationForm.reservationForm.controls.customerName.value,
+      number_guests: this.reservationForm.reservationForm.controls.numberGuests.value,
+      number_tables: this.reservationForm.reservationForm.controls.numberTables.value,
+      arrival_date: this.reservationForm.reservationForm.controls.arrivalDate.value,
+      status: this.reservationForm.reservationForm.controls.status.value,
     }
 
-    console.log(reservationData);
+    this.saveReservationEvent.emit(data);
+  }
 
-    this.reservationsApi.postReservation(reservationData)
-      .subscribe(
-        res => {
-          console.log(res);
-
-          sessionStorage.setItem('restaurant_reservation_id', res.id);
-          this.router.navigateByUrl('/suite/reservations/view-reservation');
-        },
-        err => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
+  resetForm(){
+    this.reservationForm.reservationForm.controls.reservationCode.setValue('');
+    this.reservationForm.reservationForm.controls.reservationDate.setValue('');
+    this.reservationForm.reservationForm.controls.customerName.setValue('');
+    this.reservationForm.reservationForm.controls.numberGuests.setValue('');
+    this.reservationForm.reservationForm.controls.numberTables.setValue('');
+    this.reservationForm.reservationForm.controls.arrivalDate.setValue('');
+    this.reservationForm.reservationForm.controls.status.setValue('');
   }
 
 }

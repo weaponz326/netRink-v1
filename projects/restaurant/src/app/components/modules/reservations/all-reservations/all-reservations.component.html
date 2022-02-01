@@ -4,20 +4,83 @@
 
     <div class="row mb-3">
         <div class="col-md-12">
-            <smart-button #newReservationButtonReference routerLink="/home/reservations/new-reservation">New Reservation</smart-button>
+            <button class="btn btn-secondary page-add-btn" (click)="newReservation.openModal()">New Reservation</button>
         </div>
     </div>
 
     <div class="row">
-        <div class="col-md-10">
-            <smart-grid #reservationsGridReference class="w-100"
-            [dataSource]="dataSource" [columns]="columns" [sorting]="sorting" [editing]="editing">
-            </smart-grid>
+        <div class="col-md-12">
+
+            <table class="table table-bordered table-sm w-100 page-table">
+                <thead>
+                    <tr class="bg-light">
+                        <th width="15%">
+                            Reservation ID
+                            <app-table-sorting #reservationCodeSortingComponentReference
+                            [sortField]="'reservation_code'" (sortDirection)="sortTable($event)"
+                            ></app-table-sorting>
+                        </th>
+                        <th width="20%">
+                            Reservation Date
+                            <app-table-sorting #reservationDateSortingComponentReference
+                            [sortField]="'reservation_date'" (sortDirection)="sortTable($event)"
+                            ></app-table-sorting>
+                        </th>
+                        <th width="25%">
+                            Customer Name
+                            <app-table-sorting #customerNameSortingComponentReference
+                            [sortField]="'customer_name'" (sortDirection)="sortTable($event)"
+                            ></app-table-sorting>
+                        </th>
+                        <th width="20%">
+                            Arrival Date
+                            <app-table-sorting #arrivalDateSortingComponentReference
+                            [sortField]="'arrival_date'" (sortDirection)="sortTable($event)"
+                            ></app-table-sorting>
+                        </th>
+                        <th width="20%">
+                            Status
+                            <app-table-sorting #statusSortingComponentReference
+                            [sortField]="'status'" (sortDirection)="sortTable($event)"
+                            ></app-table-sorting>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let data of reservationsGridData; index as i" (dblClick)="openEditReservation(i)" class="table-pointer">
+                        <td>{{data?.reservation_code}}</td>
+                        <td>{{data?.reservation_date | date}}</td>
+                        <td>{{data?.customer_name}}</td>
+                        <td>{{data?.arrival_date | date}}</td>
+                        <td>{{data?.status}}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr class="bg-light">
+                        <td colspan="5">
+                            <app-table-pagination #tablePaginationComponentReference
+                            [currentPage]="currentPage" [totalPages]="totalPages" (pageSelected)="getReservations()"
+                            ></app-table-pagination>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+
         </div>
     </div>
 
 </div>
 
-<!-- connection error prompt component -->
+<!-- new and edit reservation modal components -->
+
+<app-new-reservation #newReservationComponentReference (saveReservationEvent)="postReservation($event)"></app-new-reservation>
+
+<app-edit-reservation #editReservationComponentReference (saveReservationEvent)="putReservation($event)" (deleteReservation)="confirmDelete($event)"></app-edit-reservation>
+
+<!-- connection error toast component -->
 
 <app-connection-toast #connectionToastComponentReference></app-connection-toast>
+
+<!-- delete confirmation modal component -->
+
+<app-delete-modal #deleteModalComponentReference (confirmEvent)="deleteReservation()"></app-delete-modal>

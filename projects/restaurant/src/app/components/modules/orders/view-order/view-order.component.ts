@@ -109,7 +109,7 @@ export class ViewOrderComponent implements OnInit {
     this.deleteModal.openModal();
   }
 
-  deleteMenuGroup(){
+  deleteOrder(){
     this.isOrderDeleting = true;
 
     this.ordersApi.deleteOrder()

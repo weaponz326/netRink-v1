@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { ButtonComponent } from 'smart-webcomponents-angular/button';
-
 import { CustomersApiService } from 'projects/restaurant/src/app/services/modules/customers-api/customers-api.service';
+
 import { CustomerFormComponent } from '../customer-form/customer-form.component';
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
+import { DeleteModalComponent } from 'projects/personal/src/app/components/module-utilities/delete-modal/delete-modal.component'
 
 
 @Component({
@@ -22,11 +22,15 @@ export class ViewCustomerComponent implements OnInit {
 
   @ViewChild('customerFormComponentReference', { read: CustomerFormComponent, static: false }) customerForm!: CustomerFormComponent;
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
+  @ViewChild('deleteModalComponentReference', { read: DeleteModalComponent, static: false }) deleteModal!: DeleteModalComponent;
 
   navHeading: any[] = [
     { text: "All Customers", url: "/home/customers/all-customers" },
     { text: "View Customer", url: "/home/customers/view-customer" },
   ];
+
+  isCustomerSaving = false;
+  isCustomerDeleting = false;
 
   ngOnInit(): void {
   }
@@ -41,15 +45,16 @@ export class ViewCustomerComponent implements OnInit {
         res => {
           console.log(res);
 
-          this.customerForm.customerCodeInput.value = res.customer_code;
-          this.customerForm.phoneInput.value = res.phone;
-          this.customerForm.emailInput.value = res.email;
-          this.customerForm.addressTextBox.value = res.address;
-          this.customerForm.stateInput.value = res.state;
-          this.customerForm.cityInput.value = res.city;
-          this.customerForm.postCodeInput.value = res.post_code;
-          this.customerForm.allergiesTextBox.value = res.allergies;
-          this.customerForm.preferencesTextBox.value = res.preferences;
+          this.customerForm.customerForm.controls.customerCodeInput.setValue(res.customer_code);
+          this.customerForm.customerForm.controls.customerNameInput.setValue(res.customer_name);
+          this.customerForm.customerForm.controls.customerTypeInput.setValue(res.customer_type);
+          this.customerForm.customerForm.controls.phoneInput.setValue(res.phone);
+          this.customerForm.customerForm.controls.emailInput.setValue(res.email);
+          this.customerForm.customerForm.controls.addressTextBox.setValue(res.address);
+          this.customerForm.customerForm.controls.stateInput.setValue(res.state);
+          this.customerForm.customerForm.controls.cityInput.setValue(res.city);
+          this.customerForm.customerForm.controls.allergiesTextBox.setValue(res.allergies);
+          this.customerForm.customerForm.controls.preferencesTextBox.setValue(res.preferences);
         },
         err => {
           console.log(err);
@@ -63,29 +68,58 @@ export class ViewCustomerComponent implements OnInit {
 
     var customerData = {
       account: localStorage.getItem('restaurant_id'),
-      customer_code: this.customerForm.customerCodeInput.value,
-      phone: this.customerForm.phoneInput.value,
-      email: this.customerForm.emailInput.value,
-      address: this.customerForm.addressTextBox.value,
-      state: this.customerForm.stateInput.value,
-      city: this.customerForm.cityInput.value,
-      post_code: this.customerForm.postCodeInput.value,
-      allergies: this.customerForm.allergiesTextBox.value,
-      preferences: this.customerForm.preferencesTextBox.value,
+      customer_code: this.customerForm.customerForm.controls.customerCode.value,
+      customer_name: this.customerForm.customerForm.controls.customerName.value,
+      customer_type: this.customerForm.customerForm.controls.customerType.value,
+      phone: this.customerForm.customerForm.controls.phone.value,
+      email: this.customerForm.customerForm.controls.email.value,
+      address: this.customerForm.customerForm.controls.address.value,
+      state: this.customerForm.customerForm.controls.state.value,
+      city: this.customerForm.customerForm.controls.city.value,
+      allergies: this.customerForm.customerForm.controls.allergies.value,
+      preferences: this.customerForm.customerForm.controls.preferences.value,
     }
 
     console.log(customerData);
+    this.isCustomerSaving = true;
 
     this.customersApi.postCustomer(customerData)
       .subscribe(
         res => {
           console.log(res);
+          this.isCustomerSaving = false;
+        },
+        err => {
+          console.log(err);
+          this.isCustomerSaving = false;
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  confirmDelete(){
+    this.deleteModal.openModal();
+  }
+
+  deleteCustomer(){
+    this.isCustomerDeleting = true;
+
+    this.customersApi.deleteCustomer()
+      .subscribe(
+        res => {
+          console.log(res);
+
+          this.router.navigateByUrl('/home/customers/all-customers');
         },
         err => {
           console.log(err);
           this.connectionToast.openToast();
         }
       )
+  }
+
+  onPrint(){
+    console.log("lets start printing...");
   }
 
 }

@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, Output, EventEmitter, ElementRef } from '@angular/core';
+
+import { DeliveryFormComponent } from '../delivery-form/delivery-form.component';
+
 
 @Component({
   selector: 'app-edit-delivery',
@@ -9,7 +12,57 @@ export class EditDeliveryComponent implements OnInit {
 
   constructor() { }
 
+  @Output() saveDeliveryEvent = new EventEmitter<any>();
+  @Output() deleteDeliveryEvent = new EventEmitter<any>();
+
+  @ViewChild('buttonElementReference', { read: ElementRef, static: false }) buttonElement!: ElementRef;
+
+  @ViewChild('deliveryFormComponentReference', { read: DeliveryFormComponent, static: false }) deliveryForm!: DeliveryFormComponent;
+
+  selectedIndex: any = 0;
+  selectedId: any = "";
+
   ngOnInit(): void {
+  }
+
+  openModal(index: any, data: any){
+    this.selectedIndex = index;
+    this.selectedId = data.id;
+
+    this.deliveryForm.deliveryForm.controls.deliveryCode.setValue(data.delivery_code);
+    this.deliveryForm.deliveryForm.controls.deliveryDate.setValue(data.delivery_date);
+    this.deliveryForm.deliveryForm.controls.orderCode.setValue(data.order_code);
+    this.deliveryForm.deliveryForm.controls.customerName.setValue(data.customer_name);
+    this.deliveryForm.deliveryForm.controls.deliveryLocation.setValue(data.delivery_location);
+    this.deliveryForm.deliveryForm.controls.deliveryStatus.setValue(data.delivery_status);
+
+    this.buttonElement.nativeElement.click();
+  }
+
+  saveDelivery(){
+    let data = {
+      index: this.selectedIndex,
+      id: this.selectedId,
+
+      account: localStorage.getDelivery('restaurant_id'),
+      delivery_code: this.deliveryForm.deliveryForm.controls.deliveryCode.value,
+      delivery_date: this.deliveryForm.deliveryForm.controls.deliveryDate.value,
+      order_code: this.deliveryForm.deliveryForm.controls.orderCode.value,
+      customer_name: this.deliveryForm.deliveryForm.controls.customerName.value,
+      delivery_location: this.deliveryForm.deliveryForm.controls.deliveryLocation.value,
+      delivery_status: this.deliveryForm.deliveryForm.controls.deliveryStatus.value,
+    }
+
+    this.saveDeliveryEvent.emit(data);
+  }
+
+  deleteDelivery(){
+    let data = {
+      index: this.selectedIndex,
+      id: this.selectedId,
+    }
+
+    this.deleteDeliveryEvent.emit(data);
   }
 
 }

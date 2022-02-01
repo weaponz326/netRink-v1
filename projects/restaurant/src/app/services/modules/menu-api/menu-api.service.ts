@@ -5,6 +5,10 @@ import { Observable } from 'rxjs'
 import { environment } from 'projects/restaurant/src/environments/environment'
 import { EndpointsService } from 'projects/application/src/app/services/endpoints/endpoints.service';
 
+// import { AngularFireDatabase, AngularFireList, AngularFireObject } from '@angular/fire/compat/database';
+
+import { MenuGroup, MenuItem } from 'projects/restaurant/src/app/models/modules/menu-model';
+
 
 @Injectable({
   providedIn: 'root'
@@ -12,9 +16,50 @@ import { EndpointsService } from 'projects/application/src/app/services/endpoint
 export class MenuApiService {
 
   constructor(
+    // private db: AngularFireDatabase,
     private http: HttpClient,
     private endpoints: EndpointsService
   ) { }
+
+  // menuGroupsRef!: AngularFireList<any>;
+  // menuGroupRef!: AngularFireObject<any>;
+
+  // // Fetch menu group List
+  // getMenuGroupList() {
+  //   this.menuGroupsRef = this.db.list('menu-group-list');
+  //   return this.menuGroupsRef;
+  // }
+
+  // // Create menu group
+  // addMenuGroup(menuGroup: MenuGroup) {
+  //   this.menuGroupsRef.push({
+  //     menuGroup: menuGroup.menuGroup,
+  //     category: menuGroup.category,
+  //   })
+  // }
+
+  // // Fetch Single menu griup Object
+  // getMenuGroup(id: string) {
+  //   this.menuGroupRef = this.db.object('menu-group-list/' + id);
+  //   return this.menuGroupRef;
+  // }
+
+  // // Update menu group Object
+  // updateStudent(menuGroup: MenuGroup) {
+  //   this.menuGroupRef.update({
+  //     menuGroup: menuGroup.menuGroup,
+  //     category: menuGroup.category,
+  //   })
+  // }
+
+  // // Delete Student Object
+  // deleteStudent(id: string) {
+  //   this.menuGroupRef = this.db.object('menu-group-list/'+id);
+  //   this.menuGroupRef.remove();
+  // }
+
+
+
 
   restaurantUrl = environment.restaurantUrl;
 

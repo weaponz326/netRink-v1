@@ -1,8 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-
-import { InputComponent } from 'smart-webcomponents-angular/input';
-import { DropDownListComponent } from 'smart-webcomponents-angular/dropdownlist';
-import { NumericTextBoxComponent } from 'smart-webcomponents-angular/numerictextbox';
+import { FormControl, FormGroup } from '@angular/forms';
 
 
 @Component({
@@ -14,15 +11,20 @@ export class TableFormComponent implements OnInit {
 
   constructor() { }
 
-  @ViewChild('tableNumberInputReference', { read: InputComponent, static: false }) tableNumberInput!: InputComponent;
-  @ViewChild('tableTypeInputReference', { read: InputComponent, static: false }) tableTypeInput!: InputComponent;
-  @ViewChild('capacityNumericTextBoxReference', { read: NumericTextBoxComponent, static: false }) capacityNumericTextBox!: NumericTextBoxComponent;
-  @ViewChild('tableStatusDropDownListReference', { read: DropDownListComponent, static: false }) tableStatusDropDownList!: DropDownListComponent;
-  @ViewChild('locationInputReference', { read: InputComponent, static: false }) locationInput!: InputComponent;
-
-  statusSource: any[] = ["Occupied", "Vacant", "Need Cleaning"];
+  tableForm: FormGroup = new FormGroup({});
 
   ngOnInit(): void {
+    this.initTableForm();
+  }
+
+  initTableForm(){
+    this.tableForm = new FormGroup({
+      tableNumber: new FormControl(''),
+      tableType: new FormControl(''),
+      capacity: new FormControl(''),
+      location: new FormControl(''),
+      tableStatus: new FormControl(''),
+    })
   }
 
 }
