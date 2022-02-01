@@ -11,11 +11,7 @@
     <div class="row my-3">
 
         <div class="col-md-2 col-sm-6 text-center">
-            <smart-tooltip #portalTooltipReference [selector]="'portal'" [arrow]="true">
-                Interact with customers through netRink portal
-            </smart-tooltip>
-
-            <a id="portal" routerLink="/home/portal/dashboard">
+            <a id="portal" routerLink="/home/portal/dashboard" data-bs-toggle="tooltip" title="Interact with customers through netRink portal">
                 <figure>
                     <img src="assets/images/modules/portal.png" class="home-icons" />
                     <figcaption>Portal</figcaption>
@@ -24,11 +20,7 @@
         </div>
 
         <div class="col-md-2 col-sm-6 text-center">
-            <smart-tooltip #menuTooltipReference [selector]="'menu'" [arrow]="true">
-                Plan and organize all menu
-            </smart-tooltip>
-
-            <a id="menu" routerLink="/home/menu/dashboard">
+            <a id="menu" routerLink="/home/menu/dashboard" data-bs-toggle="tooltip" title="Plan and organize your menus">
                 <figure>
                     <img src="assets/images/modules/menu.png" class="home-icons" />
                     <figcaption>Menu</figcaption>
@@ -37,11 +29,7 @@
         </div>
 
         <div class="col-md-2 col-sm-6 text-center">
-            <smart-tooltip #staffTooltipReference [selector]="'staff'" [arrow]="true">
-                Manage all staff
-            </smart-tooltip>
-
-            <a id="staff" routerLink="/home/staff/dashboard">
+            <a id="staff" routerLink="/home/staff/dashboard" data-bs-toggle="tooltip" title="Manage all staff">
                 <figure>
                     <img src="assets/images/modules/staff.png" class="home-icons" />
                     <figcaption>Staff</figcaption>
@@ -50,11 +38,7 @@
         </div>
 
         <div class="col-md-2 col-sm-6 text-center">
-            <smart-tooltip #paymentsTooltipReference [selector]="'payments'" [arrow]="true">
-                Receive payment of bills from customers
-            </smart-tooltip>
-
-            <a id="payments" routerLink="/home/payments/dashboard">
+            <a id="payments" routerLink="/home/payments/dashboard" data-bs-toggle="tooltip" title="Receive payment of bills from customers">
                 <figure>
                     <img src="assets/images/modules/payments.png" class="home-icons" />
                     <figcaption>Payments</figcaption>
@@ -63,11 +47,7 @@
         </div>
 
         <div class="col-md-2 col-sm-6 text-center">
-            <smart-tooltip #ordersTooltipReference [selector]="'orders'" [arrow]="true">
-                Receive orders and automatically generate bills
-            </smart-tooltip>
-
-            <a id="orders" routerLink="/home/orders/dashboard">
+            <a id="orders" routerLink="/home/orders/dashboard" data-bs-toggle="tooltip" title="Receive orders and automatically generate bills">
                 <figure>
                     <img src="assets/images/modules/orders.png" class="home-icons" />
                     <figcaption>Orders</figcaption>
@@ -76,11 +56,7 @@
         </div>
 
         <div class="col-md-2 col-sm-6 text-center">
-            <smart-tooltip #kitchenStockTooltipReference [selector]="'kitchenStock'" [arrow]="true">
-                Keep track of the quantity dishes and items
-            </smart-tooltip>
-
-            <a id="kitchenStock" routerLink="/home/kitchen-stock/dashboard">
+            <a id="kitchenStock" routerLink="/home/kitchen-stock/dashboard" data-bs-toggle="tooltip" title="Keep track of the quantity of ingredients">
                 <figure>
                     <img src="assets/images/modules/kitchen_stock.png" class="home-icons" />
                     <figcaption>Kitchen Stock</figcaption>
@@ -96,11 +72,7 @@
     <div class="row my-3">
 
         <div class="col-md-2 col-sm-6 text-center">
-            <smart-tooltip #adminTooltipReference [selector]="'admin'" [arrow]="true">
-                Manage users and access levels
-            </smart-tooltip>
-
-            <a id="admin" routerLink="/home/admin/dashboard">
+            <a id="admin" routerLink="/home/admin/dashboard" data-bs-toggle="tooltip" title="Manage users and access levels">
                 <figure>
                     <img src="assets/images/modules/admin.png" class="home-icons" />
                     <figcaption>Admin</figcaption>
@@ -109,11 +81,7 @@
         </div>
 
         <div class="col-md-2 col-sm-6 text-center">
-            <smart-tooltip #deliveriesTooltipReference [selector]="'deliveries'" [arrow]="true">
-                Manage delivery operations
-            </smart-tooltip>
-
-            <a id="deliveries" routerLink="/home/deliveries/dashboard">
+            <a id="deliveries" routerLink="/home/deliveries/dashboard" data-bs-toggle="tooltip" title="Manage delivery operations">
                 <figure>
                     <img src="assets/images/modules/deliveries.png" class="home-icons" />
                     <figcaption>Deliveries</figcaption>
@@ -122,11 +90,7 @@
         </div>
 
         <div class="col-md-2 col-sm-6 text-center">
-            <smart-tooltip #customersTooltipReference [selector]="'customers'" [arrow]="true">
-                Keep track of all your guests and customers
-            </smart-tooltip>
-
-            <a id="customers" routerLink="/home/customers/dashboard">
+            <a id="customers" routerLink="/home/customers/dashboard" data-bs-toggle="tooltip" title="Keep track of all your guests and customers">
                 <figure>
                     <img src="assets/images/modules/customers.png" class="home-icons" />
                     <figcaption>Customers</figcaption>
@@ -135,11 +99,7 @@
         </div>
 
         <div class="col-md-2 col-sm-6 text-center">
-            <smart-tooltip #reservationsTooltipReference [selector]="'reservations'" [arrow]="true">
-                Receive and plan reservations
-            </smart-tooltip>
-
-            <a id="reservations" routerLink="/home/reservations/dashboard">
+            <a id="reservations" routerLink="/home/reservations/dashboard" data-bs-toggle="tooltip" title="Receive and plan reservations">
                 <figure>
                     <img src="assets/images/modules/reservations.png" class="home-icons" />
                     <figcaption>Reservations</figcaption>
@@ -148,11 +108,7 @@
         </div>
 
         <div class="col-md-2 col-sm-6 text-center">
-            <smart-tooltip #tablesTooltipReference [selector]="'tables'" [arrow]="true">
-                Organize tables and manage other table activities
-            </smart-tooltip>
-
-            <a id="tables" routerLink="/home/tables/dashboard">
+            <a id="tables" routerLink="/home/tables/dashboard" data-bs-toggle="tooltip" title="Organize tables and manage other table activities">
                 <figure>
                     <img src="assets/images/modules/tables.png" class="home-icons" />
                     <figcaption>Tables</figcaption>
@@ -161,11 +117,7 @@
         </div>
 
         <div class="col-md-2 col-sm-6 text-center">
-            <smart-tooltip #rosterTooltipReference [selector]="'roster'" [arrow]="true">
-                Plan and manage staff shift and schedules
-            </smart-tooltip>
-
-            <a id="roster" routerLink="/home/roster/dashboard">
+            <a id="roster" routerLink="/home/roster/dashboard" data-bs-toggle="tooltip" title="Plan and manage staff shift and schedules">
                 <figure>
                     <img src="assets/images/modules/roster.png" class="home-icons" />
                     <figcaption>Roster</figcaption>
@@ -181,11 +133,7 @@
     <div class="row my-3">
 
         <div class="col-md-2 col-sm-6 text-center">
-            <smart-tooltip #settingsTooltipReference [selector]="'settings'" [arrow]="true">
-                Set configuarations for your modules
-            </smart-tooltip>
-
-            <a id="settings" routerLink="/home/settings/dashboard">
+            <a id="settings" routerLink="/home/settings/dashboard" data-bs-toggle="tooltip" title="Set configuarations for your modules">
                 <figure>
                     <img src="assets/images/modules/settings.png" class="home-icons" />
                     <figcaption>Settings</figcaption>

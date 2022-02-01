@@ -1,10 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-
-import { ButtonComponent } from 'smart-webcomponents-angular/button';
-import { GridComponent, GridColumn, DataAdapter, Smart } from 'smart-webcomponents-angular/grid';
+import { Router } from '@angular/router';
 
 import { OrdersApiService } from 'projects/restaurant/src/app/services/modules/orders-api/orders-api.service';
+
+import { AddOrderComponent } from '../add-order/add-order.component'
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
+import { TablePaginationComponent } from 'projects/personal/src/app/components/module-utilities/table-pagination/table-pagination.component'
+import { TableSortingComponent } from 'projects/personal/src/app/components/module-utilities/table-sorting/table-sorting.component'
 
 
 @Component({
@@ -14,25 +16,33 @@ import { ConnectionToastComponent } from 'projects/personal/src/app/components/m
 })
 export class AllOrdersComponent implements OnInit {
 
-  constructor(private ordersApi: OrdersApiService) { }
+  constructor(
+    private router: Router,
+    private ordersApi: OrdersApiService
+  ) { }
 
-  @ViewChild('addOrderButtonReference', { read: ButtonComponent, static: false }) addOrderButton!: ButtonComponent;
-  @ViewChild('ordersGridReference', { read: GridComponent, static: false }) ordersGrid!: GridComponent;
-
+  @ViewChild('addOrderComponentReference', { read: AddOrderComponent, static: false }) addOrder!: AddOrderComponent;
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
+  @ViewChild('tablePaginationComponentReference', { read: TablePaginationComponent, static: false }) tablePagination!: TablePaginationComponent;
+  @ViewChild('orderCodeSortingComponentReference', { read: TableSortingComponent, static: false }) orderCodeSorting!: TableSortingComponent;
+  @ViewChild('customerNameSortingComponentReference', { read: TableSortingComponent, static: false }) customerNameSorting!: TableSortingComponent;
+  @ViewChild('orderDateSortingComponentReference', { read: TableSortingComponent, static: false }) orderDateSorting!: TableSortingComponent;
 
   navHeading: any[] = [
     { text: "All Orders", url: "/home/orders/all-orders" },
   ];
 
-  sorting = { enabled: true }
-  filtering = { enabled: true }
-  dataSource = [];
-  columns: GridColumn[] = <GridColumn[]>[];
-  editing = {}
+  ordersGridData: any[] = [];
+
+  currentPage = 0;
+  totalPages = 0;
+  totalItems = 0;
 
   ngOnInit(): void {
-    this.initGrid();
+  }
+
+  ngAfterViewInit(): void {
+    this.getOrders();
   }
 
   getOrders(){
@@ -40,7 +50,10 @@ export class AllOrdersComponent implements OnInit {
       .subscribe(
         res => {
           console.log(res);
-          this.dataSource = res;
+          this.ordersGridData = res;
+          this.currentPage = res.current_page;
+          this.totalPages = res.total_pages;
+          this.totalItems = res.count;
         },
         err => {
           console.log(err);
@@ -49,25 +62,26 @@ export class AllOrdersComponent implements OnInit {
       )
   }
 
-  initGrid(){
-    this.dataSource = new Smart.DataAdapter (
-      <DataAdapter>{
-        id: 'id',
-        dataSource: this.getOrders(),
-        dataFields:[
-          'id: string',
-          'order_code: string',
-          'customer_name: string',
-          'order_date: string',
-        ]
-      }
-    );
+  viewOrder(orderId: any){
+    console.log(orderId);
 
-    this.columns = <GridColumn[]>[
-      { label: "Order ID", dataField: "order_code", width: "25%" },
-      { label: "Customer Name", dataField: "customer_name", width: "50%" },
-      { label: "Order Date", dataField: "order_date", width: "25%" },
-    ]
+    sessionStorage.setItem("restaurant_order_id", orderId);
+    this.router.navigateByUrl("/home/orders/view-order");
+  }
+
+  sortTable(field: any){
+    console.log(field);
+    this.getOrders();
+
+    if((field == 'order_code') || (field == "-orderCode")){
+      this.orderCodeSorting.resetSort();
+    }
+    else if((field == 'customer_name') || (field == "-customer_name")){
+      this.customerNameSorting.resetSort();
+    }
+    else if((field == 'order_date') || (field == "-order_date")){
+      this.orderDateSorting.resetSort();
+    }
   }
 
   onPrint(){

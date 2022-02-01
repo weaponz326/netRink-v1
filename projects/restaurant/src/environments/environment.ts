@@ -8,6 +8,17 @@ export const environment = {
   baseUrl: "http://localhost:8000/",                // url for application backend
   personalUrl: "http://localhost:8001/",            // url for personal backend
   restaurantUrl: "http://localhost:8002/",          // url for restaurant backend
+
+  firebase: {
+    apiKey: "xxxxxxxx-xxxxxxxx",
+    authDomain: "xxxxxxxxxxxxxxxxxxxxxxxx",
+    databaseURL: "xxxxxxxxxxxxxxxxxxxxxxxx",
+    projectId: "xxxxxxxx",
+    storageBucket: "xxxxxxxx",
+    messagingSenderId: "xxxxxx",
+    appId: "xxxxx",
+    measurementId: "xxxxxxxxxxxxxxxx"
+  }
 };
 
 /*

@@ -8,9 +8,9 @@
 
     <div class="row page-form">
         <div class="col-md-12">
-            <smart-button #cancelButtonReference class="page-control-button float-end ms-1" routerLink="/home/staff/all-staff">Cancel</smart-button>
-            <smart-button #deleteButtonReference class="page-control-button float-end ms-1">Delete</smart-button>
-            <smart-button #saveButtonReference class="page-control-button float-end ms-1" (click)="saveStaff()">Save</smart-button>
+            <button type="button" class="btn btn-secondary btn-sm float-end ms-1 page-form-btn" routerLink="/home/staff/all-staff">Cancel</button>
+            <button type="button" class="btn btn-secondary btn-sm float-end ms-1 page-form-btn" (click)="confirmDelete()">Delete</button>
+            <button [disabled]="isStaffSaving" class="btn btn-secondary btn-sm float-end ms-1 page-form-btn" (click)="saveStaff()">Save</button>
         </div>
     </div>
 

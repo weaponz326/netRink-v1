@@ -4,15 +4,62 @@
 
     <div class="row mb-3">
         <div class="col-md-12">
-            <smart-button #newPaymentButtonReference routerLink="/home/payments/new-payment">New Payment</smart-button>
+            <button class="btn btn-secondary page-add-btn" routerLink="/home/payments/new-payment">New Payment</button>
         </div>
     </div>
 
     <div class="row">
         <div class="col-md-9">
-            <smart-grid #paymentsGridReference class="w-100"
-            [dataSource]="dataSource" [columns]="columns" [sorting]="sorting" [editing]="editing">
-            </smart-grid>
+
+            <table class="table table-bordered table-sm w-100 page-table">
+                <thead>
+                    <tr class="bg-light">
+                        <th width="20%">
+                            Payment ID
+                            <app-table-sorting #paymentCodeSortingComponentReference
+                            [sortField]="'payment_code'" (sortDirection)="sortTable($event)"
+                            ></app-table-sorting>
+                        </th>
+                        <th width="20%">
+                            Payment Date
+                            <app-table-sorting #paymentDateComponentReference
+                            [sortField]="'payment_date'" (sortDirection)="sortTable($event)"
+                            ></app-table-sorting>
+                        </th>
+                        <th width="40%">
+                            Customer Name
+                            <app-table-sorting #customerComponentReference
+                            [sortField]="'customer'" (sortDirection)="sortTable($event)"
+                            ></app-table-sorting>
+                        </th>
+                        <th width="20%">
+                            Amount
+                            <app-table-sorting #amountComponentReference
+                            [sortField]="'amount'" (sortDirection)="sortTable($event)"
+                            ></app-table-sorting>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let data of paymentsGridData" (dblclick)="viewPayment(data.id)" class="table-pointer">
+                        <td>{{data?.payment_code}}</td>
+                        <td>{{data?.payment_name}}</td>
+                        <td>{{data?.customer}}</td>
+                        <td>{{data?.amount}}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr class="bg-light">
+                        <td colspan="4">
+                            <app-table-pagination #tablePaginationComponentReference
+                            [currentPage]="currentPage" [totalPages]="totalPages" (pageSelected)="getPayments()"
+                            ></app-table-pagination>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+
+
         </div>
     </div>
 

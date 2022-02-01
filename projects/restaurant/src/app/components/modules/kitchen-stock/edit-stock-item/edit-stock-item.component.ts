@@ -1,11 +1,8 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
-
-import { ButtonComponent } from 'smart-webcomponents-angular/button';
+import { Component, OnInit, ViewChild, Output, EventEmitter, ElementRef } from '@angular/core';
 
 import { KitchenStockApiService } from 'projects/restaurant/src/app/services/modules/kitchen-stock-api/kitchen-stock-api.service';
+
 import { StockItemFormComponent } from '../stock-item-form/stock-item-form.component';
-import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 
 
 @Component({
@@ -16,70 +13,65 @@ import { ConnectionToastComponent } from 'projects/personal/src/app/components/m
 export class EditStockItemComponent implements OnInit {
 
   constructor(
-    private router: Router,
     private kitchenStockApi: KitchenStockApiService
   ) { }
 
+  @Output() saveItemEvent = new EventEmitter<any>();
+  @Output() deleteItemEvent = new EventEmitter<any>();
+
+  @ViewChild('buttonElementReference', { read: ElementRef, static: false }) buttonElement!: ElementRef;
+
   @ViewChild('stockItemFormComponentReference', { read: StockItemFormComponent, static: false }) stockItemForm!: StockItemFormComponent;
-  @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
 
   navHeading: any[] = [
     { text: "All Items", url: "/home/kitchen-stock/all-stock-items" },
     { text: "View Item", url: "/home/kitchen-stock/view-stock-item" },
   ];
 
+  selectedIndex: any = 0;
+  selectedId: any = "";
+
   ngOnInit(): void {
   }
 
-  ngAfterViewInit(): void {
-    this.getKitchenStock();
+  openModal(index: any, data: any){
+    this.selectedIndex = index;
+    this.selectedId = data.id;
+
+    this.stockItemForm.stockItemForm.controls.itemCode.setValue(data.item_code);
+    this.stockItemForm.stockItemForm.controls.itemName.setValue(data.item_name);
+    this.stockItemForm.stockItemForm.controls.category.setValue(data.category);
+    this.stockItemForm.stockItemForm.controls.itemType.setValue(data.item_type);
+    this.stockItemForm.stockItemForm.controls.quantity.setValue(data.quantity);
+    this.stockItemForm.stockItemForm.controls.refillOrdered.setValue(data.refill_ordered);
+
+    this.buttonElement.nativeElement.click();
   }
 
-  getKitchenStock(){
-    this.kitchenStockApi.getSingleItem()
-      .subscribe(
-        res => {
-          console.log(res);
+  saveItem(){
+    let data = {
+      index: this.selectedIndex,
+      id: this.selectedId,
 
-          this.stockItemForm.itemCodeInput.value = res.item_code;
-          this.stockItemForm.itemNameInput.value = res.item_name;
-          this.stockItemForm.categoryInput.value = res.category;
-          this.stockItemForm.itemTypeInput.value = res.item_type;
-          this.stockItemForm.quantityNumericTextBox.value = res.quantity;
-          this.stockItemForm.refillOrderedNumericTextBox.value = res.refill_ordered;
-        },
-        err => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
-  }
-
-  saveStockItem(){
-    console.log('u are saving a new payment');
-
-    var paymentData = {
       account: localStorage.getItem('restaurant_id'),
-      item_code: this.stockItemForm.itemCodeInput.value,
-      item_name: this.stockItemForm.itemNameInput.value,
-      category: this.stockItemForm.categoryInput.value,
-      item_type: this.stockItemForm.itemTypeInput.value,
-      quantity: this.stockItemForm.quantityNumericTextBox.value,
-      refill_ordered: this.stockItemForm.refillOrderedNumericTextBox.value,
+      item_code: this.stockItemForm.stockItemForm.controls.itemCode.value,
+      item_name: this.stockItemForm.stockItemForm.controls.itemName.value,
+      category: this.stockItemForm.stockItemForm.controls.category.value,
+      item_type: this.stockItemForm.stockItemForm.controls.itemType.value,
+      quantity: this.stockItemForm.stockItemForm.controls.quantity.value,
+      refill_ordered: this.stockItemForm.stockItemForm.controls.refillOrdered.value,
     }
 
-    console.log(paymentData);
+    this.saveItemEvent.emit(data);
+  }
 
-    this.kitchenStockApi.postItem(paymentData)
-      .subscribe(
-        res => {
-          console.log(res);
-        },
-        err => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
+  deleteItem(){
+    let data = {
+      index: this.selectedIndex,
+      id: this.selectedId,
+    }
+
+    this.deleteItemEvent.emit(data);
   }
 
 }

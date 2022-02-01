@@ -1,11 +1,11 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-
-import { ButtonComponent } from 'smart-webcomponents-angular/button';
-import { GridComponent, GridColumn, DataAdapter, Smart } from 'smart-webcomponents-angular/grid';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { MenuApiService } from 'projects/restaurant/src/app/services/modules/menu-api/menu-api.service';
-import { AllMenuItemsPrintComponent } from 'projects/restaurant/src/app/components/printing/menu-print/all-menu-items-print/all-menu-items-print.component'
+
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
+import { TablePaginationComponent } from 'projects/personal/src/app/components/module-utilities/table-pagination/table-pagination.component'
+import { TableSortingComponent } from 'projects/personal/src/app/components/module-utilities/table-sorting/table-sorting.component'
 
 
 @Component({
@@ -17,34 +17,40 @@ export class AllMenuItemsComponent implements OnInit {
 
   constructor(private menuApi: MenuApiService) { }
 
-  @ViewChild('menuItemsGridReference', { read: GridComponent, static: false }) menuItemsGrid!: GridComponent;
-
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
-  @ViewChild('allMenuItemsPrintComponentReference', { read: AllMenuItemsPrintComponent, static: false }) allMenuItemsPrint!: AllMenuItemsPrintComponent;
+  @ViewChild('tablePaginationComponentReference', { read: TablePaginationComponent, static: false }) tablePagination!: TablePaginationComponent;
+  @ViewChild('itemCodeSortingComponentReference', { read: TableSortingComponent, static: false }) itemCodeSorting!: TableSortingComponent;
+  @ViewChild('itemNameSortingComponentReference', { read: TableSortingComponent, static: false }) itemNameSorting!: TableSortingComponent;
+  @ViewChild('priceSortingComponentReference', { read: TableSortingComponent, static: false }) priceSorting!: TableSortingComponent;
+  @ViewChild('menuGroupSortingComponentReference', { read: TableSortingComponent, static: false }) menuGroupSorting!: TableSortingComponent;
+  @ViewChild('categorySortingComponentReference', { read: TableSortingComponent, static: false }) categorySorting!: TableSortingComponent;
 
   navHeading: any[] = [
     { text: "All Menu Items", url: "/home/menu/all-menu-items" },
   ];
 
-  sorting = { enabled: true }
-  filtering = { enabled: true }
-  dataSource = [];
-  columns: GridColumn[] = <GridColumn[]>[];
-  editing = {}
+  menuItemsGridData: any[] = [];
 
-  menuItemGridData = [];
+  currentPage = 0;
+  totalPages = 0;
+  totalItems = 0;
 
   ngOnInit(): void {
-    this.initGrid();
   }
 
-  getMenuItems(){
-    this.menuApi.getMenuItems()
+  ngAfterViewInit(): void {
+    this.getAllMenuItems();
+  }
+
+  getAllMenuItems(){
+    this.menuApi.getAllMenuItems()
       .subscribe(
         res => {
           console.log(res);
-          this.dataSource = res;
-          this.menuItemGridData = res;
+          this.menuItemsGridData = res.results;
+          this.currentPage = res.current_page;
+          this.totalPages = res.total_pages;
+          this.totalItems = res.count;
         },
         err => {
           console.log(err);
@@ -53,32 +59,29 @@ export class AllMenuItemsComponent implements OnInit {
       )
   }
 
-  initGrid(){
-    this.dataSource = new Smart.DataAdapter (
-      <DataAdapter>{
-        id: 'id',
-        dataSource: this.getMenuItems(),
-        dataFields:[
-          'id: string',
-          'item_code: string',
-          'item_name: string',
-          'price: string',
-          'category: string',
-        ]
-      }
-    );
+  sortTable(field: any){
+    console.log(field);
+    this.getAllMenuItems();
 
-    this.columns = <GridColumn[]>[
-      { label: "Item ID", dataField: "item_code", width: "20%" },
-      { label: "Item Name", dataField: "item_name", width: "45%" },
-      { label: "Price", dataField: "price", width: "15%" },
-      { label: "Category", dataField: "category", width: "20%" },
-    ]
+    if((field == 'item_code') || (field == "-item_code")){
+      this.itemCodeSorting.resetSort();
+    }
+    else if((field == 'item_name') || (field == "-item_name")){
+      this.itemNameSorting.resetSort();
+    }
+    else if((field == 'price') || (field == "-price")){
+      this.priceSorting.resetSort();
+    }
+    else if((field == 'menu_group') || (field == "-menu_group")){
+      this.menuGroupSorting.resetSort();
+    }
+    else if((field == 'category') || (field == "-category")){
+      this.categorySorting.resetSort();
+    }
   }
 
   onPrint(){
     console.log("lets start printing...");
-    this.allMenuItemsPrint.print();
   }
 
 }

@@ -34,12 +34,12 @@ export class KitchenStockApiService {
     return this.http.get(this.restaurantUrl + "module-kitchen-stock/stock-item/" + sessionStorage.getItem('restaurant_stock_item_id'));
   }
 
-  public putItem(itemData: any): Observable<any>{
-    return this.http.put(this.restaurantUrl + "module-kitchen-stock/stock-item/" + sessionStorage.getItem('restaurant_stock_item_id'), itemData);
+  public putItem(itemId: any, itemData: any): Observable<any>{
+    return this.http.put(this.restaurantUrl + "module-kitchen-stock/stock-item/" + itemId, itemData);
   }
 
-  public deleteItem(): Observable<any>{
-    return this.http.delete(this.restaurantUrl + "module-kitchen-stock/stock-item/" + sessionStorage.getItem('restaurant_stock_item_id'));
+  public deleteItem(itemId: any): Observable<any>{
+    return this.http.delete(this.restaurantUrl + "module-kitchen-stock/stock-item/" + itemId);
   }
 
   // dashboard

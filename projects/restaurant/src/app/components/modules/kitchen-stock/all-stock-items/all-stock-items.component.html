@@ -4,20 +4,90 @@
 
     <div class="row mb-3">
         <div class="col-md-12">
-            <smart-button #addItemButtonReference>New Item</smart-button>
+            <button class="btn btn-secondary page-add-btn" (click)="addStockItem.openModal()">Add New Item</button>
         </div>
     </div>
 
     <div class="row">
-        <div class="col-md-7">
-            <smart-grid #kitchenStockGridReference class="w-100"
-            [dataSource]="dataSource" [columns]="columns" [sorting]="sorting" [editing]="editing">
-            </smart-grid>
+        <div class="col-md-12">
+
+            <table class="table table-bordered table-sm w-100 page-table">
+                <thead>
+                    <tr class="bg-light">
+                        <th width="15%">
+                            Stock Item ID
+                            <app-table-sorting #itemCodeSortingComponentReference
+                            [sortField]="'item_code'" (sortDirection)="sortTable($event)"
+                            ></app-table-sorting>
+                        </th>
+                        <th width="25%">
+                            Stock Item Name
+                            <app-table-sorting #itemNameSortingComponentReference
+                            [sortField]="'item_name'" (sortDirection)="sortTable($event)"
+                            ></app-table-sorting>
+                        </th>
+                        <th width="10%">
+                            Quantity
+                            <app-table-sorting #quantitySortingComponentReference
+                            [sortField]="'quantity'" (sortDirection)="sortTable($event)"
+                            ></app-table-sorting>
+                        </th>
+                        <th width="20%">
+                            Category
+                            <app-table-sorting #categorySortingComponentReference
+                            [sortField]="'category'" (sortDirection)="sortTable($event)"
+                            ></app-table-sorting>
+                        </th>
+                        <th width="20%">
+                            Item Type
+                            <app-table-sorting #itemTypeSortingComponentReference
+                            [sortField]="'item_type'" (sortDirection)="sortTable($event)"
+                            ></app-table-sorting>
+                        </th>
+                        <th width="10%">
+                            Refill Ordered
+                            <app-table-sorting #refillOrderdSortingComponentReference
+                            [sortField]="'refill_ordered'" (sortDirection)="sortTable($event)"
+                            ></app-table-sorting>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let data of itemsGridData; index as i" (dblClick)="openEditItem(i)" class="table-pointer">
+                        <td>{{data?.item_code}}</td>
+                        <td>{{data?.item_name}}</td>
+                        <td>{{data?.quantity}}</td>
+                        <td>{{data?.item_type}}</td>
+                        <td>{{data?.category}}</td>
+                        <td>{{data?.refill_ordered}}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr class="bg-light">
+                        <td colspan="6">
+                            <app-table-pagination #tablePaginationComponentReference
+                            [currentPage]="currentPage" [totalPages]="totalPages" (pageSelected)="getItems()"
+                            ></app-table-pagination>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+
         </div>
     </div>
 
 </div>
 
-<!-- connection error prompt component -->
+<!-- add and edit item modal components -->
+
+<app-add-stock-item #addStockItemComponentReference (saveItemEvent)="postItem($event)"></app-add-stock-item>
+
+<app-edit-stock-item #editStockItemComponentReference (saveItemEvent)="putItem($event)" (deleteItem)="confirmDelete($event)"></app-edit-stock-item>
+
+<!-- connection error toast component -->
 
 <app-connection-toast #connectionToastComponentReference></app-connection-toast>
+
+<!-- delete confirmation modal component -->
+
+<app-delete-modal #deleteModalComponentReference (confirmEvent)="deleteItem()"></app-delete-modal>

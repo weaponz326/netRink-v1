@@ -4,29 +4,42 @@ import { MenuItemFormComponent } from '../menu-item-form/menu-item-form.componen
 
 
 @Component({
-  selector: 'app-add-menu-item',
-  templateUrl: './add-menu-item.component.html',
-  styleUrls: ['./add-menu-item.component.scss']
+  selector: 'app-edit-menu-item',
+  templateUrl: './edit-menu-item.component.html',
+  styleUrls: ['./edit-menu-item.component.scss']
 })
-export class AddMenuItemComponent implements OnInit {
+export class EditMenuItemComponent implements OnInit {
 
   constructor() { }
 
   @Output() saveMenuItemEvent = new EventEmitter<any>();
+  @Output() deleteMenuItemEvent = new EventEmitter<any>();
 
   @ViewChild('buttonElementReference', { read: ElementRef, static: false }) buttonElement!: ElementRef;
 
   @ViewChild('menuItemFormComponentReference', { read: MenuItemFormComponent, static: false }) menuItemForm!: MenuItemFormComponent;
 
+  selectedIndex: any = 0;
+  selectedId: any = "";
+
   ngOnInit(): void {
   }
 
-  openModal(){
+  openModal(index: any, data: any){
+    this.selectedIndex = index;
+    this.selectedId = data.id;
+
+    this.menuItemForm.menuItemForm.controls.itemCode.setValue(data.item_code);
+    this.menuItemForm.menuItemForm.controls.itemName.setValue(data.item_name);
+    this.menuItemForm.menuItemForm.controls.price.setValue(data.price);
+
     this.buttonElement.nativeElement.click();
   }
 
   saveMenuItem(){
     let data = {
+      index: this.selectedIndex,
+      id: this.selectedId,
       account: sessionStorage.getItem('restaurant_menu_item_id'),
       transaction_date: this.menuItemForm.menuItemForm.controls.itemCode.value,
       description: this.menuItemForm.menuItemForm.controls.itemName.value,
@@ -36,10 +49,13 @@ export class AddMenuItemComponent implements OnInit {
     this.saveMenuItemEvent.emit(data);
   }
 
-  resetForm(){
-    this.menuItemForm.menuItemForm.controls.transactionDate.setValue('');
-    this.menuItemForm.menuItemForm.controls.description.setValue('');
-    this.menuItemForm.menuItemForm.controls.transactionType.setValue('');
+  deleteMenuItem(){
+    let data = {
+      index: this.selectedIndex,
+      id: this.selectedId,
+    }
+
+    this.deleteMenuItemEvent.emit(data);
   }
 
 }

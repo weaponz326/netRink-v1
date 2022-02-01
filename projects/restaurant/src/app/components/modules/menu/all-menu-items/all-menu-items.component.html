@@ -3,22 +3,67 @@
 <div class="container">
 
     <div class="row">
-        <div class="col-md-9">
+        <div class="col-md-10">
 
-            <smart-grid #menuItemsGridReference class="w-100"
-            [dataSource]="dataSource" [columns]="columns" [sorting]="sorting" [editing]="editing">
-            </smart-grid>
+            <table class="table table-bordered table-sm w-100 page-table">
+                <thead>
+                    <tr class="bg-light">
+                        <th width="15%">
+                            Item ID
+                            <app-table-sorting #itemCodeSortingComponentReference
+                            [sortField]="'item_code'" (sortDirection)="sortTable($event)"
+                            ></app-table-sorting>
+                        </th>
+                        <th width="30%">
+                            Item Name
+                            <app-table-sorting #itemNameSortingComponentReference
+                            [sortField]="'item_name'" (sortDirection)="sortTable($event)"
+                            ></app-table-sorting>
+                        </th>
+                        <th width="15%">
+                            Price
+                            <app-table-sorting #priceSortingComponentReference
+                            [sortField]="'price'" (sortDirection)="sortTable($event)"
+                            ></app-table-sorting>
+                        </th>
+                        <th width="20%">
+                            Menu Group
+                            <app-table-sorting #menuItemSortingComponentReference
+                            [sortField]="'menu_group'" (sortDirection)="sortTable($event)"
+                            ></app-table-sorting>
+                        </th>
+                        <th width="20%">
+                            Category
+                            <app-table-sorting #categorySortingComponentReference
+                            [sortField]="'category'" (sortDirection)="sortTable($event)"
+                            ></app-table-sorting>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let data of menuItemsGridData" class="table-pointer">
+                        <td>{{data?.item_code}}</td>
+                        <td>{{data?.item_name}}</td>
+                        <td>{{data?.price}}</td>
+                        <td>{{data?.menu_group}}</td>
+                        <td>{{data?.category}}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr class="bg-light">
+                        <td colspan="5">
+                            <app-table-pagination #tablePaginationComponentReference
+                            [currentPage]="currentPage" [totalPages]="totalPages" (pageSelected)="getAllMenuItems()"
+                            ></app-table-pagination>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
 
         </div>
     </div>
 
 </div>
-
-<!-- print components -->
-
-<app-all-menu-items-print #allMenuItemsPrintComponentReference
-[hidden]="true" [menuItemGridData]="menuItemGridData">
-</app-all-menu-items-print>
 
 <!-- connection error prompt component -->
 

@@ -42,7 +42,12 @@ export class MenuApiService {
     return this.http.delete(this.restaurantUrl + "module-menu/menu-group/" + sessionStorage.getItem('restaurant_menu_group_id'));
   }
 
-  // create and get all menu items belonging to user
+  // get all menu items belonging to a user
+  public getAllMenuItems(): Observable<any>{
+    return this.http.get(this.restaurantUrl + "module-menu/menu-item?account=" + localStorage.getItem('restaurant_id'));
+  }
+
+  // create and get all menu items belonging to a menu group
 
   public getMenuItems(): Observable<any>{
     return this.http.get(this.restaurantUrl + "module-menu/menu-item?account=" + sessionStorage.getItem('restaurant_menu_group_id'));

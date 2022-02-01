@@ -4,16 +4,61 @@
 
     <div class="row mb-3">
         <div class="col-md-12">
-            <smart-button #newStaffButtonReference routerLink="/home/staff/new-staff">New Staff</smart-button>
+            <button class="btn btn-secondary page-add-btn" routerLink="/home/staff/new-staff">New Staff</button>
         </div>
     </div>
 
     <div class="row">
         <div class="col-md-9">
-            <smart-grid #staffGridReference class="w-100"
-            [dataSource]="dataSource" [columns]="columns" [sorting]="sorting" [editing]="editing"
-            (onRowDoubleClick)="viewStaff($event)">
-            </smart-grid>
+
+            <table class="table table-bordered table-sm w-100 page-table">
+                <thead>
+                    <tr class="bg-light">
+                        <th width="15%">
+                            Staff ID
+                            <app-table-sorting #staffCodeSortingComponentReference
+                            [sortField]="'staff_code'" (sortDirection)="sortTable($event)"
+                            ></app-table-sorting>
+                        </th>
+                        <th width="35%">
+                            Staff Name
+                            <app-table-sorting #staffNameSortingComponentReference
+                            [sortField]="'staff_name'" (sortDirection)="sortTable($event)"
+                            ></app-table-sorting>
+                        </th>
+                        <th width="25%">
+                            Department
+                            <app-table-sorting #departmentSortingComponentReference
+                            [sortField]="'department'" (sortDirection)="sortTable($event)"
+                            ></app-table-sorting>
+                        </th>
+                        <th width="25%">
+                            Job
+                            <app-table-sorting #jobSortingComponentReference
+                            [sortField]="'job'" (sortDirection)="sortTable($event)"
+                            ></app-table-sorting>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let data of staffGridData" (dblclick)="viewStaff(data.id)" class="table-pointer">
+                        <td>{{data?.staff_code}}</td>
+                        <td>{{data?.staff_name}}</td>
+                        <td>{{data?.department}}</td>
+                        <td>{{data?.job}}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr class="bg-light">
+                        <td colspan="4">
+                            <app-table-pagination #tablePaginationComponentReference
+                            [currentPage]="currentPage" [totalPages]="totalPages" (pageSelected)="getStaff()"
+                            ></app-table-pagination>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+
         </div>
     </div>
 

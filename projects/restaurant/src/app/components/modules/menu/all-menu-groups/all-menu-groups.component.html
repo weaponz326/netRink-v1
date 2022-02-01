@@ -2,28 +2,57 @@
 
 <div #print class="container">
 
-    <!-- <div class="row mb-3">
+    <div class="row mb-3">
         <div class="col-md-12">
-            <smart-button #newMenuGroupButtonReference (click)="menuGroupGrid.beginEdit(1)">New Menu Group</smart-button>
+            <button class="btn btn-secondary page-add-btn" (click)="newMenuGroup.openModal()">New Menu Group</button>
         </div>
-    </div> -->
+    </div>
 
     <div class="row">
-        <div class="col-md-8">
-            <smart-grid #menuGroupGridReference class="w-100"
-            [dataSource]="dataSource" [columns]="columns" [sorting]="sorting" [editing]="editing" [onRowInserted]="onRowInserted"
-            (rowDoubleClick)="onRowDoubleClick($event)">
-            </smart-grid>
+        <div class="col-md-7">
+
+            <table class="table table-bordered table-sm w-100 page-table">
+                <thead>
+                    <tr class="bg-light">
+                        <th width="60%">
+                            Menu Group
+                            <app-table-sorting #menuGroupSortingComponentReference
+                            [sortField]="'menu_group'" (sortDirection)="sortTable($event)"
+                            ></app-table-sorting>
+                        </th>
+                        <th width="40%">
+                            Category
+                            <app-table-sorting #categorySortingComponentReference
+                            [sortField]="'category'" (sortDirection)="sortTable($event)"
+                            ></app-table-sorting>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let data of menuGroupGridData" (dblclick)="viewMenuGroup(data.id)" class="table-pointer">
+                        <td>{{data?.menu_group}}</td>
+                        <td>{{data?.category}}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr class="bg-light">
+                        <td colspan="2">
+                            <app-table-pagination #tablePaginationComponentReference
+                            [currentPage]="currentPage" [totalPages]="totalPages" (pageSelected)="getMenuGroups()"
+                            ></app-table-pagination>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+
         </div>
     </div>
 
 </div>
 
-<!-- print components -->
+<!-- new menu group modal comopnent -->
 
-<app-all-menu-groups-print #allMenuGroupsPrintComponentReference
-[hidden]="true" [menuGroupGridData]="menuGroupGridData">
-</app-all-menu-groups-print>
+<app-new-menu-group #newMenuGroupComponentReference></app-new-menu-group>
 
 <!-- connection error prompt component -->
 

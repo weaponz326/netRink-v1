@@ -1,9 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { ButtonComponent } from 'smart-webcomponents-angular/button';
-
 import { StaffApiService } from 'projects/restaurant/src/app/services/modules/staff-api/staff-api.service';
+
 import { StaffFormComponent } from '../staff-form/staff-form.component';
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 
@@ -27,6 +26,8 @@ export class NewStaffComponent implements OnInit {
     { text: "New Staff", url: "/home/staff/new-staff" },
   ];
 
+  isStaffSaving = false;
+
   ngOnInit(): void {
   }
 
@@ -35,36 +36,39 @@ export class NewStaffComponent implements OnInit {
 
     var staffData = {
       account: localStorage.getItem('restaurant_id'),
-      first_name: this.staffForm.firstNameInput.value,
-      last_name: this.staffForm.lastNameInput.value,
-      sex: this.staffForm.sexDropDownList.value,
-      // date_of_birth: this.staffForm.dobCustomWidget.value,
-      photo: this.staffForm.photoCustomWidget.image,
-      nationality: this.staffForm.nationalityInput.value,
-      religion: this.staffForm.religionInput.value,
-      phone: this.staffForm.phoneInput.value,
-      email: this.staffForm.emailInput.value,
-      address: this.staffForm.addressTextBox.value,
-      state: this.staffForm.stateInput.value,
-      city: this.staffForm.cityInput.value,
-      post_code: this.staffForm.postCodeInput.value,
-      staff_code: this.staffForm.staffCodeInput.value,
-      department: this.staffForm.departmentInput.value,
-      job: this.staffForm.jobInput.value,
+      first_name: this.staffForm.staffForm.controls.firstName.value,
+      last_name: this.staffForm.staffForm.controls.lastName.value,
+      sex: this.staffForm.staffForm.controls.sex.value,
+      // date_of_birth: this.staffForm.staffForm.controls.dobCustomWidget.value,
+      // photo: this.staffForm.staffForm.controls.photoCustomWidget.image,
+      nationality: this.staffForm.staffForm.controls.nationality.value,
+      religion: this.staffForm.staffForm.controls.religion.value,
+      phone: this.staffForm.staffForm.controls.phone.value,
+      email: this.staffForm.staffForm.controls.email.value,
+      address: this.staffForm.staffForm.controls.address.value,
+      state: this.staffForm.staffForm.controls.state.value,
+      city: this.staffForm.staffForm.controls.city.value,
+      post_code: this.staffForm.staffForm.controls.postCode.value,
+      staff_code: this.staffForm.staffForm.controls.staffCode.value,
+      department: this.staffForm.staffForm.controls.department.value,
+      job: this.staffForm.staffForm.controls.job.value,
     }
 
     console.log(staffData);
+    this.isStaffSaving = true;
 
     this.staffApi.postStaff(staffData)
       .subscribe(
         res => {
           console.log(res);
+          this.isStaffSaving = false;
 
           sessionStorage.setItem('staff_id', res.id);
           this.router.navigateByUrl('/suite/staff/view-staff');
         },
         err => {
           console.log(err);
+          this.isStaffSaving = false;
           this.connectionToast.openToast();
         }
       )

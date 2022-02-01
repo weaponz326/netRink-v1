@@ -1,12 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-
-import { ButtonComponent } from 'smart-webcomponents-angular/button';
-import { GridComponent, GridColumn, DataAdapter, Smart } from 'smart-webcomponents-angular/grid';
-import { InputComponent } from 'smart-webcomponents-angular/input';
+import { FormControl, FormGroup } from '@angular/forms';
 
 import { MenuApiService } from 'projects/restaurant/src/app/services/modules/menu-api/menu-api.service';
+
+import { MenuItemsComponent } from '../menu-items/menu-items.component'
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
+import { DeleteModalComponent } from 'projects/personal/src/app/components/module-utilities/delete-modal/delete-modal.component'
 
 
 @Component({
@@ -21,29 +21,33 @@ export class ViewMenuGroupComponent implements OnInit {
     private menuApi: MenuApiService,
   ) { }
 
-  @ViewChild('menuGroupInputReference', { read: InputComponent, static: false }) menuGroupInput!: InputComponent;
-  @ViewChild('categoryInputReference', { read: InputComponent, static: false }) categoryInput!: InputComponent;
-  @ViewChild('menuItemsGridReference', { read: GridComponent, static: false }) menuItemsGrid!: GridComponent;
-
+  @ViewChild('menuItemsComponentReference', { read: MenuItemsComponent, static: false }) menuItems!: MenuItemsComponent;
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
+  @ViewChild('deleteModalComponentReference', { read: DeleteModalComponent, static: false }) deleteModal!: DeleteModalComponent;
 
   navHeading: any[] = [
     { text: "All Menu Groups", url: "/home/menu/all-menu-groups" },
     { text: "View Menu Group", url: "/home/menu/view-menu-group" },
   ];
 
-  sorting = { enabled: true }
-  filtering = { enabled: true }
-  dataSource = [];
-  columns: GridColumn[] = <GridColumn[]>[];
-  editing = {}
+  menuGroupForm: FormGroup = new FormGroup({});
+
+  isMenuGroupSaving: boolean = false;
+  isMenuGroupDeleting: boolean = false;
 
   ngOnInit(): void {
-    this.initGrid();
+    this.initBudgetForm();
   }
 
   ngAfterViewInit(): void {
     this.getMenuGroup();
+  }
+
+  initBudgetForm(){
+    this.menuGroupForm = new FormGroup({
+      menuGroup: new FormControl(''),
+      category: new FormControl('')
+    })
   }
 
   getMenuGroup(){
@@ -51,8 +55,8 @@ export class ViewMenuGroupComponent implements OnInit {
       .subscribe(
         res => {
           console.log(res);
-          this.menuGroupInput.value = res.menu_group;
-          this.categoryInput.value = res.category;
+          this.menuGroupForm.controls.menuGroup.setValue(res.menu_group);
+          this.menuGroupForm.controls.category.setValue(res.category);
         },
         err => {
           console.log(err);
@@ -61,22 +65,26 @@ export class ViewMenuGroupComponent implements OnInit {
       )
   }
 
-  saveMenuGroup(){
+  putMenuGroup(){
     console.log("u are updating a menu group");
 
     var groupData = {
       account: localStorage.getItem('restaurant_id'),
-      menu_group: this.menuGroupInput.value,
-      category: this.categoryInput.value,
+      menu_group: this.menuGroupForm.controls.menuGroup.value,
+      category: this.menuGroupForm.controls.category.value
     }
+
+    this.isMenuGroupSaving = true;
 
     this.menuApi.putMenuGroup(groupData)
       .subscribe(
         res => {
           console.log(res);
+          this.isMenuGroupSaving = false;
         },
         err => {
           console.log(err);
+          this.isMenuGroupSaving = false;
           this.connectionToast.openToast();
         }
       )
@@ -84,80 +92,25 @@ export class ViewMenuGroupComponent implements OnInit {
     console.log(groupData);
   }
 
+  confirmDelete(){
+    this.deleteModal.openModal();
+  }
+
   deleteMenuGroup(){
-    console.log("dude... u are gonna delete the menu group?");
-  }
+    this.isMenuGroupDeleting = true;
 
-  deleteConfirmationSelected(value: string){
-    if (value == 'yes'){
-      this.menuApi.deleteMenuGroup()
-        .subscribe(
-          res => {
-            console.log(res);
-
-            this.router.navigateByUrl('/home/menu/all-menu-group');
-          },
-          err => {
-            console.log(err);
-            this.connectionToast.openToast();
-          }
-        )
-    }
-  }
-
-  getMenuItems(){
-    this.menuApi.getMenuItems()
+    this.menuApi.deleteMenuGroup()
       .subscribe(
         res => {
           console.log(res);
-          this.dataSource = res;
+
+          this.router.navigateByUrl('/home/menu/all-menu-group');
         },
         err => {
           console.log(err);
           this.connectionToast.openToast();
         }
       )
-  }
-
-  initGrid(){
-    this.dataSource = new Smart.DataAdapter (
-      <DataAdapter>{
-        id: 'id',
-        dataSource: this.getMenuItems(),
-        dataFields:[
-          'id: string',
-          'item_code: string',
-          'item_name: string',
-          'price: string',
-        ]
-      }
-    );
-
-    this.columns = <GridColumn[]>[
-      { label: "Item ID", dataField: "item_code", width: "25%" },
-      { label: "Item Name", dataField: "item_name", width: "50%" },
-      { label: "Price", dataField: "price", width: "25%", cellsFormat: "c2", editor: "numberInput" },
-    ]
-
-    this.editing = {
-      enabled: true,
-      action: "none",
-      addNewRow: {
-        visible: true,
-        position: 'near',
-      },
-      addDialog: {
-        enabled: true,
-        header: "Add New Menu Item"
-      },
-      dialog: {
-        enabled: true
-      },
-      commandColumn: {
-        visible: true,
-        position: 'far'
-      }
-    }
   }
 
   onPrint(){

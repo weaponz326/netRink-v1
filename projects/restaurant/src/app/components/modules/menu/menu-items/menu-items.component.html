@@ -1,0 +1,36 @@
+<div class="row mb-3">
+    <div class="col-md-12">
+        <button class="btn btn-secondary page-add-btn" (click)="addMenuItem.openModal()">Add Item</button>
+    </div>
+</div>
+
+<table class="table table-bordered table-sm w-100 page-table">
+    <thead>
+        <tr class="bg-light">
+            <th width="25%">Item ID</th>
+            <th width="50%">Item Name</th>
+            <th width="25%">Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let data of menuItemsGridData; index as i" (dblClick)="openEditMenuItem(i)">
+            <td>{{data?.item_code}}</td>
+            <td>{{data?.item_name}}</td>
+            <td>{{data?.price}}</td>
+        </tr>
+    </tbody>
+</table>
+
+<!-- add and edit menu-item modal components -->
+
+<app-add-menu-item #addMenuItemComponentReference (saveMenuItemEvent)="postMenuItem($event)"></app-add-menu-item>
+
+<app-edit-menu-item #editMenuItemComponentReference (saveMenuItemEvent)="putMenuItem($event)" (deleteMenuItem)="confirmDelete($event)"></app-edit-menu-item>
+
+<!-- connection error toast component -->
+
+<app-connection-toast #connectionToastComponentReference></app-connection-toast>
+
+<!-- delete confirmation modal component -->
+
+<app-delete-modal #deleteModalComponentReference (confirmEvent)="deleteMenuItem()"></app-delete-modal>

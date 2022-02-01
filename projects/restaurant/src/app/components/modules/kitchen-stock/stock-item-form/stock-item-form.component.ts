@@ -1,7 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-
-import { InputComponent } from 'smart-webcomponents-angular/input';
-import { NumericTextBoxComponent } from 'smart-webcomponents-angular/numerictextbox';
+import { FormControl, FormGroup } from '@angular/forms';
 
 
 @Component({
@@ -13,14 +11,23 @@ export class StockItemFormComponent implements OnInit {
 
   constructor() { }
 
-  @ViewChild('itemCodeInputReference', { read: InputComponent, static: false }) itemCodeInput!: InputComponent;
-  @ViewChild('itemNameInputReference', { read: InputComponent, static: false }) itemNameInput!: InputComponent;
-  @ViewChild('categoryInputReference', { read: InputComponent, static: false }) categoryInput!: InputComponent;
-  @ViewChild('itemTypeInputReference', { read: InputComponent, static: false }) itemTypeInput!: InputComponent;
-  @ViewChild('quantityNumericTextBoxReference', { read: NumericTextBoxComponent, static: false }) quantityNumericTextBox!: NumericTextBoxComponent;
-  @ViewChild('refillOrderedNumericTextBoxReference', { read: NumericTextBoxComponent, static: false }) refillOrderedNumericTextBox!: NumericTextBoxComponent;
+  stockItemForm: FormGroup = new FormGroup({});
+
+  selectedMenuItemId: any;
 
   ngOnInit(): void {
+    this.initItemForm();
+  }
+
+  initItemForm(){
+    this.stockItemForm = new FormGroup({
+      itemCode: new FormControl(''),
+      itemName: new FormControl(''),
+      category: new FormControl(''),
+      itemType: new FormControl(''),
+      quantity: new FormControl(''),
+      refillOrdered: new FormControl(''),
+    })
   }
 
 }

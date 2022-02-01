@@ -1,11 +1,8 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
-
-import { ButtonComponent } from 'smart-webcomponents-angular/button';
+import { Component, OnInit, ViewChild, Output, EventEmitter, ElementRef } from '@angular/core';
 
 import { KitchenStockApiService } from 'projects/restaurant/src/app/services/modules/kitchen-stock-api/kitchen-stock-api.service';
+
 import { StockItemFormComponent } from '../stock-item-form/stock-item-form.component';
-import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 
 
 @Component({
@@ -16,12 +13,14 @@ import { ConnectionToastComponent } from 'projects/personal/src/app/components/m
 export class AddStockItemComponent implements OnInit {
 
   constructor(
-    private router: Router,
     private kitchenStockApi: KitchenStockApiService
   ) { }
 
+  @Output() saveItemEvent = new EventEmitter<any>();
+
+  @ViewChild('buttonElementReference', { read: ElementRef, static: false }) buttonElement!: ElementRef;
+
   @ViewChild('stockItemFormComponentReference', { read: StockItemFormComponent, static: false }) stockItemForm!: StockItemFormComponent;
-  @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
 
   navHeading: any[] = [
     { text: "New Item", url: "/home/kitchen-stock/add-stock-item" },
@@ -30,34 +29,31 @@ export class AddStockItemComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  saveStockItem(){
-    console.log('u are saving a new payment');
+  openModal(){
+    this.buttonElement.nativeElement.click();
+  }
 
-    var paymentData = {
+  saveItem(){
+    let data = {
       account: localStorage.getItem('restaurant_id'),
-      item_code: this.stockItemForm.itemCodeInput.value,
-      item_name: this.stockItemForm.itemNameInput.value,
-      category: this.stockItemForm.categoryInput.value,
-      item_type: this.stockItemForm.itemTypeInput.value,
-      quantity: this.stockItemForm.quantityNumericTextBox.value,
-      refill_ordered: this.stockItemForm.refillOrderedNumericTextBox.value,
+      item_code: this.stockItemForm.stockItemForm.controls.itemCode.value,
+      item_name: this.stockItemForm.stockItemForm.controls.itemName.value,
+      category: this.stockItemForm.stockItemForm.controls.category.value,
+      item_type: this.stockItemForm.stockItemForm.controls.itemType.value,
+      quantity: this.stockItemForm.stockItemForm.controls.quantity.value,
+      refill_ordered: this.stockItemForm.stockItemForm.controls.refillOrdered.value,
     }
 
-    console.log(paymentData);
+    this.saveItemEvent.emit(data);
+  }
 
-    this.kitchenStockApi.postItem(paymentData)
-      .subscribe(
-        res => {
-          console.log(res);
-
-          sessionStorage.setItem('restaurant_stock_item_id', res.id);
-          this.router.navigateByUrl('/home/kitchen-stock/view-stock-item');
-        },
-        err => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
+  resetForm(){
+    this.stockItemForm.stockItemForm.controls.itemCode.setValue('');
+    this.stockItemForm.stockItemForm.controls.itemName.setValue('');
+    this.stockItemForm.stockItemForm.controls.category.setValue('');
+    this.stockItemForm.stockItemForm.controls.itemType.setValue('');
+    this.stockItemForm.stockItemForm.controls.quantity.setValue('');
+    this.stockItemForm.stockItemForm.controls.refillOrdered.setValue('');
   }
 
 }

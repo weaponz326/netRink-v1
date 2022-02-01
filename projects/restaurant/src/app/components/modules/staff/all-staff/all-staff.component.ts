@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { ButtonComponent } from 'smart-webcomponents-angular/button';
-import { GridComponent, GridColumn, DataAdapter, Smart } from 'smart-webcomponents-angular/grid';
-
 import { StaffApiService } from 'projects/restaurant/src/app/services/modules/staff-api/staff-api.service';
+
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
+import { TablePaginationComponent } from 'projects/personal/src/app/components/module-utilities/table-pagination/table-pagination.component'
+import { TableSortingComponent } from 'projects/personal/src/app/components/module-utilities/table-sorting/table-sorting.component'
 
 
 @Component({
@@ -20,23 +20,28 @@ export class AllStaffComponent implements OnInit {
     private staffApi: StaffApiService
   ) { }
 
-  @ViewChild('newStaffButtonReference', { read: ButtonComponent, static: false }) newStaffGroupButton!: ButtonComponent;
-  @ViewChild('staffGridReference', { read: GridComponent, static: false }) staffGrid!: GridComponent;
-
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
+  @ViewChild('tablePaginationComponentReference', { read: TablePaginationComponent, static: false }) tablePagination!: TablePaginationComponent;
+  @ViewChild('staffCodeSortingComponentReference', { read: TableSortingComponent, static: false }) staffCodeSorting!: TableSortingComponent;
+  @ViewChild('staffNameSortingComponentReference', { read: TableSortingComponent, static: false }) staffNameSorting!: TableSortingComponent;
+  @ViewChild('departmentSortingComponentReference', { read: TableSortingComponent, static: false }) departmentSorting!: TableSortingComponent;
+  @ViewChild('jobSortingComponentReference', { read: TableSortingComponent, static: false }) jobSorting!: TableSortingComponent;
 
   navHeading: any[] = [
     { text: "All Staff", url: "/home/staff/all-staff" },
   ];
 
-  sorting = { enabled: true }
-  filtering = { enabled: true }
-  dataSource = [];
-  columns: GridColumn[] = <GridColumn[]>[];
-  editing = {}
+  staffGridData: any[] = [];
+
+  currentPage = 0;
+  totalPages = 0;
+  totalItems = 0;
 
   ngOnInit(): void {
-    this.initGrid();
+  }
+
+  ngAfterViewInit(): void {
+    this.getStaff();
   }
 
   getStaff(){
@@ -44,7 +49,10 @@ export class AllStaffComponent implements OnInit {
       .subscribe(
         res => {
           console.log(res);
-          this.dataSource = res;
+          this.staffGridData = res;
+          this.currentPage = res.current_page;
+          this.totalPages = res.total_pages;
+          this.totalItems = res.count;
         },
         err => {
           console.log(err);
@@ -53,34 +61,29 @@ export class AllStaffComponent implements OnInit {
       )
   }
 
-  viewStaff(event: any){
-    console.log(event.detail.row.data.id);
-    sessionStorage.setItem('restaurant_staff_id', event.detail.row.data.id);
+  viewStaff(staffId: any){
+    console.log(staffId);
+    sessionStorage.setItem('restaurant_staff_id', staffId);
 
     this.router.navigateByUrl('/home/staff/view-staff');
   }
 
-  initGrid(){
-    this.dataSource = new Smart.DataAdapter (
-      <DataAdapter>{
-        id: 'id',
-        dataSource: this.getStaff(),
-        dataFields:[
-          'id: string',
-          'staff_code: string',
-          'staff_name: string',
-          'department: string',
-          'job: string',
-        ]
-      }
-    );
+  sortTable(field: any){
+    console.log(field);
+    this.getStaff();
 
-    this.columns = <GridColumn[]>[
-      { label: "Staff ID", dataField: "staff_code", width: "15%" },
-      { label: "Staff Name", dataField: "staff_name", width: "37%" },
-      { label: "Department", dataField: "department", width: "24%" },
-      { label: "Job", dataField: "job", width: "24%" }
-    ]
+    if((field == 'staff_code') || (field == "-staff_code")){
+      this.staffCodeSorting.resetSort();
+    }
+    else if((field == 'staff_name') || (field == "-staff_name")){
+      this.staffNameSorting.resetSort();
+    }
+    else if((field == 'department') || (field == "-department")){
+      this.departmentSorting.resetSort();
+    }
+    else if((field == 'job') || (field == "-job")){
+      this.jobSorting.resetSort();
+    }
   }
 
   onPrint(){

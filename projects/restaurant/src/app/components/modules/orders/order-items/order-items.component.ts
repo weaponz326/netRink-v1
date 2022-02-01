@@ -1,10 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
-import { ButtonComponent } from 'smart-webcomponents-angular/button';
-import { GridComponent, GridColumn, DataAdapter, Smart } from 'smart-webcomponents-angular/grid';
-
 import { OrdersApiService } from 'projects/restaurant/src/app/services/modules/orders-api/orders-api.service';
+
+import { AddItemComponent } from '../add-item/add-item.component'
+import { EditItemComponent } from '../edit-item/edit-item.component'
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
+import { DeleteModalComponent } from 'projects/personal/src/app/components/module-utilities/delete-modal/delete-modal.component'
 
 
 @Component({
@@ -16,18 +17,23 @@ export class OrderItemsComponent implements OnInit {
 
   constructor(private ordersApi: OrdersApiService) { }
 
-  @ViewChild('itemsGridReference', { read: GridComponent, static: false }) itemsGrid!: GridComponent;
-
+  @ViewChild('addItemComponentReference', { read: AddItemComponent, static: false }) addItem!: AddItemComponent;
+  @ViewChild('editItemComponentReference', { read: EditItemComponent, static: false }) editItem!: EditItemComponent;
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
+  @ViewChild('deleteModalComponentReference', { read: DeleteModalComponent, static: false }) deleteModal!: DeleteModalComponent;
 
-  sorting = { enabled: true }
-  filtering = { enabled: true }
-  dataSource = [];
-  columns: GridColumn[] = <GridColumn[]>[];
-  editing = {}
+  itemsGridData: any[] = [];
+
+  totalPrice = 0;
+
+  deleteId = "";
+  deleteIndex = 0;
 
   ngOnInit(): void {
-    this.initGrid();
+  }
+
+  ngAfterViewInit(): void {
+    this.getItems();
   }
 
   getItems(){
@@ -35,7 +41,8 @@ export class OrderItemsComponent implements OnInit {
       .subscribe(
         res => {
           console.log(res);
-          this.dataSource = res;
+          this.itemsGridData = res;
+          this.calculateTotalPrice();
         },
         err => {
           console.log(err);
@@ -44,26 +51,77 @@ export class OrderItemsComponent implements OnInit {
       )
   }
 
-  initGrid(){
-    this.dataSource = new Smart.DataAdapter (
-      <DataAdapter>{
-        id: 'id',
-        dataSource: this.getItems(),
-        dataFields:[
-          'id: string',
-          'item_code: string',
-          'item_name: string',
-          'price: string',
-        ]
-      }
-    );
+  calculateTotalPrice(){
+    this.totalPrice = this.itemsGridData.reduce((total, {price}) => total + Number(price), 0);
+    console.log(this.totalPrice);
+  }
 
-    this.columns = <GridColumn[]>[
-      { label: "Menu Item", dataField: "menu_item", width: "45%" },
-      { label: 'Price', dataField: 'price', width: "20%" },
-      { label: 'Quantity', dataField: 'quantity', width: "15%" },
-      { label: "Total Price", dataField: "total_price", width: "20%" }
-    ]
+  postItem(data: any){
+    console.log(data);
+
+    this.ordersApi.postItem(data)
+      .subscribe(
+        res => {
+          console.log(res);
+
+          if(res.id){
+            this.itemsGridData.push(res);
+            this.calculateTotalPrice();
+            this.addItem.resetForm();
+          }
+        },
+        err => {
+          console.log(err);
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  putItem(data: any){
+    console.log(data);
+
+    this.ordersApi.putItem(data.id, data)
+      .subscribe(
+        res => {
+          console.log(res);
+
+          if(res.id){
+            this.itemsGridData[data.index] = res;
+            this.calculateTotalPrice();
+          }
+        },
+        err => {
+          console.log(err);
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  deleteItem(){
+    this.ordersApi.deleteItem(this.deleteId)
+      .subscribe(
+        res => {
+          console.log(res);
+          this.itemsGridData.splice(this.deleteIndex, 1);
+          this.itemsGridData.splice(this.deleteIndex, 1);
+        },
+        err => {
+          console.log(err);
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  openEditItem(index: any){
+    console.log(index);
+    this.editItem.openModal(index, this.itemsGridData[index]);
+  }
+
+  confirmDelete(e: any){
+    this.deleteIndex = e.index;
+    this.deleteId = e.id;
+
+    this.deleteModal.openModal();
   }
 
 }

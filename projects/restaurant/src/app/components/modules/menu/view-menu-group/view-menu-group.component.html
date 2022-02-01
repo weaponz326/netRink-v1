@@ -5,36 +5,43 @@
     <div class="row page-form">
         <div class="col-md-6">
 
-            <div class="row mb-1">
-                <div class="col-md-4"><label class="float-end">Menu Group :</label></div>
-                <div class="col-md-8">
-                    <smart-input #menuGroupInputReference class="w-100"></smart-input>
-                </div>
-            </div>
+            <form class="page-form" [formGroup]="menuGroupForm" (ngSubmit)="putMenuGroup()">
 
-            <div class="row mb-1">
-                <div class="col-md-4"><label class="float-end">Category :</label></div>
-                <div class="col-md-8">
-                    <smart-input #categoryInputReference class="w-100"></smart-input>
-                </div>
-            </div>
+                <h4 class="mb-3">Budget Details</h4>
 
-            <hr />
-
-            <div class="row">
-                <div class="col-md-12">
-                    <smart-button #cancelButtonReference class="page-control-button float-end ms-1" routerLink="/home/menu/all-menu-groups">Cancel</smart-button>
-                    <smart-button #deleteButtonReference class="page-control-button float-end ms-1" (click)="deleteMenuGroup()">Delete</smart-button>
-                    <smart-button #saveButtonReference class="page-control-button float-end ms-1" (click)="saveMenuGroup()">Save</smart-button>
+                <div class="row mb-1">
+                    <div class="col-md-4">
+                        <label class="float-end mt-1">Menu Group :</label>
+                    </div>
+                    <div class="col-md-8">
+                        <input formControlName="menuGroup" class="form-control form-control-sm w-100">
+                    </div>
                 </div>
-            </div>
+
+                <div class="row mb-1">
+                    <div class="col-md-4">
+                        <label class="float-end mt-1">Category :</label>
+                    </div>
+                    <div class="col-md-8">
+                        <input formControlName="category" class="form-control form-control-sm w-100">
+                    </div>
+                </div>
+
+                <hr />
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <button type="button" class="btn btn-secondary btn-sm float-end ms-1 page-form-btn" routerLink="/home/menu/all-menu-groups">Cancel</button>
+                        <button type="button" class="btn btn-secondary btn-sm float-end ms-1 page-form-btn" (click)="confirmDelete()">Delete</button>
+                        <button [disabled]="isMenuGroupSaving" type="submit" class="btn btn-secondary btn-sm float-end ms-1 page-form-btn">Save</button>
+                    </div>
+                </div>
+
+            </form>
 
         </div>
 
     </div>
-
-    <!-- -----------------------------------------------------------------------------------------------------------------------------
-    menu items grid -->
 
     <div class="row">
         <div class="col-md-8">
@@ -42,15 +49,9 @@
             <hr class="top-divider" />
             <hr class="bottom-divider" />
 
-            <!-- <div class="row mb-3">
-                <div class="col-md-12">
-                    <smart-button #newMenuItemButtonReference>New Item</smart-button>
-                </div>
-            </div> -->
+            <!-- menu items table comopnent -->
 
-            <smart-grid #menuItemsGridReference class="w-100"
-            [dataSource]="dataSource" [columns]="columns" [sorting]="sorting" [editing]="editing">
-            </smart-grid>
+            <app-menu-items #menuItemsComponentReference></app-menu-items>
 
         </div>
     </div>
@@ -60,3 +61,7 @@
 <!-- connection error prompt component -->
 
 <app-connection-toast #connectionToastComponentReference></app-connection-toast>
+
+<!-- delete confirmation modal component -->
+
+<app-delete-modal #deleteModalComponentReference (confirmEvent)="deleteMenuGroup()"></app-delete-modal>
