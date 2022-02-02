@@ -7,7 +7,7 @@ import { EndpointsService } from 'projects/application/src/app/services/endpoint
 
 // import { AngularFireDatabase, AngularFireList, AngularFireObject } from '@angular/fire/compat/database';
 
-import { MenuGroup, MenuItem } from 'projects/restaurant/src/app/models/modules/menu-model';
+// import { MenuGroup, MenuItem } from 'projects/restaurant/src/app/models/modules/menu/menu.model';
 
 
 @Injectable({

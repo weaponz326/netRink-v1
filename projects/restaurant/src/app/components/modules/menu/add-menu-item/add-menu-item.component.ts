@@ -27,19 +27,19 @@ export class AddMenuItemComponent implements OnInit {
 
   saveMenuItem(){
     let data = {
-      account: sessionStorage.getItem('restaurant_menu_item_id'),
-      transaction_date: this.menuItemForm.menuItemForm.controls.itemCode.value,
-      description: this.menuItemForm.menuItemForm.controls.itemName.value,
-      transaction_type: this.menuItemForm.menuItemForm.controls.price.value,
+      menu_group: sessionStorage.getItem('restaurant_menu_group_id'),
+      item_code: this.menuItemForm.menuItemForm.controls.itemCode.value,
+      item_name: this.menuItemForm.menuItemForm.controls.itemName.value,
+      price: this.menuItemForm.menuItemForm.controls.price.value,
     }
 
     this.saveMenuItemEvent.emit(data);
   }
 
   resetForm(){
-    this.menuItemForm.menuItemForm.controls.transactionDate.setValue('');
-    this.menuItemForm.menuItemForm.controls.description.setValue('');
-    this.menuItemForm.menuItemForm.controls.transactionType.setValue('');
+    this.menuItemForm.menuItemForm.controls.itemCode.setValue('');
+    this.menuItemForm.menuItemForm.controls.itemName.setValue('');
+    this.menuItemForm.menuItemForm.controls.Price.setValue('');
   }
 
 }

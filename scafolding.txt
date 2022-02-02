@@ -161,15 +161,15 @@
 				- accounts print (S)
 				- tasks print (S)
 		+ models
-            - user model (I)
+            - user model
             + modules
-                - portal model (I)
-                - settings model (I)
-                - calendar model (I)
-                - budget model (I)
-                - notes model (I)
-                - accounts model (I)
-                - tasks model (I)
+                - portal model
+                - settings model
+                - calendar model
+                - budget model
+                - notes model
+                - accounts model
+                - tasks model
 		+ guards
 			- auth (G)
             + modules
@@ -367,18 +367,21 @@
 				- orders print (S)
 				- kitchen stock print (S)
 		+ models
-			- admin model
-			- portal model
-			- settings model
-			- menu model
-			- staff model
-			- customers model
-			- deliveries model
-			- payments model
-			- roster model
-			- reservations model
-			- orders model
-			- kitchen stock model
+            - base model
+            - account model
+            + modules
+                - admin model
+                - portal model
+                - settings model
+                - menu model
+                - staff model
+                - customers model
+                - deliveries model
+                - payments model
+                - roster model
+                - reservations model
+                - orders model
+                - kitchen stock model
 		+ guards
 			- account (G)
 			+ modules access
