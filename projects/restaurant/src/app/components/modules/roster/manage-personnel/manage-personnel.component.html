@@ -2,18 +2,43 @@
 
 <div class="row mb-2">
     <div class="col-md-12">
-        <smart-button #addPersonnelButtonReference>Add Personnel</smart-button>
+        <button class="btn btn-secondary page-add-btn" (click)="addPersonnel.openModal()">Add Personnel</button>
     </div>
 </div>
 
 <div class="row">
     <div class="col-md-12">
-        <smart-grid #personnelGridReference class="w-100 h-auto"
-        [dataSource]="dataSource" [columns]="columns" [editing]="editing">
-        </smart-grid>
+
+        <table class="table table-bordered table-sm w-100 page-table">
+            <thead>
+                <tr class="bg-light">
+                    <th width="25%">Personnel ID</th>
+                    <th width="50%">Personnel Name</th>
+                    <th width="25%">Batch</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let data of personnelGridData; index as i" (dblClick)="openEditPersonnel(i)">
+                    <td>{{data?.personnel_code}}</td>
+                    <td>{{data?.personnel_name}}</td>
+                    <td>{{data?.batch_sybol}}</td>
+                </tr>
+            </tbody>
+        </table>
+
     </div>
 </div>
 
-<!-- connection error prompt component -->
+<!-- add and edit personnel modal components -->
+
+<app-edit-personnel #editPersonnelComponentReference (savePersonnelEvent)="postPersonnel($event)"></app-edit-personnel>
+
+<app-add-personnel #addPersonnelComponentReference (savePersonnelEvent)="putPersonnel($event)" (deletePersonnelEvent)="confirmDelete($event)"></app-add-personnel>
+
+<!-- connection error toast component -->
 
 <app-connection-toast #connectionToastComponentReference></app-connection-toast>
+
+<!-- delete confirmation modal component -->
+
+<app-delete-modal #deleteModalComponentReference (confirmEvent)="deletePersonnel()"></app-delete-modal>

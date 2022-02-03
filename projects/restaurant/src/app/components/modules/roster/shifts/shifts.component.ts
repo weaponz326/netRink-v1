@@ -1,11 +1,11 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
-
-import { ButtonComponent } from 'smart-webcomponents-angular/button';
-import { GridComponent, GridColumn, DataAdapter, Smart } from 'smart-webcomponents-angular/grid';
+import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
 
 import { RosterApiService } from 'projects/restaurant/src/app/services/modules/roster-api/roster-api.service';
+
+import { AddShiftComponent } from '../add-shift/add-shift.component'
+import { EditShiftComponent } from '../edit-shift/edit-shift.component'
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
+import { DeleteModalComponent } from 'projects/personal/src/app/components/module-utilities/delete-modal/delete-modal.component'
 
 
 @Component({
@@ -16,21 +16,24 @@ import { ConnectionToastComponent } from 'projects/personal/src/app/components/m
 export class ShiftsComponent implements OnInit {
 
   constructor(
-    private router: Router,
     private rosterApi: RosterApiService
   ) { }
 
-  @ViewChild('addShiftButtonReference', { read: ButtonComponent, static: false }) addShiftButton!: ButtonComponent;
-  @ViewChild('shiftsGridReference', { read: GridComponent, static: false }) shiftsGrid!: GridComponent;
-
+  @ViewChild('addShiftComponentReference', { read: AddShiftComponent, static: false }) addShift!: AddShiftComponent;
+  @ViewChild('editShiftComponentReference', { read: EditShiftComponent, static: false }) editShift!: EditShiftComponent;
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
+  @ViewChild('deleteModalComponentReference', { read: DeleteModalComponent, static: false }) deleteModal!: DeleteModalComponent;
 
-  dataSource = [];
-  columns: GridColumn[] = <GridColumn[]>[];
-  editing = {}
+  shiftsGridData: any[] = [];
+
+  deleteId = "";
+  deleteIndex = 0;
 
   ngOnInit(): void {
-    this.initGrid();
+  }
+
+  ngAfterViewInit(): void {
+    this.getShifts();
   }
 
   getShifts(){
@@ -38,7 +41,7 @@ export class ShiftsComponent implements OnInit {
       .subscribe(
         res => {
           console.log(res);
-          this.dataSource = res;
+          this.shiftsGridData = res;
         },
         err => {
           console.log(err);
@@ -47,29 +50,71 @@ export class ShiftsComponent implements OnInit {
       )
   }
 
-  initGrid(){
-    this.dataSource = new Smart.DataAdapter (
-      <DataAdapter>{
-        id: 'id',
-        dataSource: this.getShifts(),
-        dataFields:[
-          'id: string',
-          'shift_name: string',
-          'start_time: string',
-          'end_time: string',
-        ]
-      }
-    );
+  postShift(data: any){
+    console.log(data);
 
-    this.columns = <GridColumn[]>[
-      { label: 'Shift Name', dataField: 'shift_name', width: "50%" },
-      { label: 'Start Time', dataField: 'start_time', width: "25%" },
-      { label: 'End Time', dataField: 'end_time', width: "25%" },
-    ]
+    this.rosterApi.postShift(data)
+      .subscribe(
+        res => {
+          console.log(res);
+
+          if(res.id){
+            this.shiftsGridData.push(res);
+            this.addShift.resetForm();
+          }
+        },
+        err => {
+          console.log(err);
+          this.connectionToast.openToast();
+        }
+      )
   }
 
-  onPrint(){
-    console.log("lets start printing...");
+  putShift(data: any){
+    console.log(data);
+
+    this.rosterApi.putShift(data.id, data)
+      .subscribe(
+        res => {
+          console.log(res);
+
+          if(res.id){
+            this.shiftsGridData[data.index] = res;
+          }
+        },
+        err => {
+          console.log(err);
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  deleteShift(){
+    console.log(this.deleteId);
+
+    this.rosterApi.deleteShift(this.deleteId)
+      .subscribe(
+        res => {
+          console.log(res);
+          this.shiftsGridData.splice(this.deleteIndex, 1);
+        },
+        err => {
+          console.log(err);
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  openEditShift(index: any){
+    console.log(index);
+    this.editShift.openModal(index, this.shiftsGridData[index]);
+  }
+
+  confirmDelete(index: any, id: any){
+    this.deleteIndex = index;
+    this.deleteId = id;
+
+    this.deleteModal.openModal();
   }
 
 }

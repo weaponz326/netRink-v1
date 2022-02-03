@@ -1,12 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-
-import { InputComponent } from 'smart-webcomponents-angular/input';
-import { DateTimePickerComponent } from 'smart-webcomponents-angular/datetimepicker';
+import { FormControl, FormGroup } from '@angular/forms';
 
 import { RosterApiService } from 'projects/restaurant/src/app/services/modules/roster-api/roster-api.service';
-import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
+
+import { ShiftsComponent } from '../shifts/shifts.component';
 import { RosterSheetComponent } from '../roster-sheet/roster-sheet.component';
+import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
+import { DeleteModalComponent } from 'projects/personal/src/app/components/module-utilities/delete-modal/delete-modal.component'
 
 
 @Component({
@@ -21,24 +22,36 @@ export class ViewRosterComponent implements OnInit {
     private rosterApi: RosterApiService
   ) { }
 
-  @ViewChild('rosterCodeInputReference', { read: InputComponent, static: false }) rosterCodeInput!: InputComponent;
-  @ViewChild('rosterNameInputReference', { read: InputComponent, static: false }) rosterNameInput!: InputComponent;
-  @ViewChild('fromDateTimePickerReference', { read: DateTimePickerComponent, static: false }) fromDateTimePicker!: DateTimePickerComponent;
-  @ViewChild('toDateTimePickerReference', { read: DateTimePickerComponent, static: false }) toDateTimePicker!: DateTimePickerComponent;
-
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
+  @ViewChild('deleteModalComponentReference', { read: DeleteModalComponent, static: false }) deleteModal!: DeleteModalComponent;
   @ViewChild('rosterSheetComponentReference', { read: RosterSheetComponent, static: false }) rosterSheet!: RosterSheetComponent;
+  @ViewChild('shiftsComponentReference', { read: ShiftsComponent, static: false }) shifts!: ShiftsComponent;
 
   navHeading: any[] = [
     { text: "All Roster", url: "/home/roster/all-roster" },
     { text: "View Roster", url: "/home/roster/view-roster" },
   ];
 
+  rosterForm: FormGroup = new FormGroup({});
+
+  isRosterSaving: boolean = false;
+  isRosterDeleting: boolean = false;
+
   ngOnInit(): void {
+    this.initRosterForm();
   }
 
   ngAfterViewInit(): void {
     this.getSingleRoster();
+  }
+
+  initRosterForm(){
+    this.rosterForm = new FormGroup({
+      rosterCode: new FormControl(''),
+      rosterName: new FormControl(''),
+      fromDate: new FormControl(''),
+      toDate: new FormControl(''),
+    })
   }
 
   getSingleRoster(){
@@ -47,10 +60,10 @@ export class ViewRosterComponent implements OnInit {
         res => {
           console.log(res);
 
-          this.rosterCodeInput.value = res.roster_code;
-          this.rosterNameInput.value = res.roster_name;
-          this.fromDateTimePicker.value = res.from_date;
-          this.toDateTimePicker.value = res.to_date;
+          this.rosterForm.controls.rosterCode.setValue(res.roster_code);
+          this.rosterForm.controls.rosterName.setValue(res.roster_name);
+          this.rosterForm.controls.fromDate.setValue(res.from_date);
+          this.rosterForm.controls.toDate.setValue(res.to_date);
         },
         err => {
           console.log(err);
@@ -59,13 +72,13 @@ export class ViewRosterComponent implements OnInit {
       )
   }
 
-  saveRoster(){
+  putRoster(){
     let rosterData = {
       account: localStorage.getItem('restaurant_id'),
-      roster_code: this.rosterCodeInput.value,
-      roster_name: this.rosterNameInput.value,
-      from_date: this.fromDateTimePicker.value,
-      to_date: this.toDateTimePicker.value,
+      roster_name: this.rosterForm.controls.rosterName.value,
+      roster_code: this.rosterForm.controls.rosterCode.value,
+      from_date: this.rosterForm.controls.fromDate.value,
+      to_date: this.rosterForm.controls.toDate.value,
     }
 
     this.rosterApi.putRoster(rosterData)
@@ -82,6 +95,31 @@ export class ViewRosterComponent implements OnInit {
     console.log(rosterData);
 
     // this.rosterSheet.postSheetData();
+  }
+
+  confirmDelete(){
+    this.deleteModal.openModal();
+  }
+
+  deleteOrder(){
+    this.isRosterDeleting = true;
+
+    this.rosterApi.deleteRoster()
+      .subscribe(
+        res => {
+          console.log(res);
+
+          this.router.navigateByUrl('/home/roster/all-roster');
+        },
+        err => {
+          console.log(err);
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  onPrint(){
+    console.log("lets start printing...");
   }
 
 }

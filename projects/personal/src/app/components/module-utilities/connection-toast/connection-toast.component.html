@@ -1,4 +1,6 @@
-<button [hidden]="true" data-bs-toggle="toast" data-bs-target="#connectionToast">Show live toast</button>
+<button #buttonElementReference [hidden]="true" data-bs-toggle="toast" data-bs-target="#connectionToast">
+    Show live toast
+</button>
 
 <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11;">
     <div id="connectionToast" class="toast hide text-white bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">

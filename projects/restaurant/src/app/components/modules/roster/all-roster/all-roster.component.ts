@@ -1,11 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { ButtonComponent } from 'smart-webcomponents-angular/button';
-import { GridComponent, GridColumn, DataAdapter, Smart } from 'smart-webcomponents-angular/grid';
-
 import { RosterApiService } from 'projects/restaurant/src/app/services/modules/roster-api/roster-api.service';
+
+import { NewRosterComponent } from '../new-roster/new-roster.component'
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
+import { TablePaginationComponent } from 'projects/personal/src/app/components/module-utilities/table-pagination/table-pagination.component'
+import { TableSortingComponent } from 'projects/personal/src/app/components/module-utilities/table-sorting/table-sorting.component'
 
 
 @Component({
@@ -20,23 +21,27 @@ export class AllRosterComponent implements OnInit {
     private rosterApi: RosterApiService
   ) { }
 
-  @ViewChild('newRosterButtonReference', { read: ButtonComponent, static: false }) newRosterGroupButton!: ButtonComponent;
-  @ViewChild('rosterGridReference', { read: GridComponent, static: false }) rosterGrid!: GridComponent;
-
+  @ViewChild('newRosterComponentReference', { read: NewRosterComponent, static: false }) newRoster!: NewRosterComponent;
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
+  @ViewChild('tablePaginationComponentReference', { read: TablePaginationComponent, static: false }) tablePagination!: TablePaginationComponent;
+  @ViewChild('rosterCodeSortingComponentReference', { read: TableSortingComponent, static: false }) rosterCodeSorting!: TableSortingComponent;
+  @ViewChild('rosterNameSortingComponentReference', { read: TableSortingComponent, static: false }) rosterNameSorting!: TableSortingComponent;
 
   navHeading: any[] = [
     { text: "All Roster", url: "/home/roster/all-roster" },
   ];
 
-  sorting = { enabled: true }
-  filtering = { enabled: true }
-  dataSource = [];
-  columns: GridColumn[] = <GridColumn[]>[];
-  editing = {}
+  rosterGridData: any[] = [];
+
+  currentPage = 0;
+  totalPages = 0;
+  totalItems = 0;
 
   ngOnInit(): void {
-    this.initGrid();
+  }
+
+  ngAfterViewInit(): void {
+    this.getRoster();
   }
 
   getRoster(){
@@ -44,7 +49,10 @@ export class AllRosterComponent implements OnInit {
       .subscribe(
         res => {
           console.log(res);
-          this.dataSource = res;
+          this.rosterGridData = res;
+          this.currentPage = res.current_page;
+          this.totalPages = res.total_pages;
+          this.totalItems = res.count;
         },
         err => {
           console.log(err);
@@ -53,30 +61,23 @@ export class AllRosterComponent implements OnInit {
       )
   }
 
-  viewRoster(event: any){
-    console.log(event.detail.row.data.id);
-    sessionStorage.setItem('restaurant_roster_id', event.detail.row.data.id);
+  viewRoster(rosterId: any){
+    console.log(rosterId);
 
-    this.router.navigateByUrl('/home/roster/view-roster');
+    sessionStorage.setItem("restaurant_roster_id", rosterId);
+    this.router.navigateByUrl("/home/roster/view-roster");
   }
 
-  initGrid(){
-    this.dataSource = new Smart.DataAdapter (
-      <DataAdapter>{
-        id: 'id',
-        dataSource: this.getRoster(),
-        dataFields:[
-          'id: string',
-          'roster_code: string',
-          'roster_name: string',
-        ]
-      }
-    );
+  sortTable(field: any){
+    console.log(field);
+    this.getRoster();
 
-    this.columns = <GridColumn[]>[
-      { label: "Roster ID", dataField: "roster_code", width: "30%" },
-      { label: "Roster Name", dataField: "roster_name", width: "70%" },
-    ]
+    if((field == 'roster_code') || (field == "-roster_code")){
+      this.rosterCodeSorting.resetSort();
+    }
+    else if((field == 'roster_name') || (field == "-roster_name")){
+      this.rosterNameSorting.resetSort();
+    }
   }
 
   onPrint(){

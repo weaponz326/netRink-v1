@@ -2,31 +2,33 @@
 
 <div class="container">
 
-    <div class="row page-form">
+    <form class="page-form" [formGroup]="rosterForm">
 
-        <div class="col-md-12">
-            <h4>Roster Details</h4>
-        </div>
+        <div class="row page-form">
 
-        <div class="col-md-6">
+            <div class="col-md-12">
+                <h4>Roster Details</h4>
+            </div>
 
-            <div class="row mb-1">
-                <div class="col-md-4"><label class="float-end">Roster ID :</label></div>
-                <div class="col-md-8">
-                    <smart-input #rosterCodeInputReference class="w-100"></smart-input>
+            <div class="col-md-6">
+                <div class="row mb-1">
+                    <div class="col-md-4"><label class="float-end mt-1">Roster ID :</label></div>
+                    <div class="col-md-8">
+                        <input formControlName="rosterCode" class="form-control form-control-sm w-100">
+                    </div>
+                </div>
+
+                <div class="row mb-1">
+                    <div class="col-md-4"><label class="float-end mt-1">Roster Name :</label></div>
+                    <div class="col-md-8">
+                        <input formControlName="rosterName" class="form-control form-control-sm w-100">
+                    </div>
                 </div>
             </div>
 
-            <div class="row mb-1">
-                <div class="col-md-4"><label class="float-end">Roster Name :</label></div>
-                <div class="col-md-8">
-                    <smart-input #rosterNameInputReference class="w-100"></smart-input>
-                </div>
-            </div>
-
         </div>
 
-    </div>
+    </form>
 
     <hr class="top-divider" />
     <hr class="bottom-divider" />
@@ -39,15 +41,28 @@
 
             <div class="row mb-2">
                 <div class="col-md-12">
-                    <smart-button #addBatchButtonReference>Add Batch</smart-button>
+                    <button class="btn btn-secondary page-add-btn" (click)="addBatch.openModal()">Add Batch</button>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-md-12">
-                    <smart-grid #batchesGridReference class="w-100 h-auto"
-                    [dataSource]="dataSource" [columns]="columns" [editing]="editing">
-                    </smart-grid>
+
+                    <table class="table table-bordered table-sm w-100 page-table">
+                        <thead>
+                            <tr class="bg-light">
+                                <th width="45%">Batch Name</th>
+                                <th width="20%">Batch Symbol</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let data of batchesGridData; index as i" (dblClick)="openEditBatch(i)">
+                                <td>{{data?.batch_name}}</td>
+                                <td>{{data?.batch_symbol}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
                 </div>
             </div>
 
@@ -65,6 +80,16 @@
 
 </div>
 
-<!-- connection error prompt component -->
+<!-- add and edit batch modal components -->
+
+<app-add-batch #addBatchComponentReference (saveBatchEvent)="postBatch($event)"></app-add-batch>
+
+<app-edit-batch #editBatchComponentReference (saveBatchEvent)="putBatch($event)" (deleteBatch)="confirmDelete($event)"></app-edit-batch>
+
+<!-- connection error toast component -->
 
 <app-connection-toast #connectionToastComponentReference></app-connection-toast>
+
+<!-- delete confirmation modal component -->
+
+<app-delete-modal #deleteModalComponentReference (confirmEvent)="deleteBatch()"></app-delete-modal>

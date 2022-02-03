@@ -80,12 +80,20 @@ export class RosterApiService {
     return this.http.delete(this.restaurantUrl + "module-roster/batch/" + batchId);
   }
 
-  public getPersonnel(): Observable<any>{
+  public getShiftPersonnel(): Observable<any>{
     return this.http.get(this.restaurantUrl + "module-roster/personnel?roster=" + sessionStorage.getItem('restaurant_roster_id'));
   }
 
-  public putPersonnel(personnelId: any, personnel: any): Observable<any>{
+  public postShiftPersonnel(personnel: any): Observable<any>{
+    return this.http.post(this.restaurantUrl + "module-roster/personnel/", personnel);
+  }
+
+  public putShiftPersonnel(personnelId: any, personnel: any): Observable<any>{
     return this.http.put(this.restaurantUrl + "module-roster/personnel/" + personnelId, personnel);
+  }
+
+  public deleteShiftPersonnel(personnelId: any): Observable<any>{
+    return this.http.delete(this.restaurantUrl + "module-roster/personnel/" + personnelId);
   }
 
   public refreshPersonnel(): Observable<any>{

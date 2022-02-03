@@ -3,19 +3,18 @@
 
         <h4>Order Items</h4>
 
-        <div class="row mb-3">
-            <div class="col-md-12">
-                <button class="btn btn-secondary page-add-btn" (click)="addItem.openModal()">Add Item</button>
-            </div>
-        </div>
-
         <table class="table table-bordered table-sm w-100 page-table">
             <thead>
                 <tr class="bg-light">
-                    <th width="45%">Menu Item</th>
-                    <th width="20%">Price</th>
-                    <th width="15%">Quantity</th>
-                    <th width="20%">Total Price</th>
+                    <th width="40%">Menu Item</th>
+                    <th width="15%">Price</th>
+                    <th width="10%">Quantity</th>
+                    <th width="15%">Total Price</th>
+                    <th width="10%" class="p-0">
+                        <button class="btn btn-secondary btn-sm w-100" (click)="addItem.openModal()">
+                            <i class="bi bi-plus"></i>
+                        </button>
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -24,10 +23,15 @@
                     <td>{{data?.price}}</td>
                     <td>{{data?.quantity}}</td>
                     <td>{{data?.price * data?.quantity}}</td>
+                    <td class="p-0">
+                        <button class="btn btn-sm border w-50" (click)="openEditItem(i)"><i class="bi bi-pen"></i></button>
+                        <button class="btn btn-sm border w-50" (click)="confirmDelete(i, data.id)"><i class="bi bi-trash"></i></button>
+                    </td>
                 </tr>
                 <tr class="bg-light">
                     <td colspan="3"></td>
                     <td>{{totalPrice}}</td>
+                    <td></td>
                 </tr>
             </tbody>
         </table>
@@ -39,7 +43,7 @@
 
 <app-add-item #addItemComponentReference (saveItemEvent)="postItem($event)"></app-add-item>
 
-<app-edit-item #editItemComponentReference (saveItemEvent)="putItem($event)" (deleteItem)="confirmDelete($event)"></app-edit-item>
+<app-edit-item #editItemComponentReference (saveItemEvent)="putItem($event)"></app-edit-item>
 
 <!-- connection error toast component -->
 

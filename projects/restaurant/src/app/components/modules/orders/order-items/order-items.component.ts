@@ -103,7 +103,6 @@ export class OrderItemsComponent implements OnInit {
         res => {
           console.log(res);
           this.itemsGridData.splice(this.deleteIndex, 1);
-          this.itemsGridData.splice(this.deleteIndex, 1);
         },
         err => {
           console.log(err);
@@ -117,9 +116,9 @@ export class OrderItemsComponent implements OnInit {
     this.editItem.openModal(index, this.itemsGridData[index]);
   }
 
-  confirmDelete(e: any){
-    this.deleteIndex = e.index;
-    this.deleteId = e.id;
+  confirmDelete(index: any, id: any){
+    this.deleteIndex = index;
+    this.deleteId = id;
 
     this.deleteModal.openModal();
   }

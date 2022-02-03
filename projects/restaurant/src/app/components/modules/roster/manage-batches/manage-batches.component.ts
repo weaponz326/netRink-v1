@@ -1,13 +1,14 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-
-import { InputComponent } from 'smart-webcomponents-angular/input';
-import { ButtonComponent } from 'smart-webcomponents-angular/button';
-import { GridComponent, GridColumn, DataAdapter, Smart } from 'smart-webcomponents-angular/grid';
+import { FormControl, FormGroup } from '@angular/forms';
 
 import { RosterApiService } from 'projects/restaurant/src/app/services/modules/roster-api/roster-api.service';
-import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
+
 import { ManagePersonnelComponent } from '../manage-personnel/manage-personnel.component';
+import { AddBatchComponent } from '../add-batch/add-batch.component'
+import { EditBatchComponent } from '../edit-batch/edit-batch.component'
+import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
+import { DeleteModalComponent } from 'projects/personal/src/app/components/module-utilities/delete-modal/delete-modal.component'
 
 
 @Component({
@@ -22,14 +23,11 @@ export class ManageBatchesComponent implements OnInit {
     private rosterApi: RosterApiService
   ) { }
 
-  @ViewChild('rosterCodeInputReference', { read: InputComponent, static: false }) rosterCodeInput!: InputComponent;
-  @ViewChild('rosterNameInputReference', { read: InputComponent, static: false }) rosterNameInput!: InputComponent;
-
-  @ViewChild('addBatchButtonReference', { read: ButtonComponent, static: false }) addBatchGroupButton!: ButtonComponent;
-  @ViewChild('batchesGridReference', { read: GridComponent, static: false }) batchesGrid!: GridComponent;
-
   @ViewChild('managePersonnelComponentReference', { read: ManagePersonnelComponent, static: false }) managePersonnel!: ManagePersonnelComponent;
+  @ViewChild('addBatchComponentReference', { read: AddBatchComponent, static: false }) addBatch!: AddBatchComponent;
+  @ViewChild('editBatchComponentReference', { read: EditBatchComponent, static: false }) editBatch!: EditBatchComponent;
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
+  @ViewChild('deleteModalComponentReference', { read: DeleteModalComponent, static: false }) deleteModal!: DeleteModalComponent;
 
   navHeading: any[] = [
     { text: "All Roster", url: "/home/roster/all-roster" },
@@ -37,16 +35,29 @@ export class ManageBatchesComponent implements OnInit {
     { text: "Manage Batches", url: "/home/roster/manage-batches" },
   ];
 
-  dataSource = [];
-  columns: GridColumn[] = <GridColumn[]>[];
-  editing = {}
+  rosterForm: FormGroup = new FormGroup({});
+
+  batchesGridData: any[] = [];
+
+  deleteId = "";
+  deleteIndex = 0;
 
   ngOnInit(): void {
-    this.initGrid();
+    this.initRosterForm();
   }
 
   ngAfterViewInit(): void {
     this.getSingleRoster();
+    this.getBatches();
+  }
+
+  initRosterForm(){
+    this.rosterForm = new FormGroup({
+      rosterCode: new FormControl(''),
+      rosterName: new FormControl(''),
+      fromDate: new FormControl(''),
+      toDate: new FormControl(''),
+    })
   }
 
   getSingleRoster(){
@@ -55,8 +66,8 @@ export class ManageBatchesComponent implements OnInit {
         res => {
           console.log(res);
 
-          this.rosterCodeInput.value = res.roster_code;
-          this.rosterNameInput.value = res.roster_name;
+          this.rosterForm.controls.rosterCode.setValue(res.roster_code);
+          this.rosterForm.controls.rosterName.setValue(res.roster_name);
         },
         err => {
           console.log(err);
@@ -68,12 +79,12 @@ export class ManageBatchesComponent implements OnInit {
   // --------------------------------------------------------------------------------------
   // grid
 
-  getBatchs(){
+  getBatches(){
     this.rosterApi.getBatches()
       .subscribe(
         res => {
           console.log(res);
-          this.dataSource = res;
+          this.batchesGridData = res;
         },
         err => {
           console.log(err);
@@ -82,23 +93,69 @@ export class ManageBatchesComponent implements OnInit {
       )
   }
 
-  initGrid(){
-    this.dataSource = new Smart.DataAdapter (
-      <DataAdapter>{
-        id: 'id',
-        dataSource: this.getBatchs(),
-        dataFields:[
-          'id: string',
-          'batch_name: string',
-          'batch_symbol: string',
-        ]
-      }
-    );
+  postBatch(data: any){
+    console.log(data);
 
-    this.columns = <GridColumn[]>[
-      { label: 'Batch Name', dataField: 'batch_name', width: "70%" },
-      { label: 'Batch Symbol', dataField: 'batch_symbol', width: "30%" },
-    ]
+    this.rosterApi.postBatch(data)
+      .subscribe(
+        res => {
+          console.log(res);
+
+          if(res.id){
+            this.batchesGridData.push(res);
+            this.addBatch.resetForm();
+          }
+        },
+        err => {
+          console.log(err);
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  putBatch(data: any){
+    console.log(data);
+
+    this.rosterApi.putBatch(data.id, data)
+      .subscribe(
+        res => {
+          console.log(res);
+
+          if(res.id){
+            this.batchesGridData[data.index] = res;
+          }
+        },
+        err => {
+          console.log(err);
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  deleteBatch(){
+    this.rosterApi.deleteBatch(this.deleteId)
+      .subscribe(
+        res => {
+          console.log(res);
+          this.batchesGridData.splice(this.deleteIndex, 1);
+        },
+        err => {
+          console.log(err);
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  openEditBatch(index: any){
+    console.log(index);
+    this.editBatch.openModal(index, this.batchesGridData[index]);
+  }
+
+  confirmDelete(e: any){
+    this.deleteIndex = e.index;
+    this.deleteId = e.id;
+
+    this.deleteModal.openModal();
   }
 
   onPrint(){

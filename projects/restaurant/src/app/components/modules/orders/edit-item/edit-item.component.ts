@@ -13,7 +13,6 @@ export class EditItemComponent implements OnInit {
   constructor() { }
 
   @Output() saveItemEvent = new EventEmitter<any>();
-  @Output() deleteItemEvent = new EventEmitter<any>();
 
   @ViewChild('buttonElementReference', { read: ElementRef, static: false }) buttonElement!: ElementRef;
 
@@ -50,15 +49,6 @@ export class EditItemComponent implements OnInit {
     }
 
     this.saveItemEvent.emit(data);
-  }
-
-  deleteItem(){
-    let data = {
-      index: this.selectedIndex,
-      id: this.selectedId,
-    }
-
-    this.deleteItemEvent.emit(data);
   }
 
 }

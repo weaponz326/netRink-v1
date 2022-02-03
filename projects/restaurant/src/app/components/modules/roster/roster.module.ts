@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { ChartsModule } from 'ng2-charts';
 import { GridModule } from 'smart-webcomponents-angular/grid';
@@ -25,6 +26,8 @@ import { EditPersonnelComponent } from './edit-personnel/edit-personnel.componen
 import { ManageBatchesComponent } from './manage-batches/manage-batches.component';
 import { AddBatchComponent } from './add-batch/add-batch.component';
 import { EditBatchComponent } from './edit-batch/edit-batch.component';
+import { AddPersonnelComponent } from './add-personnel/add-personnel.component';
+import { PersonnelFormComponent } from './personnel-form/personnel-form.component';
 
 
 @NgModule({
@@ -42,11 +45,15 @@ import { EditBatchComponent } from './edit-batch/edit-batch.component';
     EditPersonnelComponent,
     ManageBatchesComponent,
     AddBatchComponent,
-    EditBatchComponent
+    EditBatchComponent,
+    AddPersonnelComponent,
+    PersonnelFormComponent
   ],
   imports: [
     CommonModule,
     RouterModule,
+    FormsModule,
+    ReactiveFormsModule,
     ChartsModule,
     GridModule,
     ButtonModule,

@@ -1,10 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { ButtonComponent } from 'smart-webcomponents-angular/button';
-import { GridComponent, GridColumn, DataAdapter, Smart } from 'smart-webcomponents-angular/grid';
-
 import { RosterApiService } from 'projects/restaurant/src/app/services/modules/roster-api/roster-api.service';
+
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 
 
@@ -20,13 +18,10 @@ export class RosterSheetComponent implements OnInit {
     private rosterApi: RosterApiService
   ) { }
 
-  @ViewChild('sheetGridReference', { read: GridComponent, static: false }) sheetGrid!: GridComponent;
-
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
 
   dataSource: any[] = [];
-  editing = {}
-  sheetColumns: GridColumn[] = <GridColumn[]>[];
+  sheetColumns: any[] = [];
   sheetDataFields: any = [];
   sheetEditDropDownSource: any[] = [];
 

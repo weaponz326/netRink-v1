@@ -4,11 +4,6 @@ import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { ChartsModule } from 'ng2-charts';
-import { GridModule } from 'smart-webcomponents-angular/grid';
-import { ButtonModule } from 'smart-webcomponents-angular/button';
-import { InputModule } from 'smart-webcomponents-angular/input';
-import { DropDownListModule } from 'smart-webcomponents-angular/dropdownlist';
-import { NumericTextBoxModule } from 'smart-webcomponents-angular/numerictextbox';
 
 import { ModuleUtilitiesModule } from 'projects/personal/src/app/components/module-utilities/module-utilities.module';
 
@@ -36,11 +31,6 @@ import { TableFormComponent } from './table-form/table-form.component';
     FormsModule,
     ReactiveFormsModule,
     ChartsModule,
-    GridModule,
-    ButtonModule,
-    InputModule,
-    DropDownListModule,
-    NumericTextBoxModule,
     ModuleUtilitiesModule,
   ]
 })
