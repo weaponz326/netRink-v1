@@ -1,9 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 
-import { environment } from 'projects/personal/src/environments/environment';
+import { AuthApiService } from 'projects/personal/src/app/services/user/auth-api/auth-api.service';
 
-import { AuthApiService } from 'projects/personal/src/app/services/auth-api/auth-api.service';
-import { AuthService } from 'projects/personal/src/app/services/auth/auth.service';
+import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 
 
 @Component({
@@ -15,12 +14,13 @@ export class MainNavbarComponent implements OnInit {
 
   constructor(
     private authApi: AuthApiService,
-    private auth: AuthService,
   ) { }
 
   @Input() source: string = "Application";
   @Input() navBrand: string = "NetRink";
   @Input() isForms: boolean = false;
+
+  @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
 
   isLoggedIn: boolean = false;
   name: string = "";
@@ -40,7 +40,7 @@ export class MainNavbarComponent implements OnInit {
   }
 
   getUser(){
-    // this.auth.getLoggedIn()
+    // this.userApi.getUser()
     //   .subscribe(
     //     (res: any) => {
     //       console.log(res);
@@ -66,27 +66,8 @@ export class MainNavbarComponent implements OnInit {
   logout(e: any){
     e.stopPropagation();
 
-    // this.auth.logOut()
-    //   .subscribe(
-    //     (res: any) => {
-    //       console.log(res);
-
-    //       localStorage.removeItem("personal_id");
-    //       localStorage.removeItem("hospital_id");
-    //       localStorage.removeItem("restaurant_id");
-    //       localStorage.removeItem("school_id");
-    //       localStorage.removeItem("enterprise_id");
-    //       localStorage.removeItem("association_id");
-    //       localStorage.removeItem("hotel_id");
-    //       localStorage.removeItem("shop_id");
-    //       localStorage.removeItem("production_id");
-
-    //       window.location.href = "/";
-    //     },
-    //     (err: any) => {
-    //       console.log(err);
-    //     }
-    //   )
+    this.authApi.logout();
+    window.location.href = "/";
 
     console.log("u logging out? ...where u going?");
   }

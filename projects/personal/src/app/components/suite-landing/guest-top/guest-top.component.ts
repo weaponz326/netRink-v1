@@ -1,8 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { AuthApiService } from '../../../services/auth-api/auth-api.service';
-
 
 @Component({
   selector: 'app-guest-top',
@@ -13,7 +11,6 @@ export class GuestTopComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private authApi: AuthApiService
   ) { }
 
   @Input() suiteName: string = "";
@@ -31,22 +28,10 @@ export class GuestTopComponent implements OnInit {
     if (this.suiteName != "nR Personal"){
       sessionStorage.setItem("is_suite_registration", "OK");
 
-      this.authApi.getUser()
-      .subscribe(
-        res => {
-          console.log(res);
-
-          if (res.id){
-            this.router.navigateByUrl("/register");
-          }else{
-            this.router.navigateByUrl("/auth/signup");
-          }
-        },
-        err => {
-          console.log(err);
-          this.router.navigateByUrl("/auth/signup");
-        }
-      )
+      if (localStorage.getItem('user') != "")
+        this.router.navigateByUrl("/register");
+      else
+        this.router.navigateByUrl("/auth/signup");
     }
     else{
       sessionStorage.setItem("is_suite_registration", "");

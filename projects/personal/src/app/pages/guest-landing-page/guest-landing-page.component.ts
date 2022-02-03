@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { AuthApiService } from '../../services/auth-api/auth-api.service';
-
 
 @Component({
   selector: 'app-guest-landing-page',
@@ -13,7 +11,6 @@ export class GuestLandingPageComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private authApi: AuthApiService
   ) { }
 
   isLoading: boolean = false;
@@ -25,21 +22,11 @@ export class GuestLandingPageComponent implements OnInit {
   getUser(){
       this.isLoading = true;
 
-      this.authApi.getUser()
-      .subscribe(
-        res => {
-          console.log(res);
-          this.isLoading = false;
+      if (localStorage.getItem('user') != ""){
+        this.router.navigateByUrl("/home");
+      }
 
-          if (res.id){
-            this.router.navigateByUrl("/home");
-          }
-        },
-        err => {
-          console.log(err);
-          this.isLoading = false;
-        }
-      )
+      this.isLoading = false;
   }
 
   gotoAbout() {

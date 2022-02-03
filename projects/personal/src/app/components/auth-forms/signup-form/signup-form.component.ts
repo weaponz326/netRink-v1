@@ -3,8 +3,9 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 import { MatStepper } from '@angular/material/stepper';
 
-import { AuthApiService } from '../../../services/auth-api/auth-api.service';
-import { MainApiService } from 'projects/application/src/app/services/main-api/main-api.service';
+import { User } from '../../../models/user/user.model';
+import { AuthApiService } from '../../../services/user/auth-api/auth-api.service';
+import { UserApiService } from '../../../services/user/user-api/user-api.service';
 
 
 @Component({
@@ -16,7 +17,7 @@ export class SignupFormComponent implements OnInit {
 
   constructor(
     private authApi: AuthApiService,
-    private mainApi: MainApiService,
+    private userApi: UserApiService,
   ) { }
 
   @ViewChild('stepper') private signupStepper!: MatStepper;
@@ -50,50 +51,41 @@ export class SignupFormComponent implements OnInit {
   }
 
   getSource(){
-    this.mainApi.getSource()
-      .subscribe(
-        res => {
-          console.log(res);
-
-          // this.suiteRegistrationType = res.user_source;
-          this.suiteRegistrationType = sessionStorage.getItem('app_source') as string;
-        },
-        err => {
-          console.log(err);
-        }
-      )
+    this.suiteRegistrationType = sessionStorage.getItem('app_source') as string;
   }
 
   onSubmit(){
     this.isSending = true;
-    this.authApi.postSignup(this.signupForm.value)
-      .subscribe(
-        res => {
-          console.log(res);
-          if (res.key){
-            localStorage.setItem('token', res.key);
-            this.showPrompt = true;
+    this.authApi.signup(this.signupForm.controls.email.value, this.signupForm.controls.email.value)
+      .then(
+        (res: any) => {
+          let user: User = {
+            uid: res.user.uid,
+            first_name: this.signupForm.controls.firstName.value,
+            last_name: this.signupForm.controls.lastName.value,
+            location: this.signupForm.controls.location.value,
+            about: this.signupForm.controls.about.value,
           }
-          this.isSending = false;
-        },
-        err => {
-          console.log(err);
-          this.fnErrors = err.errors?.first_name;
-          this.lnErrors = err.errors?.last_name;
-          this.locErrors = err.errors?.location;
-          this.abtErrors = err.errors?.about;
-          this.emailErrors = err.error?.email;
-          this.pass1Errors = err.error?.password1;
-          this.pass2Errors = err.error?.password2;
-          this.nfErrors = err.error?.non_field_errors;
 
+          this.submitUser(user);
+        },
+        (err: any) => {
           this.isSending = false;
-          // TODO: viewchid gives an error
           this.signupStepper.selectedIndex = 0;
         }
-      )
+      );
 
     console.log(this.signupForm.value);
+  }
+
+  submitUser(user: User){
+    this.userApi.createUser(user)
+      .then(
+        res => {
+          this.isSending = false;
+        },
+        err => {}
+      );
   }
 
   onAddressChange(address: any) {
@@ -102,13 +94,10 @@ export class SignupFormComponent implements OnInit {
   }
 
   registrationRedirect(){
-    // TODO: can't get auth_token if angular router is used
-    if(this.suiteRegistrationType == "nR Personal" || this.suiteRegistrationType == "netRink"){
+    if (this.suiteRegistrationType == "nR Personal" || this.suiteRegistrationType == "netRink")
       window.location.href = "/";
-    }
-    else{
+    else
       window.location.href = "/register";
-    }
   }
 
 }

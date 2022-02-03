@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
-import { AuthApiService } from '../../../services/auth-api/auth-api.service';
+import { AuthApiService } from '../../../services/user/auth-api/auth-api.service';
 
 
 @Component({
@@ -29,18 +29,13 @@ export class RecoveryFormComponent implements OnInit {
   onSubmit(){
     this.isSending = true;
     console.log(this.recoveryForm.value);
-    this.authApi.postRecoveryEmail(this.recoveryForm.value)
-      .subscribe(
+    this.authApi.sendRecoveryEmail(this.recoveryForm.controls.eamil.value)
+      .then(
         res => {
-          console.log(res);
           this.showPrompt =  true;
           this.isSending = false;
         },
         err => {
-          console.log(err);
-          this.emailErrors = err.error.email;
-          this.nfErrors = err.error.non_field_errors;
-
           this.isSending = false;
         }
       )
