@@ -28,31 +28,31 @@ export class CalendarDetailsComponent implements OnInit {
   }
 
   getCalendar(){
-    this.calendarApi.getCalendar()
-      .subscribe(
-        res => {
-          console.log(res);
-          this.calendarData = res;
-        },
-        err => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
+    // this.calendarApi.getCalendar()
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.calendarData = res;
+    //     },
+    //     err => {
+    //       console.log(err);
+    //       this.connectionToast.openToast();
+    //     }
+    //   )
   }
 
   getSchedules(){
-    this.calendarApi.getSchedules()
-      .subscribe(
-        res => {
-          console.log(res);
-          this.schedulesGridData = res;
-        },
-        err => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
+    // this.calendarApi.getSchedules()
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.schedulesGridData = res;
+    //     },
+    //     err => {
+    //       console.log(err);
+    //       this.connectionToast.openToast();
+    //     }
+    //   )
   }
 
 }

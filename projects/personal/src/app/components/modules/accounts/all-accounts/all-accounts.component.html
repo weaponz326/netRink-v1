@@ -35,7 +35,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let data of accountsGridData" (dblclick)="viewAccount(data.id)" class="table-pointer">
+                    <tr *ngFor="let data of accountsGridData" (dblclick)="viewAccount(data.uid)" class="table-pointer">
                         <td>{{data?.account_name}}</td>
                         <td>{{data?.account_number}}</td>
                         <td>{{data?.bank_name}}</td>
@@ -45,7 +45,7 @@
                     <tr class="bg-light">
                         <td colspan="3">
                             <app-table-pagination #tablePaginationComponentReference
-                            [currentPage]="currentPage" [totalPages]="totalPages" (pageSelected)="getAccounts($event, 20, '')"
+                            [currentPage]="currentPage" [totalPages]="totalPages" (pageSelected)="getAllUserAccount()"
                             ></app-table-pagination>
                         </td>
                     </tr>

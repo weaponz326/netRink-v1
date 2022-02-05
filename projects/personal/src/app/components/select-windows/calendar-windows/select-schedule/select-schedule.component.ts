@@ -42,19 +42,19 @@ export class SelectScheduleComponent implements OnInit {
   }
 
   getAllSchedules(page: any, size: any, sortField: any){
-    this.calendarApi.getAllSchedules(page, size, sortField)
-      .subscribe(
-        res => {
-          console.log(res);
-          this.scheduleGridData = res.results;
-          this.currentPage = res.current_page;
-          this.totalPages = res.total_pages;
-        },
-        err => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
+    // this.calendarApi.getAllSchedules(page, size, sortField)
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.scheduleGridData = res.results;
+    //       this.currentPage = res.current_page;
+    //       this.totalPages = res.total_pages;
+    //     },
+    //     err => {
+    //       console.log(err);
+    //       this.connectionToast.openToast();
+    //     }
+    //   )
   }
 
   sortTable(field: any){

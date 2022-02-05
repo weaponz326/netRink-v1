@@ -1,13 +1,15 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { CalendarApiService } from 'projects/personal/src/app/services/modules/calendar-api/calendar-api.service';
-import { CalendarPrintService } from 'projects/personal/src/app/services/printing/calendar-print/calendar-print.service';
-
 import { NewCalendarComponent } from '../new-calendar/new-calendar.component'
 import { TablePaginationComponent } from 'projects/personal/src/app/components/module-utilities/table-pagination/table-pagination.component'
 import { TableSortingComponent } from 'projects/personal/src/app/components/module-utilities/table-sorting/table-sorting.component'
 import { ConnectionToastComponent } from '../../../module-utilities/connection-toast/connection-toast.component'
+
+import { CalendarApiService } from 'projects/personal/src/app/services/modules/calendar-api/calendar-api.service';
+import { CalendarPrintService } from 'projects/personal/src/app/services/printing/calendar-print/calendar-print.service';
+
+import { Calendar } from 'projects/personal/src/app/models/modules/calendar/calendar.model';
 
 
 @Component({
@@ -33,7 +35,7 @@ export class AllCalendarsComponent implements OnInit {
     { text: "All Calendars", url: "/home/calendar/all-calendars" },
   ];
 
-  calendarGridData: any[] = [];
+  calendarGridData: Calendar[] = [];
 
   currentPage = 0;
   totalPages = 0;
@@ -43,20 +45,20 @@ export class AllCalendarsComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    this.getCalendars(1, 20, "");
+    this.getAllUserCalendar();
   }
 
-  getCalendars(page: any, size: any, sortField: any){
-    this.calendarApi.getCalendars(page, size, sortField)
-      .subscribe(
-        res => {
+  getAllUserCalendar(){
+    this.calendarApi.getAllUserCalendar({}, 20, {})
+      .then(
+        (res: any) => {
           console.log(res);
           this.calendarGridData = res.results;
-          this.currentPage = res.current_page;
-          this.totalPages = res.total_pages;
-          this.totalItems = res.count;
+          // this.currentPage = res.current_page;
+          // this.totalPages = res.total_pages;
+          // this.totalItems = res.count;
         },
-        err => {
+        (err: any) => {
           this.connectionToast.openToast();
           console.log(err);
         }
@@ -72,7 +74,7 @@ export class AllCalendarsComponent implements OnInit {
 
   sortTable(field: any){
     console.log(field);
-    this.getCalendars(1, 20, field);
+    this.getAllUserCalendar();
 
     if((field == 'calendar_name') || (field == "-calendar_name")){
       this.createdAtSorting.resetSort();

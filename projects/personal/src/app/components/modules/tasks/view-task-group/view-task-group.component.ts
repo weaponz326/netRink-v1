@@ -1,9 +1,11 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 
+import { ConnectionToastComponent } from '../../../module-utilities/connection-toast/connection-toast.component'
+
 import { TasksApiService } from 'projects/personal/src/app/services/modules/tasks-api/tasks-api.service';
 
-import { ConnectionToastComponent } from '../../../module-utilities/connection-toast/connection-toast.component'
+import { TaskGroup } from 'projects/personal/src/app/models/modules/tasks/tasks.model';
 
 
 @Component({
@@ -22,8 +24,7 @@ export class ViewTaskGroupComponent implements OnInit {
   ];
 
   taskGroupForm: FormGroup = new FormGroup({});
-
-  taskGroupFormData: any[] = [];
+  taskGroupFormData: TaskGroup = {uid: "", user: "", task_group: "", created_at: new Date()};
 
   isTaskGroupSaving: boolean = false;
 
@@ -42,35 +43,38 @@ export class ViewTaskGroupComponent implements OnInit {
   }
 
   getTaskGroup(){
-    this.tasksApi.getSingleTaskGroup()
-      .subscribe(
-        res => {
+    this.tasksApi.getTaskGroup()
+      .then(
+        (res: any) => {
           console.log(res);
-          this.taskGroupForm.controls.taskGroupName.setValue(res.task_group);
+          this.taskGroupFormData = res
+          this.taskGroupForm.controls.taskGroupName.setValue(this.taskGroupFormData.task_group);
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }
       )
   }
 
-  putTaskGroup(){
-    let data = {
-      user: localStorage.getItem('personal_id'),
-      task_roup: this.taskGroupForm.controls.taskGroupName.value
+  updateTaskGroup(){
+    let data: TaskGroup = {
+      uid: this.taskGroupFormData.uid,
+      user: localStorage.getItem('personal_id') as string,
+      task_group: this.taskGroupForm.controls.taskGroupName.value,
+      created_at: this.taskGroupFormData.created_at
     }
 
     console.log(data);
     this.isTaskGroupSaving = true;
 
-    this.tasksApi.putTaskGroup(data)
-      .subscribe(
-        res => {
+    this.tasksApi.updateTaskGroup(data)
+      .then(
+        (res: any) => {
           console.log(res);
           this.isTaskGroupSaving = false;
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
           this.isTaskGroupSaving = false;

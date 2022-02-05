@@ -40,19 +40,19 @@ export class SelectCalendarComponent implements OnInit {
   }
 
   getCalendars(page: any, size: any, sortField: any){
-    this.calendarApi.getCalendars(page, size, sortField)
-      .subscribe(
-        res => {
-          console.log(res);
-          this.calendarGridData = res.results;
-          this.currentPage = res.current_page;
-          this.totalPages = res.total_pages;
-        },
-        err => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
+    // this.calendarApi.getCalendars(page, size, sortField)
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.calendarGridData = res.results;
+    //       this.currentPage = res.current_page;
+    //       this.totalPages = res.total_pages;
+    //     },
+    //     err => {
+    //       console.log(err);
+    //       this.connectionToast.openToast();
+    //     }
+    //   )
   }
 
   sortTable(field: any){

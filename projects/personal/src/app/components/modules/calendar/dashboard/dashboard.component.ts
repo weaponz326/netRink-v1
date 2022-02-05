@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
+import { ConnectionToastComponent } from '../../../module-utilities/connection-toast/connection-toast.component'
+
 import { ChartDataSets, ChartOptions } from 'chart.js';
 import { Color, Label, SingleDataSet } from 'ng2-charts';
 
 import { CalendarApiService } from 'projects/personal/src/app/services/modules/calendar-api/calendar-api.service';
-
-import { ConnectionToastComponent } from '../../../module-utilities/connection-toast/connection-toast.component'
 
 
 @Component({
@@ -26,6 +26,7 @@ export class DashboardComponent implements OnInit {
   allCalendarsCount: number = 0;
   allSchedulesCount: number = 0;
 
+  chartOptions = {};
   schedulesLineChartData: ChartDataSets[] = [{ data: [0], label: 'Schedules' }];
   schedulesLineChartLabels: Label[] = [""]
 
@@ -33,54 +34,54 @@ export class DashboardComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    this.getCalendarsCount();
-    this.getSchedulesCount();
-    this.getScheduleAnnotation();
+    // this.getCalendarsCount();
+    // this.getSchedulesCount();
+    // this.getScheduleAnnotation();
 
-    // this.initChart();
+    this.initChart();
   }
 
-  getCalendarsCount(){
-    this.calendarApi.getCounts("Calendar")
-      .subscribe(
-        res => {
-          console.log(res);
-          this.allCalendarsCount = res;
-        },
-        err => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
-  }
+  // getCalendarsCount(){
+  //   this.calendarApi.getCounts("Calendar")
+  //     .subscribe(
+  //       res => {
+  //         console.log(res);
+  //         this.allCalendarsCount = res;
+  //       },
+  //       err => {
+  //         console.log(err);
+  //         this.connectionToast.openToast();
+  //       }
+  //     )
+  // }
 
-  getSchedulesCount(){
-    this.calendarApi.getCounts("Schedule")
-      .subscribe(
-        res => {
-          console.log(res);
-          this.allSchedulesCount = res;
-        },
-        err => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
-  }
+  // getSchedulesCount(){
+  //   this.calendarApi.getCounts("Schedule")
+  //     .subscribe(
+  //       res => {
+  //         console.log(res);
+  //         this.allSchedulesCount = res;
+  //       },
+  //       err => {
+  //         console.log(err);
+  //         this.connectionToast.openToast();
+  //       }
+  //     )
+  // }
 
-  getScheduleAnnotation(){
-    this.calendarApi.getAnnotation("Schedule")
-      .subscribe(
-        res => {
-          console.log(res);
-          this.setScheduleChartData(res);
-        },
-        err => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
-  }
+  // getScheduleAnnotation(){
+  //   this.calendarApi.getAnnotation("Schedule")
+  //     .subscribe(
+  //       res => {
+  //         console.log(res);
+  //         this.setScheduleChartData(res);
+  //       },
+  //       err => {
+  //         console.log(err);
+  //         this.connectionToast.openToast();
+  //       }
+  //     )
+  // }
 
   setScheduleChartData(data: any){
     this.schedulesLineChartLabels = [];
@@ -97,8 +98,8 @@ export class DashboardComponent implements OnInit {
     this.schedulesLineChartData = [{ data: rawData, label: 'Schedules' }];
   }
 
-  // initChart(){
-    chartOptions = {
+  initChart(){
+    this.chartOptions = {
       responsive: true,
       scales: {
         yAxes: [{
@@ -110,6 +111,6 @@ export class DashboardComponent implements OnInit {
         }]
       }
     };
-  // }
+  }
 
 }

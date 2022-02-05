@@ -42,47 +42,47 @@ export class BudgetDetailsComponent implements OnInit {
   }
 
   getBudget(){
-    this.budgetApi.getSingleBudget()
-      .subscribe(
-        res => {
-          console.log(res);
-          this.budgetData = res;
-        },
-        err => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
+    // this.budgetApi.getSingleBudget()
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.budgetData = res;
+    //     },
+    //     err => {
+    //       console.log(err);
+    //       this.connectionToast.openToast();
+    //     }
+    //   )
   }
 
   getIncome(){
-    this.budgetApi.getIncome()
-      .subscribe(
-        res => {
-          console.log(res);
-          this.incomeGridData = res;
-          this.calculateIoe();
-        },
-        err => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
+    // this.budgetApi.getIncome()
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.incomeGridData = res;
+    //       this.calculateIoe();
+    //     },
+    //     err => {
+    //       console.log(err);
+    //       this.connectionToast.openToast();
+    //     }
+    //   )
   }
 
   getExpenditure(){
-    this.budgetApi.getExpenditure()
-      .subscribe(
-        res => {
-          console.log(res);
-          this.expenditureGridData = res;
-          this.calculateIoe();
-        },
-        err => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
+    // this.budgetApi.getExpenditure()
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.expenditureGridData = res;
+    //       this.calculateIoe();
+    //     },
+    //     err => {
+    //       console.log(err);
+    //       this.connectionToast.openToast();
+    //     }
+    //   )
   }
 
 }

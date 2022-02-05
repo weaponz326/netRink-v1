@@ -2,9 +2,11 @@ import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angula
 import { Router } from '@angular/router';
 import { FormControl, FormGroup } from '@angular/forms';
 
+import { ConnectionToastComponent } from '../../../module-utilities/connection-toast/connection-toast.component'
+
 import { CalendarApiService } from 'projects/personal/src/app/services/modules/calendar-api/calendar-api.service';
 
-import { ConnectionToastComponent } from '../../../module-utilities/connection-toast/connection-toast.component'
+import { Calendar } from 'projects/personal/src/app/models/modules/calendar/calendar.model';
 
 
 @Component({
@@ -38,17 +40,19 @@ export class NewCalendarComponent implements OnInit {
     })
   }
 
-  postCalendar(){
-    let data = {
-      user: localStorage.getItem('personal_id'),
-      calendar_name: this.calendarForm.controls.calendarName.value
+  createCalendar(){
+    let data: Calendar = {
+      uid: "",
+      user: localStorage.getItem('personal_id') as string,
+      calendar_name: this.calendarForm.controls.calendarName.value,
+      created_at: new Date(),
     }
 
     console.log(data);
 
-    this.calendarApi.postCalendar(data)
-      .subscribe(
-        res => {
+    this.calendarApi.createCalendar(data)
+      .then(
+        (res: any) => {
           console.log(res);
 
           if(res.id){
@@ -56,7 +60,7 @@ export class NewCalendarComponent implements OnInit {
             this.router.navigateByUrl('/home/calendar/view-calendar');
           }
         },
-        err => {
+        (err: any) => {
           this.connectionToast.openToast();
           console.log(err);
         }

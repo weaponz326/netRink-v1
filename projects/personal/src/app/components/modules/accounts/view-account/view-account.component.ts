@@ -2,12 +2,14 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormControl, FormGroup } from '@angular/forms';
 
-import { AccountsApiService } from 'projects/personal/src/app/services/modules/accounts-api/accounts-api.service';
-import { AccountsPrintService } from 'projects/personal/src/app/services/printing/accounts-print/accounts-print.service';
-
 import { AccountTransactionsComponent } from '../account-transactions/account-transactions.component';
 import { ConnectionToastComponent } from '../../../module-utilities/connection-toast/connection-toast.component'
 import { DeleteModalComponent } from '../../../module-utilities/delete-modal/delete-modal.component'
+
+import { AccountsApiService } from 'projects/personal/src/app/services/modules/accounts-api/accounts-api.service';
+import { AccountsPrintService } from 'projects/personal/src/app/services/printing/accounts-print/accounts-print.service';
+
+import { Account } from 'projects/personal/src/app/models/modules/accounts/accounts.model';
 
 
 @Component({
@@ -33,11 +35,9 @@ export class ViewAccountComponent implements OnInit {
   ];
 
   accountForm: FormGroup = new FormGroup({});
+  accountFormData: Account = {uid: "", user: "", account_name: "", account_number: "", bank_name: "", account_type: ""}
 
   balance = 0;
-
-  accountFormData = {};
-  transactionsGridData = [];
 
   isAccountSaving: boolean = false;
 
@@ -59,25 +59,29 @@ export class ViewAccountComponent implements OnInit {
   }
 
   getAccount(){
-    this.accountsApi.getSingleAccount()
-      .subscribe(
-        res => {
+    this.accountsApi.getAccount()
+      .then(
+        (res: any) => {
           console.log(res);
-          this.accountForm.controls.accountName.setValue(res.account_name);
-          this.accountForm.controls.accountNumber.setValue(res.account_number);
-          this.accountForm.controls.bankName.setValue(res.bank_name);
-          this.accountForm.controls.accountType.setValue(res.account_type);
+
+          this.accountFormData = res;
+
+          this.accountForm.controls.accountName.setValue(this.accountFormData.account_name);
+          this.accountForm.controls.accountNumber.setValue(this.accountFormData.account_number);
+          this.accountForm.controls.bankName.setValue(this.accountFormData.bank_name);
+          this.accountForm.controls.accountType.setValue(this.accountFormData.account_type);
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }
       )
   }
 
-  putAccount(){
-    let data = {
-      user: localStorage.getItem('personal_id'),
+  updateAccount(){
+    let data: Account = {
+      uid: this.accountFormData.uid,
+      user: localStorage.getItem('personal_id') as string,
       account_name: this.accountForm.controls.accountName.value,
       account_number: this.accountForm.controls.accountNumber.value,
       bank_name: this.accountForm.controls.bankName.value,
@@ -87,13 +91,13 @@ export class ViewAccountComponent implements OnInit {
     console.log(data);
     this.isAccountSaving = true;
 
-    this.accountsApi.putAccount(data)
-      .subscribe(
-        res => {
+    this.accountsApi.updateAccount(data)
+      .then(
+        (res: any) => {
           console.log(res);
           this.isAccountSaving = false;
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
           this.isAccountSaving = false;
@@ -103,12 +107,12 @@ export class ViewAccountComponent implements OnInit {
 
   deleteAccount(){
     this.accountsApi.deleteAccount()
-      .subscribe(
-        res => {
+      .then(
+        (res: any) => {
           console.log(res);
           this.router.navigateByUrl('/home/accounts/all-accounts');
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }

@@ -1,11 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
-import { CalendarApiService } from 'projects/personal/src/app/services/modules/calendar-api/calendar-api.service';
-import { CalendarPrintService } from 'projects/personal/src/app/services/printing/calendar-print/calendar-print.service';
-
 import { TablePaginationComponent } from 'projects/personal/src/app/components/module-utilities/table-pagination/table-pagination.component'
 import { TableSortingComponent } from 'projects/personal/src/app/components/module-utilities/table-sorting/table-sorting.component'
 import { ConnectionToastComponent } from '../../../module-utilities/connection-toast/connection-toast.component'
+
+import { CalendarApiService } from 'projects/personal/src/app/services/modules/calendar-api/calendar-api.service';
+import { CalendarPrintService } from 'projects/personal/src/app/services/printing/calendar-print/calendar-print.service';
+
+import { Schedule } from 'projects/personal/src/app/models/modules/calendar/calendar.model';
 
 
 @Component({
@@ -26,12 +28,13 @@ export class AllSchedulesComponent implements OnInit {
   @ViewChild('startDateSortingComponentReference', { read: TableSortingComponent, static: false }) startDateSorting!: TableSortingComponent;
   @ViewChild('endDateSortingComponentReference', { read: TableSortingComponent, static: false }) endDateSorting!: TableSortingComponent;
   @ViewChild('statusSortingComponentReference', { read: TableSortingComponent, static: false }) statusSorting!: TableSortingComponent;
+  @ViewChild('calendarSortingComponentReference', { read: TableSortingComponent, static: false }) calendarSorting!: TableSortingComponent;
 
   navHeading: any[] = [
     { text: "All Schedules", url: "/home/calendar/all-schedules" },
   ];
 
-  schedulesGridData: any[] = [];
+  schedulesGridData: Schedule[] = [];
 
   currentPage = 0;
   totalPages = 0;
@@ -41,20 +44,20 @@ export class AllSchedulesComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    this.getAllSchedules(1, 20, "");
+    this.getAllUserSchedule();
   }
 
-  getAllSchedules(page: any, size: any, sortField: any){
-    this.calendarApi.getAllSchedules(page, size, sortField)
-      .subscribe(
-        res => {
+  getAllUserSchedule(){
+    this.calendarApi.getAllUserSchedule({}, 20, {})
+      .then(
+        (res: any) => {
           console.log(res);
           this.schedulesGridData = res.results;
-          this.currentPage = res.current_page;
-          this.totalPages = res.total_pages;
-          this.totalItems = res.count;
+          // this.currentPage = res.current_page;
+          // this.totalPages = res.total_pages;
+          // this.totalItems = res.count;
         },
-        err => {
+        (err: any) => {
           this.connectionToast.openToast();
           console.log(err);
         }
@@ -63,27 +66,37 @@ export class AllSchedulesComponent implements OnInit {
 
   sortTable(field: any){
     console.log(field);
-    this.getAllSchedules(1, 20, field);
+    this.getAllUserSchedule();
 
     if((field == 'schedule_name') || (field == "-schedule_name")){
       this.startDateSorting.resetSort();
       this.endDateSorting.resetSort();
       this.statusSorting.resetSort();
+      this.calendarSorting.resetSort();
     }
     else if((field == 'start_date') || (field == "-start_date")){
       this.scheduleNameSorting.resetSort();
       this.endDateSorting.resetSort();
       this.statusSorting.resetSort();
+      this.calendarSorting.resetSort();
     }
     else if((field == 'end_date') || (field == "-end_date")){
       this.scheduleNameSorting.resetSort();
       this.startDateSorting.resetSort();
       this.statusSorting.resetSort();
+      this.calendarSorting.resetSort();
     }
     else if((field == 'status') || (field == "-status")){
       this.scheduleNameSorting.resetSort();
       this.startDateSorting.resetSort();
       this.endDateSorting.resetSort();
+      this.calendarSorting.resetSort();
+    }
+    else if((field == 'calendar') || (field == "-calendar")){
+      this.scheduleNameSorting.resetSort();
+      this.startDateSorting.resetSort();
+      this.endDateSorting.resetSort();
+      this.statusSorting.resetSort();
     }
   }
 

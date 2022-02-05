@@ -1,9 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs'
 
-import { environment } from 'projects/personal/src/environments/environment'
-import { EndpointsService } from 'projects/application/src/app/services/endpoints/endpoints.service';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 
 
 @Injectable({
@@ -12,82 +9,69 @@ import { EndpointsService } from 'projects/application/src/app/services/endpoint
 export class AccountsApiService {
 
   constructor(
-    private http: HttpClient,
-    private endpoints: EndpointsService
+    private afs: AngularFirestore,
   ) { }
 
-  personalUrl = environment.personalUrl;
+  accountRef = this.afs.collection('personal/accounts/account');
+  incomeRef = this.afs.collection('personal/accounts/transaction');
 
-  // create and get all accounts belonging to user
+  personalId = localStorage.getItem('personal_id') as string;
+  accountId = sessionStorage.getItem('personal_account_id') as string;
 
-  public getAccounts(page: any, size: any, sortField: any): Observable<any>{
-    return this.http.get(this.personalUrl + "module-accounts/account?user=" + localStorage.getItem('personal_id')
-      + "&page=" + page
-      + "&size=" + size
-      + "&ordering=" + sortField,
-      this.endpoints.headers);
+  // account
+
+  createAccount(account: any){
+    return this.accountRef.add(account);
   }
 
-  public postAccount(account: any): Observable<any>{
-    return this.http.post(this.personalUrl + "module-accounts/account/", account, this.endpoints.headers);
+  getAccount(){
+    return this.accountRef.doc(this.accountId).ref.get();
   }
 
-  // retreive, update and delete account
-
-  public getSingleAccount(): Observable<any>{
-    return this.http.get(this.personalUrl + "module-accounts/account/" + sessionStorage.getItem('personal_account_id'), this.endpoints.headers);
+  updateAccount(account: any){
+    return this.accountRef.doc(this.accountId).update(account);
   }
 
-  public putAccount(account: any): Observable<any>{
-    return this.http.put(this.personalUrl + "module-accounts/account/" + sessionStorage.getItem('personal_account_id'), account, this.endpoints.headers);
+  deleteAccount(){
+    return this.accountRef.doc(this.accountId).delete();
   }
 
-  public deleteAccount(): Observable<any>{
-    return this.http.delete(this.personalUrl + "module-accounts/account/" + sessionStorage.getItem('personal_account_id'), this.endpoints.headers);
+  getAllUserAccount(ordering: any, pageSize: any, pageStart: any){
+    return this.accountRef.ref
+      .where("user", "==", this.personalId)
+      .orderBy(ordering.field, ordering.direction)
+      .startAt(pageStart)
+      .limit(pageSize)
+      .get();
   }
 
-  // -----------------------------------------------------------------------------------------------------------------------------------------
   // transactions
 
-  // get transactions belonging to an account
-  public getTransactions(): Observable<any>{
-    return this.http.get(this.personalUrl + "module-accounts/transaction?account=" + sessionStorage.getItem('personal_account_id'), this.endpoints.headers);
+  createTransaction(transaction: any){
+    return this.accountRef.add(transaction);
   }
 
-  // getsingle transaction
-  public getSingleTransaction(transactionId: any): Observable<any>{
-    return this.http.get(this.personalUrl + "module-accounts/transaction/" + transactionId, this.endpoints.headers);
+  updateTransaction(transactionId: any, transaction: any){
+    return this.accountRef.doc(transactionId).update(transaction);
   }
 
-  public postTransaction(transactionData: any): Observable<any>{
-    return this.http.post(this.personalUrl + "module-accounts/transaction/", transactionData, this.endpoints.headers);
+  deleteTransaction(transactionId: any){
+    return this.accountRef.doc(transactionId).delete();
   }
 
-  public putTransaction(transactionId: any, transactionData: any): Observable<any>{
-    return this.http.put(this.personalUrl + "module-accounts/transaction/" + transactionId, transactionData, this.endpoints.headers);
+  getAllAccountTransaction(){
+    return this.accountRef.ref
+      .where("user", "==", this.accountId)
+      .get();
   }
 
-  public deleteTransaction(transactionId: any): Observable<any>{
-    return this.http.delete(this.personalUrl + "module-accounts/transaction/" + transactionId, this.endpoints.headers);
-  }
-
-  // all transactions belonging to a user
-  public getAllTransactions(page: any, size: any, sortField: any): Observable<any>{
-    return this.http.get(this.personalUrl + "module-accounts/all-transactions?user=" + localStorage.getItem('personal_id')
-      + "&page=" + page
-      + "&size=" + size
-      + "&ordering=" + sortField,
-      this.endpoints.headers);
-  }
-
-  // dashboard
-
-  public getCounts(model: any): Observable<any>{
-    return this.http.get(this.personalUrl + "module-accounts/count?user=" + localStorage.getItem('personal_id') + "&model=" + model, this.endpoints.headers);
-  }
-
-  public getAnnotation(model: any): Observable<any>{
-    return this.http.get(this.personalUrl + "module-accounts/annotate?user=" + localStorage.getItem('personal_id') + "&model=" + model, this.endpoints.headers);
+  getAllUserTransaction(ordering: any, pageSize: any, pageStart: any){
+    return this.accountRef.ref
+      .where("account.user", "==", this.personalId)
+      .orderBy(ordering.field, ordering.direction)
+      .startAt(pageStart)
+      .limit(pageSize)
+      .get();
   }
 
 }

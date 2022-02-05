@@ -22,17 +22,17 @@ export class AccountsPrintService {
   // all accounts
 
   getPrintAccounts(count: any){
-    this.accountsApi.getAccounts(1, count, "")
-      .subscribe(
-        res => {
-          console.log(res);
-          this.accountsGridData = res.results;
-          this.printAllAccounts();
-        },
-        err => {
-          console.log(err);
-        }
-      )
+    // this.accountsApi.getAccounts(1, count, "")
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.accountsGridData = res.results;
+    //       this.printAllAccounts();
+    //     },
+    //     err => {
+    //       console.log(err);
+    //     }
+    //   )
   }
 
   printAllAccounts(){
@@ -71,31 +71,31 @@ export class AccountsPrintService {
   // view account
 
   getPrintAccount(){
-    this.accountsApi.getSingleAccount()
-      .subscribe(
-        res => {
-          console.log(res);
-          this.accountFormData = res;
-          this.getPrintTransactions();
-        },
-        err => {
-          console.log(err);
-        }
-      )
+    // this.accountsApi.getSingleAccount()
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.accountFormData = res;
+    //       this.getPrintTransactions();
+    //     },
+    //     err => {
+    //       console.log(err);
+    //     }
+    //   )
   }
 
   getPrintTransactions(){
-    this.accountsApi.getTransactions()
-      .subscribe(
-        res => {
-          console.log(res);
-          this.transactionsGridData = res;
-          this.printViewAccount();
-        },
-        err => {
-          console.log(err);
-        }
-      )
+    // this.accountsApi.getTransactions()
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.transactionsGridData = res;
+    //       this.printViewAccount();
+    //     },
+    //     err => {
+    //       console.log(err);
+    //     }
+    //   )
   }
 
   printViewAccount(){
@@ -149,17 +149,17 @@ export class AccountsPrintService {
   // all transaction
 
   getPrintAllTransactions(count: any){
-    this.accountsApi.getAllTransactions(1, count, "")
-      .subscribe(
-        res => {
-          console.log(res);
-          this.allTransactionsGridData = res.results;
-          this.printAllTransactions();
-        },
-        err => {
-          console.log(err);
-        }
-      )
+    // this.accountsApi.getAllTransactions(1, count, "")
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.allTransactionsGridData = res.results;
+    //       this.printAllTransactions();
+    //     },
+    //     err => {
+    //       console.log(err);
+    //     }
+    //   )
   }
 
   printAllTransactions(){

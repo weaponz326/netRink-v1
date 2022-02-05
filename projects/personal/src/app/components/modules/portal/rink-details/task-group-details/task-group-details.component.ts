@@ -28,31 +28,31 @@ export class TaskGroupDetailsComponent implements OnInit {
   }
 
   getTaskGroup(){
-    this.tasksApi.getSingleTaskGroup()
-      .subscribe(
-        res => {
-          console.log(res);
-          this.taskGroupData = res;
-        },
-        err => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
+    // this.tasksApi.getSingleTaskGroup()
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.taskGroupData = res;
+    //     },
+    //     err => {
+    //       console.log(err);
+    //       this.connectionToast.openToast();
+    //     }
+    //   )
   }
 
   getTaskItems(){
-    this.tasksApi.getTasks()
-      .subscribe(
-        res => {
-          console.log(res);
-          this.taskItemsGridData = res;
-        },
-        err => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
+    // this.tasksApi.getTasks()
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.taskItemsGridData = res;
+    //     },
+    //     err => {
+    //       console.log(err);
+    //       this.connectionToast.openToast();
+    //     }
+    //   )
   }
 
 }

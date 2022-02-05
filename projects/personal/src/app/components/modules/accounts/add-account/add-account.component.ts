@@ -2,9 +2,11 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormControl, FormGroup } from '@angular/forms';
 
+import { ConnectionToastComponent } from '../../../module-utilities/connection-toast/connection-toast.component'
+
 import { AccountsApiService } from 'projects/personal/src/app/services/modules/accounts-api/accounts-api.service';
 
-import { ConnectionToastComponent } from '../../../module-utilities/connection-toast/connection-toast.component'
+import { Account } from 'projects/personal/src/app/models/modules/accounts/accounts.model';
 
 
 @Component({
@@ -43,9 +45,10 @@ export class AddAccountComponent implements OnInit {
     })
   }
 
-  postAccount(){
-    let data = {
-      user: localStorage.getItem('personal_id'),
+  createAccount(){
+    let data: Account = {
+      uid: "",
+      user: localStorage.getItem('personal_id') as string,
       account_name: this.accountForm.controls.accountName.value,
       account_number: this.accountForm.controls.accountNumber.value,
       bank_name: this.accountForm.controls.bankName.value,
@@ -54,9 +57,9 @@ export class AddAccountComponent implements OnInit {
 
     console.log(data);
 
-    this.accountsApi.postAccount(data)
-      .subscribe(
-        res => {
+    this.accountsApi.createAccount(data)
+      .then(
+        (res: any) => {
           console.log(res);
 
           if(res.id){
@@ -64,7 +67,7 @@ export class AddAccountComponent implements OnInit {
             this.router.navigateByUrl('/home/accounts/view-account');
           }
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }

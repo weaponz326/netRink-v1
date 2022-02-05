@@ -5,6 +5,8 @@ import { Observable } from 'rxjs'
 import { environment } from 'projects/personal/src/environments/environment'
 import { EndpointsService } from 'projects/application/src/app/services/endpoints/endpoints.service';
 
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+
 
 @Injectable({
   providedIn: 'root'
@@ -13,77 +15,74 @@ export class TasksApiService {
 
   constructor(
     private http: HttpClient,
-    private endpoints: EndpointsService
+    private endpoints: EndpointsService,
+    private afs: AngularFirestore
   ) { }
 
-  personalUrl = environment.personalUrl;
+  taskGroupRef = this.afs.collection('personal/taks/task-group');
+  taskItemRef = this.afs.collection('personal/taks/task-item');
 
-  public getTaskGroups(page: any, size: any, sortField: any): Observable<any>{
-    return this.http.get(this.personalUrl + "module-tasks/task-group?user=" + localStorage.getItem('personal_id')
-      + "&page=" + page
-      + "&size=" + size
-      + "&ordering=" + sortField,
-      this.endpoints.headers);
+  personalId = localStorage.getItem('personal_id') as string;
+  taskGroupId = sessionStorage.getItem('personal_task_group_id') as string;
+
+  // task groups
+
+  createTaskGroup(taskGroup: any){
+    return this.taskGroupRef.add(taskGroup);
   }
 
-  public postTaskGroup(task: any): Observable<any>{
-    return this.http.post(this.personalUrl + "module-tasks/task-group/", task, this.endpoints.headers);
+  getTaskGroup(){
+    return this.taskGroupRef.doc(this.taskGroupId).ref.get();
   }
 
-  // retreive, update and delete task
-
-  public getSingleTaskGroup(): Observable<any>{
-    return this.http.get(this.personalUrl + "module-tasks/task-group/" + sessionStorage.getItem('personal_task_group_id'), this.endpoints.headers);
+  updateTaskGroup(taskGroup: any){
+    return this.taskGroupRef.doc(this.taskGroupId).update(taskGroup);
   }
 
-  public putTaskGroup(task: any): Observable<any>{
-    return this.http.put(this.personalUrl + "module-tasks/task-group/" + sessionStorage.getItem('personal_task_group_id'), task, this.endpoints.headers);
+  deleteTaskGroup(){
+    return this.taskGroupRef.doc(this.taskGroupId).delete();
   }
 
-  public deleteTaskGroup(): Observable<any>{
-    return this.http.delete(this.personalUrl + "module-tasks/task-group/" + sessionStorage.getItem('personal_task_group_id'), this.endpoints.headers);
+  getAllUserTaskGroup(ordering: any, pageSize: any, pageStart: any){
+    return this.taskGroupRef.ref
+      .where("user", "==", this.personalId)
+      .orderBy(ordering.field, ordering.direction)
+      .startAt(pageStart)
+      .limit(pageSize)
+      .get();
   }
 
-  // tasks
+  // task items
 
-  public getAllTaskItems(page: any, size: any, sortField: any): Observable<any>{
-    return this.http.get(this.personalUrl + "module-tasks/all-task-item?user=" + localStorage.getItem('personal_id')
-      + "&page=" + page
-      + "&size=" + size
-      + "&ordering=" + sortField,
-      this.endpoints.headers);
+  createTaskItem(taskItem: any){
+    return this.taskItemRef.add(taskItem);
   }
 
-  public getTasks(): Observable<any>{
-    return this.http.get(this.personalUrl + "module-tasks/task-item?task_group=" + sessionStorage.getItem('personal_task_group_id'), this.endpoints.headers);
+  getTaskItem(taskItemId: any){
+    return this.taskItemRef.doc(taskItemId).ref.get();
   }
 
-  public postTask(task: any): Observable<any>{
-    return this.http.post(this.personalUrl + "module-tasks/task-item/", task, this.endpoints.headers);
+  updateTaskItem(taskItemId: any, taskItem: any){
+    return this.taskItemRef.doc(taskItemId).update(taskItem);
   }
 
-  // retreive, update and delete task
-
-  public getSingleTask(taskId: any): Observable<any>{
-    return this.http.get(this.personalUrl + "module-tasks/task-item/" + taskId, this.endpoints.headers);
+  deleteTaskItem(taskItemId: any){
+    return this.taskItemRef.doc(taskItemId).delete();
   }
 
-  public putTask(taskId: any, task: any): Observable<any>{
-    return this.http.put(this.personalUrl + "module-tasks/task-item/" + taskId, task, this.endpoints.headers);
+  getAllTaskGroupTaskItem(){
+    return this.taskItemRef.ref
+      .where("calendar.uid", "==", this.taskGroupId)
+      .get();
   }
 
-  public deleteTask(taskId: any): Observable<any>{
-    return this.http.delete(this.personalUrl + "module-tasks/task-item/" + taskId, this.endpoints.headers);
-  }
-
-  // dashboard
-
-  public getCounts(model: any): Observable<any>{
-    return this.http.get(this.personalUrl + "module-tasks/count?user=" + localStorage.getItem('personal_id') + "&model=" + model, this.endpoints.headers);
-  }
-
-  public getAnnotation(model: any): Observable<any>{
-    return this.http.get(this.personalUrl + "module-tasks/annotate?user=" + localStorage.getItem('personal_id') + "&model=" + model, this.endpoints.headers);
+  getAllUserTaskItem(ordering: any, pageSize: any, pageStart: any){
+    return this.taskItemRef.ref
+      .where("user", "==", this.personalId)
+      .orderBy(ordering.field, ordering.direction)
+      .startAt(pageStart)
+      .limit(pageSize)
+      .get();
   }
 
 }

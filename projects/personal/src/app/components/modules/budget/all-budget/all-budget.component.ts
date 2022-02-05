@@ -1,13 +1,15 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { BudgetApiService } from 'projects/personal/src/app/services/modules/budget-api/budget-api.service';
-import { BudgetPrintService } from 'projects/personal/src/app/services/printing/budget-print/budget-print.service';
-
 import { NewBudgetComponent } from '../new-budget/new-budget.component'
 import { ConnectionToastComponent } from '../../../module-utilities/connection-toast/connection-toast.component'
 import { TablePaginationComponent } from 'projects/personal/src/app/components/module-utilities/table-pagination/table-pagination.component'
 import { TableSortingComponent } from 'projects/personal/src/app/components/module-utilities/table-sorting/table-sorting.component'
+
+import { BudgetApiService } from 'projects/personal/src/app/services/modules/budget-api/budget-api.service';
+import { BudgetPrintService } from 'projects/personal/src/app/services/printing/budget-print/budget-print.service';
+
+import { Budget } from 'projects/personal/src/app/models/modules/budget/budget.model';
 
 
 @Component({
@@ -33,7 +35,7 @@ export class AllBudgetComponent implements OnInit {
     { text: "All Budgets", url: "/home/budget/all-budget" },
   ];
 
-  budgetGridData: any[] = [];
+  budgetGridData: Budget[] = [];
 
   currentPage = 0;
   totalPages = 0;
@@ -43,20 +45,20 @@ export class AllBudgetComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    this.getBudgets(1, 20, "");
+    this.getAllUserBudget();
   }
 
-  getBudgets(page: any, size: any, sortField: any){
-    this.budgetApi.getBudgets(page, size, sortField)
-      .subscribe(
-        res => {
+  getAllUserBudget(){
+    this.budgetApi.getAllUserBudget({}, 20, {})
+      .then(
+        (res: any) => {
           console.log(res);
           this.budgetGridData = res.results;
-          this.currentPage = res.current_page;
-          this.totalPages = res.total_pages;
-          this.totalItems = res.count;
+          // this.currentPage = res.current_page;
+          // this.totalPages = res.total_pages;
+          // this.totalItems = res.count;
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }
@@ -72,7 +74,7 @@ export class AllBudgetComponent implements OnInit {
 
   sortTable(field: any){
     console.log(field);
-    this.getBudgets(1, 20, field);
+    this.getAllUserBudget();
 
     if((field == 'budget_name') || (field == "-budget_name")){
       this.budgetTypeSorting.resetSort();

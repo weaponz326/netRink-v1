@@ -2,9 +2,11 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormControl, FormGroup } from '@angular/forms';
 
+import { ConnectionToastComponent } from '../../../module-utilities/connection-toast/connection-toast.component'
+
 import { BudgetApiService } from 'projects/personal/src/app/services/modules/budget-api/budget-api.service';
 
-import { ConnectionToastComponent } from '../../../module-utilities/connection-toast/connection-toast.component'
+import { Budget } from 'projects/personal/src/app/models/modules/budget/budget.model';
 
 
 @Component({
@@ -41,30 +43,31 @@ export class NewBudgetComponent implements OnInit {
     })
   }
 
-  postBudget(){
-    let data = {
-      user: localStorage.getItem('personal_id'),
+  createBudget(){
+    let data: Budget = {
+      uid: "",
+      user: localStorage.getItem('personal_id') as string,
       budget_name: this.budgetForm.controls.budgetName.value,
       budget_type: this.budgetForm.controls.budgetType.value
     }
 
     console.log(data);
 
-    // this.budgetApi.postBudget(data)
-    //   .subscribe(
-    //     res => {
-    //       console.log(res);
+    this.budgetApi.createBudget(data)
+      .then(
+        (res: any) => {
+          console.log(res);
 
-    //       if(res.id){
-    //         sessionStorage.setItem('personal_budget_id', res.id);
-    //         this.router.navigateByUrl('/home/budget/view-budget');
-    //       }
-    //     },
-    //     err => {
-    //       console.log(err);
-    //       this.connectionToast.openToast();
-    //     }
-    //   )
+          if(res.id){
+            sessionStorage.setItem('personal_budget_id', res.id);
+            this.router.navigateByUrl('/home/budget/view-budget');
+          }
+        },
+        (err: any) => {
+          console.log(err);
+          this.connectionToast.openToast();
+        }
+      )
   }
 
 }

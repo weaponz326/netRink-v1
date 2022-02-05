@@ -15,18 +15,6 @@
                             ></app-table-sorting>
                         </th>
                         <th width="20%">
-                            Account Name
-                            <app-table-sorting #accountNameSortingComponentReference
-                            [sortField]="'account_name'" (sortDirection)="sortTable($event)"
-                            ></app-table-sorting>
-                        </th>
-                        <th width="18%">
-                            Bank
-                            <app-table-sorting #bankNameSortingComponentReference
-                            [sortField]="'bank_name'" (sortDirection)="sortTable($event)"
-                            ></app-table-sorting>
-                        </th>
-                        <th width="20%">
                             Description
                             <app-table-sorting #descriptionSortingComponentReference
                             [sortField]="'description'" (sortDirection)="sortTable($event)"
@@ -44,23 +32,35 @@
                             [sortField]="'amount'" (sortDirection)="sortTable($event)"
                             ></app-table-sorting>
                         </th>
+                        <th width="20%">
+                            Account Name
+                            <app-table-sorting #accountNameSortingComponentReference
+                            [sortField]="'account.account_name'" (sortDirection)="sortTable($event)"
+                            ></app-table-sorting>
+                        </th>
+                        <th width="18%">
+                            Bank
+                            <app-table-sorting #bankNameSortingComponentReference
+                            [sortField]="'account.bank_name'" (sortDirection)="sortTable($event)"
+                            ></app-table-sorting>
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let data of allTransactionsGridData; index as i">
                         <td>{{data?.transaction_date | date}}</td>
-                        <td>{{data?.account.account_name}}</td>
-                        <td>{{data?.account.bank_name}}</td>
                         <td>{{data?.description}}</td>
                         <td>{{data?.transaction_type}}</td>
                         <td>{{data?.amount}}</td>
+                        <td>{{data?.account?.account_name}}</td>
+                        <td>{{data?.account?.bank_name}}</td>
                     </tr>
                 </tbody>
                 <tfoot>
                     <tr class="bg-light">
                         <td colspan="6">
                             <app-table-pagination #tablePaginationComponentReference
-                            [currentPage]="currentPage" [totalPages]="totalPages" (pageSelected)="getAllTransactions($event, 20, '')"
+                            [currentPage]="currentPage" [totalPages]="totalPages" (pageSelected)="getAllUserTransaction()"
                             ></app-table-pagination>
                         </td>
                     </tr>

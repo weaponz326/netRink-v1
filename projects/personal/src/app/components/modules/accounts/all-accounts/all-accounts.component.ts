@@ -1,13 +1,15 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { AccountsApiService } from 'projects/personal/src/app/services/modules/accounts-api/accounts-api.service';
-import { AccountsPrintService } from 'projects/personal/src/app/services/printing/accounts-print/accounts-print.service';
-
 import { AddAccountComponent } from '../add-account/add-account.component'
 import { TablePaginationComponent } from 'projects/personal/src/app/components/module-utilities/table-pagination/table-pagination.component'
 import { TableSortingComponent } from 'projects/personal/src/app/components/module-utilities/table-sorting/table-sorting.component'
 import { ConnectionToastComponent } from '../../../module-utilities/connection-toast/connection-toast.component'
+
+import { AccountsApiService } from 'projects/personal/src/app/services/modules/accounts-api/accounts-api.service';
+import { AccountsPrintService } from 'projects/personal/src/app/services/printing/accounts-print/accounts-print.service';
+
+import { Account } from 'projects/personal/src/app/models/modules/accounts/accounts.model';
 
 
 @Component({
@@ -34,7 +36,7 @@ export class AllAccountsComponent implements OnInit {
     { text: "All Accounts", url: "/home/accounts/all-accounts" },
   ];
 
-  accountsGridData: any[] = [];
+  accountsGridData: Account[] = [];
 
   currentPage = 0;
   totalPages = 0;
@@ -44,20 +46,20 @@ export class AllAccountsComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    this.getAccounts(1, 20, "");
+    this.getAllUserAccount();
   }
 
-  getAccounts(page: any, size: any, sortField: any){
-    this.accountsApi.getAccounts(page, size, sortField)
-      .subscribe(
-        res => {
+  getAllUserAccount(){
+    this.accountsApi.getAllUserAccount({}, 20, {})
+      .then(
+        (res: any) => {
           console.log(res);
           this.accountsGridData = res.results;
           this.currentPage = res.current_page;
           this.totalPages = res.total_pages;
           this.totalItems = res.count;
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }
@@ -73,7 +75,7 @@ export class AllAccountsComponent implements OnInit {
 
   sortTable(field: any){
     console.log(field);
-    this.getAccounts(1, 20, field);
+    this.getAllUserAccount();
 
     if((field == 'account_name') || (field == "-account_name")){
       this.accountNumberSorting.resetSort();

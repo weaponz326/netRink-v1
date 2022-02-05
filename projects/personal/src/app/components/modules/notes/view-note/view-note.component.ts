@@ -1,10 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { NotesApiService } from 'projects/personal/src/app/services/modules/notes-api/notes-api.service';
-
 import { ConnectionToastComponent } from '../../../module-utilities/connection-toast/connection-toast.component'
 import { DeleteModalComponent } from '../../../module-utilities/delete-modal/delete-modal.component'
+
+import { NotesApiService } from 'projects/personal/src/app/services/modules/notes-api/notes-api.service';
+
+import { Note } from 'projects/personal/src/app/models/modules/notes/notes.model';
 
 
 @Component({
@@ -27,8 +29,7 @@ export class ViewNoteComponent implements OnInit {
     { text: "Note View", url: "/home/notes/view-note" },
   ];
 
-  subject = "";
-  body = "";
+  noteData: Note = {uid: "", user: "", created_at: new Date(), updated_at: new Date(), subject: "", body: ""};
 
   modules: any;
   styles: any;
@@ -44,11 +45,11 @@ export class ViewNoteComponent implements OnInit {
 
   getNote(){
     this.notesApi.getNote()
-      .subscribe(
-        res => {
+      .then(
+        (res: any) => {
           console.log(res);
-          this.subject = res.subject;
-          this.body = res.body;
+          this.noteData.subject = res.subject;
+          this.noteData.body = res.body;
 
         },
         err => {
@@ -58,21 +59,24 @@ export class ViewNoteComponent implements OnInit {
       )
   }
 
-  saveNote(){
-    let noteData = {
-      user: localStorage.getItem('personal_id'),
-      subject: this.subject,
-      body: this.body
+  updateNote(){
+    let noteData: Note = {
+      uid: "",
+      user: localStorage.getItem('personal_id') as string,
+      created_at: new Date(),
+      updated_at: new Date(),
+      subject: this.noteData.subject,
+      body: this.noteData.body
     }
 
     console.log(noteData);
 
-    this.notesApi.putNote(noteData)
-      .subscribe(
-        res => {
+    this.notesApi.updateNote(noteData)
+      .then(
+        (res: any) => {
           console.log(res);
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }
@@ -81,13 +85,13 @@ export class ViewNoteComponent implements OnInit {
 
   deleteNote(){
     this.notesApi.deleteNote()
-      .subscribe(
-        res => {
+      .then(
+        (res: any) => {
           console.log(res);
           sessionStorage.removeItem('personal_note_id');
           this.router.navigateByUrl('/home/notes/all-notes');
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }

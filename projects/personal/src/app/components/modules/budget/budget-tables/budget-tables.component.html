@@ -30,7 +30,7 @@
                             <td>{{data?.amount}}</td>
                             <td class="p-0">
                                 <button class="btn btn-sm border w-50" (click)="openEditIncome(i)"><i class="bi bi-pen"></i></button>
-                                <button class="btn btn-sm border w-50" (click)="confirmDelete('Income', i, data.id)"><i class="bi bi-trash"></i></button>
+                                <button class="btn btn-sm border w-50" (click)="confirmDelete('Income', i, data.uid)"><i class="bi bi-trash"></i></button>
                             </td>
                         </tr>
                         <tr class="bg-light">
@@ -67,7 +67,7 @@
                             <td>{{data?.amount}}</td>
                             <td class="p-0">
                                 <button class="btn btn-sm border w-50" (click)="openEditExpenditure(i)"><i class="bi bi-pen"></i></button>
-                                <button class="btn btn-sm border w-50" (click)="confirmDelete('Expenditure', i, data.id)"><i class="bi bi-trash"></i></button>
+                                <button class="btn btn-sm border w-50" (click)="confirmDelete('Expenditure', i, data.uid)"><i class="bi bi-trash"></i></button>
                             </td>
                         </tr>
                         <tr class="bg-light">
@@ -87,13 +87,13 @@
 
 <!-- add and edit income and expenditore modal components -->
 
-<app-add-income #addIncomeComponentReference (saveIncomeEvent)="postIncome($event)"></app-add-income>
+<app-add-income #addIncomeComponentReference (saveIncomeEvent)="createIncome($event)"></app-add-income>
 
-<app-edit-income #editIncomeComponentReference (saveIncomeEvent)="putIncome($event)"></app-edit-income>
+<app-edit-income #editIncomeComponentReference (saveIncomeEvent)="updateIncome($event)"></app-edit-income>
 
-<app-add-expenditure #addExpenditureComponentReference (saveExpenditureEvent)="postExpenditure($event)"></app-add-expenditure>
+<app-add-expenditure #addExpenditureComponentReference (saveExpenditureEvent)="createExpenditure($event)"></app-add-expenditure>
 
-<app-edit-expenditure #editExpenditureComponentReference (saveExpenditureEvent)="putExpenditure($event)"></app-edit-expenditure>
+<app-edit-expenditure #editExpenditureComponentReference (saveExpenditureEvent)="updateExpenditure($event)"></app-edit-expenditure>
 
 <!-- connection error toast component -->
 

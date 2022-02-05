@@ -1,9 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { ConnectionToastComponent } from '../../../module-utilities/connection-toast/connection-toast.component'
+
 import { NotesApiService } from 'projects/personal/src/app/services/modules/notes-api/notes-api.service';
 
-import { ConnectionToastComponent } from '../../../module-utilities/connection-toast/connection-toast.component'
+import { Note } from 'projects/personal/src/app/models/modules/notes/notes.model';
 
 
 @Component({
@@ -24,34 +26,36 @@ export class NewNoteComponent implements OnInit {
     { text: "New Note", url: "/home/notes/new-note" },
   ];
 
-  subject = "";
-  body = "";
-  
+  noteData: Note = {uid: "", user: "", created_at: new Date(), updated_at: new Date(), subject: "", body: ""};
+
   modules: any;
   styles: any;
 
   ngOnInit(): void {
     this.initModules();
     this.initStyles();
-  }  
+  }
 
-  saveNote(){
-    let noteData = {
-      user: localStorage.getItem('personal_id'),
-      subject: this.subject,
-      body: this.body
+  createNote(){
+    let noteData: Note = {
+      uid: "",
+      user: localStorage.getItem('personal_id') as string,
+      created_at: new Date(),
+      updated_at: new Date(),
+      subject: this.noteData.subject,
+      body: this.noteData.body
     }
 
     console.log(noteData);
 
-    this.notesApi.postNote(noteData)
-      .subscribe(
-        res => {
+    this.notesApi.createNote(noteData)
+      .then(
+        (res: any) => {
           console.log(res);
           sessionStorage.setItem('personal_note_id', res.id);
           this.router.navigateByUrl('/home/notes/view-note');
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }

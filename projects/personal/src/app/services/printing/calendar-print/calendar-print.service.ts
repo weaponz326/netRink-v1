@@ -20,17 +20,17 @@ export class CalendarPrintService {
   // all calendars
 
   getPrintCalendars(count: any){
-    this.calendarApi.getCalendars(1, count, "")
-      .subscribe(
-        res => {
-          console.log(res);
-          this.calendarGridData = res.results;
-          this.printAllCalendars();
-        },
-        err => {
-          console.log(err);
-        }
-      )
+    // this.calendarApi.getCalendars(1, count, "")
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.calendarGridData = res.results;
+    //       this.printAllCalendars();
+    //     },
+    //     err => {
+    //       console.log(err);
+    //     }
+    //   )
   }
 
   printAllCalendars(){
@@ -68,17 +68,17 @@ export class CalendarPrintService {
   // all schedules
 
   getPrintSchedules(count: any){
-    this.calendarApi.getAllSchedules(1, count, "")
-      .subscribe(
-        res => {
-          console.log(res);
-          this.schedulesGridData = res.results;
-          this.printAllSchedules();
-        },
-        err => {
-          console.log(err);
-        }
-      )
+    // this.calendarApi.getAllSchedules(1, count, "")
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.schedulesGridData = res.results;
+    //       this.printAllSchedules();
+    //     },
+    //     err => {
+    //       console.log(err);
+    //     }
+    //   )
   }
 
   printAllSchedules(){

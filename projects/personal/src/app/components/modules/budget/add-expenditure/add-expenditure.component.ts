@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 
+import { Expenditure } from 'projects/personal/src/app/models/modules/budget/budget.model';
+
 
 @Component({
   selector: 'app-add-expenditure',
@@ -36,8 +38,9 @@ export class AddExpenditureComponent implements OnInit {
   }
 
   saveExpenditure(){
-    let data = {
-      budget: sessionStorage.getItem('personal_budget_id'),
+    let data: Expenditure = {
+      uid: "",
+      budget: sessionStorage.getItem('personal_budget_id') as string,
       item_number: this.addExpenditureForm.controls.itemNumber.value,
       item_description: this.addExpenditureForm.controls.itemDescription.value,
       amount: this.addExpenditureForm.controls.amount.value

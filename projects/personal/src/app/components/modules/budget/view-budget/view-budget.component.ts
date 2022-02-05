@@ -2,12 +2,14 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormControl, FormGroup } from '@angular/forms';
 
-import { BudgetApiService } from 'projects/personal/src/app/services/modules/budget-api/budget-api.service';
-import { BudgetPrintService } from 'projects/personal/src/app/services/printing/budget-print/budget-print.service';
-
 import { BudgetTablesComponent } from '../budget-tables/budget-tables.component'
 import { ConnectionToastComponent } from '../../../module-utilities/connection-toast/connection-toast.component'
 import { DeleteModalComponent } from '../../../module-utilities/delete-modal/delete-modal.component'
+
+import { BudgetApiService } from 'projects/personal/src/app/services/modules/budget-api/budget-api.service';
+import { BudgetPrintService } from 'projects/personal/src/app/services/printing/budget-print/budget-print.service';
+
+import { Budget } from 'projects/personal/src/app/models/modules/budget/budget.model';
 
 
 @Component({
@@ -33,6 +35,7 @@ export class ViewBudgetComponent implements OnInit {
   ];
 
   budgetForm: FormGroup = new FormGroup({});
+  budgetFormData: Budget = {uid: "", user: "", budget_name: "", budget_type: ""}
 
   ioe = 0;
 
@@ -55,23 +58,25 @@ export class ViewBudgetComponent implements OnInit {
   }
 
   getBudget(){
-    this.budgetApi.getSingleBudget()
-      .subscribe(
-        res => {
+    this.budgetApi.getBudget()
+      .then(
+        (res: any) => {
           console.log(res);
-          this.budgetForm.controls.budgetName.setValue(res.budget_name);
-          this.budgetForm.controls.budgetType.setValue(res.budget_type);
+          this.budgetFormData = res;
+          this.budgetForm.controls.budgetName.setValue(this.budgetFormData.budget_name);
+          this.budgetForm.controls.budgetType.setValue(this.budgetFormData.budget_type);
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }
       )
   }
 
-  putBudget(){
-    let data = {
-      user: localStorage.getItem('personal_id'),
+  updateBudget(){
+    let data: Budget = {
+      uid: this.budgetFormData.uid,
+      user: localStorage.getItem('personal_id') as string,
       budget_name: this.budgetForm.controls.budgetName.value,
       budget_type: this.budgetForm.controls.budgetType.value
     }
@@ -79,13 +84,13 @@ export class ViewBudgetComponent implements OnInit {
     console.log(data);
     this.isBudgetSaving = true;
 
-    this.budgetApi.putBudget(data)
-      .subscribe(
-        res => {
+    this.budgetApi.updateBudget(data)
+      .then(
+        (res: any) => {
           console.log(res);
           this.isBudgetSaving = false;
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
           this.isBudgetSaving = false;
@@ -101,12 +106,12 @@ export class ViewBudgetComponent implements OnInit {
     this.isBudgetDeleting = true;
 
     this.budgetApi.deleteBudget()
-      .subscribe(
-        res => {
+      .then(
+        (res: any) => {
           console.log(res);
           this.router.navigateByUrl('/home/budget/all-budget');
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
           this.isBudgetDeleting = false;

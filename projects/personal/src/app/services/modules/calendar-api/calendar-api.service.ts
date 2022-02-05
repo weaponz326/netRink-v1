@@ -1,10 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs'
 
-import { environment } from 'projects/personal/src/environments/environment'
-import { EndpointsService } from 'projects/application/src/app/services/endpoints/endpoints.service';
-
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 
 @Injectable({
   providedIn: 'root'
@@ -12,85 +8,73 @@ import { EndpointsService } from 'projects/application/src/app/services/endpoint
 export class CalendarApiService {
 
   constructor(
-    private http: HttpClient,
-    private endpoints: EndpointsService
+    private afs: AngularFirestore
   ) { }
 
-  personalUrl = environment.personalUrl;
+  calendarRef = this.afs.collection('personal/calendar/calendar');
+  scheduleRef = this.afs.collection('personal/calendar/schedule');
+
+  personalId = localStorage.getItem('personal_id') as string;
+  calendarId = sessionStorage.getItem('personal_calendar_id') as string;
 
   // calendar
 
-  // get all calendars belonging to a user
-  public getCalendars(page: any, size: any, sortField: any): Observable<any>{
-    return this.http.get(this.personalUrl + "module-calendar/calendar?user=" + localStorage.getItem('personal_id')
-      + "&page=" + page
-      + "&size=" + size
-      + "&ordering=" + sortField,
-      this.endpoints.headers);
+  createCalendar(calendar: any){
+    return this.calendarRef.add(calendar);
   }
 
-  // get single calendar
-  public getCalendar(): Observable<any>{
-    return this.http.get(this.personalUrl + "module-calendar/calendar/" + sessionStorage.getItem('personal_calendar_id'), this.endpoints.headers);
+  getCalendar(){
+    return this.calendarRef.doc(this.calendarId).ref.get();
   }
 
-  // create update and delete calendar
-
-  public postCalendar(calendar: any): Observable<any>{
-    return this.http.post(this.personalUrl + "module-calendar/calendar/", calendar, this.endpoints.headers);
+  updateCalendar(calendar: any){
+    return this.calendarRef.doc(this.calendarId).update(calendar);
   }
 
-  public putCalendar(calendar: any): Observable<any>{
-    return this.http.put(this.personalUrl + "module-calendar/calendar/" + sessionStorage.getItem('personal_calendar_id'), calendar, this.endpoints.headers);
+  deleteCalendar(){
+    return this.calendarRef.doc(this.calendarId).delete();
   }
 
-  public deleteCalendar(): Observable<any>{
-    return this.http.delete(this.personalUrl + "module-calendar/calendar/" + sessionStorage.getItem('personal_calendar_id'), this.endpoints.headers);
+  getAllUserCalendar(ordering: any, pageSize: any, pageStart: any){
+    return this.calendarRef.ref
+      .where("user", "==", this.personalId)
+      .orderBy(ordering.field, ordering.direction)
+      .startAt(pageStart)
+      .limit(pageSize)
+      .get();
   }
 
-  // schedules
+  // schedule
 
-  // get all schedules belonging to a user
-  public getAllSchedules(page: any, size: any, sortField: any): Observable<any>{
-    return this.http.get(this.personalUrl + "module-calendar/schedule?user=" + localStorage.getItem('personal_id')
-      + "&page=" + page
-      + "&size=" + size
-      + "&ordering=" + sortField,
-      this.endpoints.headers);
+  createSchedule(schedule: any){
+    return this.scheduleRef.add(schedule);
   }
 
-  // get all schedules of a calendar
-  public getSchedules(): Observable<any>{
-    return this.http.get(this.personalUrl + "module-calendar/schedule?user=" + sessionStorage.getItem('personal_calendar_id'), this.endpoints.headers);
+  getSchedule(scheduleId: any){
+    return this.scheduleRef.doc(scheduleId).ref.get();
   }
 
-  // get single schedule
-  public getSchedule(schedule_id: any): Observable<any>{
-    return this.http.get(this.personalUrl + "module-calendar/schedule/=" + schedule_id, this.endpoints.headers);
+  updateSchedule(scheduleId: any, schedule: any){
+    return this.scheduleRef.doc(scheduleId).update(schedule);
   }
 
-  // create update and delete calendar
-
-  public postSchedule(schedule: any): Observable<any>{
-    return this.http.post(this.personalUrl + "module-calendar/schedule/", schedule, this.endpoints.headers);
+  deleteSchedule(scheduleId: any){
+    return this.scheduleRef.doc(scheduleId).delete();
   }
 
-  public putSchedule(schedule: any, scheduleId: any): Observable<any>{
-    return this.http.put(this.personalUrl + "module-calendar/schedule/" + scheduleId, schedule, this.endpoints.headers);
+  getAllCalendarSchedule(){
+    return this.scheduleRef.ref
+      .where("calendar.uid", "==", this.calendarId)
+      .get();
   }
 
-  public deleteSchedule(scheduleId: any): Observable<any>{
-    return this.http.delete(this.personalUrl + "module-calendar/schedule/" + scheduleId, this.endpoints.headers);
-  }
-
-  // dashboard
-
-  public getCounts(model: any): Observable<any>{
-    return this.http.get(this.personalUrl + "module-calendar/count?user=" + localStorage.getItem('personal_id') + "&model=" + model, this.endpoints.headers);
-  }
-
-  public getAnnotation(model: any): Observable<any>{
-    return this.http.get(this.personalUrl + "module-calendar/annotate?user=" + localStorage.getItem('personal_id') + "&model=" + model, this.endpoints.headers);
+  getAllUserSchedule(ordering: any, pageSize: any, pageStart: any){
+    return this.scheduleRef.ref
+      .where("user", "==", this.personalId)
+      .orderBy(ordering.field, ordering.direction)
+      .startAt(pageStart)
+      .limit(pageSize)
+      .get();
   }
 
 }

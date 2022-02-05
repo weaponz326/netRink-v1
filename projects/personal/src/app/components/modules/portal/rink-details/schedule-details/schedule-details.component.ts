@@ -25,17 +25,17 @@ export class ScheduleDetailsComponent implements OnInit {
   }
 
   getSchedule(source_id: any){
-    this.calendarApi.getSchedule(source_id)
-      .subscribe(
-        res => {
-          console.log(res);
-          this.scheduleData = res;
-        },
-        err => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
+    // this.calendarApi.getSchedule(source_id)
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.scheduleData = res;
+    //     },
+    //     err => {
+    //       console.log(err);
+    //       this.connectionToast.openToast();
+    //     }
+    //   )
   }
 
 }

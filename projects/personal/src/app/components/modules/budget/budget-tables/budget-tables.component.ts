@@ -1,13 +1,15 @@
 import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
 
-import { BudgetApiService } from 'projects/personal/src/app/services/modules/budget-api/budget-api.service';
-
 import { AddIncomeComponent } from '../add-income/add-income.component'
 import { EditIncomeComponent } from '../edit-income/edit-income.component'
 import { AddExpenditureComponent } from '../add-expenditure/add-expenditure.component'
 import { EditExpenditureComponent } from '../edit-expenditure/edit-expenditure.component'
 import { ConnectionToastComponent } from '../../../module-utilities/connection-toast/connection-toast.component'
 import { DeleteModalComponent } from '../../../module-utilities/delete-modal/delete-modal.component'
+
+import { BudgetApiService } from 'projects/personal/src/app/services/modules/budget-api/budget-api.service';
+
+import { Income, Expenditure } from 'projects/personal/src/app/models/modules/budget/budget.model';
 
 
 @Component({
@@ -28,8 +30,8 @@ export class BudgetTablesComponent implements OnInit {
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
   @ViewChild('deleteModalComponentReference', { read: DeleteModalComponent, static: false }) deleteModal!: DeleteModalComponent;
 
-  incomeGridData: any[] = [];
-  expenditureGridData: any[] = [];
+  incomeGridData: Income[] = [];
+  expenditureGridData: Expenditure[] = [];
   totalIncome = 0;
   totalExpenditure = 0;
 
@@ -41,8 +43,8 @@ export class BudgetTablesComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    this.getIncome();
-    this.getExpenditure();
+    this.getAllBudgetIncome();
+    this.getAllBudgetExpenditure();
   }
 
   calculateIoe(){
@@ -59,48 +61,48 @@ export class BudgetTablesComponent implements OnInit {
     this.calculateIoe();
   }
 
-  getIncome(){
-    this.budgetApi.getIncome()
-      .subscribe(
-        res => {
+  getAllBudgetIncome(){
+    this.budgetApi.getAllBudgetIncome()
+      .then(
+        (res: any) => {
           console.log(res);
           this.incomeGridData = res;
           this.calculateTotalIncome();
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }
       )
   }
 
-  postIncome(data: any){
+  createIncome(data: any){
     console.log(data);
 
-    this.budgetApi.postIncome(data)
-      .subscribe(
-        res => {
+    this.budgetApi.createIncome(data)
+      .then(
+        (res: any) => {
           console.log(res);
 
-          if(res.id){
+          if(res.uid){
             this.incomeGridData.push(res);
             this.calculateTotalIncome();
             this.addIncome.resetForm();
           }
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }
       )
   }
 
-  putIncome(data: any){
+  updateIncome(data: any){
     console.log(data);
 
-    this.budgetApi.putIncome(data.id, data)
-      .subscribe(
-        res => {
+    this.budgetApi.updateIncome(data.id, data.income)
+      .then(
+        (res: any) => {
           console.log(res);
 
           if(res.id){
@@ -108,7 +110,7 @@ export class BudgetTablesComponent implements OnInit {
             this.calculateTotalIncome();
           }
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }
@@ -119,13 +121,13 @@ export class BudgetTablesComponent implements OnInit {
     console.log(id);
 
     this.budgetApi.deleteIncome(id)
-      .subscribe(
-        res => {
+      .then(
+        (res: any) => {
           console.log(res);
           this.incomeGridData.splice(index, 1);
           this.calculateTotalIncome();
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }
@@ -145,27 +147,27 @@ export class BudgetTablesComponent implements OnInit {
     this.calculateIoe();
   }
 
-  getExpenditure(){
-    this.budgetApi.getExpenditure()
-      .subscribe(
-        res => {
+  getAllBudgetExpenditure(){
+    this.budgetApi.getAllBudgetExpenditure()
+      .then(
+        (res: any) => {
           console.log(res);
           this.expenditureGridData = res;
           this.calculateTotalExpenditure();
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }
       )
   }
 
-  postExpenditure(data: any){
+  createExpenditure(data: any){
     console.log(data);
 
-    this.budgetApi.postExpenditure(data)
-      .subscribe(
-        res => {
+    this.budgetApi.createExpenditure(data)
+      .then(
+        (res: any) => {
           console.log(res);
 
           if(res.id){
@@ -174,19 +176,19 @@ export class BudgetTablesComponent implements OnInit {
             this.addExpenditure.resetForm();
           }
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }
       )
   }
 
-  putExpenditure(data: any){
+  updateExpenditure(data: any){
     console.log(data);
 
-    this.budgetApi.putExpenditure(data.id, data)
-      .subscribe(
-        res => {
+    this.budgetApi.updateExpenditure(data.uid, data.expenditure)
+      .then(
+        (res: any) => {
           console.log(res);
 
           if(res.id){
@@ -194,7 +196,7 @@ export class BudgetTablesComponent implements OnInit {
             this.calculateTotalExpenditure();
           }
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }
@@ -205,13 +207,13 @@ export class BudgetTablesComponent implements OnInit {
     console.log(id);
 
     this.budgetApi.deleteExpenditure(id)
-      .subscribe(
-        res => {
+      .then(
+        (res: any) => {
           console.log(res);
           this.expenditureGridData.splice(index, 1);
           this.calculateTotalExpenditure();
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }

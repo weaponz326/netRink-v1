@@ -25,17 +25,17 @@ export class TransactionDetailsComponent implements OnInit {
   }
 
   getTransaction(source_id: any){
-    this.accountsApi.getSingleTransaction(source_id)
-      .subscribe(
-        res => {
-          console.log(res);
-          this.transactionData = res;
-        },
-        err => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
+    // this.accountsApi.getSingleTransaction(source_id)
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.transactionData = res;
+    //     },
+    //     err => {
+    //       console.log(err);
+    //       this.connectionToast.openToast();
+    //     }
+    //   )
   }
 
 }

@@ -28,31 +28,31 @@ export class AccountDetailsComponent implements OnInit {
   }
 
   getAccount(){
-    this.accountsApi.getSingleAccount()
-      .subscribe(
-        res => {
-          console.log(res);
-          this.accountData = res;
-        },
-        err => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
+    // this.accountsApi.getSingleAccount()
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.accountData = res;
+    //     },
+    //     err => {
+    //       console.log(err);
+    //       this.connectionToast.openToast();
+    //     }
+    //   )
   }
 
   getTransactions(){
-    this.accountsApi.getTransactions()
-      .subscribe(
-        res => {
-          console.log(res);
-          this.transactionsGridData = res;
-        },
-        err => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
+    // this.accountsApi.getTransactions()
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.transactionsGridData = res;
+    //     },
+    //     err => {
+    //       console.log(err);
+    //       this.connectionToast.openToast();
+    //     }
+    //   )
   }
 
 }

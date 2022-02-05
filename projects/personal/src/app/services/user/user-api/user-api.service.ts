@@ -11,11 +11,11 @@ export class UserApiService {
   constructor(private firestore: AngularFirestore) { }
 
   createUser(user: any){
-    return this.firestore.collection('personal/users').add(user);
+    return this.firestore.collection('personal/users').doc(user.uid).set(user);
   }
 
   getUser(userId: any){
-    return this.firestore.doc('personal/users/' + userId).get();
+    return this.firestore.collection('personal/users').doc(userId).get();
   }
 
 }

@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 
+import { Expenditure } from 'projects/personal/src/app/models/modules/budget/budget.model';
+
 
 @Component({
   selector: 'app-edit-expenditure',
@@ -16,6 +18,7 @@ export class EditExpenditureComponent implements OnInit {
   @ViewChild('buttonElementReference', { read: ElementRef, static: false }) buttonElement!: ElementRef;
 
   editExpenditureForm: FormGroup = new FormGroup({});
+  expenditureFormData: Expenditure = {uid: "", budget: "", item_number: "", item_description: "", amount: 0}
 
   selectedIndex: any = 0;
   selectedId: any = "";
@@ -25,12 +28,14 @@ export class EditExpenditureComponent implements OnInit {
   }
 
   openModal(index: any, data: any){
+    this.expenditureFormData = data;
+
     this.selectedIndex = index;
     this.selectedId = data.id;
 
-    this.editExpenditureForm.controls.itemNumber.setValue(data.item_number);
-    this.editExpenditureForm.controls.itemDescription.setValue(data.item_description);
-    this.editExpenditureForm.controls.amount.setValue(data.amount);
+    this.editExpenditureForm.controls.itemNumber.setValue(this.expenditureFormData.item_number);
+    this.editExpenditureForm.controls.itemDescription.setValue(this.expenditureFormData.item_description);
+    this.editExpenditureForm.controls.amount.setValue(this.expenditureFormData.amount);
 
     this.buttonElement.nativeElement.click();
   }
@@ -44,13 +49,18 @@ export class EditExpenditureComponent implements OnInit {
   }
 
   saveExpenditure(){
-    let data = {
-      index: this.selectedIndex,
-      id: this.selectedId,
-      budget: sessionStorage.getItem('personal_budget_id'),
+    let expenditure: Expenditure = {
+      uid: this.selectedIndex,
+      budget: sessionStorage.getItem('personal_budget_id') as string,
       item_number: this.editExpenditureForm.controls.itemNumber.value,
       item_description: this.editExpenditureForm.controls.itemDescription.value,
       amount: this.editExpenditureForm.controls.amount.value
+    }
+
+    let data = {
+      index: this.selectedIndex,
+      id: this.selectedId,
+      expediture: expenditure
     }
 
     this.saveExpenditureEvent.emit(data);

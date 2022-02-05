@@ -22,7 +22,7 @@ export class DashboardComponent implements OnInit {
     { text: "Dashboard", url: "/home/notes/dashboard" },
   ];
 
-  allNotesCount: any;
+  allNotesCount: number = 0;
 
   notesLineChartData: ChartDataSets[] = [{ data: [0], label: 'Notes' }];
   notesLineChartLabels: Label[] = [""]
@@ -36,31 +36,31 @@ export class DashboardComponent implements OnInit {
   }
 
   getNotesCount(){
-    this.notesApi.getCounts("Note")
-      .subscribe(
-        res => {
-          console.log(res);
-          this.allNotesCount = res;
-        },
-        err => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
+    // this.notesApi.getCounts("Note")
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.allNotesCount = res;
+    //     },
+    //     err => {
+    //       console.log(err);
+    //       this.connectionToast.openToast();
+    //     }
+    //   )
   }
 
   getNoteAnnotation(){
-    this.notesApi.getAnnotation("Note")
-      .subscribe(
-        res => {
-          console.log(res);
-          this.setNoteChartData(res);
-        },
-        err => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
+    // this.notesApi.getAnnotation("Note")
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.setNoteChartData(res);
+    //     },
+    //     err => {
+    //       console.log(err);
+    //       this.connectionToast.openToast();
+    //     }
+    //   )
   }
 
   setNoteChartData(data: any){

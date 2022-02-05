@@ -19,17 +19,17 @@ export class NotesPrintService {
   // all notes
 
   getPrintNotes(count: any){
-    this.notesApi.getNotes(1, count, "")
-      .subscribe(
-        res => {
-          console.log(res);
-          this.notesGridData = res.results;
-          this.printAllNotes();
-        },
-        err => {
-          console.log(err);
-        }
-      )
+    // this.notesApi.getNotes(1, count, "")
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.notesGridData = res.results;
+    //       this.printAllNotes();
+    //     },
+    //     err => {
+    //       console.log(err);
+    //     }
+    //   )
   }
 
   printAllNotes(){

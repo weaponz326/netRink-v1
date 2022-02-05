@@ -29,7 +29,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let data of calendarGridData" (dblclick)="viewCalendar(data.id)" class="table-pointer">
+                    <tr *ngFor="let data of calendarGridData" (dblclick)="viewCalendar(data.uid)" class="table-pointer">
                         <td>{{data?.calendar_name}}</td>
                         <td>{{data?.created_at | date}}</td>
                     </tr>
@@ -38,7 +38,7 @@
                     <tr class="bg-light">
                         <td colspan="2">
                             <app-table-pagination #tablePaginationComponentReference
-                            [currentPage]="currentPage" [totalPages]="totalPages" (pageSelected)="getCalendars($event, 20, '')"
+                            [currentPage]="currentPage" [totalPages]="totalPages" (pageSelected)="getAllUserCalendar()"
                             ></app-table-pagination>
                         </td>
                     </tr>

@@ -29,7 +29,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let data of taskGroupsGridData" (dblclick)="viewTaskGroup(data.id)" class="table-pointer">
+                    <tr *ngFor="let data of taskGroupsGridData" (dblclick)="viewTaskGroup(data.uid)" class="table-pointer">
                         <td>{{data?.task_group}}</td>
                         <td>{{data?.created_at | date}}</td>
                     </tr>
@@ -38,7 +38,7 @@
                     <tr class="bg-light">
                         <td colspan="2">
                             <app-table-pagination #tablePaginationComponentReference
-                            [currentPage]="currentPage" [totalPages]="totalPages" (pageSelected)="getTaskGroups($event, 20, '')"
+                            [currentPage]="currentPage" [totalPages]="totalPages" (pageSelected)="getAllUserTaskGroup()"
                             ></app-table-pagination>
                         </td>
                     </tr>

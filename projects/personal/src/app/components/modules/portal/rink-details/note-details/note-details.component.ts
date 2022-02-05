@@ -28,31 +28,31 @@ export class NoteDetailsComponent implements OnInit {
   }
 
   getNote(){
-    this.notesApi.getNote()
-      .subscribe(
-        res => {
-          console.log(res);
-          this.noteData = res;
-        },
-        err => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
+    // this.notesApi.getNote()
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.noteData = res;
+    //     },
+    //     err => {
+    //       console.log(err);
+    //       this.connectionToast.openToast();
+    //     }
+    //   )
   }
 
   getAttachments(){
-    this.notesApi.getFiles()
-      .subscribe(
-        res => {
-          console.log(res);
-          this.attachmentsData = res;
-        },
-        err => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
+    // this.notesApi.getFiles()
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.attachmentsData = res;
+    //     },
+    //     err => {
+    //       console.log(err);
+    //       this.connectionToast.openToast();
+    //     }
+    //   )
   }
 
 }

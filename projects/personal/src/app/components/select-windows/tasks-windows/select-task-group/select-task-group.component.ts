@@ -40,19 +40,19 @@ export class SelectTaskGroupComponent implements OnInit {
   }
 
   getTaskGroups(page: any, size: any, sortField: any){
-    this.tasksApi.getTaskGroups(page, size, sortField)
-      .subscribe(
-        res => {
-          console.log(res);
-          this.taskGroupsGridData = res.results;
-          this.currentPage = res.current_page;
-          this.totalPages = res.total_pages;
-        },
-        err => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
+    // this.tasksApi.getTaskGroups(page, size, sortField)
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.taskGroupsGridData = res.results;
+    //       this.currentPage = res.current_page;
+    //       this.totalPages = res.total_pages;
+    //     },
+    //     err => {
+    //       console.log(err);
+    //       this.connectionToast.openToast();
+    //     }
+    //   )
   }
 
   selectRow(row: any){

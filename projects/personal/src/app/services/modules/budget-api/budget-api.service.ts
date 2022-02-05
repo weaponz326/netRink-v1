@@ -1,9 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs'
 
-import { environment } from 'projects/personal/src/environments/environment'
-import { EndpointsService } from 'projects/application/src/app/services/endpoints/endpoints.service';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 
 
 @Injectable({
@@ -12,84 +9,81 @@ import { EndpointsService } from 'projects/application/src/app/services/endpoint
 export class BudgetApiService {
 
   constructor(
-    private http: HttpClient,
-    private endpoints: EndpointsService
+    private afs: AngularFirestore,
   ) { }
 
-  personalUrl = environment.personalUrl;
+  budgetRef = this.afs.collection('personal/budget/budget');
+  incomeRef = this.afs.collection('personal/budget/income');
+  expenditureRef = this.afs.collection('personal/budget/expenditure');
 
-  // get all budgets belonging to a user
-  public getBudgets(page: any, size: any, sortField: any): Observable<any>{
-    return this.http.get(this.personalUrl + "module-budget/budget?user=" + localStorage.getItem('personal_id')
-      + "&page=" + page
-      + "&size=" + size
-      + "&ordering=" + sortField,
-      this.endpoints.headers);
+  personalId = localStorage.getItem('personal_id') as string;
+  budgetId = sessionStorage.getItem('personal_budget_id') as string;
+
+  // budget
+
+  createBudget(budget: any){
+    return this.budgetRef.add(budget);
   }
 
-  // create new budget
-  public postBudget(budget: any): Observable<any>{
-    return this.http.post(this.personalUrl + "module-budget/budget/", budget, this.endpoints.headers);
+  getBudget(){
+    return this.budgetRef.doc(this.budgetId).ref.get();
   }
 
-  // retreive, update and delete budget
-
-  public getSingleBudget(): Observable<any>{
-    return this.http.get(this.personalUrl + "module-budget/budget/" + sessionStorage.getItem('personal_budget_id'), this.endpoints.headers);
+  updateBudget(budget: any){
+    return this.budgetRef.doc(this.budgetId).update(budget);
   }
 
-  public putBudget(budget: any): Observable<any>{
-    return this.http.put(this.personalUrl + "module-budget/budget/" + sessionStorage.getItem('personal_budget_id'), budget, this.endpoints.headers);
+  deleteBudget(){
+    return this.budgetRef.doc(this.budgetId).delete();
   }
 
-  public deleteBudget(): Observable<any>{
-    return this.http.delete(this.personalUrl + "module-budget/budget/" + sessionStorage.getItem('personal_budget_id'), this.endpoints.headers);
+  getAllUserBudget(ordering: any, pageSize: any, pageStart: any){
+    return this.budgetRef.ref
+      .where("user", "==", this.personalId)
+      .orderBy(ordering.field, ordering.direction)
+      .startAt(pageStart)
+      .limit(pageSize)
+      .get();
   }
 
-  // get budget's income, add, update and delete income
+  // income
 
-  public getIncome(): Observable<any>{
-    return this.http.get(this.personalUrl + "module-budget/income?budget=" + sessionStorage.getItem('personal_budget_id'), this.endpoints.headers);
+  createIncome(budget: any){
+    return this.budgetRef.add(budget);
   }
 
-  public postIncome(incomeData: any): Observable<any>{
-    return this.http.post(this.personalUrl + "module-budget/income/", incomeData, this.endpoints.headers);
+  updateIncome(incomeId: any, income: any){
+    return this.budgetRef.doc(incomeId).update(income);
   }
 
-  public putIncome(incomeId: any, incomeData: any): Observable<any>{
-    return this.http.put(this.personalUrl + "module-budget/income/" + incomeId, incomeData, this.endpoints.headers);
+  deleteIncome(incomeId: any){
+    return this.budgetRef.doc(incomeId).delete();
   }
 
-  public deleteIncome(incomeId: any): Observable<any>{
-    return this.http.delete(this.personalUrl + "module-budget/income/" + incomeId, this.endpoints.headers);
+  getAllBudgetIncome(){
+    return this.budgetRef.ref
+      .where("budget", "==", this.budgetId)
+      .get();
   }
 
-  // get budget's expenditure, add, update and delete expenditure
+  // expenditure
 
-  public getExpenditure(): Observable<any>{
-    return this.http.get(this.personalUrl + "module-budget/expenditure?budget=" + sessionStorage.getItem('personal_budget_id'), this.endpoints.headers);
+  createExpenditure(budget: any){
+    return this.budgetRef.add(budget);
   }
 
-  public postExpenditure(expenditureData: any): Observable<any>{
-    return this.http.post(this.personalUrl + "module-budget/expenditure/", expenditureData, this.endpoints.headers);
+  updateExpenditure(expenditureId: any, expenditure: any){
+    return this.budgetRef.doc(expenditureId).update(expenditure);
   }
 
-  public putExpenditure(expenditureId: any, expenditureData: any): Observable<any>{
-    return this.http.put(this.personalUrl + "module-budget/expenditure/" + expenditureId, expenditureData, this.endpoints.headers);
+  deleteExpenditure(expenditureId: any){
+    return this.budgetRef.doc(expenditureId).delete();
   }
 
-  public deleteExpenditure(expenditureId: any): Observable<any>{
-    return this.http.delete(this.personalUrl + "module-budget/expenditure/" + expenditureId, this.endpoints.headers);
-  }
-
-  // dashboard
-
-  public getCounts(model: any): Observable<any>{
-    return this.http.get(this.personalUrl + "module-budget/count?user=" + localStorage.getItem('personal_id') + "&model=" + model, this.endpoints.headers);
-  }
-
-  public getAnnotation(model: any): Observable<any>{
-    return this.http.get(this.personalUrl + "module-budget/annotate?user=" + localStorage.getItem('personal_id') + "&model=" + model, this.endpoints.headers);
+  getAllBudgetExpenditure(){
+    return this.budgetRef.ref
+      .where("budget", "==", this.budgetId)
+      .get();
   }
 
 }

@@ -38,45 +38,45 @@ export class DashboardComponent implements OnInit {
   }
 
   getAccountsCount(){
-    this.accountsApi.getCounts("Account")
-      .subscribe(
-        res => {
-          console.log(res);
-          this.allAccountsCount = res;
-        },
-        err => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
+    // this.accountsApi.getCounts("Account")
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.allAccountsCount = res;
+    //     },
+    //     err => {
+    //       console.log(err);
+    //       this.connectionToast.openToast();
+    //     }
+    //   )
   }
 
   getTransactionsCount(){
-    this.accountsApi.getCounts("Transaction")
-      .subscribe(
-        res => {
-          console.log(res);
-          this.allTransactionsCount = res;
-        },
-        err => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
+    // this.accountsApi.getCounts("Transaction")
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.allTransactionsCount = res;
+    //     },
+    //     err => {
+    //       console.log(err);
+    //       this.connectionToast.openToast();
+    //     }
+    //   )
   }
 
   getTransactionAnnotation(){
-    this.accountsApi.getAnnotation("Transaction")
-      .subscribe(
-        res => {
-          console.log(res);
-          this.setTransactionChartData(res);
-        },
-        err => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
+    // this.accountsApi.getAnnotation("Transaction")
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.setTransactionChartData(res);
+    //     },
+    //     err => {
+    //       console.log(err);
+    //       this.connectionToast.openToast();
+    //     }
+    //   )
   }
 
   setTransactionChartData(data: any){

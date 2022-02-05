@@ -25,17 +25,17 @@ export class TaskItemDetailsComponent implements OnInit {
   }
 
   getTaskItem(source_id: any){
-    this.tasksApi.getSingleTask(source_id)
-      .subscribe(
-        res => {
-          console.log(res);
-          this.taskItemData = res;
-        },
-        err => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
+    // this.tasksApi.getSingleTask(source_id)
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.taskItemData = res;
+    //     },
+    //     err => {
+    //       console.log(err);
+    //       this.connectionToast.openToast();
+    //     }
+    //   )
   }
 
 }

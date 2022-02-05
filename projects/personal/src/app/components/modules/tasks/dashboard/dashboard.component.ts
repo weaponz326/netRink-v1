@@ -42,59 +42,59 @@ export class DashboardComponent implements OnInit {
   }
 
   getTaskGroupsCount(){
-    this.tasksApi.getCounts("Task Group")
-      .subscribe(
-        res => {
-          console.log(res);
-          this.allTaskGroupsCount = res;
-        },
-        err => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
+    // this.tasksApi.getCounts("Task Group")
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.allTaskGroupsCount = res;
+    //     },
+    //     err => {
+    //       console.log(err);
+    //       this.connectionToast.openToast();
+    //     }
+    //   )
   }
 
   getTaskItemsCount(){
-    this.tasksApi.getCounts("Task Item")
-      .subscribe(
-        res => {
-          console.log(res);
-          this.allTaskItemsCount = res;
-        },
-        err => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
+    // this.tasksApi.getCounts("Task Item")
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.allTaskItemsCount = res;
+    //     },
+    //     err => {
+    //       console.log(err);
+    //       this.connectionToast.openToast();
+    //     }
+    //   )
   }
 
   getTaskGroupAnnotation(){
-    this.tasksApi.getAnnotation("Task Group")
-      .subscribe(
-        res => {
-          console.log(res);
-          this.setTaskGroupChartData(res);
-        },
-        err => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
+    // this.tasksApi.getAnnotation("Task Group")
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.setTaskGroupChartData(res);
+    //     },
+    //     err => {
+    //       console.log(err);
+    //       this.connectionToast.openToast();
+    //     }
+    //   )
   }
 
   getTaskItemAnnotation(){
-    this.tasksApi.getAnnotation("Task Item")
-      .subscribe(
-        res => {
-          console.log(res);
-          this.setTaskItemChartData(res);
-        },
-        err => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
+    // this.tasksApi.getAnnotation("Task Item")
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.setTaskItemChartData(res);
+    //     },
+    //     err => {
+    //       console.log(err);
+    //       this.connectionToast.openToast();
+    //     }
+    //   )
   }
 
   setTaskGroupChartData(data: any){

@@ -20,17 +20,17 @@ export class TasksPrintService {
   // all task groups
 
   getPrintTaskGroups(count: any){
-    this.tasksApi.getTaskGroups(1, count, "")
-      .subscribe(
-        res => {
-          console.log(res);
-          this.taskGroupsGridData = res.results;
-          this.printAllTaskGroups();
-        },
-        err => {
-          console.log(err);
-        }
-      )
+    // this.tasksApi.getTaskGroups(1, count, "")
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.taskGroupsGridData = res.results;
+    //       this.printAllTaskGroups();
+    //     },
+    //     err => {
+    //       console.log(err);
+    //     }
+    //   )
   }
 
   printAllTaskGroups(){
@@ -68,17 +68,17 @@ export class TasksPrintService {
   // all task items
 
   getPrintAllTaskItems(count: any){
-    this.tasksApi.getAllTaskItems(1, count, "")
-      .subscribe(
-        res => {
-          console.log(res);
-          this.taskItemsGridData = res.results;
-          this.printAllTaskItems();
-        },
-        err => {
-          console.log(err);
-        }
-      )
+    // this.tasksApi.getAllTaskItems(1, count, "")
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.taskItemsGridData = res.results;
+    //       this.printAllTaskItems();
+    //     },
+    //     err => {
+    //       console.log(err);
+    //     }
+    //   )
   }
 
   printAllTaskItems(){

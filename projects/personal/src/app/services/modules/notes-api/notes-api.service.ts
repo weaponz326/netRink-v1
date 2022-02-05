@@ -1,9 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs'
 
-import { environment } from 'projects/personal/src/environments/environment'
-import { EndpointsService } from 'projects/application/src/app/services/endpoints/endpoints.service';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 
 
 @Injectable({
@@ -12,61 +9,39 @@ import { EndpointsService } from 'projects/application/src/app/services/endpoint
 export class NotesApiService {
 
   constructor(
-    private http: HttpClient,
-    private endpoints: EndpointsService
+    private afs: AngularFirestore,
   ) { }
 
-  personalUrl = environment.personalUrl;
+  noteRef = this.afs.collection('personal/notes/note');
 
-  // get all notes and belonging to a user
-  public getNotes(page: any, size: any, sortField: any): Observable<any>{
-    return this.http.get(this.personalUrl + "module-notes/note?user=" + localStorage.getItem('personal_id')
-      + "&page=" + page
-      + "&size=" + size
-      + "&ordering=" + sortField,
-      this.endpoints.headers);
+  personalId = localStorage.getItem('personal_id') as string;
+  noteId = sessionStorage.getItem('personal_note_id') as string;
+
+  // note
+
+  createNote(note: any){
+    return this.noteRef.add(note);
   }
 
-  // get single note and its attachments
-
-  public getNote(): Observable<any>{
-    return this.http.get(this.personalUrl + "module-notes/note/" + sessionStorage.getItem('personal_note_id'), this.endpoints.headers);
+  getNote(){
+    return this.noteRef.doc(this.noteId).ref.get();
   }
 
-  public getFiles(): Observable<any>{
-    return this.http.get(this.personalUrl + "module-notes/file?note=" + sessionStorage.getItem('personal_note_id'), this.endpoints.headers);
+  updateNote(note: any){
+    return this.noteRef.doc(this.noteId).update(note);
   }
 
-  // create, update and delete note
-
-  public postNote(note: any): Observable<any>{
-    return this.http.post(this.personalUrl + "module-notes/note/", note, this.endpoints.headers);
+  deleteNote(){
+    return this.noteRef.doc(this.noteId).delete();
   }
 
-  public putNote(note: any): Observable<any>{
-    return this.http.put(this.personalUrl + "module-notes/note/"  + sessionStorage.getItem('personal_note_id'), note, this.endpoints.headers);
-  }
-
-  public deleteNote(): Observable<any>{
-    return this.http.delete(this.personalUrl + "module-notes/note/" + sessionStorage.getItem('personal_note_id'), this.endpoints.headers);
-  }
-
-  public postFile(file: any): Observable<any>{
-    return this.http.post(this.personalUrl + "module-notes/file/", file, this.endpoints.headers);
-  }
-
-  public deleteFile(fileId: any): Observable<any>{
-    return this.http.delete(this.personalUrl + "module-notes/file/" + fileId, this.endpoints.headers);
-  }
-
-  // dashboard
-
-  public getCounts(model: any): Observable<any>{
-    return this.http.get(this.personalUrl + "module-notes/count?user=" + localStorage.getItem('personal_id') + "&model=" + model, this.endpoints.headers);
-  }
-
-  public getAnnotation(model: any): Observable<any>{
-    return this.http.get(this.personalUrl + "module-notes/annotate?user=" + localStorage.getItem('personal_id') + "&model=" + model, this.endpoints.headers);
+  getAllUserNote(ordering: any, pageSize: any, pageStart: any){
+    return this.noteRef.ref
+      .where("user", "==", this.personalId)
+      .orderBy(ordering.field, ordering.direction)
+      .startAt(pageStart)
+      .limit(pageSize)
+      .get();
   }
 
 }

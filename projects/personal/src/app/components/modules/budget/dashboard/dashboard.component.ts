@@ -3,9 +3,9 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ChartDataSets, ChartOptions } from 'chart.js';
 import { Color, Label, SingleDataSet } from 'ng2-charts';
 
-import { BudgetApiService } from 'projects/personal/src/app/services/modules/budget-api/budget-api.service';
-
 import { ConnectionToastComponent } from '../../../module-utilities/connection-toast/connection-toast.component'
+
+import { BudgetApiService } from 'projects/personal/src/app/services/modules/budget-api/budget-api.service';
 
 
 @Component({
@@ -43,77 +43,77 @@ export class DashboardComponent implements OnInit {
   }
 
   getAllBudgetCount(){
-    this.budgetApi.getCounts("Budget")
-      .subscribe(
-        res => {
-          console.log(res);
-          this.allBudgetCount = res;
-        },
-        err => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
+    // this.budgetApi.getCounts("Budget")
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.allBudgetCount = res;
+    //     },
+    //     err => {
+    //       console.log(err);
+    //       this.connectionToast.openToast();
+    //     }
+    //   )
   }
 
   getAllIncomeCount(){
-    this.budgetApi.getCounts("Income")
-      .subscribe(
-        res => {
-          console.log(res);
-          this.allIncomeCount = res;
-          this.iePieChartData[0] = res;
-        },
-        err => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
+    // this.budgetApi.getCounts("Income")
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.allIncomeCount = res;
+    //       this.iePieChartData[0] = res;
+    //     },
+    //     err => {
+    //       console.log(err);
+    //       this.connectionToast.openToast();
+    //     }
+    //   )
   }
 
   getAllExpenditureCount(){
-    this.budgetApi.getCounts("Expenditure")
-      .subscribe(
-        res => {
-          console.log(res);
-          this.allExpenditureCount = res;
-          this.iePieChartData[1] = res;
-        },
-        err => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
+    // this.budgetApi.getCounts("Expenditure")
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.allExpenditureCount = res;
+    //       this.iePieChartData[1] = res;
+    //     },
+    //     err => {
+    //       console.log(err);
+    //       this.connectionToast.openToast();
+    //     }
+    //   )
   }
 
   getIncomeAnnotation(){
-    this.budgetApi.getAnnotation("Income")
-      .subscribe(
-        res => {
-          console.log(res);
-          this.setIEtaskBarChartLabels(res);
-          this.setIncomeChartData(res);
-        },
-        err => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
+    // this.budgetApi.getAnnotation("Income")
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.setIEtaskBarChartLabels(res);
+    //       this.setIncomeChartData(res);
+    //     },
+    //     err => {
+    //       console.log(err);
+    //       this.connectionToast.openToast();
+    //     }
+    //   )
   }
 
   getExpenditureAnnotation(){
-    this.budgetApi.getAnnotation("Expenditure")
-      .subscribe(
-        res => {
-          console.log(res);
-          this.setIEtaskBarChartLabels(res);
-          this.setExpenditureChartData(res);
-        },
-        err => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
+    // this.budgetApi.getAnnotation("Expenditure")
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.setIEtaskBarChartLabels(res);
+    //       this.setExpenditureChartData(res);
+    //     },
+    //     err => {
+    //       console.log(err);
+    //       this.connectionToast.openToast();
+    //     }
+    //   )
   }
 
   setIEtaskBarChartLabels(data: any){

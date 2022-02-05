@@ -1,11 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
-import { AccountsApiService } from 'projects/personal/src/app/services/modules/accounts-api/accounts-api.service';
-import { AccountsPrintService } from 'projects/personal/src/app/services/printing/accounts-print/accounts-print.service';
-
 import { TablePaginationComponent } from 'projects/personal/src/app/components/module-utilities/table-pagination/table-pagination.component'
 import { TableSortingComponent } from 'projects/personal/src/app/components/module-utilities/table-sorting/table-sorting.component'
 import { ConnectionToastComponent } from '../../../module-utilities/connection-toast/connection-toast.component'
+
+import { AccountsApiService } from 'projects/personal/src/app/services/modules/accounts-api/accounts-api.service';
+import { AccountsPrintService } from 'projects/personal/src/app/services/printing/accounts-print/accounts-print.service';
+
+import { Transaction } from 'projects/personal/src/app/models/modules/accounts/accounts.model';
 
 
 @Component({
@@ -33,7 +35,7 @@ export class AllTransactionsComponent implements OnInit {
     { text: "All Transactions", url: "/home/accounts/all-transactions" },
   ];
 
-  allTransactionsGridData: any[] = [];
+  allTransactionsGridData: Transaction[] = [];
 
   currentPage = 0;
   totalPages = 0;
@@ -43,20 +45,20 @@ export class AllTransactionsComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    this.getAllTransactions(1, 20, "");
+    this.getAllUserTransaction();
   }
 
-  getAllTransactions(page: any, size: any, sortField: any){
-    this.accountsApi.getAllTransactions(page, size, sortField)
-      .subscribe(
-        res => {
+  getAllUserTransaction(){
+    this.accountsApi.getAllUserTransaction({}, 20, {})
+      .then(
+        (res: any) => {
           console.log(res);
           this.allTransactionsGridData = res.results;
           this.currentPage = res.current_page;
           this.totalPages = res.total_pages;
           this.totalItems = res.count;
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }
@@ -65,7 +67,7 @@ export class AllTransactionsComponent implements OnInit {
 
   sortTable(field: any){
     console.log(field);
-    this.getAllTransactions(1, 20, field);
+    this.getAllUserTransaction();
 
     if((field == 'transaction_date') || (field == "-transaction_date")){
       this.accountNameSorting.resetSort();

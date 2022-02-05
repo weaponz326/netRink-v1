@@ -29,7 +29,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let data of budgetGridData" (dblclick)="viewBudget(data.id)" class="table-pointer">
+                    <tr *ngFor="let data of budgetGridData" (dblclick)="viewBudget(data.uid)" class="table-pointer">
                         <td>{{data?.budget_name}}</td>
                         <td>{{data?.budget_type}}</td>
                     </tr>
@@ -38,7 +38,7 @@
                     <tr class="bg-light">
                         <td colspan="2">
                             <app-table-pagination #tablePaginationComponentReference
-                            [currentPage]="currentPage" [totalPages]="totalPages" (pageSelected)="getBudgets($event, 20, '')"
+                            [currentPage]="currentPage" [totalPages]="totalPages" (pageSelected)="getAllUserBudget()"
                             ></app-table-pagination>
                         </td>
                     </tr>

@@ -1,6 +1,8 @@
-import { Component, OnInit, ViewChild, Output, EventEmitter, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, Output, EventEmitter, ElementRef, Input } from '@angular/core';
 
 import { TransactionFormComponent } from '../transaction-form/transaction-form.component'
+
+import { Account, Transaction } from 'projects/personal/src/app/models/modules/accounts/accounts.model';
 
 
 @Component({
@@ -12,10 +14,11 @@ export class AddTransactionComponent implements OnInit {
 
   constructor() { }
 
+  @Input() transactionAccount!: Account;
   @Output() saveTransactionEvent = new EventEmitter<any>();
 
   @ViewChild('buttonElementReference', { read: ElementRef, static: false }) buttonElement!: ElementRef;
-  
+
   @ViewChild('transactionFormComponentReference', { read: TransactionFormComponent, static: false }) transactionForm!: TransactionFormComponent;
 
   ngOnInit(): void {
@@ -30,8 +33,9 @@ export class AddTransactionComponent implements OnInit {
   }
 
   saveTransaction(){
-    let data = {
-      account: sessionStorage.getItem('personal_account_id'),
+    let data: Transaction = {
+      uid: "",
+      account: this.transactionAccount,
       transaction_date: this.transactionForm.transactionForm.controls.transactionDate.value,
       description: this.transactionForm.transactionForm.controls.description.value,
       transaction_type: this.transactionForm.transactionForm.controls.transactionType.value,

@@ -1,11 +1,13 @@
-import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
-
-import { AccountsApiService } from 'projects/personal/src/app/services/modules/accounts-api/accounts-api.service';
+import { Component, OnInit, ViewChild, Input, Output, EventEmitter } from '@angular/core';
 
 import { AddTransactionComponent } from '../add-transaction/add-transaction.component'
 import { EditTransactionComponent } from '../edit-transaction/edit-transaction.component'
 import { ConnectionToastComponent } from '../../../module-utilities/connection-toast/connection-toast.component'
 import { DeleteModalComponent } from '../../../module-utilities/delete-modal/delete-modal.component'
+
+import { AccountsApiService } from 'projects/personal/src/app/services/modules/accounts-api/accounts-api.service';
+
+import { Account, Transaction } from 'projects/personal/src/app/models/modules/accounts/accounts.model';
 
 
 @Component({
@@ -17,6 +19,7 @@ export class AccountTransactionsComponent implements OnInit {
 
   constructor(private accountsApi: AccountsApiService) { }
 
+  @Input() transactionAccount!: Account;
   @Output() balanceEvent = new EventEmitter<any>();
 
   @ViewChild('addTransactionComponentReference', { read: AddTransactionComponent, static: false }) addTransaction!: AddTransactionComponent;
@@ -24,7 +27,7 @@ export class AccountTransactionsComponent implements OnInit {
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
   @ViewChild('deleteModalComponentReference', { read: DeleteModalComponent, static: false }) deleteModal!: DeleteModalComponent;
 
-  transactionsGridData: any[] = [];
+  transactionsGridData: Transaction[] = [];
 
   deleteId = "";
   deleteIndex = 0;
@@ -33,40 +36,40 @@ export class AccountTransactionsComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    this.getTransactions();
+    this.getAllAccountTransaction();
   }
 
   calculateBalance(){
-    let balance = this.transactionsGridData.reduce((total, transaction) => {
-      (transaction.transaction_type == "Credit") ?
-        total + transaction.amount : total - transaction.amount;
-    });
+    // let balance = this.transactionsGridData.reduce((total, transaction) => {
+    //   (transaction.transaction_type == "Credit") ?
+    //     total + transaction.amount : total - transaction.amount;
+    // });
 
-    this.balanceEvent.emit(balance);
-    console.log(balance);
+    // this.balanceEvent.emit(balance);
+    // console.log(balance);
   }
 
-  getTransactions(){
-    this.accountsApi.getTransactions()
-      .subscribe(
-        res => {
+  getAllAccountTransaction(){
+    this.accountsApi.getAllAccountTransaction()
+      .then(
+        (res: any) => {
           console.log(res);
           this.transactionsGridData = res;
           this.calculateBalance();
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }
       )
   }
 
-  postTransaction(data: any){
+  createTransaction(data: any){
     console.log(data);
 
-    this.accountsApi.postTransaction(data)
-      .subscribe(
-        res => {
+    this.accountsApi.createTransaction(data)
+      .then(
+        (res: any) => {
           console.log(res);
 
           if(res.id){
@@ -75,19 +78,19 @@ export class AccountTransactionsComponent implements OnInit {
             this.addTransaction.resetForm();
           }
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }
       )
   }
 
-  putTransaction(data: any){
+  updateTransaction(data: any){
     console.log(data);
 
-    this.accountsApi.putTransaction(data.id, data)
-      .subscribe(
-        res => {
+    this.accountsApi.updateTransaction(data.id, data.transaction)
+      .then(
+        (res: any) => {
           console.log(res);
 
           if(res.id){
@@ -95,7 +98,7 @@ export class AccountTransactionsComponent implements OnInit {
             this.calculateBalance();
           }
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }
@@ -106,13 +109,13 @@ export class AccountTransactionsComponent implements OnInit {
     console.log(this.deleteId);
 
     this.accountsApi.deleteTransaction(this.deleteId)
-      .subscribe(
-        res => {
+      .then(
+        (res: any) => {
           console.log(res);
           this.transactionsGridData.splice(this.deleteIndex, 1);
           this.calculateBalance();
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }

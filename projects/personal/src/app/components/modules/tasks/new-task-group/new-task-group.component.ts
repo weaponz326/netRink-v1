@@ -2,9 +2,12 @@ import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angula
 import { Router } from '@angular/router';
 import { FormControl, FormGroup } from '@angular/forms';
 
+import { ConnectionToastComponent } from '../../../module-utilities/connection-toast/connection-toast.component'
+
 import { TasksApiService } from 'projects/personal/src/app/services/modules/tasks-api/tasks-api.service';
 
-import { ConnectionToastComponent } from '../../../module-utilities/connection-toast/connection-toast.component'
+import { TaskGroup } from 'projects/personal/src/app/models/modules/tasks/tasks.model';
+
 
 
 @Component({
@@ -38,29 +41,31 @@ export class NewTaskGroupComponent implements OnInit {
     })
   }
 
-  postTaskGroup(){
-    let data = {
-      user: localStorage.getItem('personal_id'),
-      task_group: this.taskGroupForm.controls.taskGroupName.value
+  createTaskGroup(){
+    let data: TaskGroup = {
+      uid: "",
+      user: localStorage.getItem('personal_id') as string,
+      task_group: this.taskGroupForm.controls.taskGroupName.value,
+      created_at: new Date()
     }
 
     console.log(data);
 
-    // this.tasksApi.postTaskGroup(data)
-    //   .subscribe(
-    //     res => {
-    //       console.log(res);
+    this.tasksApi.createTaskGroup(data)
+      .then(
+        (res: any) => {
+          console.log(res);
 
-    //       if(res.id){
-    //         sessionStorage.setItem('personal_task_group_id', res.id);
-    //         this.router.navigateByUrl('/home/tasks/view-task-group/kanban-view');
-    //       }
-    //     },
-    //     err => {
-    //       console.log(err);
-    //       this.connectionToast.openToast();
-    //     }
-    //   )
+          if(res.id){
+            sessionStorage.setItem('personal_task_group_id', res.id);
+            this.router.navigateByUrl('/home/tasks/view-task-group/kanban-view');
+          }
+        },
+        (err: any) => {
+          console.log(err);
+          this.connectionToast.openToast();
+        }
+      )
   }
 
 

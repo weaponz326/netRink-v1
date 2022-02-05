@@ -22,17 +22,17 @@ export class BudgetPrintService {
   // all budget
 
   getPrintBudgets(count: any){
-    this.budgetApi.getBudgets(1, count, "")
-      .subscribe(
-        res => {
-          console.log(res);
-          this.budgetGridData = res.results;
-          this.printAllBudget();
-        },
-        err => {
-          console.log(err);
-        }
-      )
+    // this.budgetApi.getBudgets(1, count, "")
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.budgetGridData = res.results;
+    //       this.printAllBudget();
+    //     },
+    //     err => {
+    //       console.log(err);
+    //     }
+    //   )
   }
 
   printAllBudget(){
@@ -70,45 +70,45 @@ export class BudgetPrintService {
   // view budget
 
   getPrintBudget(){
-    this.budgetApi.getSingleBudget()
-      .subscribe(
-        res => {
-          console.log(res);
-          this.budgetFormData = res;
-          this.getPrintIncome();
-        },
-        err => {
-          console.log(err);
-        }
-      )
+    // this.budgetApi.getSingleBudget()
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.budgetFormData = res;
+    //       this.getPrintIncome();
+    //     },
+    //     err => {
+    //       console.log(err);
+    //     }
+    //   )
   }
 
   getPrintIncome(){
-    this.budgetApi.getIncome()
-      .subscribe(
-        res => {
-          console.log(res);
-          this.incomeGridData = res;
-          this.getPrintExpenditure();
-        },
-        err => {
-          console.log(err);
-        }
-      )
+    // this.budgetApi.getIncome()
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.incomeGridData = res;
+    //       this.getPrintExpenditure();
+    //     },
+    //     err => {
+    //       console.log(err);
+    //     }
+    //   )
   }
 
   getPrintExpenditure(){
-    this.budgetApi.getExpenditure()
-      .subscribe(
-        res => {
-          console.log(res);
-          this.expenditureGridData = res;
-          this.printViewBudget();
-        },
-        err => {
-          console.log(err);
-        }
-      )
+    // this.budgetApi.getExpenditure()
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.expenditureGridData = res;
+    //       this.printViewBudget();
+    //     },
+    //     err => {
+    //       console.log(err);
+    //     }
+    //   )
   }
 
   printViewBudget(){

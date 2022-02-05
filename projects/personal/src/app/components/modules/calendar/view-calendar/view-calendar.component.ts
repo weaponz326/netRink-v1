@@ -1,9 +1,11 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 
+import { ConnectionToastComponent } from '../../../module-utilities/connection-toast/connection-toast.component'
+
 import { CalendarApiService } from 'projects/personal/src/app/services/modules/calendar-api/calendar-api.service';
 
-import { ConnectionToastComponent } from '../../../module-utilities/connection-toast/connection-toast.component'
+import { Calendar, Schedule } from 'projects/personal/src/app/models/modules/calendar/calendar.model';
 
 
 @Component({
@@ -22,9 +24,8 @@ export class ViewCalendarComponent implements OnInit {
   ];
 
   calendarForm: FormGroup = new FormGroup({});
-
-  schedulesGridData: any[] = [];
-  calendarFormData: any[] = [];
+  schedulesGridData: Schedule[] = [];
+  calendarFormData: Calendar = {uid: "", user: "", calendar_name: "", created_at: new Date()};
 
   isCalendarSaving: boolean = false;
 
@@ -33,8 +34,8 @@ export class ViewCalendarComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    this.getSchedules();
     this.getCalendar();
+    this.getAllCalendarSchedule();
   }
 
   initClendarForm(){
@@ -45,52 +46,54 @@ export class ViewCalendarComponent implements OnInit {
 
   getCalendar(){
     this.calendarApi.getCalendar()
-      .subscribe(
-        res => {
+      .then(
+        (res: any) => {
           console.log(res);
           this.calendarFormData = res;
-          this.calendarForm.controls.calendarName.setValue(res.calendar_name);
+          this.calendarForm.controls.calendarName.setValue(this.calendarFormData.calendar_name);
         },
-        err => {
+        (err: any) => {
           this.connectionToast.openToast();
           console.log(err);
         }
       )
   }
 
-  getSchedules(){
-    this.calendarApi.getSchedules()
-      .subscribe(
-        res => {
-          console.log(res);
-          this.schedulesGridData = res;
-        },
-        err => {
-          this.connectionToast.openToast();
-          console.log(err);
-        }
-      )
-  }
-
-  putCalendar(){
-    let data = {
-      user: localStorage.getItem('personal_id'),
-      calendar_name: this.calendarForm.controls.calendarName.value
+  updateCalendar(){
+    let data: Calendar = {
+      uid: this.calendarFormData.uid,
+      user: localStorage.getItem('personal_id') as string,
+      calendar_name: this.calendarForm.controls.calendarName.value,
+      created_at: this.calendarFormData.created_at
     }
 
     console.log(data);
     this.isCalendarSaving = true;
 
-    this.calendarApi.putCalendar(data)
-      .subscribe(
-        res => {
+    this.calendarApi.updateCalendar(data)
+      .then(
+        (res: any) => {
           console.log(res);
           this.isCalendarSaving = false;
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
           this.isCalendarSaving = false;
+        }
+      )
+  }
+
+  getAllCalendarSchedule(){
+    this.calendarApi.getAllCalendarSchedule()
+      .then(
+        (res: any) => {
+          console.log(res);
+          this.schedulesGridData = res;
+        },
+        (err: any) => {
+          this.connectionToast.openToast();
+          console.log(err);
         }
       )
   }

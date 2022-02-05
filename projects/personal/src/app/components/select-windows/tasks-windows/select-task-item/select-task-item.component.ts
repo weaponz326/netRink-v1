@@ -41,19 +41,19 @@ export class SelectTaskItemComponent implements OnInit {
   }
 
   getAllTaskItems(page: any, size: any, sortField: any){
-    this.tasksApi.getAllTaskItems(page, size, sortField)
-      .subscribe(
-        res => {
-          console.log(res);
-          this.taskItemsGridData = res.results;
-          this.currentPage = res.current_page;
-          this.totalPages = res.total_pages;
-        },
-        err => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
+    // this.tasksApi.getAllTaskItems(page, size, sortField)
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.taskItemsGridData = res.results;
+    //       this.currentPage = res.current_page;
+    //       this.totalPages = res.total_pages;
+    //     },
+    //     err => {
+    //       console.log(err);
+    //       this.connectionToast.openToast();
+    //     }
+    //   )
   }
 
   selectRow(row: any){

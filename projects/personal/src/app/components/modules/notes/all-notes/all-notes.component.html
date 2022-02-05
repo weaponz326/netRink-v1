@@ -35,7 +35,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let data of notesGridData" (dblclick)="viewNote(data.id)" class="table-pointer">
+                    <tr *ngFor="let data of notesGridData" (dblclick)="viewNote(data.uid)" class="table-pointer">
                         <td>{{data?.subject}}</td>
                         <td>{{data?.created_at | date}}</td>
                         <td>{{data?.updated_at | date}}</td>
@@ -45,7 +45,7 @@
                     <tr class="bg-light">
                         <td colspan="3">
                             <app-table-pagination #tablePaginationComponentReference
-                            [currentPage]="currentPage" [totalPages]="totalPages" (pageSelected)="getNotes($event, 10, '')"
+                            [currentPage]="currentPage" [totalPages]="totalPages" (pageSelected)="getAllUserNote()"
                             ></app-table-pagination>
                         </td>
                     </tr>
