@@ -1,7 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
-// import { TabsComponent } from 'smart-webcomponents-angular/tabs';
-
 import { SettingsApiService } from 'projects/personal/src/app/services/modules/settings-api/settings-api.service';
 
 import { BasicComponent } from '../profile-content/basic/basic.component';

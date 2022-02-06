@@ -9,10 +9,12 @@
                 <div class="col-md-8 mx-auto">
 
                     <form (ngSubmit)="doSearch()">
-                        <div class="input-group">
+                        <div class="input-group input-group-sm">
                             <input [(ngModel)]="searchInput" [ngModelOptions]="{standalone: true}" type="text" class="form-control" placeholder="Search for users" aria-label="Search for users" aria-describedby="button-addon2">
                             <div class="input-group-append">
-                                <button class="btn btn-secondary" type="submit" id="button-addon2">Search</button>
+                                <button class="btn btn-sm btn-secondary" type="submit" id="button-addon2">
+                                    Search <i class="bi bi-search ms-1"></i>
+                                </button>
                             </div>
                         </div>
                     </form>

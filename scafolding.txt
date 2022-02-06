@@ -144,7 +144,7 @@
 						- select task group (C)
 						- select task item (C)
 		+ services
-            - auth (S)
+            - auth api (S)
             - pdf print (S)
 			+ modules
 				- portal api (S)
@@ -343,7 +343,7 @@
 				+ kitchen stock windows (M)
           			- select kitchen stock (C)
 		+ services
-			- register api (S)
+			- account api (S)
 			+ modules
 				- admin api (S)
 				- portal api (S)
@@ -584,7 +584,7 @@
 				+ sections windows (M)
           			- select section (C)
 		+ services
-			- register api (S)
+			- account api (S)
 			+ modules
 				- admin api (S)
 				- portal api (S)
@@ -851,7 +851,7 @@
         		+ year windows (M)
           			- select year (C)
 		+ services
-			- register api (S)
+			- account api (S)
 			+ modules
 				- admin api (S)
 				- portal api (S)
@@ -1071,7 +1071,7 @@
 				+ year windows (M)
           			- select year (C)
 		+ services
-			- register api (S)
+			- account api (S)
 			+ modules
 				- admin api (S)
 				- portal api (S)
@@ -1343,7 +1343,7 @@
 				+ roster windows (M)
           			- select roster (C)
 		+ services
-			- register api (S)
+			- account api (S)
 			+ modules
 				- admin api (S)
 				- portal api (S)
@@ -1582,7 +1582,7 @@
 				+ housekeeping windows (M)
           			- select housekeeping (C)
 		+ services
-			- register api (S)
+			- account api (S)
 			+ modules
 				- admin api (S)
 				- portal api (S)
@@ -1835,7 +1835,7 @@
 				+ staff windows (M)
           			- select staff (C)
 		+ services
-			- register api (S)
+			- account api (S)
 			+ modules
 				- admin api (S)
 				- portal api (S)
@@ -2065,7 +2065,7 @@
 				+ materials windows (M)
           			- select material (C)
 		+ services
-			- register api (S)
+			- account api (S)
 			+ modules
 				- admin api (S)
 				- portal api (S)

@@ -13,29 +13,25 @@
                     <div class="row mb-2">
                         <div class="col-md-4"><label>Subscription Type :</label></div>
                         <div class="col-md-8">
-                            <smart-drop-down-list #subscriptionDropDownListReference class="w-100"
-                            (change)="setSubscription($event)">
-                                <smart-list-item *ngFor="let subscription of subscriptionSource" [value]="subscription">{{subscription}}</smart-list-item>
-                            </smart-drop-down-list>
+                            <select [(ngModel)]="subscriptionTypeValue" class="form-control form-control-sm w-100" (change)="setSubscription($event)">
+                                <option *ngFor="let subscription of subscriptionSource">{{subscription}}</option>
+                            </select>
                         </div>
                     </div>
 
                     <div class="row mb-2">
                         <div class="col-md-4"><label>Billing Frequency :</label></div>
                         <div class="col-md-8">
-                            <smart-drop-down-list #frequencyDropDownListReference class="w-100"
-                            (change)="setFrequency($event)">
-                                <smart-list-item *ngFor="let frequency of frequencySource" [value]="frequency">{{frequency}}</smart-list-item>
-                            </smart-drop-down-list>
+                            <select [(ngModel)]="billingFrequencyValue" class="form-control form-control-sm w-100" (change)="setFrequency($event)">
+                                <option *ngFor="let frequency of frequencySource">{{frequency}}</option>
+                            </select>
                         </div>
                     </div>
 
                     <div class="row mb-2">
                         <div class="col-md-4"><label>No. of Users :</label></div>
                         <div class="col-md-4">
-                            <smart-numeric-text-box #usersNumericTextBoxReference class="w-100"
-                            [spinButtons]="true" [spinButtonsPosition]="'right'" [spinButtonsStep]="usersTextBoxIncrement">
-                            </smart-numeric-text-box>
+                            <input [(ngModel)]="numberUsersValue" type="number" [step]="numberUsersStep" class="form-control form-control-sm w-100">
                         </div>
                     </div>
 
@@ -44,46 +40,13 @@
 
             <hr />
 
-            <!-- TODO: delete! component no longer being used -->
+            <!-- ================================
+            TODO: payment form
+            ================================ -->
 
-            <!-- paymetn form component -->
-
-            <!-- <app-payment-form #paymentFormCompnentReference></app-payment-form> -->
-
-            <div class="row billing-form">
+            <div class="row my-4 page-form">
                 <div class="col-md-9">
-
-                    <h3 class="mb-3">Billing Details</h3>
-
-                    <div class="row mb-2">
-                        <div class="col-md-4"><label>First Name :</label></div>
-                        <div class="col-md-8">
-                            <smart-input #firstNameInputReference class="w-100"></smart-input>
-                        </div>
-                    </div>
-
-                    <div class="row mb-2">
-                        <div class="col-md-4"><label>Last Name :</label></div>
-                        <div class="col-md-8">
-                            <smart-input #lastNamerInputReference class="w-100"></smart-input>
-                        </div>
-                    </div>
-
-                    <div class="row mb-2">
-                        <div class="col-md-4"><label>Email :</label></div>
-                        <div class="col-md-8">
-                            <smart-input #emailInputReference class="w-100"></smart-input>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-            <hr />
-
-            <div class="row my-4">
-                <div class="col-md-9">
-                    <smart-button #buttonReference class="float-end page-control-button" (click)="saveSubscription()">Save</smart-button>
+                    <button class="btn btn-secondary btn-sm float-end page-form-btn" (click)="updateSubscription()">Save</button>
                 </div>
             </div>
 
@@ -93,7 +56,9 @@
 
             <div class="row mb-3">
                 <div class="col">
-                    <smart-button #buttonReference class="float-right" routerLink="/home/settings/payments-history">Billing History</smart-button>
+                    <button class="btn btn-secondary float-end nr-standard-font" routerLink="/home/settings/payments-history">
+                        <i class="bi bi-arrow-left-right me-2"></i> Billing History
+                    </button>
                 </div>
             </div>
 
@@ -170,13 +135,13 @@
                         <div *ngIf="selectedFrequency=='Monthly'">
                             <p class="mb-2">Total Bill :</p>
                             <p class="h3 m-0">
-                                ${{19.99 * (usersNumericTextBox.value / 10)}} / month
+                                ${{19.99 * (numberUsersValue / 10)}} / month
                             </p>
                         </div>
                         <div *ngIf="selectedFrequency=='Yearly'">
                             <p class="mb-2">Total Bill :</p>
                             <p class="h3 m-0">
-                                ${{199.99 * (usersNumericTextBox.value / 10)}} / year
+                                ${{199.99 * (numberUsersValue / 10)}} / year
                             </p>
                         </div>
                     </div>
@@ -184,13 +149,13 @@
                         <div *ngIf="selectedFrequency=='Monthly'">
                             <p class="mb-2">Total Bill :</p>
                             <p class="h3 m-0">
-                                ${{74.99 * (usersNumericTextBox.value / 50)}} / month
+                                ${{74.99 * (numberUsersValue / 50)}} / month
                             </p>
                         </div>
                         <div *ngIf="selectedFrequency=='Yearly'">
                             <p class="mb-2">Total Bill :</p>
                             <p class="h3 m-0">
-                                ${{749.99 * (usersNumericTextBox.value / 50)}} / year
+                                ${{749.99 * (numberUsersValue / 50)}} / year
                             </p>
                         </div>
                     </div>

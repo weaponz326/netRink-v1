@@ -4,10 +4,32 @@
 
     <div class="row">
         <div class="col-md-7">
-            <smart-grid #gridReference class="w-100"
-            [dataSource]="dataSource" [columns]="columns" [sorting]="sorting" [filtering]="filtering"
-            (onRowDoubleClick)="viewUser($event)">
-            </smart-grid>
+
+            <table class="table table-bordered table-sm w-100 page-table">
+                <thead>
+                    <tr class="bg-light">
+                        <th width="70%">
+                            User's Name
+                            <app-table-sorting #personalNameSortingComponentReference
+                            [sortField]="'personal_name'" (sortDirection)="sortTable($event)"
+                            ></app-table-sorting>
+                        </th>
+                        <th width="30%">
+                            User Levle
+                            <app-table-sorting #userLevelSortingComponentReference
+                            [sortField]="'user_level'" (sortDirection)="sortTable($event)"
+                            ></app-table-sorting>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let data of usersGridData" (dblclick)="viewUser(data.uid)" class="table-pointer">
+                        <td>{{data?.personal_name}}</td>
+                        <td>{{data?.access_level}}</td>
+                    </tr>
+                </tbody>
+            </table>
+
         </div>
     </div>
 

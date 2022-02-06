@@ -1,10 +1,12 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { GridComponent, GridColumn, DataAdapter, Smart } from 'smart-webcomponents-angular/grid';
+import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
+import { TableSortingComponent } from 'projects/personal/src/app/components/module-utilities/table-sorting/table-sorting.component'
 
 import { AdminApiService } from 'projects/restaurant/src/app/services/modules/admin-api/admin-api.service';
-import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
+
+import { User } from 'projects/restaurant/src/app/models/modules/admin/admin.model';
 
 
 @Component({
@@ -19,67 +21,54 @@ export class AllUsersComponent implements OnInit {
     private adminApi: AdminApiService,
   ) { }
 
-  @ViewChild('gridReference', { read: GridComponent, static: false }) grid!: GridComponent;
-
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
+  @ViewChild('personalNameCodeSortingComponentReference', { read: TableSortingComponent, static: false }) personalNameSorting!: TableSortingComponent;
+  @ViewChild('userLevelSortingComponentReference', { read: TableSortingComponent, static: false }) userLevelSorting!: TableSortingComponent;
 
   navHeading: any[] = [
     { text: "All Users", url: "/home/admin/all-users" },
   ];
 
-  sorting = { enabled: true }
-  filtering = { enabled: true }
-  dataSource = [];
-  columns: GridColumn[] = <GridColumn[]>[];
+  usersGridData: User[] = [];
 
   ngOnInit(): void {
   }
 
   ngAfterViewInit(): void {
-    this.setGridConfig();
+    this.getAllAccountAdminUser();
   }
 
-  getAllUsers() {
-    this.adminApi.getAllUsers()
-      .subscribe(
-        res => {
+  getAllAccountAdminUser() {
+    this.adminApi.getAllAccountAdminUser()
+      .then(
+        (res: any) => {
           console.log(res);
-          this.dataSource = res;
+          this.usersGridData = res;
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }
       )
   }
 
-  viewUser(event: any){
-    console.log(event.detail.row.data);
-    sessionStorage.setItem('restaurant_admin_user_id', event.detail.row.data.id);
+  viewUser(personalId: any){
+    console.log(personalId);
+    sessionStorage.setItem('restaurant_admin_user_id', personalId);
 
     this.router.navigateByUrl('/home/admin/view-user');
   }
 
-  // ------------------------------------------------------------------------------------------------
-  // grid config
+  sortTable(field: any){
+    console.log(field);
+    this.getAllAccountAdminUser();
 
-  setGridConfig(){
-    this.dataSource = new Smart.DataAdapter(
-      <DataAdapter>{
-        id: 'id',
-        dataSource: this.getAllUsers(),
-        dataFields: [
-          'id: string',
-          'personal_name: string',
-          'user_level: string'
-        ]
-      }
-    );
-
-    this.columns = <GridColumn[]>[
-      { label: "User's Name", dataField: "personal_name", width: "60%" },
-      { label: "User Level", dataField: "user_level", width: "40%" },
-    ];
+    if((field == 'personal_name') || (field == "-personal_name")){
+      this.personalNameSorting.resetSort();
+    }
+    else if((field == 'user_level') || (field == "-user_level")){
+      this.userLevelSorting.resetSort();
+    }
   }
 
 }

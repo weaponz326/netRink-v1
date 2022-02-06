@@ -4,16 +4,54 @@
 
     <div class="row mb-3">
         <div class="col">
-            <smart-button #buttonReference routerLink="/home/admin/search">Invite User</smart-button>
+            <button class="btn btn-secondary page-add-btn" routerLink="/home/admin/search">Invite User</button>
         </div>
     </div>
 
     <div class="row">
         <div class="col-md-8">
-            <smart-grid #gridReference class="w-100"
-            [dataSource]="dataSource" [columns]="columns" [sorting]="sorting" [filtering]="filtering"
-            (onRowDoubleClick)="viewInvitation($event)">
-            </smart-grid>
+
+            <table class="table table-bordered table-sm w-100 page-table">
+                <thead>
+                    <tr class="bg-light">
+                        <th width="25%">
+                            Invotation Date
+                            <app-table-sorting #invitationDateSortingComponentReference
+                            [sortField]="'invitation_date'" (sortDirection)="sortTable($event)"
+                            ></app-table-sorting>
+                        </th>
+                        <th width="50%">
+                            User's Name
+                            <app-table-sorting #inviteeNameSortingComponentReference
+                            [sortField]="'invitee_name'" (sortDirection)="sortTable($event)"
+                            ></app-table-sorting>
+                        </th>
+                        <th width="25%">
+                            Invotation Status
+                            <app-table-sorting #invitationStatusSortingComponentReference
+                            [sortField]="'invitation_status'" (sortDirection)="sortTable($event)"
+                            ></app-table-sorting>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let data of invitationsGridData" (dblclick)="viewInvitation(data.uid)" class="table-pointer">
+                        <td>{{data?.invitation_date | date}}</td>
+                        <td>{{data?.invitee_name}}</td>
+                        <td>{{data?.invitation_status}}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr class="bg-light">
+                        <td colspan="3">
+                            <app-table-pagination #tablePaginationComponentReference
+                            [currentPage]="currentPage" [totalPages]="totalPages" (pageSelected)="getAllAccountInvitation()"
+                            ></app-table-pagination>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+
         </div>
     </div>
 

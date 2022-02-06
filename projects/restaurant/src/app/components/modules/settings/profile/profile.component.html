@@ -5,20 +5,36 @@
     <div class="row settings-tabs">
         <div class="col-md-12">
 
-            <smart-tabs #tabsReference class="w-100">
-                <smart-tab-item label="Basic Profile">
-                    <app-basic #basicComponentReference (additionalEvent)="sendAccount($event)"></app-basic>
-                </smart-tab-item>
-                <smart-tab-item label="Restaurant Logo">
-                    <app-logo #logoComponentReference (logoEvent)="sendAccount($event)"></app-logo>
-                </smart-tab-item>
-                <smart-tab-item label="Location Details">
-                    <app-location #locationComponentReference (locationEvent)="saveLocation($event)"></app-location>
-                </smart-tab-item>
-                <smart-tab-item label="Contact Details">
-                    <app-contact #contactComponentReference (contactEvent)="saveContact($event)"></app-contact>
-                </smart-tab-item>
-            </smart-tabs>
+            <nav class="settings-tabs">
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <button class="nav-link active" id="nav-basic-tab" data-bs-toggle="tab" data-bs-target="#nav-basic" type="button" role="tab" aria-controls="nav-basic" aria-selected="true">
+                        Basic Profle
+                    </button>
+                    <button class="nav-link" id="nav-photo-tab" data-bs-toggle="tab" data-bs-target="#nav-photo" type="button" role="tab" aria-controls="nav-photo" aria-selected="false">
+                        Restaurant Photo
+                    </button>
+                    <button class="nav-link" id="nav-location-tab" data-bs-toggle="tab" data-bs-target="#nav-location" type="button" role="tab" aria-controls="nav-location" aria-selected="false">
+                        Location Details
+                    </button>
+                    <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">
+                        Contact Details
+                    </button>
+                </div>
+            </nav>
+            <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="nav-basic" role="tabpanel" aria-labelledby="nav-basic-tab">
+                    <app-basic #basicComponentReference (additionalEvent)="updateAccount()"></app-basic>
+                </div>
+                <div class="tab-pane fade" id="nav-photo" role="tabpanel" aria-labelledby="nav-photo-tab">
+                    <app-logo #logoComponentReference (photoEvent)="updateAccount()"></app-logo>
+                </div>
+                <div class="tab-pane fade" id="nav-location" role="tabpanel" aria-labelledby="nav-location-tab">
+                    <app-location #locationComponentReference (locationEvent)="updateExtendedProfile()"></app-location>
+                </div>
+                <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
+                    <app-contact #contactComponentReference (contactEvent)="updateExtendedProfile()"></app-contact>
+                </div>
+            </div>
 
         </div>
     </div>

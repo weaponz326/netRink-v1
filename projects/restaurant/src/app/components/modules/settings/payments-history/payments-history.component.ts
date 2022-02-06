@@ -1,7 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
-import { SettingsApiService } from 'projects/restaurant/src/app/services/modules/settings-api/settings-api.service';
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
+
+import { SettingsApiService } from 'projects/restaurant/src/app/services/modules/settings-api/settings-api.service';
 
 
 @Component({

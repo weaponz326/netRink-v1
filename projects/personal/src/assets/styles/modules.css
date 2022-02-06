@@ -115,6 +115,10 @@ table.page-table .page-link{
 	color: green;
 }
 
+.search-input-group .filter-toggle{
+  width: 120px;
+}
+
 /* settings module */
 
 .active-panel .subscription-panel{
@@ -136,4 +140,10 @@ table.page-table .page-link{
 .settings-tabs .nav-link.active{
   color: #fff;
   background-color: #858796;
+}
+
+/* admin module */
+
+.form-check-input {
+  margin-left: 0;
 }

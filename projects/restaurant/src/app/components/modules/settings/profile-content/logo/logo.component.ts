@@ -1,7 +1,5 @@
 import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
 
-import { ButtonComponent } from 'smart-webcomponents-angular/button';
-
 import { ImageInputComponent } from 'projects/personal/src/app/components/module-utilities/image-input/image-input.component'
 
 
@@ -14,20 +12,17 @@ export class LogoComponent implements OnInit {
 
   constructor() { }
 
-  @ViewChild('saveButtonReference', { read: ButtonComponent, static: false }) saveButton!: ButtonComponent;
   @ViewChild('imageInputComponentReference', { read: ImageInputComponent, static: false }) imageInput!: ImageInputComponent;
 
   @Output() logoEvent = new EventEmitter<any>();
+
+  isLogoSaving = false;
 
   ngOnInit(): void {
   }
 
   emitLogo(){
-    let data = {
-      logo: this.imageInput.image
-    }
-
-  	this.logoEvent.emit(data);
+  	this.logoEvent.emit();
   }
 
 }

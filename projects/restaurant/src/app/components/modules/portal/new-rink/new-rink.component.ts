@@ -1,12 +1,6 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
-
-import { ButtonComponent } from 'smart-webcomponents-angular/button';
-import { InputComponent } from 'smart-webcomponents-angular/input';
-import { MultilineTextBoxComponent } from 'smart-webcomponents-angular/multilinetextbox';
-
-import { PortalApiService } from 'projects/restaurant/src/app/services/modules/portal-api/portal-api.service';
-import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
+import { FormControl, FormGroup } from '@angular/forms';
 
 import { SelectMenuGroupComponent } from '../../../select-windows/menu-windows/select-menu-group/select-menu-group.component';
 import { SelectMenuItemComponent } from '../../../select-windows/menu-windows/select-menu-item/select-menu-item.component';
@@ -15,6 +9,14 @@ import { SelectOrderComponent } from '../../../select-windows/orders-windows/sel
 import { SelectDeliveryComponent } from '../../../select-windows/deliveries-windows/select-delivery/select-delivery.component';
 import { SelectCustomerComponent } from '../../../select-windows/customers-windows/select-customer/select-customer.component';
 import { SelectReservationComponent } from '../../../select-windows/reservations-windows/select-reservation/select-reservation.component';
+
+import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
+
+import { AccountApiService } from 'projects/restaurant/src/app/services/account-api/account-api.service';
+import { PortalApiService } from 'projects/restaurant/src/app/services/modules/portal-api/portal-api.service';
+
+import { Account } from 'projects/restaurant/src/app/models/account/account.model';
+import { Rink } from 'projects/restaurant/src/app/models/modules/portal/portal.model';
 
 
 @Component({
@@ -26,17 +28,9 @@ export class NewRinkComponent implements OnInit {
 
   constructor(
     private router: Router,
+    private accountApi: AccountApiService,
     private portalApi: PortalApiService,
   ) { }
-
-  @ViewChild('nameInputReference', { read: InputComponent, static: false }) nameInput!: InputComponent;
-  @ViewChild('locationInputReference', { read: InputComponent, static: false }) locationInput!: InputComponent;
-  @ViewChild('typeDropDownListReference', { read: InputComponent, static: false }) typeDropDownList!: InputComponent;
-  @ViewChild('sourceInputReference', { read: InputComponent, static: false }) sourceInput!: InputComponent;
-  @ViewChild('sourceButtonReference', { read: ButtonComponent, static: false }) sourceButton!: ButtonComponent;
-  @ViewChild('commentTextAreaReference', { read: MultilineTextBoxComponent, static: false }) commentTextArea!: MultilineTextBoxComponent;
-  @ViewChild('sendButtonReference', { read: ButtonComponent, static: false }) sendButton!: ButtonComponent;
-  @ViewChild('cancelButtonReference', { read: ButtonComponent, static: false }) cancelButton!: ButtonComponent;
 
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
 
@@ -53,6 +47,11 @@ export class NewRinkComponent implements OnInit {
     { text: "Send Rink", url: "/home/portal/search/new-rink" },
   ];
 
+  rinkForm: FormGroup = new FormGroup({});
+  senderData: Account = {uid: "", name: "", location: "", about: ""};
+  recipientData: Account = {uid: "", name: "", location: "", about: ""};
+  rinkFormData: Rink = {uid: "", sender: this.senderData, recipient: this.recipientData, rink_date: new Date, rink_type: "", rink_source: "", comment: "" };
+
   selectedSourceId: any;
   typeSource: any[] = [
     'Customer',
@@ -64,88 +63,117 @@ export class NewRinkComponent implements OnInit {
     'Reservation',
   ];
 
+  isRinkSending = false;
+
   ngOnInit(): void {
   }
 
   ngAfterViewInit(): void {
-    this.getDetail();
+    this.getAccountDetail()
+    this.getSearchDetail();
   }
 
-  getDetail(){
-    this.portalApi.getDetail(String(sessionStorage.getItem('restaurantSearchUser')))
-      .subscribe(
-        res => {
+  initRinkForm(){
+    this.rinkForm = new FormGroup({
+      recipientName: new FormControl(''),
+      recipientLocation: new FormControl(''),
+      rinkType: new FormControl('Calendar'),
+      rinkSource: new FormControl(''),
+      comment: new FormControl('')
+    })
+  }
+
+  getAccountDetail(){
+    this.accountApi.getAccount()
+      .then(
+        (res: any) => {
           console.log(res);
-          this.nameInput.value = res.first_name + " " + res.last_name;
-          this.locationInput.value = res.location;
+          this.senderData = res;
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }
       )
   }
 
-  sendRink(){
-    let rinkData = {
-      sender: localStorage.getItem('restaurant_id'),
-      recipient: sessionStorage.getItem('restaurant_rink_recipient'),
-      rink_type: this.typeDropDownList.value,
-      // rink_source: this.selectedSourceId,
-      comment: this.commentTextArea.value
+  getSearchDetail(){
+    this.portalApi.getSearchDetail(String(sessionStorage.getItem('restaurantSearchUser')))
+      .then(
+        (res: any) => {
+          console.log(res);
+
+          this.recipientData = res;
+
+          this.rinkForm.controls.recipientName.setValue(this.recipientData.name);
+          this.rinkForm.controls.recipientLocation.setValue(this.recipientData.location);
+        },
+        (err: any) => {
+          console.log(err);
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  createRink(){
+    let data = {
+      uid: "",
+      sender: this.senderData,
+      recipient: this.recipientData,
+      rink_type: this.rinkForm.controls.rinkType.value,
+      rink_source: this.rinkForm.controls.rinkSource.value,
+      comment: this.rinkForm.controls.comment.value
     }
 
-    console.log(rinkData);
-    this.sendButton.disabled = true;
+    console.log(data);
+    this.isRinkSending = true;
 
-    this.portalApi.postRink(rinkData)
-      .subscribe(
-        res => {
+    this.portalApi.createRink(data)
+      .then(
+        (res: any) => {
           console.log(res);
-          this.sendButton.disabled = false;
+          this.isRinkSending = false;
 
-          if (res.message == "OK"){
-            sessionStorage.setItem('restaurant_rink_id', res.data.id);
-            this.router.navigateByUrl('/home/portal/view-rink');
-          }
+          sessionStorage.setItem('restaurant_rink_id', res.data.uid);
+          this.router.navigateByUrl('/home/portal/view-rink');
         },
         err => {
           console.log(err);
-          this.sendButton.disabled = false;
+          this.isRinkSending = false;
           this.connectionToast.openToast();
         }
       )
   }
 
-  onTypeSelected(event: any){
-    this.sourceButton.disabled = false;
-    this.sourceInput.value = "";
+  onTypeSelected(){
+    console.log("why did u change the type?");
+    this.rinkForm.controls.rinkSource.setValue("");
   }
 
   openSourceWindow(){
-    let type = this.typeDropDownList.value;
+    // let type = this.typeDropDownList.value;
 
-    if (type == "Menu Group") this.selectMenuGroup.window.open();
-    else if (type == "Menu Item") this.selectMenuItem.window.open();
-    else if (type == "Staff") this.selectStaff.window.open();
-    else if (type == "Order") this.selectOrder.window.open();
-    else if (type == "Delivery") this.selectDelivery.window.open();
-    else if (type == "Customer") this.selectCustomer.window.open();
-    else if (type == "Reservation") this.selectReservation.window.open();
+    // if (type == "Menu Group") this.selectMenuGroup.window.open();
+    // else if (type == "Menu Item") this.selectMenuItem.window.open();
+    // else if (type == "Staff") this.selectStaff.window.open();
+    // else if (type == "Order") this.selectOrder.window.open();
+    // else if (type == "Delivery") this.selectDelivery.window.open();
+    // else if (type == "Customer") this.selectCustomer.window.open();
+    // else if (type == "Reservation") this.selectReservation.window.open();
   }
 
   onSourceSelected(sourceData: any){
     console.log(sourceData);
-    let type = this.typeDropDownList.value;
+    let type = this.rinkForm.controls.rinkType.value;
     this.selectedSourceId = sourceData.id;
 
-    if (type == "Menu Group") this.sourceInput.value = sourceData.menu_group;
-    else if (type == "Menu Item") this.sourceInput.value = sourceData.item_name;
-    else if (type == "Staff") this.sourceInput.value = sourceData.staff_name;
-    else if (type == "Order") this.sourceInput.value = sourceData.order_code;
-    else if (type == "Delivery") this.sourceInput.value = sourceData.delivery_code;
-    else if (type == "Customer") this.sourceInput.value = sourceData.customer_name;
-    else if (type == "Reservation") this.sourceInput.value = sourceData.reservation_code;
+    // if (type == "Menu Group") this.sourceInput.value = sourceData.menu_group;
+    // else if (type == "Menu Item") this.sourceInput.value = sourceData.item_name;
+    // else if (type == "Staff") this.sourceInput.value = sourceData.staff_name;
+    // else if (type == "Order") this.sourceInput.value = sourceData.order_code;
+    // else if (type == "Delivery") this.sourceInput.value = sourceData.delivery_code;
+    // else if (type == "Customer") this.sourceInput.value = sourceData.customer_name;
+    // else if (type == "Reservation") this.sourceInput.value = sourceData.reservation_code;
   }
 
 }

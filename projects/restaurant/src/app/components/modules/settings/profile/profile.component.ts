@@ -1,14 +1,16 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
-import { TabsComponent } from 'smart-webcomponents-angular/tabs';
-
+import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 import { BasicComponent } from '../profile-content/basic/basic.component';
 import { LogoComponent } from '../profile-content/logo/logo.component';
 import { LocationComponent } from '../profile-content/location/location.component';
 import { ContactComponent } from '../profile-content/contact/contact.component';
 
+import { AccountApiService } from 'projects/restaurant/src/app/services/account-api/account-api.service';
 import { SettingsApiService } from 'projects/restaurant/src/app/services/modules/settings-api/settings-api.service';
-import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
+
+import { Account } from 'projects/restaurant/src/app/models/account/account.model';
+import { ExtendedProfile } from 'projects/restaurant/src/app/models/modules/settings/settings.model';
 
 
 @Component({
@@ -18,9 +20,10 @@ import { ConnectionToastComponent } from 'projects/personal/src/app/components/m
 })
 export class ProfileComponent implements OnInit {
 
-  constructor(private settingsApi: SettingsApiService) { }
-
-  @ViewChild('tabsReference', { read: TabsComponent, static: false }) tabs!: TabsComponent;
+  constructor(
+    private accountApi: AccountApiService,
+    private settingsApi: SettingsApiService,
+  ) { }
 
   @ViewChild('basicComponentReference') basic!: BasicComponent;
   @ViewChild('logoComponentReference') logo!: LogoComponent;
@@ -33,61 +36,81 @@ export class ProfileComponent implements OnInit {
     { text: "Profile", url: "/home/settings/profile" },
   ];
 
+  accountData: Account = {uid: "", name: "", location: "", about: ""};
+  extendedProfileData: ExtendedProfile = {uid: "", phone: "", address: "", country: "", state: "", city: ""};
+
   ngOnInit(): void {
-    this.getBasic();
-    this.getExtended();
   }
 
-  getBasic(){
-    this.settingsApi.getAccount()
-      .subscribe(
-        res => {
+  ngAfterViewInit(): void {
+    this.getAccount();
+    this.getExtendedProfile();
+  }
+
+  getAccount(){
+    this.accountApi.getAccount()
+      .then(
+        (res: any) => {
           console.log(res);
-          this.basic.nameInput.value = res.name;
-          this.basic.locationInput.value = res.location;
-          this.basic.aboutTextArea.value = res.about;
+
+          this.accountData = res;
+
+          this.basic.basicForm.controls.name.setValue(this.accountData.name);
+          this.basic.basicForm.controls.about.setValue(this.accountData.about);
+          this.location.locationForm.controls.location.setValue(this.accountData.location);
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }
       )
   }
 
-  getExtended(){
+  getExtendedProfile(){
     this.settingsApi.getExtendedProfile()
-      .subscribe(
-        res => {
+      .then(
+        (res: any) => {
           console.log(res);
-          this.location.countrySelectInput.value = res.country;
-          this.location.stateSelectInput.value = res.state;
-          this.location.citySelectInput.value = res.city;
-          this.contact.emailInput.value = res.email;
-          this.contact.phoneInput.value = res.phone;
-          this.contact.addressTextArea.value = res.address;
+
+          this.extendedProfileData = res;
+
+          this.location.locationForm.controls.country.setValue(this.extendedProfileData.country);
+          this.location.locationForm.controls.state.setValue(this.extendedProfileData.state);
+          this.location.locationForm.controls.city.setValue(this.extendedProfileData.city);
+          this.contact.contactForm.controls.phone.setValue(this.extendedProfileData.phone);
+          this.contact.contactForm.controls.address.setValue(this.extendedProfileData.address);
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }
       )
   }
 
-  sendAccount(data: any){
-    this.basic.saveButton.disabled = true;
-    this.logo.saveButton.disabled = true;
+  updateAccount(){
+    let data: Account = {
+      uid: this.accountData.uid,
+      name: this.basic.basicForm.controls.name.value,
+      location: this.location.locationForm.controls.location.value,
+      about: this.basic.basicForm.controls.about.value,
+    }
 
-    this.settingsApi.putAccount(data)
-      .subscribe(
-        res => {
+    this.basic.isBasicSaving = true;
+    this.logo.isLogoSaving = true;
+
+    this.accountApi.updateAccount(data)
+      .then(
+        (res: any) => {
           console.log(res);
-          this.basic.saveButton.disabled = false;
-          this.logo.saveButton.disabled = false;
+
+          this.basic.isBasicSaving = false;
+          this.logo.isLogoSaving = false;
         },
-        err => {
+        (err: any) => {
           console.log(err);
-          this.basic.saveButton.disabled = false;
-          this.logo.saveButton.disabled = false;
+
+          this.basic.isBasicSaving = false;
+          this.logo.isLogoSaving = false;
 
           this.connectionToast.openToast();
         }
@@ -95,46 +118,35 @@ export class ProfileComponent implements OnInit {
   }
 
   // extended profile
-  sendExtended(data: any){
-    console.log(data);
-    this.location.saveButton.disabled = true;
-    this.contact.saveButton.disabled = true;
+  updateExtendedProfile(){
+    let data: ExtendedProfile = {
+      uid: this.extendedProfileData.uid,
+      phone: this.contact.contactForm.controls.phone.value,
+      address: this.contact.contactForm.controls.address.value,
+      country: this.location.locationForm.controls.country.value,
+      state: this.location.locationForm.controls.state.value,
+      city: this.location.locationForm.controls.city.value,
+    }
 
-    this.settingsApi.putExtendedProfile(data)
-      .subscribe(
+    this.location.isLocationSaving = true;
+    this.contact.isContactSaving = true;
+
+    this.settingsApi.updateExtendedProfile(data)
+      .then(
         res => {
           console.log(res);
-          this.location.saveButton.disabled = false;
-          this.contact.saveButton.disabled = false;
+
+          this.location.isLocationSaving = false;
+          this.contact.isContactSaving = false;
         },
         err => {
           console.log(err);
-          this.location.saveButton.disabled = false;
-          this.contact.saveButton.disabled = false;
 
+          this.location.isLocationSaving = false;
+          this.contact.isContactSaving = false;
           this.connectionToast.openToast();
         }
       )
-  }
-
-  saveLocation(data: any){
-    let locationData = {
-      country: data.country,
-      state: data.state,
-      city: data.city
-    }
-
-    this.sendExtended(locationData);
-  }
-
-  saveContact(data: any){
-    let contactData = {
-      phone: data.phone,
-      email: data.email,
-      address: data.address
-    }
-
-    this.sendExtended(contactData);
   }
 
 }

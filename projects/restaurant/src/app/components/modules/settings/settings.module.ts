@@ -1,15 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { ChartsModule } from 'ng2-charts';
-import { TabsModule } from 'smart-webcomponents-angular/tabs';
-import { ButtonModule } from 'smart-webcomponents-angular/button';
-import { InputModule } from 'smart-webcomponents-angular/input';
-import { MultilineTextBoxModule } from 'smart-webcomponents-angular/multilinetextbox';
-import { DropDownListModule } from 'smart-webcomponents-angular/dropdownlist';
-import { NumericTextBoxModule } from 'smart-webcomponents-angular/numerictextbox';
-
+import { GooglePlaceModule } from "ngx-google-places-autocomplete";
 import { ModuleUtilitiesModule } from 'projects/personal/src/app/components/module-utilities/module-utilities.module';
 
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -39,13 +34,10 @@ import { PaymentsHistoryComponent } from './payments-history/payments-history.co
   imports: [
     CommonModule,
     RouterModule,
+    FormsModule,
+    ReactiveFormsModule,
     ChartsModule,
-    TabsModule,
-    ButtonModule,
-    InputModule,
-    MultilineTextBoxModule,
-    DropDownListModule,
-    NumericTextBoxModule,
+    GooglePlaceModule,
     ModuleUtilitiesModule,
   ]
 })

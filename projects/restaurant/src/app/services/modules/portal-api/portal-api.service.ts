@@ -1,9 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs'
 
-import { environment } from 'projects/restaurant/src/environments/environment'
-import { EndpointsService } from 'projects/application/src/app/services/endpoints/endpoints.service';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 
 
 @Injectable({
@@ -12,43 +9,49 @@ import { EndpointsService } from 'projects/application/src/app/services/endpoint
 export class PortalApiService {
 
   constructor(
-    private http: HttpClient,
-    private endpoints: EndpointsService
+    private afs: AngularFirestore,
   ) { }
 
-  restaurantUrl = environment.restaurantUrl;
-  personalUrl = environment.personalUrl;
+  rinkRef = this.afs.collection('personal/portal/rink');
+  personalUserRef = this.afs.collection('personal');
+  restaurantAccountRef = this.afs.collection('restaurant');
 
-  // create and get all sent and recieved by account
+  personalId = localStorage.getItem('personal_id') as string;
+  restaurantId = localStorage.getItem('restaurant_id') as string;
+  rinkId = sessionStorage.getItem('restaurant_rink_id') as string;
 
-  public getRinks(): Observable<any>{
-    return this.http.get(this.restaurantUrl + "module-portal/rink-list?account=" + localStorage.getItem('restaurant_id'));
+  // rinks
+
+  createRink(rink: any){
+    return this.rinkRef.add(rink);
   }
 
-  public postRink(rink: any): Observable<any>{
-    return this.http.post(this.restaurantUrl + "module-portal/rink/", rink);
+  getRink(){
+    return this.rinkRef.doc(this.rinkId).ref.get();
   }
 
-  // get search results
-  public getSearch(input: string, filter: string): Observable<any>{
-    // return this.http.get(this.restaurantUrl + "module-portal/search?input=" + input + "&filter=" + filter);
-    return this.http.get(this.restaurantUrl + "accounts/search/?search=" + input + "&account=" + localStorage.getItem('restaurant_id'));
+  getAllRink(pageSize: any, pageStart: any){
+    return this.rinkRef.ref
+      .where("sender", "==", this.personalId)
+      .where("recipent", "==", this.personalId)
+      .orderBy("rink_date", "desc")
+      .startAt(pageStart)
+      .limit(pageSize)
+      .get();
   }
 
-  // get search detail of selected account
-  public getDetail(account: string): Observable<any>{
-    return this.http.get(this.restaurantUrl + "accounts/search/" + account);
+  // restaurant search
+
+  getSearchResult(searchQuery: string, searchFilter: string){
+    return this.restaurantAccountRef.ref
+      .orderBy('accounts')
+      .startAt(searchQuery)
+      .startAt(searchQuery + '\uf8ff')
+      .get();
   }
 
-  // get accounts rinks with detailed sender and recipient
-  public getSingleRink(rinkId: any): Observable<any>{
-    return this.http.get(this.restaurantUrl + "module-portal/rink/" + rinkId);
-  }
-
-  // dashboard
-
-  public getCounts(model: any): Observable<any>{
-    return this.http.get(this.restaurantUrl + "module-portal/count?account=" + localStorage.getItem('restaurant_id') + "&model=" + model);
+  getSearchDetail(restaurantId: any){
+    return this.restaurantAccountRef.doc(restaurantId).ref.get();
   }
 
 }

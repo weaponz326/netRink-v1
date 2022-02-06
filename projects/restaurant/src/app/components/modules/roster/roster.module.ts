@@ -4,11 +4,6 @@ import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { ChartsModule } from 'ng2-charts';
-import { GridModule } from 'smart-webcomponents-angular/grid';
-import { ButtonModule } from 'smart-webcomponents-angular/button';
-import { InputModule } from 'smart-webcomponents-angular/input';
-import { DateTimePickerModule } from 'smart-webcomponents-angular/datetimepicker';
-import { DropDownListModule } from 'smart-webcomponents-angular/dropdownlist';
 
 import { ModuleUtilitiesModule } from 'projects/personal/src/app/components/module-utilities/module-utilities.module';
 
@@ -55,11 +50,6 @@ import { PersonnelFormComponent } from './personnel-form/personnel-form.componen
     FormsModule,
     ReactiveFormsModule,
     ChartsModule,
-    GridModule,
-    ButtonModule,
-    InputModule,
-    DateTimePickerModule,
-    DropDownListModule,
     ModuleUtilitiesModule,
   ]
 })

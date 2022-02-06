@@ -9,10 +9,10 @@
                 <div class="col-md-9 mx-auto">
 
                     <form (ngSubmit)="doSearch()">
-                        <div class="input-group">
+                        <div class="input-group input-group-sm search-input-group">
                             <div class="input-group-prepend">
                                 <div class="dropdown">
-                                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle filter-toggle" type="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
                                         {{searchFilter}}
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
@@ -24,7 +24,9 @@
                             </div>
                             <input [(ngModel)]="searchInput" [ngModelOptions]="{standalone: true}" type="text" class="form-control" placeholder="Search for users" aria-label="Search for users" aria-describedby="button-addon2">
                             <div class="input-group-append">
-                                <button class="btn btn-secondary" type="submit" id="button-addon2">Search</button>
+                                <button class="btn btn-sm btn-secondary" type="submit" id="button-addon2">
+                                    Search <i class="bi bi-search ms-1"></i>
+                                </button>
                             </div>
                         </div>
                     </form>
@@ -40,7 +42,7 @@
 
             <div *ngIf="isSearchResultsReady">
                 <app-search-results
-                    (viewDetailEvent)="gotoSearchDetail($event)"
+                    (viewDetailEvent)="getSearchDetail($event)"
                     [searchQuery]="searchQuery"
                     [searchResults]="searchResults"
                 ></app-search-results>

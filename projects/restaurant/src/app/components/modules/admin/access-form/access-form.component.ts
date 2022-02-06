@@ -1,9 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
-import { CheckBoxComponent } from 'smart-webcomponents-angular/checkbox';
+import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component';
 
 import { AdminApiService } from 'projects/restaurant/src/app/services/modules/admin-api/admin-api.service';
-import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component';
+
+import { Access } from 'projects/restaurant/src/app/models/modules/admin/admin.model';
 
 
 @Component({
@@ -17,42 +18,50 @@ export class AccessFormComponent implements OnInit {
     private adminApi: AdminApiService,
   ) { }
 
-  @ViewChild('adminCheckBoxReference', { read: CheckBoxComponent, static: false }) adminCheckBox!: CheckBoxComponent;
-  @ViewChild('customersCheckBoxReference', { read: CheckBoxComponent, static: false }) customersCheckBox!: CheckBoxComponent;
-  @ViewChild('deliveriesCheckBoxReference', { read: CheckBoxComponent, static: false }) deliveriesCheckBox!: CheckBoxComponent;
-  @ViewChild('menuCheckBoxReference', { read: CheckBoxComponent, static: false }) menuCheckBox!: CheckBoxComponent;
-  @ViewChild('ordersCheckBoxReference', { read: CheckBoxComponent, static: false }) ordersCheckBox!: CheckBoxComponent;
-  @ViewChild('paymentsCheckBoxReference', { read: CheckBoxComponent, static: false }) paymentsCheckBox!: CheckBoxComponent;
-  @ViewChild('portalCheckBoxReference', { read: CheckBoxComponent, static: false }) portalCheckBox!: CheckBoxComponent;
-  @ViewChild('settingsCheckBoxReference', { read: CheckBoxComponent, static: false }) settingsCheckBox!: CheckBoxComponent;
-  @ViewChild('staffCheckBoxReference', { read: CheckBoxComponent, static: false }) staffCheckBox!: CheckBoxComponent;
-  @ViewChild('reservationsCheckBoxReference', { read: CheckBoxComponent, static: false }) reservationsCheckBox!: CheckBoxComponent;
-  @ViewChild('tablesCheckBoxReference', { read: CheckBoxComponent, static: false }) tablesCheckBox!: CheckBoxComponent;
-
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
+
+  accessForm: Access = {
+    uid: "",
+    user: "",
+    admin_access: false,
+    customers_access: false,
+    deliveries_access: false,
+    menu_access: false,
+    orders_access: false,
+    payments_access: false,
+    portal_access:  false,
+    settings_access: false,
+    staff_access: false,
+    reservations_access: false,
+    tables_access: false,
+  }
 
   ngOnInit(): void {
   }
 
-  initAccessLevel(){
+  ngAfterViewInit(): void {
+    this.getUserAccess();
+  }
+
+  getUserAccess(){
     this.adminApi.getUserAccess()
-      .subscribe(
-        res => {
+      .then(
+        (res: any) => {
           console.log(res);
 
-          this.adminCheckBox.value = res.admin_access;
-          this.customersCheckBox.value = res.customers_access;
-          this.deliveriesCheckBox.value = res.deliveries_access;
-          this.menuCheckBox.value = res.menu_access;
-          this.ordersCheckBox.value = res.orders_access;
-          this.paymentsCheckBox.value = res.payments_access;
-          this.portalCheckBox.value = res.portal_access;
-          this.settingsCheckBox.value = res.settings_access;
-          this.staffCheckBox.value = res.staff_access;
-          this.reservationsCheckBox.value = res.reservations_access;
-          this.tablesCheckBox.value = res.tables_access;
+          this.accessForm.admin_access = res.admin_access;
+          this.accessForm.customers_access = res.customers_access;
+          this.accessForm.deliveries_access = res.deliveries_access;
+          this.accessForm.menu_access = res.menu_access;
+          this.accessForm.orders_access = res.orders_access;
+          this.accessForm.payments_access = res.payments_access;
+          this.accessForm.portal_access = res.portal_access;
+          this.accessForm.settings_access = res.settings_access;
+          this.accessForm.staff_access = res.staff_access;
+          this.accessForm.reservations_access = res.reservations_access;
+          this.accessForm.tables_access = res.tables_access;
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }
@@ -61,25 +70,25 @@ export class AccessFormComponent implements OnInit {
 
   saveAccessLevel(){
     let access = {
-      admin_access: this.adminCheckBox.value,
-      customers_access: this.customersCheckBox.value,
-      deliveries_access: this.deliveriesCheckBox.value,
-      menu_access: this.menuCheckBox.value,
-      orders_access: this.ordersCheckBox.value,
-      payments_access: this.paymentsCheckBox.value,
-      portal_access: this.portalCheckBox.value,
-      settings_access: this.settingsCheckBox.value,
-      staff_access: this.staffCheckBox.value,
-      reservations_access: this.reservationsCheckBox.value,
-      tables_access: this.tablesCheckBox.value
+      admin_access: this.accessForm.admin_access,
+      customers_access: this.accessForm.customers_access,
+      deliveries_access: this.accessForm.deliveries_access,
+      menu_access: this.accessForm.menu_access,
+      orders_access: this.accessForm.orders_access,
+      payments_access: this.accessForm.payments_access,
+      portal_access: this.accessForm.portal_access,
+      settings_access: this.accessForm.settings_access,
+      staff_access: this.accessForm.staff_access,
+      reservations_access: this.accessForm.reservations_access,
+      tables_access: this.accessForm.tables_access
     }
 
-    this.adminApi.putUserAccess(access)
-      .subscribe(
-        res => {
+    this.adminApi.updateUserAccess(access)
+      .then(
+        (res: any) => {
           console.log(res);
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }
@@ -90,43 +99,43 @@ export class AccessFormComponent implements OnInit {
     console.log("u are changing user level to " + level);
 
     if (level == 'Admin'){
-      this.adminCheckBox.value = 'true';
-      this.customersCheckBox.value = 'true';
-      this.deliveriesCheckBox.value = 'true';
-      this.menuCheckBox.value = 'true';
-      this.ordersCheckBox.value = 'true';
-      this.paymentsCheckBox.value = 'true';
-      this.portalCheckBox.value = 'true';
-      this.settingsCheckBox.value = 'true';
-      this.staffCheckBox.value = 'true';
-      this.reservationsCheckBox.value = 'true';
-      this.tablesCheckBox.value = 'true';
+      this.accessForm.admin_access = true;
+      this.accessForm.customers_access = true;
+      this.accessForm.deliveries_access = true;
+      this.accessForm.menu_access = true;
+      this.accessForm.orders_access = true;
+      this.accessForm.payments_access = true;
+      this.accessForm.portal_access = true;
+      this.accessForm.settings_access = true;
+      this.accessForm.staff_access = true;
+      this.accessForm.reservations_access = true;
+      this.accessForm.tables_access = true;
     }
     else if (level == 'Manager'){
-      this.adminCheckBox.value = 'false';
-      this.customersCheckBox.value = 'true';
-      this.deliveriesCheckBox.value = 'true';
-      this.menuCheckBox.value = 'true';
-      this.ordersCheckBox.value = 'true';
-      this.paymentsCheckBox.value = 'true';
-      this.portalCheckBox.value = 'true';
-      this.settingsCheckBox.value = 'false';
-      this.staffCheckBox.value = 'true';
-      this.reservationsCheckBox.value = 'true';
-      this.tablesCheckBox.value = 'true';
+      this.accessForm.admin_access =  false;
+      this.accessForm.customers_access = true;
+      this.accessForm.deliveries_access = true;
+      this.accessForm.menu_access = true;
+      this.accessForm.orders_access = true;
+      this.accessForm.payments_access = true;
+      this.accessForm.portal_access = true;
+      this.accessForm.settings_access = false;
+      this.accessForm.staff_access = true;
+      this.accessForm.reservations_access = true;
+      this.accessForm.tables_access = true;
     }
     else if (level == 'Staff'){
-      this.adminCheckBox.value = 'false';
-      this.customersCheckBox.value = 'false';
-      this.deliveriesCheckBox.value = 'false';
-      this.menuCheckBox.value = 'false';
-      this.ordersCheckBox.value = 'false';
-      this.paymentsCheckBox.value = 'false';
-      this.portalCheckBox.value = 'false';
-      this.settingsCheckBox.value = 'false';
-      this.staffCheckBox.value = 'false';
-      this.reservationsCheckBox.value = 'false';
-      this.tablesCheckBox.value = 'false';
+      this.accessForm.admin_access = false;
+      this.accessForm.customers_access = false;
+      this.accessForm.deliveries_access = false;
+      this.accessForm.menu_access = false;
+      this.accessForm.orders_access = false;
+      this.accessForm.payments_access = false;
+      this.accessForm.portal_access = false;
+      this.accessForm.settings_access = false;
+      this.accessForm.staff_access = false;
+      this.accessForm.reservations_access = false;
+      this.accessForm.tables_access = false;
     }
   }
 

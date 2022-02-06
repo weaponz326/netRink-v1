@@ -1,8 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { PortalApiService } from 'projects/restaurant/src/app/services/modules/portal-api/portal-api.service';
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
+
+import { PortalApiService } from 'projects/restaurant/src/app/services/modules/portal-api/portal-api.service';
 
 
 @Component({
@@ -47,14 +48,16 @@ export class SearchViewComponent implements OnInit {
   }
 
   doSearch(){
-    // put search input in url
-    this.router.navigate(['/home/portal/search', { input: this.searchInput, filter: this.searchFilter }]);
+    if (this.searchInput.trim() != ""){
+      // put search input in url
+      this.router.navigate(['/home/portal/search', { input: this.searchInput, filter: this.searchFilter }]);
 
-    sessionStorage.setItem('restaurantSearchInput', this.searchInput);
-    sessionStorage.setItem('restaurantSearchFilter', this.searchFilter);
-    this.searchQuery = this.searchInput;
+      sessionStorage.setItem('restaurantSearchInput', this.searchInput);
+      sessionStorage.setItem('restaurantSearchFilter', this.searchFilter);
+      this.searchQuery = this.searchInput;
 
-    this.getSearch();
+      this.getSearchResult();
+    }
   }
 
   setSearchFilter(event: any, value: any){
@@ -62,36 +65,36 @@ export class SearchViewComponent implements OnInit {
     this.searchFilter = value;
   }
 
-  getSearch(){
-    this.portalApi.getSearch(this.searchInput, this.searchFilter)
-      .subscribe(
-        res => {
+  getSearchResult(){
+    this.portalApi.getSearchResult(this.searchInput, this.searchFilter)
+      .then(
+        (res: any) => {
           console.log(res);
           this.searchResults = res;
 
           this.isSearchResultsReady = true;
           this.isSearchDetailReady = false;
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }
       )
   }
 
-  gotoSearchDetail(userId: any){
+  getSearchDetail(userId: any){
     sessionStorage.setItem('restaurantSearchUser', userId);
 
-    this.portalApi.getDetail(String(sessionStorage.getItem('restaurantSearchUser')))
-      .subscribe(
-        res => {
+    this.portalApi.getSearchDetail(String(sessionStorage.getItem('restaurantSearchUser')))
+      .then(
+        (res: any) => {
           console.log(res);
           this.searchDetail = res;
 
           this.isSearchResultsReady = false;
           this.isSearchDetailReady = true;
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }

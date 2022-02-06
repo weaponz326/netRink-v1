@@ -15,7 +15,7 @@
 
         <div class="row mt-3 page-form-div">
             <div class="col-md-12">
-                <smart-button #saveButtonReference class="page-control-button" (click)="emitLogo()">Save</smart-button>
+                <button [disabled]="isLogoSaving" type="submit" class="btn btn-secondary btn-sm page-form-btn" (click)="emitLogo()">Save</button>
             </div>
         </div>
 

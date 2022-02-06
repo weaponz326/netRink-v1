@@ -1,12 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
-import { DropDownListComponent } from 'smart-webcomponents-angular/dropdownlist';
-import { NumericTextBoxComponent } from 'smart-webcomponents-angular/numerictextbox';
-import { InputComponent } from 'smart-webcomponents-angular/input';
-import { ButtonComponent } from 'smart-webcomponents-angular/button';
+import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 
 import { SettingsApiService } from 'projects/restaurant/src/app/services/modules/settings-api/settings-api.service';
-import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
+
+import { Subscription } from 'projects/restaurant/src/app/models/modules/settings/settings.model';
 
 
 @Component({
@@ -18,20 +16,17 @@ export class BillingComponent implements OnInit {
 
   constructor(private settingsApi: SettingsApiService) { }
 
-  @ViewChild('subscriptionDropDownListReference', { read: DropDownListComponent, static: false }) subscriptionDropDownList!: DropDownListComponent;
-  @ViewChild('frequencyDropDownListReference', { read: DropDownListComponent, static: false }) frequencyDropDownList!: DropDownListComponent;
-  @ViewChild('usersNumericTextBoxReference', { read: NumericTextBoxComponent, static: false }) usersNumericTextBox!: NumericTextBoxComponent;
-  @ViewChild('firstNameInputReference', { read: InputComponent, static: false }) firstNameInput!: InputComponent;
-  @ViewChild('lastNameInputReference', { read: InputComponent, static: false }) lastNameInput!: InputComponent;
-  @ViewChild('emailInputReference', { read: InputComponent, static: false }) emailInput!: InputComponent;
-
-  @ViewChild('buttonReference', { read: ButtonComponent, static: false }) button!: ButtonComponent;
-
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
 
   navHeading: any[] = [
     { text: "Billing", url: "/home/settings/billing" },
   ];
+
+  subscriptionData: Subscription = {uid: "", subscription_type: "", billing_frequency: "", number_users: 0}
+
+  subscriptionTypeValue = "";
+  billingFrequencyValue = "";
+  numberUsersValue = 0;
 
   selectedSubscription = '';
   selectedFrequency = '';
@@ -39,6 +34,10 @@ export class BillingComponent implements OnInit {
 
   subscriptionSource = ["Individual", "Small Team", "Large Team", "Comprehensive", ""];
   frequencySource = ["Monthly", "Yearly", ""];
+
+  numberUsersStep = 1;
+  isFrequencyDisabled = false;
+  isnumberUsersDisabled = false;
 
   ngOnInit(): void {
   }
@@ -49,39 +48,37 @@ export class BillingComponent implements OnInit {
 
   getSubscription(){
     this.settingsApi.getSubscription()
-      .subscribe(
-        res => {
+      .then(
+        (res: any) => {
           console.log(res);
-          this.subscriptionDropDownList.value = res.subscription_type;
-          this.frequencyDropDownList.value = res.billing_frequency;
-          this.usersNumericTextBox.value = res.number_users;
-          this.firstNameInput.value = res.first_name;
-          this.lastNameInput.value = res.last_name;
-          this.emailInput.value = res.email_name;
+
+          this.subscriptionData = res;
+
+          this.subscriptionTypeValue = this.subscriptionData.subscription_type;
+          this.billingFrequencyValue = this.subscriptionData.billing_frequency;
+          this.numberUsersValue = this.subscriptionData.number_users;
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }
       )
   }
 
-  saveSubscription(){
-    let data = {
-      subscription_type: this.subscriptionDropDownList.value,
-      billing_frequency: this.frequencyDropDownList.value,
-      number_users: this.usersNumericTextBox.value,
-      first_name: this.firstNameInput.value,
-      last_name: this.lastNameInput.value,
-      email: this.emailInput.value,
+  updateSubscription(){
+    let data: Subscription = {
+      uid: this.subscriptionData.uid,
+      subscription_type: this.subscriptionTypeValue,
+      billing_frequency: this.billingFrequencyValue,
+      number_users: this.numberUsersValue,
     }
 
-    this.settingsApi.putSubscription(data)
-      .subscribe(
-        res => {
+    this.settingsApi.updateSubscription(data)
+      .then(
+        (res: any) => {
           console.log(res);
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }
@@ -89,37 +86,37 @@ export class BillingComponent implements OnInit {
   }
 
   setSubscription(event: any){
-    this.selectedSubscription = event.detail.value;
+    this.selectedSubscription = event.target.value;
     console.log(this.selectedSubscription);
 
     if (this.selectedSubscription == "Individual"){
-      this.frequencyDropDownList.value = "";
-      this.frequencyDropDownList.disabled = true;
-      this.usersNumericTextBox.value = 1;
-      this.usersNumericTextBox.disabled = true;
+      this.billingFrequencyValue = "";
+      this.numberUsersValue = 1;
+      this.isFrequencyDisabled = true;
+      this.isnumberUsersDisabled = true;
     }
     else if (this.selectedSubscription == "Small Team"){
-      this.usersTextBoxIncrement = 10;
-      this.frequencyDropDownList.disabled = false;
-      this.usersNumericTextBox.value = 10;
-      this.usersNumericTextBox.disabled = false;
+      this.numberUsersStep = 10;
+      this.numberUsersValue = 10;
+      this.isFrequencyDisabled = false;
+      this.isnumberUsersDisabled = false;
     }
     else if (this.selectedSubscription == "Large Team"){
-      this.usersTextBoxIncrement = 50;
-      this.frequencyDropDownList.disabled = false;
-      this.usersNumericTextBox.value = 50;
-      this.usersNumericTextBox.disabled = false;
+      this.numberUsersStep = 50;
+      this.numberUsersValue = 50;
+      this.isFrequencyDisabled = false;
+      this.isnumberUsersDisabled = false;
     }
     else if (this.selectedSubscription == "Comprehensive"){
-      this.frequencyDropDownList.value = "";
-      this.frequencyDropDownList.disabled = true;
-      this.usersNumericTextBox.value = 0;
-      this.usersNumericTextBox.disabled = true;
+      this.billingFrequencyValue = "";
+      this.numberUsersValue = 0;
+      this.isFrequencyDisabled = true;
+      this.isnumberUsersDisabled = true;
     }
   }
 
   setFrequency(event: any){
-    this.selectedFrequency = event.detail.value;
+    this.selectedFrequency = event.target.value;
     console.log(this.selectedFrequency);
   }
 

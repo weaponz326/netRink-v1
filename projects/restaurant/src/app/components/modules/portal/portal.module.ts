@@ -1,12 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { ChartsModule } from 'ng2-charts';
-import { ButtonModule } from 'smart-webcomponents-angular/button';
-import { InputModule } from 'smart-webcomponents-angular/input';
-import { MultilineTextBoxModule } from 'smart-webcomponents-angular/multilinetextbox';
 
 import { ModuleUtilitiesModule } from 'projects/personal/src/app/components/module-utilities/module-utilities.module';
 import { MenuWindowsModule } from '../../select-windows/menu-windows/menu-windows.module';
@@ -50,11 +47,9 @@ import { OrderDetailsComponent } from './rink-details/order-details/order-detail
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     RouterModule,
     ChartsModule,
-    ButtonModule,
-    InputModule,
-    MultilineTextBoxModule,
     ModuleUtilitiesModule,
     MenuWindowsModule,
     StaffWindowsModule,

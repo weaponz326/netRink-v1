@@ -1,9 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs'
 
-import { environment } from 'projects/restaurant/src/environments/environment'
-import { EndpointsService } from 'projects/application/src/app/services/endpoints/endpoints.service';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 
 
 @Injectable({
@@ -12,63 +9,91 @@ import { EndpointsService } from 'projects/application/src/app/services/endpoint
 export class AdminApiService {
 
   constructor(
-    private http: HttpClient,
-    private endpoints: EndpointsService
+    private afs: AngularFirestore,
   ) { }
 
-  restaurantUrl = environment.restaurantUrl;
-  personalUrl = environment.personalUrl;
+  personalUserSearchRef = this.afs.collection('personal');
+  adminUserRef = this.afs.collection('restaurant/admin/user');
+  userAccessRef = this.afs.collection('restaurant/admin/user-access');
+  invitationRef = this.afs.collection('restaurant/admin/invitation');
 
-  // get search results
-  public getSearch(input: string): Observable<any>{
-    return this.http.get(this.personalUrl + "users/search?search=" + input, this.endpoints.headers);
+  restaurantId = localStorage.getItem('restaurant_id') as string;
+  adminUserId = sessionStorage.getItem('restaurant_admin_user_id') as string;
+  invitationId = sessionStorage.getItem('restaurant_invitation_id') as string;
+
+  // user search
+
+  getSearchResult(searchQuery: string){
+    return this.personalUserSearchRef.ref
+      .orderBy('accounts')
+      .startAt(searchQuery)
+      .startAt(searchQuery + '\uf8ff')
+      .get();
   }
 
-  // get search detail of selected account
-  public getDetail(account: string): Observable<any>{
-    return this.http.get(this.personalUrl + "users/search/" + account, this.endpoints.headers);
+  getSearchDetail(restaurantId: any){
+    return this.personalUserSearchRef.doc(restaurantId).ref.get();
+  }
+
+  // user
+
+  createAdminUser(adminUser: any){
+    return this.adminUserRef.add(adminUser);
+  }
+
+  getAdminUser(){
+    return this.adminUserRef.doc(this.adminUserId).ref.get();
+  }
+
+  updateAdminUser(adminUser: any){
+    return this.adminUserRef.doc(this.adminUserId).update(adminUser);
+  }
+
+  deleteAdminUser(){
+    return this.adminUserRef.doc(this.adminUserId).delete();
+  }
+
+  getAllAccountAdminUser(){
+    return this.adminUserRef.ref
+      .where("account", "==", this.restaurantId)
+      .get();
+  }
+
+  // access
+
+  createUserAccess(userAccess: any){
+    return this.userAccessRef.add(userAccess);
+  }
+
+  getUserAccess(){
+    return this.userAccessRef.doc(this.adminUserId).ref.get();
+  }
+
+  updateUserAccess(userAccess: any){
+    return this.userAccessRef.doc(this.adminUserId).update(userAccess);
+  }
+
+  deleteUserAccess(){
+    return this.userAccessRef.doc(this.adminUserId).delete();
   }
 
   // invitations
 
-  public sendInvitation(invitation: any): Observable<any>{
-    return this.http.post(this.restaurantUrl + "module-admin/invitation/", invitation);
+  createInvitation(invitation: any){
+    return this.invitationRef.add(invitation);
   }
 
-  public getInvitation(): Observable<any>{
-    return this.http.get(this.restaurantUrl + "module-admin/invitation/" + sessionStorage.getItem('restaurant_invitation_id'));
+  getInvitation(){
+    return this.invitationRef.doc(this.invitationId).ref.get();
   }
 
-  public getAllInvitations(): Observable<any>{
-    return this.http.get(this.restaurantUrl + "module-admin/invitation?account=" + localStorage.getItem('restaurant_id'));
-  }
-
-  // users
-
-  public getAllUsers(): Observable<any>{
-    return this.http.get(this.restaurantUrl + "module-admin/user?account=" + localStorage.getItem('restaurant_id'));
-  }
-
-  public getUser(): Observable<any>{
-    return this.http.get(this.restaurantUrl + "module-admin/user/" + sessionStorage.getItem('restaurant_admin_user_id'));
-  }
-
-  public getUserAccess(): Observable<any>{
-    return this.http.get(this.restaurantUrl + "module-admin/user-access/" + sessionStorage.getItem('restaurant_admin_user_id'));
-  }
-
-  public putUser(user: any): Observable<any>{
-    return this.http.put(this.restaurantUrl + "module-admin/user/" + localStorage.getItem('restaurant_admin_user_id'), user);
-  }
-
-  public putUserAccess(userAccess: any): Observable<any>{
-    return this.http.put(this.restaurantUrl + "module-admin/user-access/" + sessionStorage.getItem('restaurant_admin_user_id'), userAccess);
-  }
-
-  // dashboard
-
-  public getCounts(model: any): Observable<any>{
-    return this.http.get(this.restaurantUrl + "module-admin/count?account=" + localStorage.getItem('restaurant_id') + "&model=" + model);
+  getAllAccountInvitation(ordering: any, pageSize: any, pageStart: any){
+    return this.invitationRef.ref
+      .where("account", "==", this.restaurantId)
+      .orderBy(ordering.field, ordering.direction)
+      .startAt(pageStart)
+      .limit(pageSize)
+      .get();
   }
 
 }

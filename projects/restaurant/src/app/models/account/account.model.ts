@@ -1,7 +1,7 @@
-import { Base } from '../base/base.model'
+// import { Base } from '../base/base.model'
 
-export class Account extends Base {
-  creatorId!: string;
+export class Account {
+  uid!: string;
   name!: string;
   location!: string;
   about!: string;

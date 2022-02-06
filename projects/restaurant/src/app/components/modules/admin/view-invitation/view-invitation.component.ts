@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
-import { ButtonComponent } from 'smart-webcomponents-angular/button';
-
-import { environment } from 'projects/restaurant/src/environments/environment';
-import { AdminApiService } from 'projects/restaurant/src/app/services/modules/admin-api/admin-api.service';
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component';
+
+import { AdminApiService } from 'projects/restaurant/src/app/services/modules/admin-api/admin-api.service';
+
+import { Invitation } from 'projects/restaurant/src/app/models/modules/admin/admin.model';
 
 
 
@@ -19,18 +19,14 @@ export class ViewInvitationComponent implements OnInit {
     private adminApi: AdminApiService,
   ) { }
 
-  @ViewChild('buttonReference', { read: ButtonComponent, static: false }) button!: ButtonComponent;
-
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
-
-  personalUrl = environment.personalUrl;
 
   navHeading: any[] = [
     { text: "Invitations", url: "/home/admin/invitations" },
     { text: "View Invitation", url: "/home/admin/view-invitation" },
   ];
 
-  invitation: any;
+  invitationData: Invitation = {uid: "", account: "", invitation_date: new Date(), invitee_id: "", invitee_name: "", invitation_status: ""};
 
   ngOnInit(): void {
     this.getInvitation();
@@ -38,12 +34,12 @@ export class ViewInvitationComponent implements OnInit {
 
   getInvitation(){
     this.adminApi.getInvitation()
-      .subscribe(
-        res => {
+      .then(
+        (res: any) => {
           console.log(res);
-          this.invitation = res;
+          this.invitationData = res;
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }

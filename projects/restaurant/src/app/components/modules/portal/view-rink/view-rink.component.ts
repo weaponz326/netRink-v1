@@ -1,8 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { PortalApiService } from 'projects/restaurant/src/app/services/modules/portal-api/portal-api.service';
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
+
+import { PortalApiService } from 'projects/restaurant/src/app/services/modules/portal-api/portal-api.service';
 
 
 @Component({
@@ -32,9 +33,9 @@ export class ViewRinkComponent implements OnInit {
   }
 
   getRink(){
-    this.portalApi.getSingleRink(sessionStorage.getItem('restaurant_rink_id'))
-      .subscribe(
-        res => {
+    this.portalApi.getRink()
+      .then(
+        (res: any) => {
           console.log(res);
           this.rink = res;
           sessionStorage.setItem('restaurant_rink_source_id', res.rink_source)
@@ -48,7 +49,7 @@ export class ViewRinkComponent implements OnInit {
           //   this.router.navigateByUrl('suite/suite/view-rink/note');
           // }
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }
