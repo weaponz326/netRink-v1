@@ -21,11 +21,17 @@ import { SearchDetailComponent } from './search-detail/search-detail.component';
 import { NewRinkComponent } from './new-rink/new-rink.component';
 import { TimelineComponent } from './timeline/timeline.component';
 import { ViewRinkComponent } from './view-rink/view-rink.component';
-import { MenuDetailsComponent } from './rink-details/menu-details/menu-details.component';
 import { StaffDetailsComponent } from './rink-details/staff-details/staff-details.component';
 import { CustomerDetailsComponent } from './rink-details/customer-details/customer-details.component';
 import { ReservationDetailsComponent } from './rink-details/reservation-details/reservation-details.component';
 import { OrderDetailsComponent } from './rink-details/order-details/order-details.component';
+import { MenuGroupDetailsComponent } from './rink-details/menu-group-details/menu-group-details.component';
+import { MenuItemDetailsComponent } from './rink-details/menu-item-details/menu-item-details.component';
+import { PaymentDetailsComponent } from './rink-details/payment-details/payment-details.component';
+import { StockItemDetailsComponent } from './rink-details/stock-item-details/stock-item-details.component';
+import { DeliveryDetailsComponent } from './rink-details/delivery-details/delivery-details.component';
+import { TableDetailsComponent } from './rink-details/table-details/table-details.component';
+import { RosterDetailsComponent } from './rink-details/roster-details/roster-details.component';
 
 
 @NgModule({
@@ -38,11 +44,17 @@ import { OrderDetailsComponent } from './rink-details/order-details/order-detail
     NewRinkComponent,
     TimelineComponent,
     ViewRinkComponent,
-    MenuDetailsComponent,
     StaffDetailsComponent,
     CustomerDetailsComponent,
     ReservationDetailsComponent,
     OrderDetailsComponent,
+    MenuGroupDetailsComponent,
+    MenuItemDetailsComponent,
+    PaymentDetailsComponent,
+    StockItemDetailsComponent,
+    DeliveryDetailsComponent,
+    TableDetailsComponent,
+    RosterDetailsComponent,
   ],
   imports: [
     CommonModule,
