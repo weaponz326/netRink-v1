@@ -30,12 +30,7 @@ export class AdditionalComponent implements OnInit {
   }
 
   emitAdditional(){
-    let data = {
-      date_of_birth: this.bdayInput.value,
-      gender: this.additionalForm.controls.gender.value
-    }
-
-  	this.additionalEvent.emit(data);
+  	this.additionalEvent.emit();
   }
 
 }

@@ -12,7 +12,7 @@ export class PortalApiService {
     private afs: AngularFirestore,
   ) { }
 
-  rinkRef = this.afs.collection('personal/portal/rink');
+  rinkRef = this.afs.collection('restaurant/portal/rink');
   personalUserRef = this.afs.collection('personal');
   restaurantAccountRef = this.afs.collection('restaurant');
 

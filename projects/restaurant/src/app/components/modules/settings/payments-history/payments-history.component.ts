@@ -31,17 +31,17 @@ export class PaymentsHistoryComponent implements OnInit {
   }
 
   getHistory(){
-    this.settingsApi.getHistory()
-      .subscribe(
-        res => {
-          console.log(res);
-          this.historyData = res;
-        },
-        err => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
+    // this.settingsApi.getHistory()
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.historyData = res;
+    //     },
+    //     err => {
+    //       console.log(err);
+    //       this.connectionToast.openToast();
+    //     }
+    //   )
   }
 
 }

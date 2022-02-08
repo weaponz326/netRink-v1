@@ -1,9 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { ConnectionToastComponent } from '../../../module-utilities/connection-toast/connection-toast.component'
+
 import { PortalApiService } from 'projects/personal/src/app/services/modules/portal-api/portal-api.service';
 
-import { ConnectionToastComponent } from '../../../module-utilities/connection-toast/connection-toast.component'
+import { User } from 'projects/personal/src/app/models/user/user.model';
+import { Rink } from 'projects/personal/src/app/models/modules/portal/portal.model';
 
 
 @Component({
@@ -26,21 +29,27 @@ export class ViewRinkComponent implements OnInit {
   ];
 
   personalId = localStorage.getItem('personal_id');
-  rink: any;
+
+  senderData: User = {uid: "", first_name: "", last_name: "", location: "", about: ""};
+  recipientData: User = {uid: "", first_name: "", last_name: "", location: "", about: ""};
+  rinkData: Rink = {uid: "", sender: this.senderData, recipient: this.recipientData, rink_date: new Date, rink_type: "", rink_source: "", comment: "" };
 
   ngOnInit(): void {
+  }
+
+  ngAfterViewInit(): void {
     this.getRink();
   }
 
   getRink(){
-    this.portalApi.getSingleRink(sessionStorage.getItem('personal_rink_id'))
-      .subscribe(
-        res => {
+    this.portalApi.getRink()
+      .then(
+        (res: any) => {
           console.log(res);
-          this.rink = res;
+          this.rinkData = res;
           sessionStorage.setItem('personal_rink_source_id', res.rink_source);
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }

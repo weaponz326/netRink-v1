@@ -41,61 +41,61 @@ export class DashboardComponent implements OnInit {
   }
 
   getRinkOutCount(){
-    this.portalApi.getCounts("Rink Out")
-      .subscribe(
-        res => {
-          console.log(res);
-          this.allRinkOutCount = res;
-        },
-        err => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
+    // this.portalApi.getCounts("Rink Out")
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.allRinkOutCount = res;
+    //     },
+    //     err => {
+    //       console.log(err);
+    //       this.connectionToast.openToast();
+    //     }
+    //   )
   }
 
   getRinkInCount(){
-    this.portalApi.getCounts("Rink In")
-      .subscribe(
-        res => {
-          console.log(res);
-          this.allRinkInCount = res;
-        },
-        err => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
+    // this.portalApi.getCounts("Rink In")
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.allRinkInCount = res;
+    //     },
+    //     err => {
+    //       console.log(err);
+    //       this.connectionToast.openToast();
+    //     }
+    //   )
   }
 
   getRinkInAnnotation(){
-    this.portalApi.getAnnotation("Rink In")
-      .subscribe(
-        res => {
-          console.log(res);
-          this.setRinkLineChartLabels(res);
-          this.setRinkInChartData(res);
-        },
-        err => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
+    // this.portalApi.getAnnotation("Rink In")
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.setRinkLineChartLabels(res);
+    //       this.setRinkInChartData(res);
+    //     },
+    //     err => {
+    //       console.log(err);
+    //       this.connectionToast.openToast();
+    //     }
+    //   )
   }
 
   getRinkOutAnnotation(){
-    this.portalApi.getAnnotation("Rink Out")
-      .subscribe(
-        res => {
-          console.log(res);
-          this.setRinkLineChartLabels(res);
-          this.setRinkOutChartData(res);
-        },
-        err => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
+    // this.portalApi.getAnnotation("Rink Out")
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.setRinkLineChartLabels(res);
+    //       this.setRinkOutChartData(res);
+    //     },
+    //     err => {
+    //       console.log(err);
+    //       this.connectionToast.openToast();
+    //     }
+    //   )
   }
 
   setRinkLineChartLabels(data: any){

@@ -33,7 +33,7 @@
             <div class="row mb-2">
                 <div class="col-md-4"><label class="mt-1">Location :</label></div>
                 <div class="col-md-8">
-                    <input [(ngModel)]="location" [ngModelOptions]="{standalone: true}" class="form-control form-control-sm w-100"
+                    <input formControlName="location" class="form-control form-control-sm w-100"
                     ngx-google-places-autocomplete #placesRef="ngx-places" (onAddressChange)="onAddressChange($event)">
                 </div>
             </div>

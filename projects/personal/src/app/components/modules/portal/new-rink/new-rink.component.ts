@@ -2,8 +2,6 @@ import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormControl, FormGroup } from '@angular/forms';
 
-import { PortalApiService } from 'projects/personal/src/app/services/modules/portal-api/portal-api.service';
-
 import { ConnectionToastComponent } from '../../../module-utilities/connection-toast/connection-toast.component';
 
 import { SelectCalendarComponent } from '../../../select-windows/calendar-windows/select-calendar/select-calendar.component';
@@ -15,6 +13,12 @@ import { SelectTransactionComponent } from '../../../select-windows/accounts-win
 import { SelectTaskGroupComponent } from '../../../select-windows/tasks-windows/select-task-group/select-task-group.component';
 import { SelectTaskItemComponent } from '../../../select-windows/tasks-windows/select-task-item/select-task-item.component';
 
+import { UserApiService } from 'projects/personal/src/app/services/user/user-api/user-api.service';
+import { PortalApiService } from 'projects/personal/src/app/services/modules/portal-api/portal-api.service';
+
+import { User } from 'projects/personal/src/app/models/user/user.model';
+import { Rink } from 'projects/personal/src/app/models/modules/portal/portal.model';
+
 
 @Component({
   selector: 'app-new-rink',
@@ -25,6 +29,7 @@ export class NewRinkComponent implements OnInit {
 
   constructor(
     private router: Router,
+    private userApi: UserApiService,
     private portalApi: PortalApiService,
   ) { }
 
@@ -45,6 +50,9 @@ export class NewRinkComponent implements OnInit {
   ];
 
   rinkForm: FormGroup = new FormGroup({});
+  senderData: User = {uid: "", first_name: "", last_name: "", location: "", about: ""};
+  recipientData: User = {uid: "", first_name: "", last_name: "", location: "", about: ""};
+  rinkFormData: Rink = {uid: "", sender: this.senderData, recipient: this.recipientData, rink_date: new Date, rink_type: "", rink_source: "", comment: "" };
 
   selectedSourceId: any;
   typeSource: any[] = ['Calendar', 'Schedule', 'Budget', 'Note', 'Account', 'Transaction', 'Task Group', 'Task Item'];
@@ -56,7 +64,8 @@ export class NewRinkComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    this.getDetail();
+    this.getUserDetail()
+    this.getSearchDetail();
   }
 
   initRinkForm(){
@@ -69,43 +78,59 @@ export class NewRinkComponent implements OnInit {
     })
   }
 
-  getDetail(){
-    this.portalApi.getDetail(String(sessionStorage.getItem('personalSearchUser')))
+  getUserDetail(){
+    this.userApi.getUser(localStorage.getItem('personal_id'))
       .subscribe(
-        res => {
+        (res: any) => {
           console.log(res);
-          this.rinkForm.controls.recipientName.setValue(res.first_name + " " + res.last_name);
-          this.rinkForm.controls.recipientLocation.setValue(res.location);
+          this.senderData = res;
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }
       )
   }
 
-  sendRink(){
-    let rinkData = {
-      sender: localStorage.getItem('personal_id'),
-      recipient: sessionStorage.getItem('personal_rink_recipient'),
+  getSearchDetail(){
+    this.portalApi.getSearchDetail(String(sessionStorage.getItem('restaurantSearchUser')))
+      .then(
+        (res: any) => {
+          console.log(res);
+
+          this.recipientData = res;
+
+          this.rinkForm.controls.recipientName.setValue(this.recipientData.first_name + " " + this.recipientData.last_name);
+          this.rinkForm.controls.recipientLocation.setValue(this.recipientData.location);
+        },
+        (err: any) => {
+          console.log(err);
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  createRink(){
+    let data = {
+      uid: "",
+      sender: this.senderData,
+      recipient: this.recipientData,
       rink_type: this.rinkForm.controls.rinkType.value,
-      rink_source: this.selectedSourceId,
-      comment: this.rinkForm.controls.comment.value,
+      rink_source: this.rinkForm.controls.rinkSource.value,
+      comment: this.rinkForm.controls.comment.value
     }
 
-    console.log(rinkData);
+    console.log(data);
     this.isRinkSending = true;
 
-    this.portalApi.postRink(rinkData)
-      .subscribe(
-        res => {
+    this.portalApi.createRink(data)
+      .then(
+        (res: any) => {
           console.log(res);
           this.isRinkSending = false;
 
-          if (res.id){
-            sessionStorage.setItem('personal_rink_id', res.data.id);
-            this.router.navigateByUrl('/home/portal/view-rink');
-          }
+          sessionStorage.setItem('restaurant_rink_id', res.data.uid);
+          this.router.navigateByUrl('/home/portal/view-rink');
         },
         err => {
           console.log(err);

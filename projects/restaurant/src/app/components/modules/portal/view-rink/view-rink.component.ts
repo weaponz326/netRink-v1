@@ -5,6 +5,9 @@ import { ConnectionToastComponent } from 'projects/personal/src/app/components/m
 
 import { PortalApiService } from 'projects/restaurant/src/app/services/modules/portal-api/portal-api.service';
 
+import { Account } from 'projects/restaurant/src/app/models/account/account.model';
+import { Rink } from 'projects/restaurant/src/app/models/modules/portal/portal.model';
+
 
 @Component({
   selector: 'app-view-rink',
@@ -26,7 +29,10 @@ export class ViewRinkComponent implements OnInit {
   ];
 
   restaurantId = localStorage.getItem('restaurant_id');
-  rink: any;
+
+  senderData: Account = {uid: "", name: "", location: "", about: ""};
+  recipientData: Account = {uid: "", name: "", location: "", about: ""};
+  rinkData: Rink = {uid: "", sender: this.senderData, recipient: this.recipientData, rink_date: new Date, rink_type: "", rink_source: "", comment: "" };
 
   ngOnInit(): void {
     this.getRink();
@@ -37,7 +43,7 @@ export class ViewRinkComponent implements OnInit {
       .then(
         (res: any) => {
           console.log(res);
-          this.rink = res;
+          this.rinkData = res;
           sessionStorage.setItem('restaurant_rink_source_id', res.rink_source)
 
           // // route to show rink detail

@@ -14,6 +14,10 @@ export class UserApiService {
     return this.firestore.collection('personal/users').doc(user.uid).set(user);
   }
 
+  updateUser(user: any){
+    return this.firestore.collection('personal/users').doc(user.uid).update(user);
+  }
+
   getUser(userId: any){
     return this.firestore.collection('personal/users').doc(userId).get();
   }

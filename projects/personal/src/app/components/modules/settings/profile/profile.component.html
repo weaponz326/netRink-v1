@@ -26,19 +26,19 @@
             </nav>
             <div class="tab-content" id="nav-tabContent">
                 <div class="tab-pane fade show active" id="nav-basic" role="tabpanel" aria-labelledby="nav-basic-tab">
-                    <app-basic #basicComponentReference (additionalEvent)="sendUser($event)"></app-basic>
+                    <app-basic #basicComponentReference (additionalEvent)="updateUser()"></app-basic>
                 </div>
                 <div class="tab-pane fade" id="nav-photo" role="tabpanel" aria-labelledby="nav-photo-tab">
-                    <app-photo #photoComponentReference (photoEvent)="sendUser($event)"></app-photo>
+                    <app-photo #photoComponentReference (photoEvent)="updateUser()"></app-photo>
                 </div>
                 <div class="tab-pane fade" id="nav-bio" role="tabpanel" aria-labelledby="nav-bio-tab">
-                    <app-additional #additionalComponentReference (additionalEvent)="saveAdditional($event)"></app-additional>
+                    <app-additional #additionalComponentReference (additionalEvent)="updateExtendedProfile()"></app-additional>
                 </div>
                 <div class="tab-pane fade" id="nav-location" role="tabpanel" aria-labelledby="nav-location-tab">
-                    <app-location #locationComponentReference (locationEvent)="saveLocation($event)"></app-location>
+                    <app-location #locationComponentReference (locationEvent)="updateExtendedProfile()"></app-location>
                 </div>
                 <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
-                    <app-contact #contactComponentReference (contactEvent)="saveContact($event)"></app-contact>
+                    <app-contact #contactComponentReference (contactEvent)="updateExtendedProfile()"></app-contact>
                 </div>
             </div>
 

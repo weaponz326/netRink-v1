@@ -28,13 +28,7 @@ export class ContactComponent implements OnInit {
   }
 
   emitContact(){
-    let data = {
-      email: this.contactForm.controls.email.value,
-      phone: this.contactForm.controls.phone.value,
-      address: this.contactForm.controls.address.value
-    }
-
-  	this.contactEvent.emit(data);
+  	this.contactEvent.emit();
   }
 
 }

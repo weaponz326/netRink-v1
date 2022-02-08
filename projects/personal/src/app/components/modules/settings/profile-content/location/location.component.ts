@@ -14,7 +14,6 @@ export class LocationComponent implements OnInit {
   @Output() locationEvent = new EventEmitter<any>();
 
   locationForm: FormGroup = new FormGroup({});
-  location = "";
 
   ngOnInit(): void {
     this.initLocationForm();
@@ -22,6 +21,7 @@ export class LocationComponent implements OnInit {
 
   initLocationForm(){
     this.locationForm = new FormGroup({
+      location: new FormControl(),
       country: new FormControl(),
       state: new FormControl(),
       city: new FormControl(),
@@ -29,17 +29,11 @@ export class LocationComponent implements OnInit {
   }
 
   emitLocation(){
-    let data = {
-      country: this.locationForm.controls.country.value,
-      state: this.locationForm.controls.state.value,
-      city: this.locationForm.controls.city.value,
-    }
-
-  	this.locationEvent.emit(data);
+  	this.locationEvent.emit();
   }
 
   onAddressChange(address: any) {
-    this.location = address.formatted_address;
+    this.locationForm.controls.location.setValue(address.formatted_address);
     console.log(address);
   }
 

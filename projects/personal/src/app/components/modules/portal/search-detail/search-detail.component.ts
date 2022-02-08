@@ -1,9 +1,8 @@
 import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { ButtonComponent } from 'smart-webcomponents-angular/button';
-
 import { environment } from 'projects/personal/src/environments/environment';
+
 import { PortalApiService } from 'projects/personal/src/app/services/modules/portal-api/portal-api.service';
 
 
@@ -20,8 +19,6 @@ export class SearchDetailComponent implements OnInit {
   ) { }
 
   @Input() searchDetail: any;
-
-  @ViewChild('buttonReference', { read: ButtonComponent, static: false }) button!: ButtonComponent;
 
   personalUrl = environment.personalUrl;
 

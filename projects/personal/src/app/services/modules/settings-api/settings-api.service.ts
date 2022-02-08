@@ -5,6 +5,8 @@ import { Observable } from 'rxjs'
 import { environment } from 'projects/personal/src/environments/environment'
 import { EndpointsService } from 'projects/application/src/app/services/endpoints/endpoints.service';
 
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+
 
 @Injectable({
   providedIn: 'root'
@@ -12,35 +14,32 @@ import { EndpointsService } from 'projects/application/src/app/services/endpoint
 export class SettingsApiService {
 
   constructor(
+    private afs: AngularFirestore,
     private http: HttpClient,
     private endpoints: EndpointsService
   ) { }
 
-  personalUrl = environment.personalUrl;
+  extendedProfileRef = this.afs.collection('personal/settings/extended-profile');
 
-  // get all profile categories
+  personalId = localStorage.getItem('personal_id') as string;
 
-  public getUser(): Observable<any>{
-    return this.http.get(this.personalUrl + "users/rest-auth/user/", this.endpoints.headers);
+  // extended profile
+
+  createExtendedProfile(extendedProfile: any){
+    return this.extendedProfileRef.add(extendedProfile);
   }
 
-  public getExtendedProfile(): Observable<any>{
-    return this.http.get(this.personalUrl + "module-settings/extended-profile/" + localStorage.getItem('personal_id'), this.endpoints.headers);
+  getExtendedProfile(){
+    return this.extendedProfileRef.doc(this.personalId).ref.get();
   }
 
-  // send basic profile
-  public putUser(user: any): Observable<any>{
-    return this.http.put(this.personalUrl + "users/user/" + localStorage.getItem('personal_id'), user, this.endpoints.headers);
+  updateExtendedProfile(extendedProfile: any){
+    return this.extendedProfileRef.doc(this.personalId).update(extendedProfile);
   }
 
-  // send extended profile
-  public putExtendedProfile(extended: any): Observable<any>{
-    return this.http.put(this.personalUrl + "module-settings/extended-profile/" + localStorage.getItem('personal_id'), extended, this.endpoints.headers);
-  }
-
-  // get all suite accounts
-  public getUserAccounts(suiteUrl: any): Observable<any>{
-    return this.http.get(suiteUrl + "accounts/user-accounts?personal_id=" + localStorage.getItem('personal_id'));
-  }
+  // // get all suite accounts
+  // public getUserAccounts(suiteUrl: any): Observable<any>{
+  //   return this.http.get(suiteUrl + "accounts/user-accounts?personal_id=" + localStorage.getItem('personal_id'));
+  // }
 
 }

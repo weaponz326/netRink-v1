@@ -30,6 +30,9 @@ export class TimelineComponent implements OnInit {
   rinksData: Rink[] = [];
 
   ngOnInit(): void {
+  }
+
+  ngAfterViewInit(): void {
     this.getAllRink();
   }
 

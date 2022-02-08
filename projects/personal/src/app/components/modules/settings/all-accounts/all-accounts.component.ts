@@ -1,9 +1,14 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
-import { environment } from 'projects/personal/src/environments/environment'
+import { ConnectionToastComponent } from '../../../module-utilities/connection-toast/connection-toast.component'
+
+import { AuthApiService } from 'projects/personal/src/app/services/user/auth-api/auth-api.service';
+import { UserApiService } from 'projects/personal/src/app/services/user/user-api/user-api.service';
 import { SettingsApiService } from 'projects/personal/src/app/services/modules/settings-api/settings-api.service';
 
-import { ConnectionToastComponent } from '../../../module-utilities/connection-toast/connection-toast.component'
+import { User } from 'projects/personal/src/app/models/user/user.model';
+
+import { environment } from 'projects/personal/src/environments/environment'
 
 
 @Component({
@@ -13,7 +18,11 @@ import { ConnectionToastComponent } from '../../../module-utilities/connection-t
 })
 export class AllAccountsComponent implements OnInit {
 
-  constructor(private settingsApi: SettingsApiService) { }
+  constructor(
+    private authApi: AuthApiService,
+    private userApi: UserApiService,
+    private settingsApi: SettingsApiService,
+  ) { }
 
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
 
@@ -21,7 +30,8 @@ export class AllAccountsComponent implements OnInit {
     { text: "All Accounts", url: "/home/profile/all-accounts" },
   ];
 
-  personalData: any;
+  userData: User = {uid: "", first_name: "", last_name: "", location: "", about: ""};
+
   restaurantData: any = [];
   schoolData: any = [];
   enterpriseData: any = [];
@@ -68,18 +78,19 @@ export class AllAccountsComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
+    // TODO: this getAuth();
     this.getUser();
     this.getSuiteAccounts();
   }
 
   getUser(){
-    this.settingsApi.getUser()
+    this.userApi.getUser(localStorage.getItem('personal_id'))
       .subscribe(
-        res => {
+        (res: any) => {
           console.log(res);
-          this.personalData = res;
+          this.userData = res;
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }
@@ -87,21 +98,21 @@ export class AllAccountsComponent implements OnInit {
   }
 
   getSuiteAccounts(){
-    this.suiteUrls.forEach((url, index) => {
-      this.settingsApi.getUserAccounts(url)
-        .subscribe(
-          res => {
-            console.log(res);
-            this.suiteData[index] = res;
-          },
-          err => {
-            console.log(err);
-            this.connectionToast.openToast();
-          }
-        )
-    });
+    // this.suiteUrls.forEach((url, index) => {
+    //   this.settingsApi.getUserAccounts(url)
+    //     .subscribe(
+    //       res => {
+    //         console.log(res);
+    //         this.suiteData[index] = res;
+    //       },
+    //       err => {
+    //         console.log(err);
+    //         this.connectionToast.openToast();
+    //       }
+    //     )
+    // });
 
-    this.suiteData.forEach((suite) => console.log(suite));
+    // this.suiteData.forEach((suite) => console.log(suite));
   }
 
 }

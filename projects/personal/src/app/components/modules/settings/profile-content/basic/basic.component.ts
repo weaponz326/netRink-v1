@@ -29,14 +29,7 @@ export class BasicComponent implements OnInit {
   }
 
   emitBasic(){
-    let data = {
-      first_name: this.basicForm.controls.firstName.value,
-      last_name: this.basicForm.controls.lastName.value,
-      // location: this.basicForm.controls.location.value,
-      about: this.basicForm.controls.aboutText.value
-    }
-
-  	this.basicEvent.emit(data);
+  	this.basicEvent.emit();
   }
 
 }

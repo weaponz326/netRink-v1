@@ -47,20 +47,20 @@ export class DashboardComponent implements OnInit {
 
   getSuiteAccounts(){
     this.suiteUrls.forEach((url, index) => {
-      this.settingsApi.getUserAccounts(url)
-        .subscribe(
-          res => {
-            console.log(res);
+      // this.settingsApi.getUserAccounts(url)
+      //   .subscribe(
+      //     res => {
+      //       console.log(res);
 
-            this.accountsData[index + 1] = res.length;
-            this.allAccounts = this.allAccounts + res.length;
-            console.log(this.allAccounts);
-          },
-          err => {
-            console.log(err);
-            this.connectionToast.openToast();
-          }
-        )
+      //       this.accountsData[index + 1] = res.length;
+      //       this.allAccounts = this.allAccounts + res.length;
+      //       console.log(this.allAccounts);
+      //     },
+      //     err => {
+      //       console.log(err);
+      //       this.connectionToast.openToast();
+      //     }
+      //   )
     });
   }
 
@@ -91,6 +91,5 @@ export class DashboardComponent implements OnInit {
     'Shop',
     'Restaurant',
   ];
-
 
 }

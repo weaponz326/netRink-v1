@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { PortalApiService } from 'projects/personal/src/app/services/modules/portal-api/portal-api.service';
-
 import { ConnectionToastComponent } from '../../../module-utilities/connection-toast/connection-toast.component'
+
+import { PortalApiService } from 'projects/personal/src/app/services/modules/portal-api/portal-api.service';
 
 
 @Component({
@@ -56,7 +56,7 @@ export class SearchViewComponent implements OnInit {
       sessionStorage.setItem('personalSearchFilter', this.searchFilter);
       this.searchQuery = this.searchInput;
 
-      this.getSearch();
+      this.getSearchResult();
     }
   }
 
@@ -65,40 +65,41 @@ export class SearchViewComponent implements OnInit {
     this.searchFilter = value;
   }
 
-  getSearch(){
-    this.portalApi.getSearch(this.searchInput, this.searchFilter)
-      .subscribe(
-        res => {
+  getSearchResult(){
+    this.portalApi.getSearchResult(this.searchInput, this.searchFilter)
+      .then(
+        (res: any) => {
           console.log(res);
           this.searchResults = res;
 
           this.isSearchResultsReady = true;
           this.isSearchDetailReady = false;
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }
       )
   }
 
-  gotoSearchDetail(userId: any){
-    sessionStorage.setItem('personalSearchUser', userId);
+  getSearchDetail(userId: any){
+    sessionStorage.setItem('restaurantSearchUser', userId);
 
-    this.portalApi.getDetail(String(sessionStorage.getItem('personalSearchUser')))
-      .subscribe(
-        res => {
+    this.portalApi.getSearchDetail(String(sessionStorage.getItem('restaurantSearchUser')))
+      .then(
+        (res: any) => {
           console.log(res);
           this.searchDetail = res;
 
           this.isSearchResultsReady = false;
           this.isSearchDetailReady = true;
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }
       )
   }
+
 
 }
