@@ -3,9 +3,10 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 import { MatStepper } from '@angular/material/stepper';
 
-import { User } from '../../../models/user/user.model';
 import { AuthApiService } from '../../../services/user/auth-api/auth-api.service';
 import { UserApiService } from '../../../services/user/user-api/user-api.service';
+
+import { User } from '../../../models/user/user.model';
 
 
 @Component({
@@ -22,15 +23,7 @@ export class SignupFormComponent implements OnInit {
 
   @ViewChild('stepper') private signupStepper!: MatStepper;
 
-  signupForm = new FormGroup({
-    first_name: new FormControl('', Validators.required),
-    last_name: new FormControl('', Validators.required),
-    location: new FormControl('', Validators.required),
-    about: new FormControl('', Validators.required),
-    email: new FormControl('', [Validators.required, Validators.email]),
-    password1: new FormControl('', [Validators.required, Validators.min(8)]),
-    password2: new FormControl('', [Validators.required, Validators.min(8)]),
-  })
+  signupForm = new FormGroup({})
 
   isSending: boolean = false;
   showPrompt: boolean = false;
@@ -48,17 +41,32 @@ export class SignupFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.getSource();
+    this.initSignupForm();
   }
 
   getSource(){
     this.suiteRegistrationType = sessionStorage.getItem('app_source') as string;
   }
 
+  initSignupForm(){
+    this.signupForm = new FormGroup({
+      firstName: new FormControl('', Validators.required),
+      lastName: new FormControl('', Validators.required),
+      location: new FormControl('', Validators.required),
+      about: new FormControl('', Validators.required),
+      email: new FormControl('', [Validators.required, Validators.email]),
+      password1: new FormControl('', [Validators.required, Validators.min(8)]),
+      password2: new FormControl('', [Validators.required, Validators.min(8)]),
+    })
+  }
+
   onSubmit(){
     this.isSending = true;
-    this.authApi.signup(this.signupForm.controls.email.value, this.signupForm.controls.email.value)
+    this.authApi.signup(this.signupForm.controls.email.value, this.signupForm.controls.password1.value)
       .then(
         (res: any) => {
+          console.log(res);
+
           let user: User = {
             uid: res.user.uid,
             first_name: this.signupForm.controls.firstName.value,
@@ -70,6 +78,7 @@ export class SignupFormComponent implements OnInit {
           this.submitUser(user);
         },
         (err: any) => {
+          console.log(err);
           this.isSending = false;
           this.signupStepper.selectedIndex = 0;
         }
@@ -79,13 +88,25 @@ export class SignupFormComponent implements OnInit {
   }
 
   submitUser(user: User){
-    this.userApi.createUser(user)
-      .then(
-        res => {
-          this.isSending = false;
-        },
-        err => {}
-      );
+    console.log(user);
+
+    if (this.signupForm.controls.password1.value == this.signupForm.controls.password2.value){
+      this.userApi.createUser(user)
+        .then(
+          res => {
+            console.log(res);
+
+            this.isSending = false;
+            this.showPrompt = true;
+          },
+          err => {
+            console.log(err);
+          }
+        );
+    }
+    else{
+      console.log('passwords do not match');
+    }
   }
 
   onAddressChange(address: any) {

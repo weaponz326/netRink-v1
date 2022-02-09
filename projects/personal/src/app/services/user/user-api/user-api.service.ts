@@ -10,16 +10,19 @@ export class UserApiService {
 
   constructor(private firestore: AngularFirestore) { }
 
+  userRef = this.firestore.collection('personal');
+  personalId = localStorage.getItem('personal_id') as string;
+
   createUser(user: any){
-    return this.firestore.collection('personal/users').doc(user.uid).set(user);
+    return this.userRef.doc(user.uid).set(user);
   }
 
   updateUser(user: any){
-    return this.firestore.collection('personal/users').doc(user.uid).update(user);
+    return this.userRef.doc(user.uid).update(user);
   }
 
-  getUser(userId: any){
-    return this.firestore.collection('personal/users').doc(userId).get();
+  getUser(){
+    return this.userRef.doc(this.personalId).ref.get();
   }
 
 }

@@ -79,8 +79,8 @@ export class NewRinkComponent implements OnInit {
   }
 
   getUserDetail(){
-    this.userApi.getUser(localStorage.getItem('personal_id'))
-      .subscribe(
+    this.userApi.getUser()
+      .then(
         (res: any) => {
           console.log(res);
           this.senderData = res;

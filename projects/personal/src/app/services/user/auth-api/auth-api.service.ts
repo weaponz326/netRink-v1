@@ -10,16 +10,7 @@ export class AuthApiService {
 
   constructor(
     public afAuth: AngularFireAuth
-  ) {
-    this.afAuth.authState
-      .subscribe(user => {
-        if(user)
-          localStorage.setItem('user', JSON.stringify(user));
-        else
-          localStorage.setItem('user', '');
-      }
-    );
-  }
+  ) { }
 
   login(email: string, password: string){
     return this.afAuth.signInWithEmailAndPassword(email, password);
@@ -34,17 +25,11 @@ export class AuthApiService {
   }
 
   logout(){
-    this.afAuth.signOut();
+    return this.afAuth.signOut();
+  }
 
-    localStorage.removeItem("personal_id");
-    localStorage.removeItem("hospital_id");
-    localStorage.removeItem("restaurant_id");
-    localStorage.removeItem("school_id");
-    localStorage.removeItem("enterprise_id");
-    localStorage.removeItem("association_id");
-    localStorage.removeItem("hotel_id");
-    localStorage.removeItem("shop_id");
-    localStorage.removeItem("production_id");
+  getAuth(){
+    return this.afAuth.authState;
   }
 
 }

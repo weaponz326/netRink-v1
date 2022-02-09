@@ -26,7 +26,7 @@ export class GuestTopComponent implements OnInit {
     console.log("u are about to create an account or accounts");
 
     if (this.suiteName != "nR Personal"){
-      sessionStorage.setItem("is_suite_registration", "OK");
+      sessionStorage.setItem("isSuiteRegistration", "OK");
 
       if (localStorage.getItem('user') != "")
         this.router.navigateByUrl("/register");
@@ -34,7 +34,7 @@ export class GuestTopComponent implements OnInit {
         this.router.navigateByUrl("/auth/signup");
     }
     else{
-      sessionStorage.setItem("is_suite_registration", "");
+      sessionStorage.setItem("isSuiteRegistration", "");
 
       this.router.navigateByUrl("/auth/signup");
     }

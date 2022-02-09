@@ -44,24 +44,32 @@ export class LoginFormComponent implements OnInit {
     this.authApi.login(this.loginForm.controls.email.value, this.loginForm.controls.email.value)
       .then(
         res => {
-          if (this.suiteRegistrationType == "nR Personal" || this.suiteRegistrationType == "netRink"){
-            window.location.href = "/";
-          }
-          else{
-            if (sessionStorage.getItem("is_suite_registration") == "OK")
-              this.showPrompt = true;
-            else
-              window.location.href = "/";
-
-            sessionStorage.removeItem("is_suite_registration");
-          }
-
+          console.log(res);
           this.isSending = false;
+
+          this.registrationType();
         },
         err => {
+          console.log(err);
           this.isSending = false;
         }
       )
+  }
+
+  registrationType(){
+    if (this.suiteRegistrationType == "nR Personal" || this.suiteRegistrationType == "netRink"){
+      window.location.href = "/";
+    }
+    else{
+      if (sessionStorage.getItem("isSuiteRegistration") == "OK"){
+        this.showPrompt = true;
+      }
+      else{
+        window.location.href = "/";
+      }
+
+      sessionStorage.removeItem("isSuiteRegistration");
+    }
   }
 
   registrationRedirect(){
