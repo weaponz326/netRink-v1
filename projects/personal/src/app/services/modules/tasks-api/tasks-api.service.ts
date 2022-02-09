@@ -1,9 +1,4 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs'
-
-import { environment } from 'projects/personal/src/environments/environment'
-import { EndpointsService } from 'projects/application/src/app/services/endpoints/endpoints.service';
 
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 
@@ -14,13 +9,11 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 export class TasksApiService {
 
   constructor(
-    private http: HttpClient,
-    private endpoints: EndpointsService,
     private afs: AngularFirestore
   ) { }
 
-  taskGroupRef = this.afs.collection('personal/taks/task-group');
-  taskItemRef = this.afs.collection('personal/taks/task-item');
+  taskGroupRef = this.afs.collection('personal/module_tasks/tasks_task_group');
+  taskItemRef = this.afs.collection('personal/module_tasks/tasks_task_item');
 
   personalId = localStorage.getItem('personal_id') as string;
   taskGroupId = sessionStorage.getItem('personal_task_group_id') as string;

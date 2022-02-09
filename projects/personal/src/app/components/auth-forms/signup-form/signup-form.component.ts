@@ -30,6 +30,8 @@ export class SignupFormComponent implements OnInit {
 
   suiteRegistrationType: string = "";
 
+  registeredUserId = "";
+
   fnErrors: any;
   lnErrors: any;
   locErrors: any;
@@ -67,15 +69,8 @@ export class SignupFormComponent implements OnInit {
         (res: any) => {
           console.log(res);
 
-          let user: User = {
-            uid: res.user.uid,
-            first_name: this.signupForm.controls.firstName.value,
-            last_name: this.signupForm.controls.lastName.value,
-            location: this.signupForm.controls.location.value,
-            about: this.signupForm.controls.about.value,
-          }
-
-          this.submitUser(user);
+          this.registeredUserId = res.user.id;
+          this.submitUser();
         },
         (err: any) => {
           console.log(err);
@@ -87,11 +82,16 @@ export class SignupFormComponent implements OnInit {
     console.log(this.signupForm.value);
   }
 
-  submitUser(user: User){
-    console.log(user);
+  submitUser(){
+    let userData: User = {
+      first_name: this.signupForm.controls.firstName.value,
+      last_name: this.signupForm.controls.lastName.value,
+      location: this.signupForm.controls.location.value,
+      about: this.signupForm.controls.about.value,
+    }
 
     if (this.signupForm.controls.password1.value == this.signupForm.controls.password2.value){
-      this.userApi.createUser(user)
+      this.userApi.createUser(this.registeredUserId, userData)
         .then(
           res => {
             console.log(res);

@@ -2,6 +2,9 @@ import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angula
 import { Router } from '@angular/router';
 import { FormControl, FormGroup } from '@angular/forms';
 
+
+import * as firebase from 'firebase/compat/app';
+
 import { ConnectionToastComponent } from '../../../module-utilities/connection-toast/connection-toast.component'
 
 import { CalendarApiService } from 'projects/personal/src/app/services/modules/calendar-api/calendar-api.service';
@@ -18,6 +21,7 @@ export class NewCalendarComponent implements OnInit {
 
   constructor(
     private router: Router,
+    // private afs: AngularFirestore,
     private calendarApi: CalendarApiService
   ) { }
 
@@ -42,10 +46,9 @@ export class NewCalendarComponent implements OnInit {
 
   createCalendar(){
     let data: Calendar = {
-      uid: "",
+      created_at: firebase.default.firestore.FieldValue.serverTimestamp(),
       user: localStorage.getItem('personal_id') as string,
       calendar_name: this.calendarForm.controls.calendarName.value,
-      created_at: new Date(),
     }
 
     console.log(data);

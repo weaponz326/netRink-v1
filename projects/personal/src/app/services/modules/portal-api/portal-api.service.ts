@@ -12,8 +12,8 @@ export class PortalApiService {
     private afs: AngularFirestore,
   ) { }
 
-  rinkRef = this.afs.collection('personal/portal/rink');
-  personalUserRef = this.afs.collection('personal');
+  rinkRef = this.afs.collection('personal/module_portal/portal_rink');
+  personalUserRef = this.afs.collection('personal/users/user');
 
   personalId = localStorage.getItem('personal_id') as string;
   rinkId = sessionStorage.getItem('personal_rink_id') as string;

@@ -27,66 +27,91 @@ export class AllCalendarsComponent implements OnInit {
 
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
   @ViewChild('newCalendarComponentReference', { read: NewCalendarComponent, static: false }) newCalendar!: NewCalendarComponent;
-  @ViewChild('tablePaginationComponentReference', { read: TablePaginationComponent, static: false }) tablePagination!: TablePaginationComponent;
-  @ViewChild('calendarNameSortingComponentReference', { read: TableSortingComponent, static: false }) calendarNameSorting!: TableSortingComponent;
-  @ViewChild('createdAtSortingComponentReference', { read: TableSortingComponent, static: false }) createdAtSorting!: TableSortingComponent;
 
   navHeading: any[] = [
     { text: "All Calendars", url: "/home/calendar/all-calendars" },
   ];
 
-  calendarGridData: Calendar[] = [];
+  isFetchingGridData: boolean =  false;
+  isDataAvailable: boolean =  true;
 
-  currentPage = 0;
-  totalPages = 0;
-  totalItems = 0;
+  // calendarGridData: Calendar[] = [];
+  calendarGridData: any[] = [];
+
+  firstInResponse: any = [];
+  lastInResponse: any = [];
+  prevStartAt: any = [];
+  nextStartAt: any = [];
+  pageNumber = 1;
+  disable_next: boolean = false;
+  disable_prev: boolean = true;
+
+  sortParams = {
+    field: "created_at",
+    direction: "desc"
+  }
 
   ngOnInit(): void {
   }
 
   ngAfterViewInit(): void {
-    this.getAllUserCalendar();
+    this.getAllUserCalendar(this.sortParams, 20, null);
   }
 
-  getAllUserCalendar(){
-    this.calendarApi.getAllUserCalendar({}, 20, {})
+  getAllUserCalendar(sorting: any, pageSize: any, pageStart: any){
+    this.isFetchingGridData = true;
+    this.calendarApi.getAllUserCalendar(sorting, pageSize, pageStart)
       .then(
         (res: any) => {
           console.log(res);
-          this.calendarGridData = res.results;
-          // this.currentPage = res.current_page;
-          // this.totalPages = res.total_pages;
-          // this.totalItems = res.count;
+
+          this.calendarGridData = res.docs;
+          this.isFetchingGridData = false;
+          if (!res.docs.length) this.isDataAvailable = false;
+
+          this.prevStartAt = this.firstInResponse;
+          this.nextStartAt = res.docs[res.docs.length - 1];
+          this.firstInResponse = res.docs[0];
         },
         (err: any) => {
-          this.connectionToast.openToast();
           console.log(err);
+          this.connectionToast.openToast();
+          this.isFetchingGridData = false;
         }
       )
   }
 
   viewCalendar(id: any){
-    console.log(id);
     sessionStorage.setItem('personal_calendar_id', id);
-
     this.router.navigateByUrl('/home/calendar/view-calendar')
   }
 
-  sortTable(field: any){
-    console.log(field);
-    this.getAllUserCalendar();
+  nextPage(e: any){
+    e.preventDefault();
 
-    if((field == 'calendar_name') || (field == "-calendar_name")){
-      this.createdAtSorting.resetSort();
-    }
-    else if((field == 'created_at') || (field == "-created_at")){
-      this.calendarNameSorting.resetSort();
-    }
+    this.sortParams = { field: "created_at", direction: "desc" };
+    this.getAllUserCalendar(this.sortParams, 20, this.nextStartAt);
+    this.pageNumber++;
+  }
+
+  previousPage(e: any){
+    e.preventDefault();
+
+    this.sortParams = { field: "created_at", direction: "desc" };
+    this.getAllUserCalendar(this.sortParams, 20, this.prevStartAt);
+    this.pageNumber--;
+  }
+
+  sortTable(field: any, direction: any){
+    this.sortParams.field = field;
+    this.sortParams.direction = direction;
+
+    this.getAllUserCalendar(this.sortParams, 20, null);
   }
 
   onPrint(){
     console.log("lets start printing...");
-    this.calendarPrint.getPrintCalendars(this.totalItems);
+    // this.calendarPrint.getPrintCalendars(this.totalItems);
   }
 
 }

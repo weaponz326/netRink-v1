@@ -12,8 +12,8 @@ export class AccountsApiService {
     private afs: AngularFirestore,
   ) { }
 
-  accountRef = this.afs.collection('personal/accounts/account');
-  incomeRef = this.afs.collection('personal/accounts/transaction');
+  accountRef = this.afs.collection('personal/module_accounts/accounts_account');
+  incomeRef = this.afs.collection('personal/module_accounts/accounts_transaction');
 
   personalId = localStorage.getItem('personal_id') as string;
   accountId = sessionStorage.getItem('personal_account_id') as string;

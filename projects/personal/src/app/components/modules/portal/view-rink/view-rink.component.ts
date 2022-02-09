@@ -30,9 +30,9 @@ export class ViewRinkComponent implements OnInit {
 
   personalId = localStorage.getItem('personal_id');
 
-  senderData: User = {uid: "", first_name: "", last_name: "", location: "", about: ""};
-  recipientData: User = {uid: "", first_name: "", last_name: "", location: "", about: ""};
-  rinkData: Rink = {uid: "", sender: this.senderData, recipient: this.recipientData, rink_date: new Date, rink_type: "", rink_source: "", comment: "" };
+  senderData: any = {first_name: "", last_name: "", location: "", about: ""};
+  recipientData: any = {first_name: "", last_name: "", location: "", about: ""};
+  rinkData: any = {uid: "", sender: this.senderData, recipient: this.recipientData, rink_date: new Date, rink_type: "", rink_source: "", comment: "" };
 
   ngOnInit(): void {
   }

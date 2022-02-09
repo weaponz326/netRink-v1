@@ -12,7 +12,7 @@ export class NotesApiService {
     private afs: AngularFirestore,
   ) { }
 
-  noteRef = this.afs.collection('personal/notes/note');
+  noteRef = this.afs.collection('personal/module_notes/notes_note');
 
   personalId = localStorage.getItem('personal_id') as string;
   noteId = sessionStorage.getItem('personal_note_id') as string;

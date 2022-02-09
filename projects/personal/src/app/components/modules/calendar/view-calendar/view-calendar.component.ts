@@ -25,7 +25,8 @@ export class ViewCalendarComponent implements OnInit {
 
   calendarForm: FormGroup = new FormGroup({});
   schedulesGridData: Schedule[] = [];
-  calendarFormData: Calendar = {uid: "", user: "", calendar_name: "", created_at: new Date()};
+  // calendarFormData: Calendar = {user: "", calendar_name: "", created_at: new Date()};
+  calendarFormData: any;
 
   isCalendarSaving: boolean = false;
 
@@ -50,7 +51,7 @@ export class ViewCalendarComponent implements OnInit {
         (res: any) => {
           console.log(res);
           this.calendarFormData = res;
-          this.calendarForm.controls.calendarName.setValue(this.calendarFormData.calendar_name);
+          this.calendarForm.controls.calendarName.setValue(this.calendarFormData.data().calendar_name);
         },
         (err: any) => {
           this.connectionToast.openToast();
@@ -61,7 +62,6 @@ export class ViewCalendarComponent implements OnInit {
 
   updateCalendar(){
     let data: Calendar = {
-      uid: this.calendarFormData.uid,
       user: localStorage.getItem('personal_id') as string,
       calendar_name: this.calendarForm.controls.calendarName.value,
       created_at: this.calendarFormData.created_at

@@ -12,8 +12,8 @@ export class BudgetApiService {
     private afs: AngularFirestore,
   ) { }
 
-  budgetRef = this.afs.collection('personal/budget/budget');
-  incomeRef = this.afs.collection('personal/budget/income');
+  budgetRef = this.afs.collection('personal/module_budget/budget_budget');
+  incomeRef = this.afs.collection('personal/module_budget/budget_income');
   expenditureRef = this.afs.collection('personal/budget/expenditure');
 
   personalId = localStorage.getItem('personal_id') as string;

@@ -1,8 +1,7 @@
 export class Calendar {
-  uid!: string;
+  created_at!: any;
   user!: string;
   calendar_name!: string;
-  created_at!: Date;
 }
 
 export class Schedule {

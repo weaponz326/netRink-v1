@@ -50,8 +50,8 @@ export class NewRinkComponent implements OnInit {
   ];
 
   rinkForm: FormGroup = new FormGroup({});
-  senderData: User = {uid: "", first_name: "", last_name: "", location: "", about: ""};
-  recipientData: User = {uid: "", first_name: "", last_name: "", location: "", about: ""};
+  senderData: User = {first_name: "", last_name: "", location: "", about: ""};
+  recipientData: User = {first_name: "", last_name: "", location: "", about: ""};
   rinkFormData: Rink = {uid: "", sender: this.senderData, recipient: this.recipientData, rink_date: new Date, rink_type: "", rink_source: "", comment: "" };
 
   selectedSourceId: any;

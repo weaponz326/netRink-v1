@@ -41,7 +41,7 @@ export class ProfileComponent implements OnInit {
     { text: "Profile", url: "/home/profile/dashboard" },
   ];
 
-  userData: User = {uid: "", first_name: "", last_name: "", location: "", about: ""};
+  userData: User = {first_name: "", last_name: "", location: "", about: ""};
   extendedProfileData: ExtendedProfile = {uid: "", date_of_birth: "", gender: "", phone: "", address: "", country: "", state: "", city: ""};
 
 
@@ -104,7 +104,6 @@ export class ProfileComponent implements OnInit {
     this.photo.saveButton.disabled = true;
 
     let data: User = {
-      uid: this.userData.uid,
       first_name: this.basic.basicForm.controls.first_name.value,
       last_name: this.basic.basicForm.controls.last_name.value,
       location: this.location.locationForm.controls.location.value,

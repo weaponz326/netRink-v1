@@ -11,11 +11,10 @@ export class CalendarApiService {
     private afs: AngularFirestore
   ) { }
 
-  calendarRef = this.afs.collection('personal/calendar/calendar');
-  scheduleRef = this.afs.collection('personal/calendar/schedule');
+  calendarRef = this.afs.collection('personal/module_calendar/calendar_calendar');
+  scheduleRef = this.afs.collection('personal/module_calendar/calendar_schedule');
 
-  personalId = localStorage.getItem('personal_id') as string;
-  calendarId = sessionStorage.getItem('personal_calendar_id') as string;
+  // localStorage.getItem('personal_id') = localStorage.getItem('personal_id') as string;
 
   // calendar
 
@@ -24,23 +23,23 @@ export class CalendarApiService {
   }
 
   getCalendar(){
-    return this.calendarRef.doc(this.calendarId).ref.get();
+    return this.calendarRef.doc(String(sessionStorage.getItem('personal_calendar_id'))).ref.get();
   }
 
   updateCalendar(calendar: any){
-    return this.calendarRef.doc(this.calendarId).update(calendar);
+    return this.calendarRef.doc(String(sessionStorage.getItem('personal_calendar_id'))).update(calendar);
   }
 
   deleteCalendar(){
-    return this.calendarRef.doc(this.calendarId).delete();
+    return this.calendarRef.doc(String(sessionStorage.getItem('personal_calendar_id'))).delete();
   }
 
-  getAllUserCalendar(ordering: any, pageSize: any, pageStart: any){
+  getAllUserCalendar(sorting: any, pageSize: any, pageStart: any){
     return this.calendarRef.ref
-      .where("user", "==", this.personalId)
-      .orderBy(ordering.field, ordering.direction)
-      .startAt(pageStart)
+      .where("user", "==", localStorage.getItem('personal_id'))
       .limit(pageSize)
+      .orderBy(sorting?.field, sorting?.direction)
+      .startAt(pageStart)
       .get();
   }
 
@@ -64,13 +63,13 @@ export class CalendarApiService {
 
   getAllCalendarSchedule(){
     return this.scheduleRef.ref
-      .where("calendar.uid", "==", this.calendarId)
+      .where("calendar.uid", "==", sessionStorage.getItem('personal_calendar_id'))
       .get();
   }
 
   getAllUserSchedule(ordering: any, pageSize: any, pageStart: any){
     return this.scheduleRef.ref
-      .where("user", "==", this.personalId)
+      .where("user", "==", localStorage.getItem('personal_id'))
       .orderBy(ordering.field, ordering.direction)
       .startAt(pageStart)
       .limit(pageSize)

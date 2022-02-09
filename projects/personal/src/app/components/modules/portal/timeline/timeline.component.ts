@@ -27,7 +27,7 @@ export class TimelineComponent implements OnInit {
   ];
 
   personalId = localStorage.getItem('personal_id');
-  rinksData: Rink[] = [];
+  rinksData: any[] = [];
 
   ngOnInit(): void {
   }

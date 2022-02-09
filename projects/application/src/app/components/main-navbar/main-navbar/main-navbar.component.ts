@@ -28,7 +28,7 @@ export class MainNavbarComponent implements OnInit {
 
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
 
-  userData: User = {uid: "", first_name: "", last_name: "", location: "", about: ""};
+  userData: User = {first_name: "", last_name: "", location: "", about: ""};
 
   isLoggedIn: boolean = false;
   isAuthLoading: boolean = false;
