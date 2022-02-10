@@ -22,13 +22,20 @@
             </thead>
             <tbody>
                 <tr *ngFor="let data of transactionsGridData; index as i">
-                    <td>{{data?.transaction_date | date}}</td>
-                    <td>{{data?.description}}</td>
-                    <td>{{data?.transaction_type}}</td>
-                    <td>{{data?.amount}}</td>
+                    <td>{{data?.data().transaction_date | date}}</td>
+                    <td>{{data?.data().description}}</td>
+                    <td>{{data?.data().transaction_type}}</td>
+                    <td>{{data?.data().amount}}</td>
                     <td class="p-0">
                         <button class="btn btn-sm border w-50" (click)="openEditTransaction(i)"><i class="bi bi-pen"></i></button>
                         <button class="btn btn-sm border w-50" (click)="confirmDelete(i, data.uid)"><i class="bi bi-trash"></i></button>
+                    </td>
+                </tr>
+                <tr *ngIf="isFetchingGridData" class="text-center">
+                    <td colspan="3">
+                        <div class="spinner-grow m-4" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
                     </td>
                 </tr>
             </tbody>

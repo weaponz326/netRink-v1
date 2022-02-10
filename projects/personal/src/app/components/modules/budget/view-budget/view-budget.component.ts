@@ -35,7 +35,7 @@ export class ViewBudgetComponent implements OnInit {
   ];
 
   budgetForm: FormGroup = new FormGroup({});
-  budgetFormData: Budget = {uid: "", user: "", budget_name: "", budget_type: ""}
+  budgetFormData: any;
 
   ioe = 0;
 
@@ -63,8 +63,8 @@ export class ViewBudgetComponent implements OnInit {
         (res: any) => {
           console.log(res);
           this.budgetFormData = res;
-          this.budgetForm.controls.budgetName.setValue(this.budgetFormData.budget_name);
-          this.budgetForm.controls.budgetType.setValue(this.budgetFormData.budget_type);
+          this.budgetForm.controls.budgetName.setValue(this.budgetFormData.data().budget_name);
+          this.budgetForm.controls.budgetType.setValue(this.budgetFormData.data().budget_type);
         },
         (err: any) => {
           console.log(err);
@@ -75,7 +75,7 @@ export class ViewBudgetComponent implements OnInit {
 
   updateBudget(){
     let data: Budget = {
-      uid: this.budgetFormData.uid,
+      created_at: this.budgetFormData.data().created_at,
       user: localStorage.getItem('personal_id') as string,
       budget_name: this.budgetForm.controls.budgetName.value,
       budget_type: this.budgetForm.controls.budgetType.value

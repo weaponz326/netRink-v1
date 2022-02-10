@@ -30,14 +30,23 @@ export class BudgetTablesComponent implements OnInit {
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
   @ViewChild('deleteModalComponentReference', { read: DeleteModalComponent, static: false }) deleteModal!: DeleteModalComponent;
 
-  incomeGridData: Income[] = [];
-  expenditureGridData: Expenditure[] = [];
+  incomeGridData: any[] = [];
+  expenditureGridData: any[] = [];
+
+  isFetchingIncomeGridData: boolean =  false;
+  isFetchingExpenditureGridData: boolean =  false;
+
   totalIncome = 0;
   totalExpenditure = 0;
 
   deleteType = "";
   deleteId = "";
   deleteIndex = 0;
+
+  sortParams = {
+    field: "created_at",
+    direction: "desc"
+  }
 
   ngOnInit(): void {
   }
@@ -56,21 +65,26 @@ export class BudgetTablesComponent implements OnInit {
   // income
 
   calculateTotalIncome(){
-    this.totalIncome = this.incomeGridData.reduce((total, {amount}) => total + Number(amount), 0);
-    console.log(this.totalIncome);
-    this.calculateIoe();
+    // this.totalIncome = this.incomeGridData.reduce((total, {amount}) => total + Number(amount), 0);
+    // console.log(this.totalIncome);
+    // this.calculateIoe();
   }
 
   getAllBudgetIncome(){
-    this.budgetApi.getAllBudgetIncome()
+    this.isFetchingIncomeGridData = true;
+
+    this.budgetApi.getAllBudgetIncome(this.sortParams)
       .then(
         (res: any) => {
           console.log(res);
-          this.incomeGridData = res;
+          this.incomeGridData = res.docs;
+          this.isFetchingIncomeGridData = false;
+
           this.calculateTotalIncome();
         },
         (err: any) => {
           console.log(err);
+          this.isFetchingIncomeGridData = false;
           this.connectionToast.openToast();
         }
       )
@@ -142,21 +156,26 @@ export class BudgetTablesComponent implements OnInit {
   // expenditure
 
   calculateTotalExpenditure(){
-    this.totalExpenditure = this.expenditureGridData.reduce((total, {amount}) => total + Number(amount), 0);
-    console.log(this.totalExpenditure);
-    this.calculateIoe();
+    // this.totalExpenditure = this.expenditureGridData.reduce((total, {amount}) => total + Number(amount), 0);
+    // console.log(this.totalExpenditure);
+    // this.calculateIoe();
   }
 
   getAllBudgetExpenditure(){
-    this.budgetApi.getAllBudgetExpenditure()
+    this.isFetchingExpenditureGridData = true;
+
+    this.budgetApi.getAllBudgetExpenditure(this.sortParams)
       .then(
         (res: any) => {
           console.log(res);
-          this.expenditureGridData = res;
+          this.expenditureGridData = res.docs;
+          this.isFetchingExpenditureGridData = false;
+
           this.calculateTotalExpenditure();
         },
         (err: any) => {
           console.log(err);
+          this.isFetchingExpenditureGridData = false;
           this.connectionToast.openToast();
         }
       )

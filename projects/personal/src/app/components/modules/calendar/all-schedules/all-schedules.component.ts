@@ -1,7 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
-import { TablePaginationComponent } from 'projects/personal/src/app/components/module-utilities/table-pagination/table-pagination.component'
-import { TableSortingComponent } from 'projects/personal/src/app/components/module-utilities/table-sorting/table-sorting.component'
 import { ConnectionToastComponent } from '../../../module-utilities/connection-toast/connection-toast.component'
 
 import { CalendarApiService } from 'projects/personal/src/app/services/modules/calendar-api/calendar-api.service';
@@ -23,86 +21,86 @@ export class AllSchedulesComponent implements OnInit {
   ) { }
 
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
-  @ViewChild('tablePaginationComponentReference', { read: TablePaginationComponent, static: false }) tablePagination!: TablePaginationComponent;
-  @ViewChild('scheduleNameSortingComponentReference', { read: TableSortingComponent, static: false }) scheduleNameSorting!: TableSortingComponent;
-  @ViewChild('startDateSortingComponentReference', { read: TableSortingComponent, static: false }) startDateSorting!: TableSortingComponent;
-  @ViewChild('endDateSortingComponentReference', { read: TableSortingComponent, static: false }) endDateSorting!: TableSortingComponent;
-  @ViewChild('statusSortingComponentReference', { read: TableSortingComponent, static: false }) statusSorting!: TableSortingComponent;
-  @ViewChild('calendarSortingComponentReference', { read: TableSortingComponent, static: false }) calendarSorting!: TableSortingComponent;
 
   navHeading: any[] = [
     { text: "All Schedules", url: "/home/calendar/all-schedules" },
   ];
 
-  schedulesGridData: Schedule[] = [];
+  schedulesGridData: any[] = [];
 
-  currentPage = 0;
-  totalPages = 0;
-  totalItems = 0;
+  isFetchingGridData: boolean =  false;
+  isDataAvailable: boolean =  true;
+
+  firstInResponse: any = [];
+  lastInResponse: any = [];
+  prevStartAt: any = [];
+  nextStartAt: any = [];
+  pageNumber = 1;
+  disable_next: boolean = false;
+  disable_prev: boolean = true;
+
+  sortParams = {
+    field: "created_at",
+    direction: "desc"
+  }
 
   ngOnInit(): void {
   }
 
   ngAfterViewInit(): void {
-    this.getAllUserSchedule();
+    this.getAllUserSchedule(this.sortParams, 20, null);
   }
 
-  getAllUserSchedule(){
-    this.calendarApi.getAllUserSchedule({}, 20, {})
+  getAllUserSchedule(sorting: any, pageSize: any, pageStart: any){
+    this.isFetchingGridData = true;
+
+    this.calendarApi.getAllUserSchedule(sorting, pageSize, pageStart)
       .then(
         (res: any) => {
           console.log(res);
-          this.schedulesGridData = res.results;
-          // this.currentPage = res.current_page;
-          // this.totalPages = res.total_pages;
-          // this.totalItems = res.count;
+
+          this.schedulesGridData = res.docs;
+          this.isFetchingGridData = false;
+          if (!res.docs.length) this.isDataAvailable = false;
+
+          this.prevStartAt = this.firstInResponse;
+          this.nextStartAt = res.docs[res.docs.length - 1];
+          this.firstInResponse = res.docs[0];
         },
         (err: any) => {
           this.connectionToast.openToast();
+          this.isFetchingGridData = false;
           console.log(err);
         }
       )
   }
 
-  sortTable(field: any){
-    console.log(field);
-    this.getAllUserSchedule();
+  nextPage(e: any){
+    e.preventDefault();
 
-    if((field == 'schedule_name') || (field == "-schedule_name")){
-      this.startDateSorting.resetSort();
-      this.endDateSorting.resetSort();
-      this.statusSorting.resetSort();
-      this.calendarSorting.resetSort();
-    }
-    else if((field == 'start_date') || (field == "-start_date")){
-      this.scheduleNameSorting.resetSort();
-      this.endDateSorting.resetSort();
-      this.statusSorting.resetSort();
-      this.calendarSorting.resetSort();
-    }
-    else if((field == 'end_date') || (field == "-end_date")){
-      this.scheduleNameSorting.resetSort();
-      this.startDateSorting.resetSort();
-      this.statusSorting.resetSort();
-      this.calendarSorting.resetSort();
-    }
-    else if((field == 'status') || (field == "-status")){
-      this.scheduleNameSorting.resetSort();
-      this.startDateSorting.resetSort();
-      this.endDateSorting.resetSort();
-      this.calendarSorting.resetSort();
-    }
-    else if((field == 'calendar') || (field == "-calendar")){
-      this.scheduleNameSorting.resetSort();
-      this.startDateSorting.resetSort();
-      this.endDateSorting.resetSort();
-      this.statusSorting.resetSort();
-    }
+    this.sortParams = { field: "created_at", direction: "desc" };
+    this.getAllUserSchedule(this.sortParams, 20, this.nextStartAt);
+    this.pageNumber++;
+  }
+
+  previousPage(e: any){
+    e.preventDefault();
+
+    this.sortParams = { field: "created_at", direction: "desc" };
+    this.getAllUserSchedule(this.sortParams, 20, this.prevStartAt);
+    this.pageNumber--;
+  }
+
+  sortTable(field: any, direction: any){
+    this.sortParams.field = field;
+    this.sortParams.direction = direction;
+
+    this.getAllUserSchedule(this.sortParams, 20, null);
   }
 
   onPrint(){
     console.log("lets start printing...");
-    this.calendarPrint.getPrintSchedules(this.totalItems);
+    // this.calendarPrint.getPrintSchedules(this.totalItems);
   }
 
 }

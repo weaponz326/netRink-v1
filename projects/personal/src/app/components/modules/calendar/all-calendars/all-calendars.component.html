@@ -40,7 +40,7 @@
                             </div>
                         </td>
                     </tr>
-                    <tr *ngIf="!isDataAvailable" class="text-center">
+                    <tr *ngIf="!isDataAvailable && !isFetchingGridData" class="text-center">
                         <td colspan="2">
                             <p class="m-4">No data available</p>
                         </td>
@@ -57,7 +57,7 @@
                                         </a>
                                     </li>
                                     <li class="page-item">
-                                        <a class="page-link" href="#" aria-label="Current">
+                                        <a class="page-link" href="#" aria-label="Current" (click)="$event.preventDefault()">
                                             {{pageNumber}}
                                         </a>
                                     </li>
@@ -68,7 +68,6 @@
                                     </li>
                                 </ul>
                             </nav>
-
                         </td>
                     </tr>
                 </tfoot>

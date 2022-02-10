@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 
+import * as firebase from 'firebase/compat/app';
+
 import { Expenditure } from 'projects/personal/src/app/models/modules/budget/budget.model';
 
 
@@ -39,7 +41,7 @@ export class AddExpenditureComponent implements OnInit {
 
   saveExpenditure(){
     let data: Expenditure = {
-      uid: "",
+      created_at: firebase.default.firestore.FieldValue.serverTimestamp(),
       budget: sessionStorage.getItem('personal_budget_id') as string,
       item_number: this.addExpenditureForm.controls.itemNumber.value,
       item_description: this.addExpenditureForm.controls.itemDescription.value,

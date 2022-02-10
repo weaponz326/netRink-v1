@@ -18,7 +18,7 @@ export class EditIncomeComponent implements OnInit {
   @ViewChild('buttonElementReference', { read: ElementRef, static: false }) buttonElement!: ElementRef;
 
   editIncomeForm: FormGroup = new FormGroup({});
-  incomeFormData: Income = {uid: "", budget: "", item_number: "", item_description: "", amount: 0}
+  incomeFormData: any;
 
   selectedIndex: any = 0;
   selectedId: any = "";
@@ -33,9 +33,9 @@ export class EditIncomeComponent implements OnInit {
     this.selectedIndex = index;
     this.selectedId = data.id;
 
-    this.editIncomeForm.controls.itemNumber.setValue(this.incomeFormData.item_number);
-    this.editIncomeForm.controls.itemDescription.setValue(this.incomeFormData.item_description);
-    this.editIncomeForm.controls.amount.setValue(this.incomeFormData.amount);
+    this.editIncomeForm.controls.itemNumber.setValue(this.incomeFormData.data().item_number);
+    this.editIncomeForm.controls.itemDescription.setValue(this.incomeFormData.data().item_description);
+    this.editIncomeForm.controls.amount.setValue(this.incomeFormData.data().amount);
 
     this.buttonElement.nativeElement.click();
   }
@@ -50,7 +50,7 @@ export class EditIncomeComponent implements OnInit {
 
   saveIncome(){
     let income: Income = {
-      uid: this.selectedIndex,
+      created_at: this.incomeFormData.data().created_at,
       budget: sessionStorage.getItem('personal_budget_id') as string,
       item_number: this.editIncomeForm.controls.itemNumber.value,
       item_description: this.editIncomeForm.controls.itemDescription.value,

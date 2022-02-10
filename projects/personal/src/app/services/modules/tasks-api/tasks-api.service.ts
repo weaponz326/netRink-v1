@@ -15,9 +15,6 @@ export class TasksApiService {
   taskGroupRef = this.afs.collection('personal/module_tasks/tasks_task_group');
   taskItemRef = this.afs.collection('personal/module_tasks/tasks_task_item');
 
-  personalId = localStorage.getItem('personal_id') as string;
-  taskGroupId = sessionStorage.getItem('personal_task_group_id') as string;
-
   // task groups
 
   createTaskGroup(taskGroup: any){
@@ -25,20 +22,20 @@ export class TasksApiService {
   }
 
   getTaskGroup(){
-    return this.taskGroupRef.doc(this.taskGroupId).ref.get();
+    return this.taskGroupRef.doc(String(sessionStorage.getItem('personal_task_group_id'))).ref.get();
   }
 
   updateTaskGroup(taskGroup: any){
-    return this.taskGroupRef.doc(this.taskGroupId).update(taskGroup);
+    return this.taskGroupRef.doc(String(sessionStorage.getItem('personal_task_group_id'))).update(taskGroup);
   }
 
   deleteTaskGroup(){
-    return this.taskGroupRef.doc(this.taskGroupId).delete();
+    return this.taskGroupRef.doc(String(sessionStorage.getItem('personal_task_group_id'))).delete();
   }
 
   getAllUserTaskGroup(ordering: any, pageSize: any, pageStart: any){
     return this.taskGroupRef.ref
-      .where("user", "==", this.personalId)
+      .where("user", "==", localStorage.getItem('personal_id'))
       .orderBy(ordering.field, ordering.direction)
       .startAt(pageStart)
       .limit(pageSize)
@@ -65,13 +62,13 @@ export class TasksApiService {
 
   getAllTaskGroupTaskItem(){
     return this.taskItemRef.ref
-      .where("calendar.uid", "==", this.taskGroupId)
+      .where("calendar.uid", "==", String(sessionStorage.getItem('personal_task_group_id')))
       .get();
   }
 
   getAllUserTaskItem(ordering: any, pageSize: any, pageStart: any){
     return this.taskItemRef.ref
-      .where("user", "==", this.personalId)
+      .where("user", "==", localStorage.getItem('personal_id'))
       .orderBy(ordering.field, ordering.direction)
       .startAt(pageStart)
       .limit(pageSize)

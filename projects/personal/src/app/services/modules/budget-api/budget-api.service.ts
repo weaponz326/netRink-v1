@@ -16,9 +16,6 @@ export class BudgetApiService {
   incomeRef = this.afs.collection('personal/module_budget/budget_income');
   expenditureRef = this.afs.collection('personal/budget/expenditure');
 
-  personalId = localStorage.getItem('personal_id') as string;
-  budgetId = sessionStorage.getItem('personal_budget_id') as string;
-
   // budget
 
   createBudget(budget: any){
@@ -26,23 +23,23 @@ export class BudgetApiService {
   }
 
   getBudget(){
-    return this.budgetRef.doc(this.budgetId).ref.get();
+    return this.budgetRef.doc(String(sessionStorage.getItem('personal_budget_id'))).ref.get();
   }
 
   updateBudget(budget: any){
-    return this.budgetRef.doc(this.budgetId).update(budget);
+    return this.budgetRef.doc(String(sessionStorage.getItem('personal_budget_id'))).update(budget);
   }
 
   deleteBudget(){
-    return this.budgetRef.doc(this.budgetId).delete();
+    return this.budgetRef.doc(String(sessionStorage.getItem('personal_budget_id'))).delete();
   }
 
-  getAllUserBudget(ordering: any, pageSize: any, pageStart: any){
+  getAllUserBudget(sorting: any, pageSize: any, pageStart: any){
     return this.budgetRef.ref
-      .where("user", "==", this.personalId)
-      .orderBy(ordering.field, ordering.direction)
-      .startAt(pageStart)
+      .where("user", "==", localStorage.getItem('personal_id'))
       .limit(pageSize)
+      .orderBy(sorting.field, sorting.direction)
+      .startAt(pageStart)
       .get();
   }
 
@@ -60,9 +57,10 @@ export class BudgetApiService {
     return this.budgetRef.doc(incomeId).delete();
   }
 
-  getAllBudgetIncome(){
+  getAllBudgetIncome(sorting: any){
     return this.budgetRef.ref
-      .where("budget", "==", this.budgetId)
+      .where("budget", "==", String(sessionStorage.getItem('personal_budget_id')))
+      .orderBy(sorting.field, sorting.direction)
       .get();
   }
 
@@ -80,9 +78,10 @@ export class BudgetApiService {
     return this.budgetRef.doc(expenditureId).delete();
   }
 
-  getAllBudgetExpenditure(){
+  getAllBudgetExpenditure(sorting: any){
     return this.budgetRef.ref
-      .where("budget", "==", this.budgetId)
+      .where("budget", "==", String(sessionStorage.getItem('personal_budget_id')))
+      .orderBy(sorting.field, sorting.direction)
       .get();
   }
 

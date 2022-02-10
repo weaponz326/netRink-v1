@@ -18,7 +18,7 @@ export class EditExpenditureComponent implements OnInit {
   @ViewChild('buttonElementReference', { read: ElementRef, static: false }) buttonElement!: ElementRef;
 
   editExpenditureForm: FormGroup = new FormGroup({});
-  expenditureFormData: Expenditure = {uid: "", budget: "", item_number: "", item_description: "", amount: 0}
+  expenditureFormData: any;
 
   selectedIndex: any = 0;
   selectedId: any = "";
@@ -33,9 +33,9 @@ export class EditExpenditureComponent implements OnInit {
     this.selectedIndex = index;
     this.selectedId = data.id;
 
-    this.editExpenditureForm.controls.itemNumber.setValue(this.expenditureFormData.item_number);
-    this.editExpenditureForm.controls.itemDescription.setValue(this.expenditureFormData.item_description);
-    this.editExpenditureForm.controls.amount.setValue(this.expenditureFormData.amount);
+    this.editExpenditureForm.controls.itemNumber.setValue(this.expenditureFormData.data().item_number);
+    this.editExpenditureForm.controls.itemDescription.setValue(this.expenditureFormData.data().item_description);
+    this.editExpenditureForm.controls.amount.setValue(this.expenditureFormData.data().amount);
 
     this.buttonElement.nativeElement.click();
   }
@@ -50,7 +50,7 @@ export class EditExpenditureComponent implements OnInit {
 
   saveExpenditure(){
     let expenditure: Expenditure = {
-      uid: this.selectedIndex,
+      created_at: this.expenditureFormData.data().created_at,
       budget: sessionStorage.getItem('personal_budget_id') as string,
       item_number: this.editExpenditureForm.controls.itemNumber.value,
       item_description: this.editExpenditureForm.controls.itemDescription.value,

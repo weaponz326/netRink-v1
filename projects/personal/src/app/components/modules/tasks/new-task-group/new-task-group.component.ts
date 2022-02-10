@@ -2,6 +2,8 @@ import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angula
 import { Router } from '@angular/router';
 import { FormControl, FormGroup } from '@angular/forms';
 
+import * as firebase from 'firebase/compat/app';
+
 import { ConnectionToastComponent } from '../../../module-utilities/connection-toast/connection-toast.component'
 
 import { TasksApiService } from 'projects/personal/src/app/services/modules/tasks-api/tasks-api.service';
@@ -43,10 +45,9 @@ export class NewTaskGroupComponent implements OnInit {
 
   createTaskGroup(){
     let data: TaskGroup = {
-      uid: "",
+      created_at: firebase.default.firestore.FieldValue.serverTimestamp(),
       user: localStorage.getItem('personal_id') as string,
       task_group: this.taskGroupForm.controls.taskGroupName.value,
-      created_at: new Date()
     }
 
     console.log(data);

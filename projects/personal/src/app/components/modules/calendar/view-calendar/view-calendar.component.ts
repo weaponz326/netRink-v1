@@ -62,9 +62,9 @@ export class ViewCalendarComponent implements OnInit {
 
   updateCalendar(){
     let data: Calendar = {
+      created_at: this.calendarFormData.data().created_at,
       user: localStorage.getItem('personal_id') as string,
       calendar_name: this.calendarForm.controls.calendarName.value,
-      created_at: this.calendarFormData.created_at
     }
 
     console.log(data);

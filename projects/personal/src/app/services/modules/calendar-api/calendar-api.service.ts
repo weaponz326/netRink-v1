@@ -14,8 +14,6 @@ export class CalendarApiService {
   calendarRef = this.afs.collection('personal/module_calendar/calendar_calendar');
   scheduleRef = this.afs.collection('personal/module_calendar/calendar_schedule');
 
-  // localStorage.getItem('personal_id') = localStorage.getItem('personal_id') as string;
-
   // calendar
 
   createCalendar(calendar: any){
@@ -67,12 +65,12 @@ export class CalendarApiService {
       .get();
   }
 
-  getAllUserSchedule(ordering: any, pageSize: any, pageStart: any){
+  getAllUserSchedule(sorting: any, pageSize: any, pageStart: any){
     return this.scheduleRef.ref
       .where("user", "==", localStorage.getItem('personal_id'))
-      .orderBy(ordering.field, ordering.direction)
-      .startAt(pageStart)
       .limit(pageSize)
+      .orderBy(sorting.field, sorting.direction)
+      .startAt(pageStart)
       .get();
   }
 

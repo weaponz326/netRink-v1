@@ -35,7 +35,7 @@ export class ViewAccountComponent implements OnInit {
   ];
 
   accountForm: FormGroup = new FormGroup({});
-  accountFormData: Account = {uid: "", user: "", account_name: "", account_number: "", bank_name: "", account_type: ""}
+  accountFormData: any;
 
   balance = 0;
 
@@ -66,10 +66,10 @@ export class ViewAccountComponent implements OnInit {
 
           this.accountFormData = res;
 
-          this.accountForm.controls.accountName.setValue(this.accountFormData.account_name);
-          this.accountForm.controls.accountNumber.setValue(this.accountFormData.account_number);
-          this.accountForm.controls.bankName.setValue(this.accountFormData.bank_name);
-          this.accountForm.controls.accountType.setValue(this.accountFormData.account_type);
+          this.accountForm.controls.accountName.setValue(this.accountFormData.data().account_name);
+          this.accountForm.controls.accountNumber.setValue(this.accountFormData.data().account_number);
+          this.accountForm.controls.bankName.setValue(this.accountFormData.data().bank_name);
+          this.accountForm.controls.accountType.setValue(this.accountFormData.data().account_type);
         },
         (err: any) => {
           console.log(err);
@@ -80,7 +80,7 @@ export class ViewAccountComponent implements OnInit {
 
   updateAccount(){
     let data: Account = {
-      uid: this.accountFormData.uid,
+      created_at: this.accountFormData.data().created_at,
       user: localStorage.getItem('personal_id') as string,
       account_name: this.accountForm.controls.accountName.value,
       account_number: this.accountForm.controls.accountNumber.value,

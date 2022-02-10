@@ -24,7 +24,7 @@ export class ViewTaskGroupComponent implements OnInit {
   ];
 
   taskGroupForm: FormGroup = new FormGroup({});
-  taskGroupFormData: TaskGroup = {uid: "", user: "", task_group: "", created_at: new Date()};
+  taskGroupFormData: any;
 
   isTaskGroupSaving: boolean = false;
 
@@ -48,7 +48,7 @@ export class ViewTaskGroupComponent implements OnInit {
         (res: any) => {
           console.log(res);
           this.taskGroupFormData = res
-          this.taskGroupForm.controls.taskGroupName.setValue(this.taskGroupFormData.task_group);
+          this.taskGroupForm.controls.taskGroupName.setValue(this.taskGroupFormData.data().task_group);
         },
         (err: any) => {
           console.log(err);
@@ -59,10 +59,9 @@ export class ViewTaskGroupComponent implements OnInit {
 
   updateTaskGroup(){
     let data: TaskGroup = {
-      uid: this.taskGroupFormData.uid,
+      created_at: this.taskGroupFormData.data().created_at,
       user: localStorage.getItem('personal_id') as string,
       task_group: this.taskGroupForm.controls.taskGroupName.value,
-      created_at: this.taskGroupFormData.created_at
     }
 
     console.log(data);

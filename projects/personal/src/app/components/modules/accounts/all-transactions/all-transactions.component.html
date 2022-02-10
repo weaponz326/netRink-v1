@@ -10,58 +10,86 @@
                     <tr class="bg-light">
                         <th width="15%">
                             Transaction Date
-                            <app-table-sorting #transactionDateSortingComponentReference
-                            [sortField]="'transaction_date'" (sortDirection)="sortTable($event)"
-                            ></app-table-sorting>
+                            <i *ngIf="sortParams.field != 'transasction_date'" class="bi bi-filter float-end list-pointer" (click)="sortTable('transasction_date', 'desc')"></i>
+                            <i *ngIf="sortParams.field == 'transasction_date' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('transasction_date', 'asc')"></i>
+                            <i *ngIf="sortParams.field == 'transasction_date' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('transasction_date', 'desc')"></i>
                         </th>
                         <th width="20%">
                             Description
-                            <app-table-sorting #descriptionSortingComponentReference
-                            [sortField]="'description'" (sortDirection)="sortTable($event)"
-                            ></app-table-sorting>
+                            <i *ngIf="sortParams.field != 'description'" class="bi bi-filter float-end list-pointer" (click)="sortTable('description', 'desc')"></i>
+                            <i *ngIf="sortParams.field == 'description' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('description', 'asc')"></i>
+                            <i *ngIf="sortParams.field == 'description' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('description', 'desc')"></i>
                         </th>
                         <th width="15%">
                             Transaction Type
-                            <app-table-sorting #transactionTypeSortingComponentReference
-                            [sortField]="'transactiona_type'" (sortDirection)="sortTable($event)"
-                            ></app-table-sorting>
+                            <i *ngIf="sortParams.field != 'transaction_type'" class="bi bi-filter float-end list-pointer" (click)="sortTable('transaction_type', 'desc')"></i>
+                            <i *ngIf="sortParams.field == 'transaction_type' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('transaction_type', 'asc')"></i>
+                            <i *ngIf="sortParams.field == 'transaction_type' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('transaction_type', 'desc')"></i>
                         </th>
                         <th width="12%">
                             Amount
-                            <app-table-sorting #amountSortingComponentReference
-                            [sortField]="'amount'" (sortDirection)="sortTable($event)"
-                            ></app-table-sorting>
+                            <i *ngIf="sortParams.field != 'amount'" class="bi bi-filter float-end list-pointer" (click)="sortTable('amount', 'desc')"></i>
+                            <i *ngIf="sortParams.field == 'amount' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('amount', 'asc')"></i>
+                            <i *ngIf="sortParams.field == 'amount' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('amount', 'desc')"></i>
                         </th>
                         <th width="20%">
                             Account Name
-                            <app-table-sorting #accountNameSortingComponentReference
-                            [sortField]="'account.account_name'" (sortDirection)="sortTable($event)"
-                            ></app-table-sorting>
+                            <i *ngIf="sortParams.field != 'account_name'" class="bi bi-filter float-end list-pointer" (click)="sortTable('account_name', 'desc')"></i>
+                            <i *ngIf="sortParams.field == 'account_name' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('account_name', 'asc')"></i>
+                            <i *ngIf="sortParams.field == 'account_name' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('account_name', 'desc')"></i>
                         </th>
                         <th width="18%">
                             Bank
-                            <app-table-sorting #bankNameSortingComponentReference
-                            [sortField]="'account.bank_name'" (sortDirection)="sortTable($event)"
-                            ></app-table-sorting>
+                            <i *ngIf="sortParams.field != 'bank_name'" class="bi bi-filter float-end list-pointer" (click)="sortTable('bank_name', 'desc')"></i>
+                            <i *ngIf="sortParams.field == 'bank_name' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('bank_name', 'asc')"></i>
+                            <i *ngIf="sortParams.field == 'bank_name' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('bank_name', 'desc')"></i>
                         </th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let data of allTransactionsGridData; index as i">
-                        <td>{{data?.transaction_date | date}}</td>
-                        <td>{{data?.description}}</td>
-                        <td>{{data?.transaction_type}}</td>
-                        <td>{{data?.amount}}</td>
-                        <td>{{data?.account?.account_name}}</td>
-                        <td>{{data?.account?.bank_name}}</td>
+                        <td>{{data?.data().transaction_date | date}}</td>
+                        <td>{{data?.data().description}}</td>
+                        <td>{{data?.data().transaction_type}}</td>
+                        <td>{{data?.data().amount}}</td>
+                        <td>{{data?.data().account?.account_name}}</td>
+                        <td>{{data?.data().account?.bank_name}}</td>
+                    </tr>
+                    <tr *ngIf="isFetchingGridData" class="text-center">
+                        <td colspan="6">
+                            <div class="spinner-grow m-4" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="!isDataAvailable && !isFetchingGridData" class="text-center">
+                        <td colspan="6">
+                            <p class="m-4">No data available</p>
+                        </td>
                     </tr>
                 </tbody>
                 <tfoot>
                     <tr class="bg-light">
                         <td colspan="6">
-                            <app-table-pagination #tablePaginationComponentReference
-                            [currentPage]="currentPage" [totalPages]="totalPages" (pageSelected)="getAllUserTransaction()"
-                            ></app-table-pagination>
+                            <nav class="nav-light float-end" aria-label="Page navigation">
+                                <ul class="pagination pagination-sm mb-0 justify-content-end">
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" aria-label="First" (click)="previousPage($event)">
+                                            <i class="bi bi-caret-left-fill"></i>
+                                        </a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" aria-label="Current" (click)="$event.preventDefault()">
+                                            {{pageNumber}}
+                                        </a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" aria-label="Last" (click)="nextPage($event)">
+                                            <i class="bi bi-caret-right-fill"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
                         </td>
                     </tr>
                 </tfoot>

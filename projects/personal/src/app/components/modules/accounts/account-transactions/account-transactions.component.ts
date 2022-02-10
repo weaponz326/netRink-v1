@@ -27,10 +27,12 @@ export class AccountTransactionsComponent implements OnInit {
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
   @ViewChild('deleteModalComponentReference', { read: DeleteModalComponent, static: false }) deleteModal!: DeleteModalComponent;
 
-  transactionsGridData: Transaction[] = [];
+  transactionsGridData: any[] = [];
 
   deleteId = "";
   deleteIndex = 0;
+
+  isFetchingGridData = false;
 
   ngOnInit(): void {
   }
@@ -50,15 +52,20 @@ export class AccountTransactionsComponent implements OnInit {
   }
 
   getAllAccountTransaction(){
+    this.isFetchingGridData = true;
+
     this.accountsApi.getAllAccountTransaction()
       .then(
         (res: any) => {
           console.log(res);
-          this.transactionsGridData = res;
+
+          this.transactionsGridData = res.docs;
+          this.isFetchingGridData = false;
           this.calculateBalance();
         },
         (err: any) => {
           console.log(err);
+          this.isFetchingGridData = false;
           this.connectionToast.openToast();
         }
       )

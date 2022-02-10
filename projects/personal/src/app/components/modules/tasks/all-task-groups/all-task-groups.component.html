@@ -16,30 +16,58 @@
                     <tr class="bg-light">
                         <th width="65%">
                             Task Group Name
-                            <app-table-sorting #taskGroupSortingComponentReference
-                            [sortField]="'task_group'" (sortDirection)="sortTable($event)"
-                            ></app-table-sorting>
+                            <i *ngIf="sortParams.field != 'task_group'" class="bi bi-filter float-end list-pointer" (click)="sortTable('task_group', 'desc')"></i>
+                            <i *ngIf="sortParams.field == 'task_group' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('task_group', 'asc')"></i>
+                            <i *ngIf="sortParams.field == 'task_group' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('task_group', 'desc')"></i>
                         </th>
                         <th width="35%">
                             Created At
-                            <app-table-sorting #createdAtSortingComponentReference
-                            [sortField]="'created_at'" (sortDirection)="sortTable($event)"
-                            ></app-table-sorting>
+                            <i *ngIf="sortParams.field != 'created_at'" class="bi bi-filter float-end list-pointer" (click)="sortTable('created_at', 'desc')"></i>
+                            <i *ngIf="sortParams.field == 'created_at' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('created_at', 'asc')"></i>
+                            <i *ngIf="sortParams.field == 'created_at' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('created_at', 'desc')"></i>
                         </th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let data of taskGroupsGridData" (dblclick)="viewTaskGroup(data.uid)" class="table-pointer">
-                        <td>{{data?.task_group}}</td>
-                        <td>{{data?.created_at | date}}</td>
+                        <td>{{data?.data().task_group}}</td>
+                        <td>{{data?.data().created_at | date}}</td>
+                    </tr>
+                    <tr *ngIf="isFetchingGridData" class="text-center">
+                        <td colspan="2">
+                            <div class="spinner-grow m-4" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="!isDataAvailable && !isFetchingGridData" class="text-center">
+                        <td colspan="2">
+                            <p class="m-4">No data available</p>
+                        </td>
                     </tr>
                 </tbody>
                 <tfoot>
                     <tr class="bg-light">
                         <td colspan="2">
-                            <app-table-pagination #tablePaginationComponentReference
-                            [currentPage]="currentPage" [totalPages]="totalPages" (pageSelected)="getAllUserTaskGroup()"
-                            ></app-table-pagination>
+                            <nav class="nav-light float-end" aria-label="Page navigation">
+                                <ul class="pagination pagination-sm mb-0 justify-content-end">
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" aria-label="First" (click)="previousPage($event)">
+                                            <i class="bi bi-caret-left-fill"></i>
+                                        </a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" aria-label="Current" (click)="$event.preventDefault()">
+                                            {{pageNumber}}
+                                        </a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" aria-label="Last" (click)="nextPage($event)">
+                                            <i class="bi bi-caret-right-fill"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
                         </td>
                     </tr>
                 </tfoot>

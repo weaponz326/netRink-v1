@@ -14,9 +14,6 @@ export class NotesApiService {
 
   noteRef = this.afs.collection('personal/module_notes/notes_note');
 
-  personalId = localStorage.getItem('personal_id') as string;
-  noteId = sessionStorage.getItem('personal_note_id') as string;
-
   // note
 
   createNote(note: any){
@@ -24,23 +21,23 @@ export class NotesApiService {
   }
 
   getNote(){
-    return this.noteRef.doc(this.noteId).ref.get();
+    return this.noteRef.doc(String(sessionStorage.getItem('personal_note_id'))).ref.get();
   }
 
   updateNote(note: any){
-    return this.noteRef.doc(this.noteId).update(note);
+    return this.noteRef.doc(String(sessionStorage.getItem('personal_note_id'))).update(note);
   }
 
   deleteNote(){
-    return this.noteRef.doc(this.noteId).delete();
+    return this.noteRef.doc(String(sessionStorage.getItem('personal_note_id'))).delete();
   }
 
-  getAllUserNote(ordering: any, pageSize: any, pageStart: any){
+  getAllUserNote(sorting: any, pageSize: any, pageStart: any){
     return this.noteRef.ref
-      .where("user", "==", this.personalId)
-      .orderBy(ordering.field, ordering.direction)
-      .startAt(pageStart)
+      .where("user", "==", localStorage.getItem('personal_id'))
       .limit(pageSize)
+      .orderBy(sorting.field, sorting.direction)
+      .startAt(pageStart)
       .get();
   }
 

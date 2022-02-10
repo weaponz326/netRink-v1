@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormControl, FormGroup } from '@angular/forms';
 
+import * as firebase from 'firebase/compat/app';
+
 import { ConnectionToastComponent } from '../../../module-utilities/connection-toast/connection-toast.component'
 
 import { AccountsApiService } from 'projects/personal/src/app/services/modules/accounts-api/accounts-api.service';
@@ -47,7 +49,7 @@ export class AddAccountComponent implements OnInit {
 
   createAccount(){
     let data: Account = {
-      uid: "",
+      created_at: firebase.default.firestore.FieldValue.serverTimestamp(),
       user: localStorage.getItem('personal_id') as string,
       account_name: this.accountForm.controls.accountName.value,
       account_number: this.accountForm.controls.accountNumber.value,

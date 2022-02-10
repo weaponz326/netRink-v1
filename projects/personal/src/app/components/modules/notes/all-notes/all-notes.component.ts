@@ -1,8 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { TablePaginationComponent } from 'projects/personal/src/app/components/module-utilities/table-pagination/table-pagination.component'
-import { TableSortingComponent } from 'projects/personal/src/app/components/module-utilities/table-sorting/table-sorting.component'
 import { ConnectionToastComponent } from '../../../module-utilities/connection-toast/connection-toast.component'
 
 import { NotesApiService } from 'projects/personal/src/app/services/modules/notes-api/notes-api.service';
@@ -26,40 +24,58 @@ export class AllNotesComponent implements OnInit {
   ) { }
 
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
-  @ViewChild('tablePaginationComponentReference', { read: TablePaginationComponent, static: false }) tablePagination!: TablePaginationComponent;
-  @ViewChild('subjectSortingComponentReference', { read: TableSortingComponent, static: false }) subjectSorting!: TableSortingComponent;
-  @ViewChild('createdAtSortingComponentReference', { read: TableSortingComponent, static: false }) createdAtSorting!: TableSortingComponent;
-  @ViewChild('updatedAtSortingComponentReference', { read: TableSortingComponent, static: false }) updatedAtSorting!: TableSortingComponent;
 
   navHeading: any[] = [
     { text: "All Notes", url: "/home/notes/all-notes" },
   ];
 
-  notesGridData: Note[] = [];
+  notesGridData: any[] = [];
 
-  currentPage = 0;
-  totalPages = 0;
-  totalItems = 0;
+  isFetchingGridData: boolean =  false;
+  isDataAvailable: boolean =  true;
+
+  firstInResponse: any = [];
+  lastInResponse: any = [];
+  prevStartAt: any = [];
+  nextStartAt: any = [];
+  pageNumber = 1;
+  disableNext: boolean = false;
+  disablePrev: boolean = true;
+
+  sortParams = {
+    field: "updated_at",
+    direction: "desc"
+  }
 
   ngOnInit(): void {
   }
 
   ngAfterViewInit(): void {
-    this.getAllUserNote();
+    this.getAllUserNote(this.sortParams, 20, null);
   }
 
-  getAllUserNote(){
-    this.notesApi.getAllUserNote({}, 20, {})
+  getAllUserNote(sorting: any, pageSize: any, pageStart: any){
+    this.isFetchingGridData = true;
+
+    this.notesApi.getAllUserNote(sorting, pageSize, pageStart)
       .then(
         (res: any) => {
           console.log(res);
-          this.notesGridData = res.results;
-          this.currentPage = res.current_page;
-          this.totalPages = res.total_pages;
-          this.totalItems = res.count;
+
+          this.notesGridData = res.docs;
+          this.isFetchingGridData = false;
+          if (!res.docs.length) this.isDataAvailable = false;
+
+          this.prevStartAt = this.firstInResponse;
+          this.nextStartAt = res.docs[res.docs.length - 1];
+          this.firstInResponse = res.docs[0];
+
+          this.disableNext = false;
+          this.disablePrev = false;
         },
         (err: any) => {
           console.log(err);
+          this.isFetchingGridData = false;
           this.connectionToast.openToast();
         }
       )
@@ -67,32 +83,39 @@ export class AllNotesComponent implements OnInit {
 
   viewNote(id: any){
     console.log(id);
-    sessionStorage.setItem('personal_note_id', id);
 
+    sessionStorage.setItem('personal_note_id', id);
     this.router.navigateByUrl('/home/notes/view-note')
   }
 
-  sortTable(field: any){
-    console.log(field);
-    this.getAllUserNote();
+  nextPage(e: any){
+    e.preventDefault();
+    this.disableNext = true;
 
-    if((field == 'subject') || (field == "-subject")){
-      this.createdAtSorting.resetSort();
-      this.updatedAtSorting.resetSort();
-    }
-    else if((field == 'created_at') || (field == "-created_at")){
-      this.subjectSorting.resetSort();
-      this.updatedAtSorting.resetSort();
-    }
-    else if((field == 'updated_at') || (field == "-updated_at")){
-      this.subjectSorting.resetSort();
-      this.createdAtSorting.resetSort();
-    }
+    this.sortParams = { field: "updated_at", direction: "desc" };
+    this.getAllUserNote(this.sortParams, 20, this.nextStartAt);
+    this.pageNumber++;
+  }
+
+  previousPage(e: any){
+    e.preventDefault();
+    this.disablePrev = true;
+
+    this.sortParams = { field: "updated_at", direction: "desc" };
+    this.getAllUserNote(this.sortParams, 20, this.prevStartAt);
+    this.pageNumber--;
+  }
+
+  sortTable(field: any, direction: any){
+    this.sortParams.field = field;
+    this.sortParams.direction = direction;
+
+    this.getAllUserNote(this.sortParams, 20, null);
   }
 
   onPrint(){
     console.log("lets start printing...");
-    this.notesPrint.getPrintNotes(this.totalItems);
+    // this.notesPrint.getPrintNotes(this.totalItems);
   }
 
 }

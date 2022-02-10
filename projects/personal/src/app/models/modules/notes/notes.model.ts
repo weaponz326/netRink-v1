@@ -1,8 +1,7 @@
 export class Note {
-  uid!: string;
+  created_at!: any;
   user!: string;
-  created_at!: Date;
-  updated_at!: Date;
   subject!: string;
   body!: string;
+  updated_at!: any;
 }

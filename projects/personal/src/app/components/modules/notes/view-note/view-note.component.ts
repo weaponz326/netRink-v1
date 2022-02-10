@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
+import * as firebase from 'firebase/compat/app';
+
 import { ConnectionToastComponent } from '../../../module-utilities/connection-toast/connection-toast.component'
 import { DeleteModalComponent } from '../../../module-utilities/delete-modal/delete-modal.component'
 
@@ -29,7 +31,10 @@ export class ViewNoteComponent implements OnInit {
     { text: "Note View", url: "/home/notes/view-note" },
   ];
 
-  noteData: Note = {uid: "", user: "", created_at: new Date(), updated_at: new Date(), subject: "", body: ""};
+  subject: any;
+  body: any;
+
+  noteData: any;
 
   modules: any;
   styles: any;
@@ -48,8 +53,10 @@ export class ViewNoteComponent implements OnInit {
       .then(
         (res: any) => {
           console.log(res);
-          this.noteData.subject = res.subject;
-          this.noteData.body = res.body;
+
+          this.noteData = res;
+          this.subject = this.noteData.data().subject;
+          this.body = this.noteData.data().body;
 
         },
         err => {
@@ -61,12 +68,11 @@ export class ViewNoteComponent implements OnInit {
 
   updateNote(){
     let noteData: Note = {
-      uid: "",
+      created_at: this.noteData.data().created_at,
       user: localStorage.getItem('personal_id') as string,
-      created_at: new Date(),
-      updated_at: new Date(),
-      subject: this.noteData.subject,
-      body: this.noteData.body
+      subject: this.subject,
+      body: this.body,
+      updated_at: firebase.default.firestore.FieldValue.serverTimestamp(),
     }
 
     console.log(noteData);

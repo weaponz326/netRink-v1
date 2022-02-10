@@ -1,8 +1,7 @@
 export class TaskGroup {
-  uid!: string;
+  created_at!: any;
   user!: string;
   task_group!: string;
-  created_at!: Date;
 }
 
 export class TaskItem {

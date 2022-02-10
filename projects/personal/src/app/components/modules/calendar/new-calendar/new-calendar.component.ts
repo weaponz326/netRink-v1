@@ -2,7 +2,6 @@ import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angula
 import { Router } from '@angular/router';
 import { FormControl, FormGroup } from '@angular/forms';
 
-
 import * as firebase from 'firebase/compat/app';
 
 import { ConnectionToastComponent } from '../../../module-utilities/connection-toast/connection-toast.component'

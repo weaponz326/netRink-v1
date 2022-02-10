@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
+import * as firebase from 'firebase/compat/app';
+
 import { ConnectionToastComponent } from '../../../module-utilities/connection-toast/connection-toast.component'
 
 import { NotesApiService } from 'projects/personal/src/app/services/modules/notes-api/notes-api.service';
@@ -26,7 +28,8 @@ export class NewNoteComponent implements OnInit {
     { text: "New Note", url: "/home/notes/new-note" },
   ];
 
-  noteData: Note = {uid: "", user: "", created_at: new Date(), updated_at: new Date(), subject: "", body: ""};
+  subject: any;
+  body: any;
 
   modules: any;
   styles: any;
@@ -38,12 +41,11 @@ export class NewNoteComponent implements OnInit {
 
   createNote(){
     let noteData: Note = {
-      uid: "",
+      created_at: firebase.default.firestore.FieldValue.serverTimestamp(),
       user: localStorage.getItem('personal_id') as string,
-      created_at: new Date(),
-      updated_at: new Date(),
-      subject: this.noteData.subject,
-      body: this.noteData.body
+      subject: this.subject,
+      body: this.body,
+      updated_at: firebase.default.firestore.FieldValue.serverTimestamp(),
     }
 
     console.log(noteData);
@@ -52,6 +54,7 @@ export class NewNoteComponent implements OnInit {
       .then(
         (res: any) => {
           console.log(res);
+
           sessionStorage.setItem('personal_note_id', res.id);
           this.router.navigateByUrl('/home/notes/view-note');
         },

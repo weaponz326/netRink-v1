@@ -15,9 +15,6 @@ export class AccountsApiService {
   accountRef = this.afs.collection('personal/module_accounts/accounts_account');
   incomeRef = this.afs.collection('personal/module_accounts/accounts_transaction');
 
-  personalId = localStorage.getItem('personal_id') as string;
-  accountId = sessionStorage.getItem('personal_account_id') as string;
-
   // account
 
   createAccount(account: any){
@@ -25,23 +22,23 @@ export class AccountsApiService {
   }
 
   getAccount(){
-    return this.accountRef.doc(this.accountId).ref.get();
+    return this.accountRef.doc(String(sessionStorage.getItem('personal_account_id'))).ref.get();
   }
 
   updateAccount(account: any){
-    return this.accountRef.doc(this.accountId).update(account);
+    return this.accountRef.doc(String(sessionStorage.getItem('personal_account_id'))).update(account);
   }
 
   deleteAccount(){
-    return this.accountRef.doc(this.accountId).delete();
+    return this.accountRef.doc(String(sessionStorage.getItem('personal_account_id'))).delete();
   }
 
-  getAllUserAccount(ordering: any, pageSize: any, pageStart: any){
+  getAllUserAccount(sorting: any, pageSize: any, pageStart: any){
     return this.accountRef.ref
-      .where("user", "==", this.personalId)
-      .orderBy(ordering.field, ordering.direction)
-      .startAt(pageStart)
+      .where("user", "==", localStorage.getItem('personal_id'))
       .limit(pageSize)
+      .orderBy(sorting.field, sorting.direction)
+      .startAt(pageStart)
       .get();
   }
 
@@ -61,16 +58,16 @@ export class AccountsApiService {
 
   getAllAccountTransaction(){
     return this.accountRef.ref
-      .where("user", "==", this.accountId)
+      .where("user", "==", String(sessionStorage.getItem('personal_account_id')))
       .get();
   }
 
-  getAllUserTransaction(ordering: any, pageSize: any, pageStart: any){
+  getAllUserTransaction(sorting: any, pageSize: any, pageStart: any){
     return this.accountRef.ref
-      .where("account.user", "==", this.personalId)
-      .orderBy(ordering.field, ordering.direction)
-      .startAt(pageStart)
+      .where("account.user", "==", localStorage.getItem('personal_id'))
       .limit(pageSize)
+      .orderBy(sorting.field, sorting.direction)
+      .startAt(pageStart)
       .get();
   }
 

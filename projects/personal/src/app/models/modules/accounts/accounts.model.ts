@@ -1,5 +1,5 @@
 export class Account {
-  uid!: string;
+  created_at!: any;
   user!: string;
   account_name!: string;
   account_number!: string;
@@ -8,7 +8,7 @@ export class Account {
 }
 
 export class Transaction {
-  uid!: string;
+  created_at!: any;
   account!: Account;
   transaction_date!: Date;
   description!: string;

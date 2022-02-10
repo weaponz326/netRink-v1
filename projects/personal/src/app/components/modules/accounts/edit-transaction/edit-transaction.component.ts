@@ -21,7 +21,7 @@ export class EditTransactionComponent implements OnInit {
 
   @ViewChild('transactionFormComponentReference', { read: TransactionFormComponent, static: false }) transactionForm!: TransactionFormComponent;
 
-  transactionFormData: Transaction = {uid: "", account: this.transactionAccount, transaction_date: new Date(), description: "", transaction_type: "", amount: 0}
+  transactionFormData: any;
 
   selectedIndex: any = 0;
   selectedId: any = "";
@@ -45,7 +45,7 @@ export class EditTransactionComponent implements OnInit {
 
   saveTransaction(){
     let transaction: Transaction = {
-      uid: this.transactionFormData.uid,
+      created_at: this.transactionFormData.data().created_at,
       account: this.transactionAccount,
       transaction_date: this.transactionForm.transactionForm.controls.transactionDate.value,
       description: this.transactionForm.transactionForm.controls.description.value,

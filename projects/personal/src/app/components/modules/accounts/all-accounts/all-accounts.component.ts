@@ -2,8 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { AddAccountComponent } from '../add-account/add-account.component'
-import { TablePaginationComponent } from 'projects/personal/src/app/components/module-utilities/table-pagination/table-pagination.component'
-import { TableSortingComponent } from 'projects/personal/src/app/components/module-utilities/table-sorting/table-sorting.component'
 import { ConnectionToastComponent } from '../../../module-utilities/connection-toast/connection-toast.component'
 
 import { AccountsApiService } from 'projects/personal/src/app/services/modules/accounts-api/accounts-api.service';
@@ -27,40 +25,58 @@ export class AllAccountsComponent implements OnInit {
 
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
   @ViewChild('addAccountComponentReference', { read: AddAccountComponent, static: false }) addAccount!: AddAccountComponent;
-  @ViewChild('tablePaginationComponentReference', { read: TablePaginationComponent, static: false }) tablePagination!: TablePaginationComponent;
-  @ViewChild('accountNameSortingComponentReference', { read: TableSortingComponent, static: false }) accountNameSorting!: TableSortingComponent;
-  @ViewChild('accountNumberSortingComponentReference', { read: TableSortingComponent, static: false }) accountNumberSorting!: TableSortingComponent;
-  @ViewChild('bankNameSortingComponentReference', { read: TableSortingComponent, static: false }) bankNameSorting!: TableSortingComponent;
 
   navHeading: any[] = [
     { text: "All Accounts", url: "/home/accounts/all-accounts" },
   ];
 
-  accountsGridData: Account[] = [];
+  accountsGridData: any[] = [];
 
-  currentPage = 0;
-  totalPages = 0;
-  totalItems = 0;
+  isFetchingGridData: boolean =  false;
+  isDataAvailable: boolean =  true;
+
+  firstInResponse: any = [];
+  lastInResponse: any = [];
+  prevStartAt: any = [];
+  nextStartAt: any = [];
+  pageNumber = 1;
+  disableNext: boolean = false;
+  disablePrev: boolean = true;
+
+  sortParams = {
+    field: "created_at",
+    direction: "desc"
+  }
 
   ngOnInit(): void {
   }
 
   ngAfterViewInit(): void {
-    this.getAllUserAccount();
+    this.getAllUserAccount(this.sortParams, 20, null);
   }
 
-  getAllUserAccount(){
-    this.accountsApi.getAllUserAccount({}, 20, {})
+  getAllUserAccount(sorting: any, pageSize: any, pageStart: any){
+    this.isFetchingGridData = true;
+
+    this.accountsApi.getAllUserAccount(sorting, pageSize, pageStart)
       .then(
         (res: any) => {
           console.log(res);
-          this.accountsGridData = res.results;
-          this.currentPage = res.current_page;
-          this.totalPages = res.total_pages;
-          this.totalItems = res.count;
+
+          this.accountsGridData = res.docs;
+          this.isFetchingGridData = false;
+          if (!res.docs.length) this.isDataAvailable = false;
+
+          this.prevStartAt = this.firstInResponse;
+          this.nextStartAt = res.docs[res.docs.length - 1];
+          this.firstInResponse = res.docs[0];
+
+          this.disableNext = false;
+          this.disablePrev = false;
         },
         (err: any) => {
           console.log(err);
+          this.isFetchingGridData = false;
           this.connectionToast.openToast();
         }
       )
@@ -73,27 +89,34 @@ export class AllAccountsComponent implements OnInit {
     this.router.navigateByUrl("/home/accounts/view-account");
   }
 
-  sortTable(field: any){
-    console.log(field);
-    this.getAllUserAccount();
+  nextPage(e: any){
+    e.preventDefault();
+    this.disableNext = true;
 
-    if((field == 'account_name') || (field == "-account_name")){
-      this.accountNumberSorting.resetSort();
-      this.bankNameSorting.resetSort();
-    }
-    else if((field == 'account_number') || (field == "-account_number")){
-      this.accountNameSorting.resetSort();
-      this.bankNameSorting.resetSort();
-    }
-    else if((field == 'bank_name') || (field == "-bank_name")){
-      this.accountNameSorting.resetSort();
-      this.accountNumberSorting.resetSort();
-    }
+    this.sortParams = { field: "created_at", direction: "desc" };
+    this.getAllUserAccount(this.sortParams, 20, this.nextStartAt);
+    this.pageNumber++;
+  }
+
+  previousPage(e: any){
+    e.preventDefault();
+    this.disablePrev = true;
+
+    this.sortParams = { field: "created_at", direction: "desc" };
+    this.getAllUserAccount(this.sortParams, 20, this.prevStartAt);
+    this.pageNumber--;
+  }
+
+  sortTable(field: any, direction: any){
+    this.sortParams.field = field;
+    this.sortParams.direction = direction;
+
+    this.getAllUserAccount(this.sortParams, 20, null);
   }
 
   onPrint(){
     console.log("lets start printing...");
-    this.accountsPrint.getPrintAccounts(this.totalItems);
+    // this.accountsPrint.getPrintAccounts(this.totalItems);
   }
 
 }

@@ -5,7 +5,7 @@ export class Calendar {
 }
 
 export class Schedule {
-  uid!: string;
+  created_at!: string;
   calendar!: Calendar;
   schedule_name!: string;
   start_date!: Date;

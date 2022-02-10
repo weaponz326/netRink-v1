@@ -1,7 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
-import { TablePaginationComponent } from 'projects/personal/src/app/components/module-utilities/table-pagination/table-pagination.component'
-import { TableSortingComponent } from 'projects/personal/src/app/components/module-utilities/table-sorting/table-sorting.component'
 import { ConnectionToastComponent } from '../../../module-utilities/connection-toast/connection-toast.component'
 
 import { AccountsApiService } from 'projects/personal/src/app/services/modules/accounts-api/accounts-api.service';
@@ -23,99 +21,92 @@ export class AllTransactionsComponent implements OnInit {
   ) { }
 
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
-  @ViewChild('tablePaginationComponentReference', { read: TablePaginationComponent, static: false }) tablePagination!: TablePaginationComponent;
-  @ViewChild('transactionDateSortingComponentReference', { read: TableSortingComponent, static: false }) transactionDateSorting!: TableSortingComponent;
-  @ViewChild('accountNameSortingComponentReference', { read: TableSortingComponent, static: false }) accountNameSorting!: TableSortingComponent;
-  @ViewChild('bankNameSortingComponentReference', { read: TableSortingComponent, static: false }) bankNameSorting!: TableSortingComponent;
-  @ViewChild('descriptionSortingComponentReference', { read: TableSortingComponent, static: false }) descriptionSorting!: TableSortingComponent;
-  @ViewChild('transactionTypeSortingComponentReference', { read: TableSortingComponent, static: false }) transactionTypeSorting!: TableSortingComponent;
-  @ViewChild('amountSortingComponentReference', { read: TableSortingComponent, static: false }) amountSorting!: TableSortingComponent;
 
   navHeading: any[] = [
     { text: "All Transactions", url: "/home/accounts/all-transactions" },
   ];
 
-  allTransactionsGridData: Transaction[] = [];
+  allTransactionsGridData: any[] = [];
 
-  currentPage = 0;
-  totalPages = 0;
-  totalItems = 0;
+  isFetchingGridData: boolean =  false;
+  isDataAvailable: boolean =  true;
+
+  firstInResponse: any = [];
+  lastInResponse: any = [];
+  prevStartAt: any = [];
+  nextStartAt: any = [];
+  pageNumber = 1;
+  disableNext: boolean = false;
+  disablePrev: boolean = true;
+
+  sortParams = {
+    field: "created_at",
+    direction: "desc"
+  }
 
   ngOnInit(): void {
   }
 
   ngAfterViewInit(): void {
-    this.getAllUserTransaction();
+    this.getAllUserTransaction(this.sortParams, 20, null);
   }
 
-  getAllUserTransaction(){
-    this.accountsApi.getAllUserTransaction({}, 20, {})
+  getAllUserTransaction(sorting: any, pageSize: any, pageStart: any){
+  this.isFetchingGridData = true;
+
+    this.accountsApi.getAllUserTransaction(sorting, pageSize, pageStart)
       .then(
         (res: any) => {
           console.log(res);
-          this.allTransactionsGridData = res.results;
-          this.currentPage = res.current_page;
-          this.totalPages = res.total_pages;
-          this.totalItems = res.count;
+
+          this.allTransactionsGridData = res.docs;
+          this.isFetchingGridData = false;
+          if (!res.docs.length) this.isDataAvailable = false;
+
+          this.prevStartAt = this.firstInResponse;
+          this.nextStartAt = res.docs[res.docs.length - 1];
+          this.firstInResponse = res.docs[0];
+
+          this.disableNext = false;
+          this.disablePrev = false;
         },
         (err: any) => {
           console.log(err);
+          this.isFetchingGridData = false;
           this.connectionToast.openToast();
         }
       )
   }
 
-  sortTable(field: any){
-    console.log(field);
-    this.getAllUserTransaction();
 
-    if((field == 'transaction_date') || (field == "-transaction_date")){
-      this.accountNameSorting.resetSort();
-      this.bankNameSorting.resetSort();
-      this.descriptionSorting.resetSort();
-      this.transactionTypeSorting.resetSort();
-      this.amountSorting.resetSort();
-    }
-    else if((field == 'account_name') || (field == "-account_name")){
-      this.transactionDateSorting.resetSort();
-      this.bankNameSorting.resetSort();
-      this.descriptionSorting.resetSort();
-      this.transactionTypeSorting.resetSort();
-      this.amountSorting.resetSort();
-    }
-    else if((field == 'bank_name') || (field == "-bank_name")){
-      this.transactionDateSorting.resetSort();
-      this.accountNameSorting.resetSort();
-      this.descriptionSorting.resetSort();
-      this.transactionTypeSorting.resetSort();
-      this.amountSorting.resetSort();
-    }
-    else if((field == 'description') || (field == "-description")){
-      this.transactionDateSorting.resetSort();
-      this.accountNameSorting.resetSort();
-      this.bankNameSorting.resetSort();
-      this.transactionTypeSorting.resetSort();
-      this.amountSorting.resetSort();
-    }
-    else if((field == 'transaction_type') || (field == "-transaction_type")){
-      this.transactionDateSorting.resetSort();
-      this.accountNameSorting.resetSort();
-      this.bankNameSorting.resetSort();
-      this.descriptionSorting.resetSort();
-      this.amountSorting.resetSort();
-    }
-    else if((field == 'amount') || (field == "-amount")){
-      this.transactionDateSorting.resetSort();
-      this.accountNameSorting.resetSort();
-      this.bankNameSorting.resetSort();
-      this.descriptionSorting.resetSort();
-      this.transactionTypeSorting.resetSort();
-    }
+  nextPage(e: any){
+    e.preventDefault();
+    this.disableNext = true;
+
+    this.sortParams = { field: "created_at", direction: "desc" };
+    this.getAllUserTransaction(this.sortParams, 20, this.nextStartAt);
+    this.pageNumber++;
+  }
+
+  previousPage(e: any){
+    e.preventDefault();
+    this.disablePrev = true;
+
+    this.sortParams = { field: "created_at", direction: "desc" };
+    this.getAllUserTransaction(this.sortParams, 20, this.prevStartAt);
+    this.pageNumber--;
+  }
+
+  sortTable(field: any, direction: any){
+    this.sortParams.field = field;
+    this.sortParams.direction = direction;
+
+    this.getAllUserTransaction(this.sortParams, 20, null);
   }
 
   onPrint(){
     console.log("lets start printing...");
-    this.accountsPrint.getPrintAllTransactions(this.totalItems);
+    // this.accountsPrint.getPrintAllTransactions(this.totalItems);
   }
 
 }

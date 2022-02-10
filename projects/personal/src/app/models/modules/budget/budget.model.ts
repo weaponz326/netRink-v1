@@ -1,12 +1,12 @@
 export class Budget {
-  uid!: string;
+  created_at!: any;
   user!: string;
   budget_name!: string;
   budget_type!: string;
 }
 
 export class Income {
-  uid!: string;
+  created_at!: any;
   budget!: string;
   item_number!: string;
   item_description!: string;
@@ -14,7 +14,7 @@ export class Income {
 }
 
 export class Expenditure {
-  uid!: string;
+  created_at!: any;
   budget!: string;
   item_number!: string;
   item_description!: string;
