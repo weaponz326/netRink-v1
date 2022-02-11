@@ -5,8 +5,10 @@ import { MatStepper } from '@angular/material/stepper';
 
 import { AuthApiService } from '../../../services/user/auth-api/auth-api.service';
 import { UserApiService } from '../../../services/user/user-api/user-api.service';
+import { SettingsApiService } from '../../../services/modules/settings-api/settings-api.service';
 
 import { User } from '../../../models/user/user.model';
+import { ExtendedProfile } from '../../../models/modules/settings/settings.model';
 
 
 @Component({
@@ -19,6 +21,7 @@ export class SignupFormComponent implements OnInit {
   constructor(
     private authApi: AuthApiService,
     private userApi: UserApiService,
+    private settingsApi: SettingsApiService,
   ) { }
 
   @ViewChild('stepper') private signupStepper!: MatStepper;
@@ -63,26 +66,38 @@ export class SignupFormComponent implements OnInit {
   }
 
   onSubmit(){
-    this.isSending = true;
-    this.authApi.signup(this.signupForm.controls.email.value, this.signupForm.controls.password1.value)
-      .then(
-        (res: any) => {
-          console.log(res);
+    if (this.signupForm.controls.password1.value == this.signupForm.controls.password2.value){
+      this.isSending = true;
 
-          this.registeredUserId = res.user.id;
-          this.submitUser();
-        },
-        (err: any) => {
-          console.log(err);
-          this.isSending = false;
-          this.signupStepper.selectedIndex = 0;
-        }
-      );
+      this.authApi.signup(this.signupForm.controls.email.value, this.signupForm.controls.password1.value)
+        .then(
+          (res: any) => {
+            console.log(res);
+
+            localStorage.setItem('personal_id', res.user.uid);
+            this.registeredUserId = res.user.uid;
+
+            this.createUSer();
+            this.createExtendedProfile();
+
+            this.isSending = false;
+            this.showPrompt = true;
+          },
+          (err: any) => {
+            console.log(err);
+            this.isSending = false;
+            this.signupStepper.selectedIndex = 0;
+          }
+        );
+    }
+    else{
+      console.log('passwords do not match');
+    }
 
     console.log(this.signupForm.value);
   }
 
-  submitUser(){
+  createUSer(){
     let userData: User = {
       first_name: this.signupForm.controls.firstName.value,
       last_name: this.signupForm.controls.lastName.value,
@@ -90,23 +105,29 @@ export class SignupFormComponent implements OnInit {
       about: this.signupForm.controls.about.value,
     }
 
-    if (this.signupForm.controls.password1.value == this.signupForm.controls.password2.value){
-      this.userApi.createUser(this.registeredUserId, userData)
-        .then(
-          res => {
-            console.log(res);
+    this.userApi.createUser(this.registeredUserId, userData)
+      .then(
+        res => console.log(res),
+        err => console.log(err)
+      );
+  }
 
-            this.isSending = false;
-            this.showPrompt = true;
-          },
-          err => {
-            console.log(err);
-          }
-        );
+  createExtendedProfile(){
+    let data: ExtendedProfile = {
+      date_of_birth: "",
+      gender: "",
+      phone: "",
+      address: "",
+      country: "",
+      state: "",
+      city: "",
     }
-    else{
-      console.log('passwords do not match');
-    }
+
+    this.settingsApi.createExtendedProfile(this.registeredUserId, data)
+      .then(
+        res => console.log(res),
+        err => console.log(err)
+      );
   }
 
   onAddressChange(address: any) {

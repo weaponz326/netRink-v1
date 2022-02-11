@@ -52,17 +52,17 @@ export class MainNavbarComponent implements OnInit {
 
   getAuth(){
     this.isAuthLoading = true;
+
     this.authApi.getAuth()
       .subscribe(
         (res: any) => {
           console.log(res);
+          this.isAuthLoading = false;
 
           if (res.uid){
             this.isLoggedIn = true;
             this.email = res.email;
           }
-
-          this.isAuthLoading = false;
         },
         (err: any) => {
           console.log(err);

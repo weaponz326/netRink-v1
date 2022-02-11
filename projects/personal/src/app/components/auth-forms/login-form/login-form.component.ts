@@ -41,13 +41,17 @@ export class LoginFormComponent implements OnInit {
 
   onSubmit(){
     this.isSending = true;
-    this.authApi.login(this.loginForm.controls.email.value, this.loginForm.controls.email.value)
+    this.authApi.login(this.loginForm.controls.email.value, this.loginForm.controls.password.value)
       .then(
         res => {
           console.log(res);
-          this.isSending = false;
 
-          this.registrationType();
+          if (res.user){
+            localStorage.setItem('personal_id', res.user.uid);
+            this.registrationType();
+          }
+
+          this.isSending = false;
         },
         err => {
           console.log(err);

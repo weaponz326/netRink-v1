@@ -1,5 +1,4 @@
 export class ExtendedProfile {
-  uid!: string;
   date_of_birth!: string;
   gender!: string;
   phone!: string;

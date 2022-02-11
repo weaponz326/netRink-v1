@@ -8,9 +8,9 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 })
 export class UserApiService {
 
-  constructor(private firestore: AngularFirestore) { }
+  constructor(private afs: AngularFirestore) { }
 
-  userRef = this.firestore.collection('personal/users/user');
+  userRef = this.afs.collection('personal/users/user');
 
   createUser(userId:any, userData: any){
     return this.userRef.doc(userId).set(userData);

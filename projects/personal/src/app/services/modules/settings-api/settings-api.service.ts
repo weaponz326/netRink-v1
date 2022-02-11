@@ -18,8 +18,8 @@ export class SettingsApiService {
 
   // extended profile
 
-  createExtendedProfile(extendedProfile: any){
-    return this.extendedProfileRef.doc(String(localStorage.getItem('personal_id'))).set(extendedProfile);
+  createExtendedProfile(personalId: any, extendedProfile: any){
+    return this.extendedProfileRef.doc(personalId).set(extendedProfile);
   }
 
   getExtendedProfile(){

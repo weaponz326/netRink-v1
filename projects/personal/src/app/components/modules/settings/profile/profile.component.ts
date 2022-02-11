@@ -42,7 +42,7 @@ export class ProfileComponent implements OnInit {
   ];
 
   userData: User = {first_name: "", last_name: "", location: "", about: ""};
-  extendedProfileData: ExtendedProfile = {uid: "", date_of_birth: "", gender: "", phone: "", address: "", country: "", state: "", city: ""};
+  extendedProfileData: ExtendedProfile = {date_of_birth: "", gender: "", phone: "", address: "", country: "", state: "", city: ""};
 
 
   ngOnInit(): void {
@@ -129,7 +129,6 @@ export class ProfileComponent implements OnInit {
     console.log();
 
     let data: ExtendedProfile = {
-      uid: this.extendedProfileData.uid,
       date_of_birth: this.additional.bdayInput.value,
       gender: this.additional.additionalForm.controls.gender.value,
       phone: this.contact.contactForm.controls.phone.value,

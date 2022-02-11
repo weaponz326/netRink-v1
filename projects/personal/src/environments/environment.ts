@@ -17,13 +17,12 @@ export const environment = {
   productionUrl: "https://production-api.netrink.com/",
 
   firebase: {
-    apiKey: "AIzaSyCdIR_KDHHiiG7bJU5w0AHDDKXB4MDmwLw",
-    authDomain: "netrink-18.firebaseapp.com",
-    projectId: "netrink-18",
-    storageBucket: "netrink-18.appspot.com",
-    messagingSenderId: "821993582816",
-    appId: "1:821993582816:web:547676f0346a28542e2085",
-    measurementId: "G-VE8DYFFHH2"
+    apiKey: "AIzaSyC-pUZi6j5AecjEKiBaQL1nTZrKWB_J9w0",
+    authDomain: "netrink-test-v1.firebaseapp.com",
+    projectId: "netrink-test-v1",
+    storageBucket: "netrink-test-v1.appspot.com",
+    messagingSenderId: "140608103001",
+    appId: "1:140608103001:web:ab3a30ff3ab42a3e78c748"
   }
 };
 
