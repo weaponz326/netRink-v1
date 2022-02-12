@@ -6,7 +6,7 @@ import { TableSortingComponent } from 'projects/personal/src/app/components/modu
 
 import { AdminApiService } from 'projects/restaurant/src/app/services/modules/admin-api/admin-api.service';
 
-import { User } from 'projects/restaurant/src/app/models/modules/admin/admin.model';
+import { AccountUser } from 'projects/restaurant/src/app/models/modules/admin/admin.model';
 
 
 @Component({
@@ -29,7 +29,7 @@ export class AllUsersComponent implements OnInit {
     { text: "All Users", url: "/home/admin/all-users" },
   ];
 
-  usersGridData: User[] = [];
+  usersGridData: any[] = [];
 
   ngOnInit(): void {
   }
@@ -39,7 +39,7 @@ export class AllUsersComponent implements OnInit {
   }
 
   getAllAccountAdminUser() {
-    this.adminApi.getAllAccountAdminUser()
+    this.adminApi.getAllAccountAccountUser()
       .then(
         (res: any) => {
           console.log(res);

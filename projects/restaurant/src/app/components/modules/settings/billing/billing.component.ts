@@ -22,7 +22,7 @@ export class BillingComponent implements OnInit {
     { text: "Billing", url: "/home/settings/billing" },
   ];
 
-  subscriptionData: Subscription = {uid: "", subscription_type: "", billing_frequency: "", number_users: 0}
+  subscriptionData: Subscription = {subscription_type: "", billing_frequency: "", number_users: 0}
 
   subscriptionTypeValue = "";
   billingFrequencyValue = "";
@@ -67,7 +67,6 @@ export class BillingComponent implements OnInit {
 
   updateSubscription(){
     let data: Subscription = {
-      uid: this.subscriptionData.uid,
       subscription_type: this.subscriptionTypeValue,
       billing_frequency: this.billingFrequencyValue,
       number_users: this.numberUsersValue,

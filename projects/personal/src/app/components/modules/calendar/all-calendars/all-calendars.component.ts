@@ -52,7 +52,7 @@ export class AllCalendarsComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    this.getAllUserCalendar(this.sortParams, 20, null);
+    this.getAllUserCalendar(this.sortParams, 20, 1);
   }
 
   getAllUserCalendar(sorting: any, pageSize: any, pageStart: any){

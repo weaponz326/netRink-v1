@@ -1,9 +1,10 @@
-export class User {
-  uid!: string;
-  account!: string;
+import { Account } from '../../account/account.model';
+
+export class AccountUser {
   personal_id!: string;
-  personal_name!: string;
+  personal_name!:  string;
   access_level!: string;
+  account!: Account;
 }
 
 export class Invitation {
@@ -15,9 +16,7 @@ export class Invitation {
   invitation_status!: string;
 }
 
-export class Access {
-  uid!: string;
-  user!: string;
+export class UserAccess {
   admin_access!: boolean;
   customers_access!: boolean;
   deliveries_access!: boolean;

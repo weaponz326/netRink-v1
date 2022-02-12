@@ -28,14 +28,13 @@ export class GuestTopComponent implements OnInit {
     if (this.suiteName != "nR Personal"){
       sessionStorage.setItem("isSuiteRegistration", "OK");
 
-      if (localStorage.getItem('user') != "")
+      if (localStorage.getItem('personal_id'))
         this.router.navigateByUrl("/register");
       else
         this.router.navigateByUrl("/auth/signup");
     }
     else{
       sessionStorage.setItem("isSuiteRegistration", "");
-
       this.router.navigateByUrl("/auth/signup");
     }
   }

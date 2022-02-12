@@ -8,7 +8,7 @@ import { AccessFormComponent } from '../access-form/access-form.component';
 
 import { AdminApiService } from 'projects/restaurant/src/app/services/modules/admin-api/admin-api.service';
 
-import { User } from 'projects/restaurant/src/app/models/modules/admin/admin.model';
+import { AccountUser } from 'projects/restaurant/src/app/models/modules/admin/admin.model';
 
 
 @Component({
@@ -33,7 +33,7 @@ export class ViewUserComponent implements OnInit {
   ];
 
   userForm: FormGroup = new FormGroup({});
-  userFormData: User = {uid: "", account: "", personal_id: "", personal_name: "", access_level: ""}
+  userFormData: any;
 
   isUserSaving: boolean = false;
   isUserDeleting: boolean = false;
@@ -54,7 +54,7 @@ export class ViewUserComponent implements OnInit {
   }
 
   getAdminUser() {
-    this.adminApi.getAdminUser()
+    this.adminApi.getAccountUser()
       .then(
         (res: any) => {
           console.log(res);
@@ -78,15 +78,16 @@ export class ViewUserComponent implements OnInit {
 
     this.isUserSaving = true;
 
-    let data: User = {
-      uid: this.userFormData.uid,
-      account: localStorage.getItem('restaurant_id') as string,
+    // TODO: change x to account type
+    let x: any;
+    let data: AccountUser = {
       personal_id: this.userFormData.personal_id,
       personal_name: this.userFormData.personal_name,
       access_level: this.userForm.controls.accessLevel.value,
+      account: x
     }
 
-    this.adminApi.updateAdminUser(data)
+    this.adminApi.updateAccountUser(data)
       .then(
         (res: any) => {
           console.log(res);
@@ -114,7 +115,7 @@ export class ViewUserComponent implements OnInit {
   deleteAdminUser(){
     this.isUserDeleting = true;
 
-    this.adminApi.deleteAdminUser()
+    this.adminApi.deleteAccountUser()
       .then(
         (res: any) => {
           console.log(res);

@@ -12,37 +12,35 @@ export class SettingsApiService {
     private afs: AngularFirestore,
   ) { }
 
-  extendedProfileRef = this.afs.collection('restaurant/settings/extended-profile');
-  subscriptionRef = this.afs.collection('restaurant/settings/subscription');
-
-  restaurantId = localStorage.getItem('restaurant_id') as string;
+  extendedProfileRef = this.afs.collection('restaurant/module_settings/settings_extended_profile');
+  subscriptionRef = this.afs.collection('restaurant/module_settings/settings_subscription');
 
   // extended profile
 
   createExtendedProfile(extendedProfile: any){
-    return this.extendedProfileRef.add(extendedProfile);
+    return this.extendedProfileRef.doc(String(localStorage.getItem('restaurant_id'))).set(extendedProfile);
   }
 
   getExtendedProfile(){
-    return this.extendedProfileRef.doc(this.restaurantId).ref.get();
+    return this.extendedProfileRef.doc(String(localStorage.getItem('restaurant_id'))).ref.get();
   }
 
   updateExtendedProfile(extendedProfile: any){
-    return this.extendedProfileRef.doc(this.restaurantId).update(extendedProfile);
+    return this.extendedProfileRef.doc(String(localStorage.getItem('restaurant_id'))).update(extendedProfile);
   }
 
   // subscription
 
   createSubscription(subscription: any){
-    return this.subscriptionRef.add(subscription);
+    return this.subscriptionRef.doc(String(localStorage.getItem('restaurant_id'))).set(subscription);
   }
 
   getSubscription(){
-    return this.subscriptionRef.doc(this.restaurantId).ref.get();
+    return this.subscriptionRef.doc(String(localStorage.getItem('restaurant_id'))).ref.get();
   }
 
   updateSubscription(subscription: any){
-    return this.subscriptionRef.doc(this.restaurantId).update(subscription);
+    return this.subscriptionRef.doc(String(localStorage.getItem('restaurant_id'))).update(subscription);
   }
 
 }

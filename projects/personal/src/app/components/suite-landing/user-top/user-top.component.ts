@@ -10,7 +10,8 @@ export class UserTopComponent implements OnInit {
   constructor() { }
 
   @Input() suiteName: string = "";
-  @Input() accounts: any;
+  @Input() accountsData: any;
+  @Input() isAccountLoading: boolean = false;
 
   @Output() selectAccount = new EventEmitter<number>();
 

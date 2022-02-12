@@ -12,19 +12,17 @@ export class AdminApiService {
     private afs: AngularFirestore,
   ) { }
 
-  personalUserSearchRef = this.afs.collection('personal');
-  adminUserRef = this.afs.collection('restaurant/admin/user');
-  userAccessRef = this.afs.collection('restaurant/admin/user-access');
-  invitationRef = this.afs.collection('restaurant/admin/invitation');
+  personalAccountUserSearchRef = this.afs.collection('personal');
+  accountUserRef = this.afs.collection('restaurant/module_admin/admin_account_user');
+  userAccessRef = this.afs.collection('restaurant/module_admin/admin_user_access');
+  invitationRef = this.afs.collection('restaurant/module_admin/admin_invitation');
 
-  restaurantId = localStorage.getItem('restaurant_id') as string;
-  adminUserId = sessionStorage.getItem('restaurant_admin_user_id') as string;
   invitationId = sessionStorage.getItem('restaurant_invitation_id') as string;
 
-  // user search
+  // accountUser search
 
   getSearchResult(searchQuery: string){
-    return this.personalUserSearchRef.ref
+    return this.personalAccountUserSearchRef.ref
       .orderBy('accounts')
       .startAt(searchQuery)
       .startAt(searchQuery + '\uf8ff')
@@ -32,49 +30,55 @@ export class AdminApiService {
   }
 
   getSearchDetail(restaurantId: any){
-    return this.personalUserSearchRef.doc(restaurantId).ref.get();
+    return this.personalAccountUserSearchRef.doc(restaurantId).ref.get();
   }
 
-  // user
+  // accountUser
 
-  createAdminUser(adminUser: any){
-    return this.adminUserRef.add(adminUser);
+  createAccountUser(userData: any){
+    return this.accountUserRef.add(userData);
   }
 
-  getAdminUser(){
-    return this.adminUserRef.doc(this.adminUserId).ref.get();
+  getAccountUser(){
+    return this.accountUserRef.doc(String(sessionStorage.getItem('restaurant_account_user_id'))).ref.get();
   }
 
-  updateAdminUser(adminUser: any){
-    return this.adminUserRef.doc(this.adminUserId).update(adminUser);
+  updateAccountUser(userData: any){
+    return this.accountUserRef.doc(String(sessionStorage.getItem('restaurant_account_user_id'))).update(userData);
   }
 
-  deleteAdminUser(){
-    return this.adminUserRef.doc(this.adminUserId).delete();
+  deleteAccountUser(){
+    return this.accountUserRef.doc(String(sessionStorage.getItem('restaurant_account_user_id'))).delete();
   }
 
-  getAllAccountAdminUser(){
-    return this.adminUserRef.ref
-      .where("account", "==", this.restaurantId)
+  getAllAccountAccountUser(){
+    return this.accountUserRef.ref
+      .where("account", "==", String(localStorage.getItem('restaurant_id')))
+      .get();
+  }
+
+  getAllUserAccountUser(){
+    return this.accountUserRef.ref
+      .where("personal_id", "==", String(localStorage.getItem('personal_id')))
       .get();
   }
 
   // access
 
-  createUserAccess(userAccess: any){
-    return this.userAccessRef.add(userAccess);
+  createUserAccess(accountUserID: any, accessData: any){
+    return this.userAccessRef.doc(accountUserID).set(accessData);
   }
 
   getUserAccess(){
-    return this.userAccessRef.doc(this.adminUserId).ref.get();
+    return this.userAccessRef.doc(String(sessionStorage.getItem('restaurant_account_user_id'))).ref.get();
   }
 
-  updateUserAccess(userAccess: any){
-    return this.userAccessRef.doc(this.adminUserId).update(userAccess);
+  updateUserAccess(accessData: any){
+    return this.userAccessRef.doc(String(sessionStorage.getItem('restaurant_account_user_id'))).update(accessData);
   }
 
   deleteUserAccess(){
-    return this.userAccessRef.doc(this.adminUserId).delete();
+    return this.userAccessRef.doc(String(sessionStorage.getItem('restaurant_account_user_id'))).delete();
   }
 
   // invitations
@@ -89,7 +93,7 @@ export class AdminApiService {
 
   getAllAccountInvitation(ordering: any, pageSize: any, pageStart: any){
     return this.invitationRef.ref
-      .where("account", "==", this.restaurantId)
+      .where("account", "==", String(localStorage.getItem('restaurant_id')))
       .orderBy(ordering.field, ordering.direction)
       .startAt(pageStart)
       .limit(pageSize)

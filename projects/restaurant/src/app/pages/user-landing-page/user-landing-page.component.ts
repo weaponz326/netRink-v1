@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { RegisterApiService } from '../../services/register-api/register-api.service';
+import { AdminApiService } from '../../services/modules/admin-api/admin-api.service';
 
 
 @Component({
@@ -13,43 +13,39 @@ export class UserLandingPageComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private registerApi: RegisterApiService
+    private adminApi: AdminApiService
   ) { }
 
-  accounts: any;
+  accountsData: any;
+  isAccountLoading: boolean = false;
 
   ngOnInit(): void {
-    this.getUserAccounts();
+    this.getAllUserAccountUser();
   }
 
-  getUserAccounts(){
-    this.registerApi.getUserAccounts()
-    .subscribe(
-      res => {
-        console.log(res);
-        this.accounts = res;
-      },
-      err => {
-        console.log(err);
-      }
-    )
+  getAllUserAccountUser(){
+    this.isAccountLoading = true;
+
+    this.adminApi.getAllUserAccountUser()
+      .then(
+        (res: any) => {
+          console.log(res);
+          this.accountsData = res.docs;
+          this.isAccountLoading = false;
+        },
+        (err: any) => {
+          console.log(err);
+          this.isAccountLoading = false;
+        }
+      )
   }
 
   activateAccount(accountId: any){
     console.log(accountId);
+    localStorage.setItem('restaurant_id', accountId);
+    this.router.navigateByUrl('/home');
 
-    this.registerApi.postSelectedAccount(accountId)
-      .subscribe(
-        res => {
-          console.log(res);
-
-          localStorage.setItem('restaurant_id', res.restaurant_id);
-          this.router.navigateByUrl('/home');
-        },
-        err => {
-          console.log(err);
-        }
-      )
+    // TODO: store selected account in server session
   }
 
   gotoAbout() {

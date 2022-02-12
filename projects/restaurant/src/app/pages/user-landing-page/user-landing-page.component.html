@@ -11,7 +11,8 @@
 
 <app-user-top
     [suiteName]="'Restaurant'"
-    [accounts]="this.accounts"
+    [accountsData]="accountsData"
+    [isAccountLoading]="isAccountLoading"
     (selectAccount)="activateAccount($event)"
 ></app-user-top>
 

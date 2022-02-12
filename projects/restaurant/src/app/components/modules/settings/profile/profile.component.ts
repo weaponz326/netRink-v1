@@ -36,8 +36,8 @@ export class ProfileComponent implements OnInit {
     { text: "Profile", url: "/home/settings/profile" },
   ];
 
-  accountData: Account = {uid: "", name: "", location: "", about: ""};
-  extendedProfileData: ExtendedProfile = {uid: "", phone: "", address: "", country: "", state: "", city: ""};
+  accountData: Account = {created_at: "", name: "", location: "", about: "", created_by: ""};
+  extendedProfileData: ExtendedProfile = {phone: "", address: "", country: "", state: "", city: ""};
 
   ngOnInit(): void {
   }
@@ -89,10 +89,11 @@ export class ProfileComponent implements OnInit {
 
   updateAccount(){
     let data: Account = {
-      uid: this.accountData.uid,
+      created_at: this.accountData.created_at,
       name: this.basic.basicForm.controls.name.value,
       location: this.location.locationForm.controls.location.value,
       about: this.basic.basicForm.controls.about.value,
+      created_by: this.accountData.created_by,
     }
 
     this.basic.isBasicSaving = true;
@@ -120,7 +121,6 @@ export class ProfileComponent implements OnInit {
   // extended profile
   updateExtendedProfile(){
     let data: ExtendedProfile = {
-      uid: this.extendedProfileData.uid,
       phone: this.contact.contactForm.controls.phone.value,
       address: this.contact.contactForm.controls.address.value,
       country: this.location.locationForm.controls.country.value,

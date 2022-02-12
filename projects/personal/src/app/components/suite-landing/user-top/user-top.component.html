@@ -11,28 +11,35 @@
                 </div>
 
                 <table class="table table-hover table-striped">
+                    <thead>
+                        <tr>
+                            <th width="60%">{{ suiteName }} Name</th>
+                            <th width="40%">{{ suiteName }} Location</th>
+                        </tr>
+                    </thead>
 
-                    <div *ngIf="this.accounts != null; then accountsBlock else noAccountBlock"></div>
-
-                    <ng-template #accountsBlock>
-                        <thead>
-                            <tr>
-                                <th width="60%">{{ suiteName }} Name</th>
-                                <th width="40%">{{ suiteName }} Location</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let userAccount of accounts" (click)="accountSelected(userAccount.account.id)">
-                                <td>{{ userAccount.account.name }}</td>
-                                <td>{{ userAccount.account.location }}</td>
-                            </tr>
-                        </tbody>
-                    </ng-template>
-
-                    <ng-template #noAccountBlock>
-                        <td class="text-center py-3">you don't have any {{suiteName}} accounts</td>
-                    </ng-template>
-
+                    <tbody *ngIf="accountsData?.length != 0">
+                        <tr *ngFor="let account of accountsData" (click)="accountSelected(account.id)">
+                            <td>{{ account?.data().account.name }}</td>
+                            <td>{{ account?.data().account.location }}</td>
+                        </tr>
+                    </tbody>
+                    <tbody *ngIf="accountsData?.length == 0">
+                        <tr>
+                            <td colspan="2" class="text-center p-3 text-muted">
+                                you don't have any {{suiteName}} accounts
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tbody *ngIf="isAccountLoading">
+                        <tr>
+                            <td colspan="2" class="text-center p-3">
+                                <div class="spinner-grow" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
                 </table>
 
             </div>

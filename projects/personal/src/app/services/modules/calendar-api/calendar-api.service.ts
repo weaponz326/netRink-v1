@@ -35,9 +35,9 @@ export class CalendarApiService {
   getAllUserCalendar(sorting: any, pageSize: any, pageStart: any){
     return this.calendarRef.ref
       .where("user", "==", localStorage.getItem('personal_id'))
-      .limit(pageSize)
       .orderBy(sorting?.field, sorting?.direction)
       .startAt(pageStart)
+      .limit(pageSize)
       .get();
   }
 
@@ -68,9 +68,9 @@ export class CalendarApiService {
   getAllUserSchedule(sorting: any, pageSize: any, pageStart: any){
     return this.scheduleRef.ref
       .where("user", "==", localStorage.getItem('personal_id'))
-      .limit(pageSize)
       .orderBy(sorting.field, sorting.direction)
       .startAt(pageStart)
+      .limit(pageSize)
       .get();
   }
 

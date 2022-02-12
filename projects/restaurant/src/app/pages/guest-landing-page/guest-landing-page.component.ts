@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { RegisterApiService } from '../../services/register-api/register-api.service';
+import { AuthApiService } from 'projects/personal/src/app/services/user/auth-api/auth-api.service';
 
 
 @Component({
@@ -12,31 +12,30 @@ import { RegisterApiService } from '../../services/register-api/register-api.ser
 export class GuestLandingPageComponent implements OnInit {
 
   constructor(
+    private authApi: AuthApiService,
     private router: Router,
-    private registerApi: RegisterApiService
   ) { }
 
   isLoading: boolean = false;
 
   ngOnInit(): void {
-    this.checkUserAccount();
+    this.getAuth();
   }
 
-  checkUserAccount(){
+  getAuth(){
     this.isLoading = true;
 
-    // redirect if user has an account
-    this.registerApi.hasAccount()
+    this.authApi.getAuth()
       .subscribe(
-        res => {
+        (res: any) => {
           console.log(res);
           this.isLoading = false;
 
-          if (res.has_account == true){
+          if (res.uid){
             this.router.navigateByUrl("/user");
           }
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.isLoading = false;
         }

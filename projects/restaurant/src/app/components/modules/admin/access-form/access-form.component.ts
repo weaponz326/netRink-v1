@@ -4,7 +4,7 @@ import { ConnectionToastComponent } from 'projects/personal/src/app/components/m
 
 import { AdminApiService } from 'projects/restaurant/src/app/services/modules/admin-api/admin-api.service';
 
-import { Access } from 'projects/restaurant/src/app/models/modules/admin/admin.model';
+import { UserAccess } from 'projects/restaurant/src/app/models/modules/admin/admin.model';
 
 
 @Component({
@@ -20,9 +20,7 @@ export class AccessFormComponent implements OnInit {
 
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
 
-  accessForm: Access = {
-    uid: "",
-    user: "",
+  accessForm: UserAccess = {
     admin_access: false,
     customers_access: false,
     deliveries_access: false,

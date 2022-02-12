@@ -2,7 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { RegisterApiService } from '../../../services/register-api/register-api.service';
+import * as firebase from 'firebase/compat/app';
+
+import { AccountApiService } from '../../../services/account-api/account-api.service';
+import { AdminApiService } from '../../../services/modules/admin-api/admin-api.service';
+import { SettingsApiService } from '../../../services/modules/settings-api/settings-api.service';
+
+import { Account } from '../../../models/account/account.model';
+import { AccountUser, UserAccess } from '../../../models/modules/admin/admin.model';
+import { ExtendedProfile, Subscription } from '../../../models/modules/settings/settings.model';
 
 
 @Component({
@@ -14,10 +22,12 @@ export class RegisterFormComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private registerApi: RegisterApiService
+    private accountApi: AccountApiService,
+    private adminApi: AdminApiService,
+    private settingsApi: SettingsApiService,
   ) { }
 
-  registerForm = new FormGroup({
+  accountForm = new FormGroup({
     name: new FormControl('', Validators.required),
     location: new FormControl('', Validators.required),
     about: new FormControl('', Validators.required),
@@ -34,41 +44,113 @@ export class RegisterFormComponent implements OnInit {
   }
 
   onSubmit(){
-    let personalData: any = {
-      personal_id: localStorage.getItem('personal_id'),
-      personal_name: sessionStorage.getItem('personal_name')
+    let accountData: Account = {
+      created_at: firebase.default.firestore.FieldValue.serverTimestamp(),
+      name: this.accountForm.controls.name.value,
+      location: this.accountForm.controls.location.value,
+      about: this.accountForm.controls.about.value,
+      created_by: localStorage.getItem('personal_id') as string,
     }
 
-    let mergedData = Object.assign(this.registerForm.value, personalData);
-    console.log(mergedData);
-
     this.isSending = true;
-    this.registerApi.postProfile(mergedData)
-      .subscribe(
-        res => {
+
+    this.accountApi.createAccount(accountData)
+      .then(
+        (res: any) => {
           console.log(res);
-          if(res.message == "OK"){
-            this.showPrompt = true;
-            localStorage.setItem('restaurant_id', res.data.id);
-          }
 
+          localStorage.setItem('restaurant_id', res.id);
+          this.showPrompt = true;
           this.isSending = false;
-        },
-        err => {
-          console.log(err);
-          this.nameErrors = err.errors.name;
-          this.locErrors = err.errors.location;
-          this.abtErrors = err.errors.about;
 
+          this.createAccountUser(accountData);
+          this.createExtendedProfile();
+          this.createSubscription();
+        },
+        (err: any) => {
+          console.log(err);
           this.isSending = false;
         }
       )
 
-    console.log(this.registerForm.value);
+    console.log(this.accountForm.value);
+  }
+
+  createAccountUser(account: any){
+    let userData: AccountUser = {
+      personal_id: localStorage.getItem('personal_id') as string,
+      personal_name: sessionStorage.getItem('personal_name') as string,
+      access_level: "Admin",
+      account: account,
+    }
+
+    this.adminApi.createAccountUser(userData)
+      .then(
+        (res: any) => {
+          console.log(res);
+          sessionStorage.setItem('restaurant_account_user_id', res.id)
+          this.createUserAccess(res.id);
+        },
+        (err: any) => {
+          console.log(err)
+        }
+      )
+  }
+
+  createUserAccess(accountUserId: any){
+    let accessData: UserAccess = {
+      admin_access: true,
+      customers_access: true,
+      deliveries_access: true,
+      menu_access: true,
+      orders_access: true,
+      payments_access: true,
+      portal_access: true,
+      settings_access: true,
+      staff_access: true,
+      reservations_access: true,
+      tables_access: true,
+    }
+
+    this.adminApi.createUserAccess(accountUserId, accessData)
+      .then(
+        (res: any) => console.log(res),
+        (err: any) => console.log(err)
+      )
+  }
+
+  createExtendedProfile(){
+    let data: ExtendedProfile = {
+      phone: "",
+      address: "",
+      country: "",
+      state: "",
+      city: "",
+    }
+
+    this.settingsApi.createExtendedProfile(data)
+      .then(
+        (res: any) => console.log(res),
+        (err: any) => console.log(err)
+      )
+  }
+
+  createSubscription(){
+    let data: Subscription = {
+      subscription_type: "Individual",
+      billing_frequency: "",
+      number_users: 1,
+    }
+
+    this.settingsApi.createSubscription(data)
+      .then(
+        (res: any) => console.log(res),
+        (err: any) => console.log(err)
+      )
   }
 
   onAddressChange(address: any) {
-    this.registerForm.controls.location.setValue(address.formatted_address);
+    this.accountForm.controls.location.setValue(address.formatted_address);
     console.log(address);
   }
 

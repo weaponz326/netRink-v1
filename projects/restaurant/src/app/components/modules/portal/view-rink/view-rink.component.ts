@@ -30,9 +30,9 @@ export class ViewRinkComponent implements OnInit {
 
   restaurantId = localStorage.getItem('restaurant_id');
 
-  senderData: Account = {uid: "", name: "", location: "", about: ""};
-  recipientData: Account = {uid: "", name: "", location: "", about: ""};
-  rinkData: Rink = {uid: "", sender: this.senderData, recipient: this.recipientData, rink_date: new Date, rink_type: "", rink_source: "", comment: "" };
+  senderData: any;
+  recipientData: any;
+  rinkData: any;
 
   ngOnInit(): void {
     this.getRink();

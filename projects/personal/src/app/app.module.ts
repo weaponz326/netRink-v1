@@ -9,6 +9,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AngularFireModule } from "@angular/fire/compat";
 import { AngularFireAuthModule } from "@angular/fire/compat/auth";
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
+import { GooglePlaceModule } from "ngx-google-places-autocomplete";
 
 import { AppRoutingModule } from './app-routing.module';
 
@@ -31,6 +32,7 @@ import { environment } from '../environments/environment';
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
     AngularFirestoreModule,
+    GooglePlaceModule,
     AppRoutingModule,
   ],
   // providers: [{provide: LocationStrategy, useClass: HashLocationStrategy}],

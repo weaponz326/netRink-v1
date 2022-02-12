@@ -12,9 +12,7 @@ export class AccountApiService {
     private afs: AngularFirestore,
   ) { }
 
-  accountRef = this.afs.collection('restaurant');
-
-  restaurantId = localStorage.getItem('restaurant_id') as string;
+  accountRef = this.afs.collection('restaurant/accounts/account');
 
   // extended profile
 
@@ -23,16 +21,17 @@ export class AccountApiService {
   }
 
   getAccount(){
-    return this.accountRef.doc(this.restaurantId).ref.get();
+    return this.accountRef.doc(String(localStorage.getItem('restaurant_id'))).ref.get();
   }
 
   updateAccount(account: any){
-    return this.accountRef.doc(this.restaurantId).update(account);
+    return this.accountRef.doc(String(localStorage.getItem('restaurant_id'))).update(account);
   }
 
+  // TODO: move functionality to admin and remove
   getAllAccountAccount(){
     return this.accountRef.ref
-      .where("account", "==", this.restaurantId)
+      .where("account", "==", String(localStorage.getItem('restaurant_id')))
       .get();
   }
 

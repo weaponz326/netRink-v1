@@ -1,8 +1,9 @@
 // import { Base } from '../base/base.model'
 
 export class Account {
-  uid!: string;
+  created_at!: any;
   name!: string;
   location!: string;
   about!: string;
+  created_by!: string;
 }

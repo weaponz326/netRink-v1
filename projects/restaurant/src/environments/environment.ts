@@ -10,14 +10,14 @@ export const environment = {
   restaurantUrl: "http://localhost:8002/",          // url for restaurant backend
 
   firebase: {
-    apiKey: "xxxxxxxx-xxxxxxxx",
-    authDomain: "xxxxxxxxxxxxxxxxxxxxxxxx",
-    databaseURL: "xxxxxxxxxxxxxxxxxxxxxxxx",
-    projectId: "xxxxxxxx",
-    storageBucket: "xxxxxxxx",
-    messagingSenderId: "xxxxxx",
-    appId: "xxxxx",
-    measurementId: "xxxxxxxxxxxxxxxx"
+    apiKey: "AIzaSyC-pUZi6j5AecjEKiBaQL1nTZrKWB_J9w0",
+    authDomain: "netrink-test-v1.firebaseapp.com",
+    databaseURL: "https://netrink-test-v1-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "netrink-test-v1",
+    storageBucket: "netrink-test-v1.appspot.com",
+    messagingSenderId: "140608103001",
+    appId: "1:140608103001:web:b8cbede412b0a45d78c748",
+    measurementId: "G-JYYP2YE5FW"
   }
 };
 
