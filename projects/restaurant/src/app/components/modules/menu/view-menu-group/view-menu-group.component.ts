@@ -2,11 +2,12 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormControl, FormGroup } from '@angular/forms';
 
-import { MenuApiService } from 'projects/restaurant/src/app/services/modules/menu-api/menu-api.service';
-
 import { MenuItemsComponent } from '../menu-items/menu-items.component'
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 import { DeleteModalComponent } from 'projects/personal/src/app/components/module-utilities/delete-modal/delete-modal.component'
+
+import { MenuApiService } from 'projects/restaurant/src/app/services/modules/menu-api/menu-api.service';
+import { MenuGroup } from 'projects/restaurant/src/app/models/modules/menu/menu.model';
 
 
 @Component({
@@ -31,6 +32,7 @@ export class ViewMenuGroupComponent implements OnInit {
   ];
 
   menuGroupForm: FormGroup = new FormGroup({});
+  menuGroupFormData: any;
 
   isMenuGroupSaving: boolean = false;
   isMenuGroupDeleting: boolean = false;
@@ -51,45 +53,47 @@ export class ViewMenuGroupComponent implements OnInit {
   }
 
   getMenuGroup(){
-    this.menuApi.getSingleMenuGroup()
-      .subscribe(
-        res => {
+    this.menuApi.getMenuGroup()
+      .then(
+        (res: any) => {
           console.log(res);
-          this.menuGroupForm.controls.menuGroup.setValue(res.menu_group);
-          this.menuGroupForm.controls.category.setValue(res.category);
+          this.menuGroupFormData = res;
+          this.menuGroupForm.controls.menuGroup.setValue(this.menuGroupFormData.data().menu_group);
+          this.menuGroupForm.controls.category.setValue(this.menuGroupFormData.data().category);
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }
       )
   }
 
-  putMenuGroup(){
+  updateMenuGroup(){
     console.log("u are updating a menu group");
 
-    var groupData = {
-      account: localStorage.getItem('restaurant_id'),
+    let data: MenuGroup = {
+      created_at: this.menuGroupFormData.data().created_at,
+      account: localStorage.getItem('restaurant_id') as string,
       menu_group: this.menuGroupForm.controls.menuGroup.value,
       category: this.menuGroupForm.controls.category.value
     }
 
     this.isMenuGroupSaving = true;
 
-    this.menuApi.putMenuGroup(groupData)
-      .subscribe(
-        res => {
+    this.menuApi.updateMenuGroup(data)
+      .then(
+        (res: any) => {
           console.log(res);
           this.isMenuGroupSaving = false;
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.isMenuGroupSaving = false;
           this.connectionToast.openToast();
         }
       )
 
-    console.log(groupData);
+    console.log(data);
   }
 
   confirmDelete(){
@@ -100,13 +104,13 @@ export class ViewMenuGroupComponent implements OnInit {
     this.isMenuGroupDeleting = true;
 
     this.menuApi.deleteMenuGroup()
-      .subscribe(
-        res => {
+      .then(
+        (res: any) => {
           console.log(res);
 
           this.router.navigateByUrl('/home/menu/all-menu-group');
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }

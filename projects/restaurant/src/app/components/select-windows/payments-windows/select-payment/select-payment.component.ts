@@ -33,17 +33,17 @@ export class SelectPaymentComponent implements OnInit {
   }
 
   getPayments(){
-    this.paymentsApi.getPayments()
-      .subscribe(
-        res => {
-          console.log(res);
-          this.dataSource = res;
-        },
-        err => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
+    // this.paymentsApi.getPayments()
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.dataSource = res;
+    //     },
+    //     err => {
+    //       console.log(err);
+    //       this.connectionToast.openToast();
+    //     }
+    //   )
   }
 
   selectRow(event: any){

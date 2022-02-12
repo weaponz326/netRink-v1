@@ -33,17 +33,17 @@ export class SelectRosterComponent implements OnInit {
   }
 
   getRoster(){
-    this.rosterApi.getRoster()
-      .subscribe(
-        res => {
-          console.log(res);
-          this.dataSource = res;
-        },
-        err => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
+    // this.rosterApi.getRoster()
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.dataSource = res;
+    //     },
+    //     err => {
+    //       console.log(err);
+    //       this.connectionToast.openToast();
+    //     }
+    //   )
   }
 
   selectRow(event: any){

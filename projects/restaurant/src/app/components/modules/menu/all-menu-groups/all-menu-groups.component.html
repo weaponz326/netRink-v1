@@ -16,30 +16,58 @@
                     <tr class="bg-light">
                         <th width="60%">
                             Menu Group
-                            <app-table-sorting #menuGroupSortingComponentReference
-                            [sortField]="'menu_group'" (sortDirection)="sortTable($event)"
-                            ></app-table-sorting>
+                            <i *ngIf="sortParams.field != 'menu_group'" class="bi bi-filter float-end list-pointer" (click)="sortTable('menu_group', 'desc')"></i>
+                            <i *ngIf="sortParams.field == 'menu_group' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('menu_group', 'asc')"></i>
+                            <i *ngIf="sortParams.field == 'menu_group' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('menu_group', 'desc')"></i>
                         </th>
                         <th width="40%">
                             Category
-                            <app-table-sorting #categorySortingComponentReference
-                            [sortField]="'category'" (sortDirection)="sortTable($event)"
-                            ></app-table-sorting>
+                            <i *ngIf="sortParams.field != 'category'" class="bi bi-filter float-end list-pointer" (click)="sortTable('category', 'desc')"></i>
+                            <i *ngIf="sortParams.field == 'category' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('category', 'asc')"></i>
+                            <i *ngIf="sortParams.field == 'category' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('category', 'desc')"></i>
                         </th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let data of menuGroupGridData" (dblclick)="viewMenuGroup(data.id)" class="table-pointer">
-                        <td>{{data?.menu_group}}</td>
-                        <td>{{data?.category}}</td>
+                        <td>{{data?.data().menu_group}}</td>
+                        <td>{{data?.data().category}}</td>
+                    </tr>
+                    <tr *ngIf="isFetchingGridData" class="text-center">
+                        <td colspan="2">
+                            <div class="spinner-grow m-4" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="!isDataAvailable && !isFetchingGridData" class="text-center">
+                        <td colspan="2">
+                            <p class="m-4">No data available</p>
+                        </td>
                     </tr>
                 </tbody>
                 <tfoot>
                     <tr class="bg-light">
                         <td colspan="2">
-                            <app-table-pagination #tablePaginationComponentReference
-                            [currentPage]="currentPage" [totalPages]="totalPages" (pageSelected)="getMenuGroups()"
-                            ></app-table-pagination>
+                            <nav class="nav-light float-end" aria-label="Page navigation">
+                                <ul class="pagination pagination-sm mb-0 justify-content-end">
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" aria-label="First" (click)="previousPage($event)">
+                                            <i class="bi bi-caret-left-fill"></i>
+                                        </a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" aria-label="Current" (click)="$event.preventDefault()">
+                                            {{pageNumber}}
+                                        </a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" aria-label="Last" (click)="nextPage($event)">
+                                            <i class="bi bi-caret-right-fill"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
                         </td>
                     </tr>
                 </tfoot>

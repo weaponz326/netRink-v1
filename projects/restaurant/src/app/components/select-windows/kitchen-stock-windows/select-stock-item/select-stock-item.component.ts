@@ -33,17 +33,17 @@ export class SelectStockItemComponent implements OnInit {
   }
 
   getItems(){
-    this.kitchenStockApi.getItems()
-      .subscribe(
-        res => {
-          console.log(res);
-          this.dataSource = res;
-        },
-        err => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
+    // this.kitchenStockApi.getItems()
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.dataSource = res;
+    //     },
+    //     err => {
+    //       console.log(err);
+    //       this.connectionToast.openToast();
+    //     }
+    //   )
   }
 
   selectRow(event: any){

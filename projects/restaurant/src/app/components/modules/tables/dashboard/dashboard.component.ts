@@ -32,17 +32,17 @@ export class DashboardComponent implements OnInit {
   }
 
   getTablesCount(){
-    this.tablesApi.getCounts("Table")
-      .subscribe(
-        res => {
-          console.log(res);
-          this.allTablesCount = res;
-        },
-        err => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
+    // this.tablesApi.getCounts("Table")
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.allTablesCount = res;
+    //     },
+    //     err => {
+    //       console.log(err);
+    //       this.connectionToast.openToast();
+    //     }
+    //   )
   }
 
 }

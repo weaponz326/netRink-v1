@@ -32,17 +32,17 @@ export class DashboardComponent implements OnInit {
   }
 
   getOrdersCount(){
-    this.ordersApi.getCounts("Order")
-      .subscribe(
-        res => {
-          console.log(res);
-          this.allOrdersCount = res;
-        },
-        err => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
+    // this.ordersApi.getCounts("Order")
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.allOrdersCount = res;
+    //     },
+    //     err => {
+    //       console.log(err);
+    //       this.connectionToast.openToast();
+    //     }
+    //   )
   }
 
 }

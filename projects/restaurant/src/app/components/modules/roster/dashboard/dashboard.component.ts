@@ -32,17 +32,17 @@ export class DashboardComponent implements OnInit {
   }
 
   getRosterCount(){
-    this.rosterApi.getCounts("Roster")
-      .subscribe(
-        res => {
-          console.log(res);
-          this.allRosterCount = res;
-        },
-        err => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
+    // this.rosterApi.getCounts("Roster")
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.allRosterCount = res;
+    //     },
+    //     err => {
+    //       console.log(err);
+    //       this.connectionToast.openToast();
+    //     }
+    //   )
   }
 
 }

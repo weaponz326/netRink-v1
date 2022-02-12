@@ -33,17 +33,17 @@ export class SelectMenuGroupComponent implements OnInit {
   }
 
   getMenuGroups(){
-    this.menuApi.getMenuGroups()
-      .subscribe(
-        res => {
-          console.log(res);
-          this.dataSource = res;
-        },
-        err => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
+    // this.menuApi.getMenuGroups()
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.dataSource = res;
+    //     },
+    //     err => {
+    //       console.log(err);
+    //       this.connectionToast.openToast();
+    //     }
+    //   )
   }
 
   selectRow(event: any){
@@ -68,7 +68,7 @@ export class SelectMenuGroupComponent implements OnInit {
     this.columns = <GridColumn[]>[
       { label: "Menu Group", dataField: "menu_group", width: "60%" },
       { label: "Category", dataField: "category", width: "40%" },
-    ]    
+    ]
   }
 
 }

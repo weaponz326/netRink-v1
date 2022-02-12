@@ -38,46 +38,46 @@ export class DashboardComponent implements OnInit {
   }
 
   getMenuGroupsCount(){
-    this.menuApi.getCounts("Menu Group")
-      .subscribe(
-        res => {
-          console.log(res);
-          this.allMenuGroupsCount = res;
-        },
-        err => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
+    // this.menuApi.getCounts("Menu Group")
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.allMenuGroupsCount = res;
+    //     },
+    //     err => {
+    //       console.log(err);
+    //       this.connectionToast.openToast();
+    //     }
+    //   )
   }
 
   getMenuItemsCount(){
-    this.menuApi.getCounts("Menu Item")
-      .subscribe(
-        res => {
-          console.log(res);
-          this.allMenuItemsCount = res;
-        },
-        err => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
+    // this.menuApi.getCounts("Menu Item")
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.allMenuItemsCount = res;
+    //     },
+    //     err => {
+    //       console.log(err);
+    //       this.connectionToast.openToast();
+    //     }
+    //   )
   }
 
   getItemGroupAnnotation(){
-    this.menuApi.getAnnotation("MenuItem")
-      .subscribe(
-        res => {
-          console.log(res);
-          // this.setDoughnutChartLabels(res);
-          // this.setDoughnutChartData(res);
-        },
-        err => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
+    // this.menuApi.getAnnotation("MenuItem")
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       // this.setDoughnutChartLabels(res);
+    //       // this.setDoughnutChartData(res);
+    //     },
+    //     err => {
+    //       console.log(err);
+    //       this.connectionToast.openToast();
+    //     }
+    //   )
   }
 
   chartOptions = {

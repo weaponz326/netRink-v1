@@ -83,6 +83,15 @@ table.page-table{
   font-size: 14px;
 }
 
+table.page-table td,
+table.page-table th{
+  white-space: nowrap;
+  table-layout: fixed;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 0;
+}
+
 .table-pointer td{
   cursor: pointer;
 }

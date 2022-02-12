@@ -13,19 +13,26 @@
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let data of menuItemsGridData; index as i" (dblClick)="openEditMenuItem(i)">
+        <tr *ngFor="let data of menuItemsGridData; index as i" (dblClick)="openEditMenuItem(i)" class="table-pointer">
             <td>{{data?.item_code}}</td>
             <td>{{data?.item_name}}</td>
             <td>{{data?.price}}</td>
+        </tr>
+        <tr *ngIf="isFetchingGridData" class="text-center">
+            <td colspan="5">
+                <div class="spinner-grow m-4" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </td>
         </tr>
     </tbody>
 </table>
 
 <!-- add and edit menu-item modal components -->
 
-<app-add-menu-item #addMenuItemComponentReference (saveMenuItemEvent)="postMenuItem($event)"></app-add-menu-item>
+<app-add-menu-item #addMenuItemComponentReference (saveMenuItemEvent)="createMenuItem($event)" [menuGroup]="menuGroup"></app-add-menu-item>
 
-<app-edit-menu-item #editMenuItemComponentReference (saveMenuItemEvent)="putMenuItem($event)" (deleteMenuItem)="confirmDelete($event)"></app-edit-menu-item>
+<app-edit-menu-item #editMenuItemComponentReference (saveMenuItemEvent)="updateMenuItem($event)" (deleteMenuItem)="confirmDelete($event)"></app-edit-menu-item>
 
 <!-- connection error toast component -->
 

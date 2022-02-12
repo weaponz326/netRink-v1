@@ -1,12 +1,10 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { MenuApiService } from 'projects/restaurant/src/app/services/modules/menu-api/menu-api.service';
-
 import { NewMenuGroupComponent } from '../new-menu-group/new-menu-group.component'
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
-import { TablePaginationComponent } from 'projects/personal/src/app/components/module-utilities/table-pagination/table-pagination.component'
-import { TableSortingComponent } from 'projects/personal/src/app/components/module-utilities/table-sorting/table-sorting.component'
+
+import { MenuApiService } from 'projects/restaurant/src/app/services/modules/menu-api/menu-api.service';
 
 
 @Component({
@@ -23,9 +21,6 @@ export class AllMenuGroupsComponent implements OnInit {
 
   @ViewChild('newMenuGroupComponentReference', { read: NewMenuGroupComponent, static: false }) newMenuGroup!: NewMenuGroupComponent;
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
-  @ViewChild('tablePaginationComponentReference', { read: TablePaginationComponent, static: false }) tablePagination!: TablePaginationComponent;
-  @ViewChild('menuGroupSortingComponentReference', { read: TableSortingComponent, static: false }) menuGroupSorting!: TableSortingComponent;
-  @ViewChild('categorySortingComponentReference', { read: TableSortingComponent, static: false }) categorySorting!: TableSortingComponent;
 
   navHeading: any[] = [
     { text: "All Menu Groups", url: "/home/menu/all-menu-groups" },
@@ -33,32 +28,124 @@ export class AllMenuGroupsComponent implements OnInit {
 
   menuGroupGridData: any[] = [];
 
-  currentPage = 0;
-  totalPages = 0;
-  totalItems = 0;
+  isFetchingGridData: boolean =  false;
+  isDataAvailable: boolean =  true;
+
+  firstInResponse: any = [];
+  lastInResponse: any = [];
+  nextStartAfter: any = [];
+  prevStartAt: any = [];
+  pageNumber = 0;
+  disableNext: boolean = false;
+  disablePrev: boolean = true;
+
+  sortParams = {
+    field: "created_at",
+    direction: "desc"
+  }
 
   ngOnInit(): void {
   }
 
   ngAfterViewInit(): void {
-    this.getMenuGroups();
+    this.getAccountMenuGroup();
   }
 
-  getMenuGroups(){
-    this.menuApi.getMenuGroups()
-      .subscribe(
-        res => {
+  getAccountMenuGroup(){
+    this.isFetchingGridData = true;
+
+    this.menuApi.getAccountMenuGroup(this.sortParams, 20)
+      .then(
+        (res: any) => {
           console.log(res);
-          this.menuGroupGridData = res.results;
-          this.currentPage = res.current_page;
-          this.totalPages = res.total_pages;
-          this.totalItems = res.count;
+
+          this.menuGroupGridData = res.docs;
+          this.isFetchingGridData = false;
+          if (!res.docs.length) this.isDataAvailable = false;
+
+          this.prevStartAt = this.firstInResponse;
+          this.nextStartAfter = res.docs[res.docs.length - 1];
+          this.firstInResponse = res.docs[0];
+          this.pageNumber = 1;
+
+          this.disableNext = false;
+          this.disablePrev = true;
         },
-        err => {
+        (err: any) => {
           console.log(err);
+          this.isFetchingGridData = false;
           this.connectionToast.openToast();
         }
       )
+  }
+
+  nextPage(e: any){
+    e.preventDefault();
+    this.isFetchingGridData = true;
+
+    this.menuApi.getAccountMenuGroupNext(this.sortParams, 20, this.nextStartAfter)
+      .then(
+        (res: any) => {
+          console.log(res);
+
+          this.menuGroupGridData = res.docs;
+          this.isFetchingGridData = false;
+          if (!res.docs.length) this.isDataAvailable = false;
+
+          this.prevStartAt = this.firstInResponse;
+          this.nextStartAfter = res.docs[res.docs.length - 1];
+          this.firstInResponse = res.docs[0];
+          this.pageNumber++;
+
+          if (res.docs.length < 20){
+            this.disableNext = true;
+            this.disablePrev = false;
+          }
+        },
+        (err: any) => {
+          console.log(err);
+          this.isFetchingGridData = false;
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  previousPage(e: any){
+    e.preventDefault();
+    this.isFetchingGridData = true;
+
+    this.menuApi.getAccountMenuGroupPrev(this.sortParams, 20, this.prevStartAt)
+      .then(
+        (res: any) => {
+          console.log(res);
+
+          this.menuGroupGridData = res.docs;
+          this.isFetchingGridData = false;
+          if (!res.docs.length) this.isDataAvailable = false;
+
+          this.prevStartAt = this.firstInResponse;
+          this.nextStartAfter = res.docs[res.docs.length - 1];
+          this.firstInResponse = res.docs[0];
+          this.pageNumber++;
+
+          if (this.pageNumber == 1){
+            this.disableNext = false;
+            this.disablePrev = true;
+          }
+        },
+        (err: any) => {
+          console.log(err);
+          this.isFetchingGridData = false;
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  sortTable(field: any, direction: any){
+    this.sortParams.field = field;
+    this.sortParams.direction = direction;
+
+    this.getAccountMenuGroup();
   }
 
   viewMenuGroup(menuGroupId: any){
@@ -66,18 +153,6 @@ export class AllMenuGroupsComponent implements OnInit {
 
     sessionStorage.setItem("restaurant_menu_group_id", menuGroupId);
     this.router.navigateByUrl("/home/menu/view-menu-group");
-  }
-
-  sortTable(field: any){
-    console.log(field);
-    this.getMenuGroups();
-
-    if((field == 'menu_group') || (field == "-menu_group")){
-      this.menuGroupSorting.resetSort();
-    }
-    else if((field == 'category') || (field == "-category")){
-      this.categorySorting.resetSort();
-    }
   }
 
   onPrint(){

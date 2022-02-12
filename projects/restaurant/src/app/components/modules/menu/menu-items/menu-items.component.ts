@@ -1,11 +1,13 @@
-import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
-
-import { MenuApiService } from 'projects/restaurant/src/app/services/modules/menu-api/menu-api.service';
+import { Component, OnInit, ViewChild, Output, EventEmitter, Input } from '@angular/core';
 
 import { AddMenuItemComponent } from '../add-menu-item/add-menu-item.component'
 import { EditMenuItemComponent } from '../edit-menu-item/edit-menu-item.component'
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 import { DeleteModalComponent } from 'projects/personal/src/app/components/module-utilities/delete-modal/delete-modal.component'
+
+import { MenuApiService } from 'projects/restaurant/src/app/services/modules/menu-api/menu-api.service';
+
+import { MenuGroup } from 'projects/restaurant/src/app/models/modules/menu/menu.model';
 
 
 @Component({
@@ -17,6 +19,8 @@ export class MenuItemsComponent implements OnInit {
 
   constructor(private menuApi: MenuApiService) { }
 
+  @Input() menuGroup!: MenuGroup;
+
   @ViewChild('addMenuItemComponentReference', { read: AddMenuItemComponent, static: false }) addMenuItem!: AddMenuItemComponent;
   @ViewChild('editMenuItemComponentReference', { read: EditMenuItemComponent, static: false }) editMenuItem!: EditMenuItemComponent;
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
@@ -27,6 +31,8 @@ export class MenuItemsComponent implements OnInit {
   deleteId = "";
   deleteIndex = 0;
 
+  isFetchingGridData = false;
+
   ngOnInit(): void {
   }
 
@@ -35,52 +41,57 @@ export class MenuItemsComponent implements OnInit {
   }
 
   getMenuItems(){
-    this.menuApi.getMenuItems()
-      .subscribe(
-        res => {
+    this.isFetchingGridData = true;
+
+    this.menuApi.getMenuGroupMenuItem()
+      .then(
+        (res: any) => {
           console.log(res);
-          this.menuItemsGridData = res;
+          this.isFetchingGridData = false;
+
+          for (let item of res.docs) {
+            this.menuItemsGridData.push(item.data());
+          }
+          console.log(this.menuItemsGridData);
         },
-        err => {
+        (err: any) => {
           console.log(err);
+          this.isFetchingGridData = false;
           this.connectionToast.openToast();
         }
       )
   }
 
-  postMenuItem(data: any){
+  createMenuItem(data: any){
     console.log(data);
 
-    this.menuApi.postMenuItem(data)
-      .subscribe(
-        res => {
+    this.menuApi.createMenuItem(data)
+      .then(
+        (res: any) => {
           console.log(res);
 
           if(res.id){
-            this.menuItemsGridData.push(res);
+            this.menuItemsGridData.push(data);
             this.addMenuItem.resetForm();
           }
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }
       )
   }
 
-  putMenuItem(data: any){
+  updateMenuItem(data: any){
     console.log(data);
 
-    this.menuApi.putMenuItem(data)
-      .subscribe(
-        res => {
+    this.menuApi.updateMenuItem(data.menu_item)
+      .then(
+        (res: any) => {
           console.log(res);
-
-          if(res.id){
-            this.menuItemsGridData[data.index] = res;
-          }
+          this.menuItemsGridData[data.index] = data.menu_item;
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }
@@ -89,12 +100,12 @@ export class MenuItemsComponent implements OnInit {
 
   deleteMenuItem(){
     this.menuApi.deleteMenuItem()
-      .subscribe(
-        res => {
+      .then(
+        (res: any) => {
           console.log(res);
           this.menuItemsGridData.splice(this.deleteIndex, 1);
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }

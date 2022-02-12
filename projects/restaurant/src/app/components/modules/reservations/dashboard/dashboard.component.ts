@@ -32,17 +32,17 @@ export class DashboardComponent implements OnInit {
   }
 
   getReservationsCount(){
-    this.reservationsApi.getCounts("Reservation")
-      .subscribe(
-        res => {
-          console.log(res);
-          this.allReservationsCount = res;
-        },
-        err => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
+    // this.reservationsApi.getCounts("Reservation")
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.allReservationsCount = res;
+    //     },
+    //     err => {
+    //       console.log(err);
+    //       this.connectionToast.openToast();
+    //     }
+    //   )
   }
 
 }

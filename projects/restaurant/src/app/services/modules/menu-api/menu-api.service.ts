@@ -1,13 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs'
 
-import { environment } from 'projects/restaurant/src/environments/environment'
-import { EndpointsService } from 'projects/application/src/app/services/endpoints/endpoints.service';
-
-// import { AngularFireDatabase, AngularFireList, AngularFireObject } from '@angular/fire/compat/database';
-
-// import { MenuGroup, MenuItem } from 'projects/restaurant/src/app/models/modules/menu/menu.model';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 
 
 @Injectable({
@@ -16,114 +9,105 @@ import { EndpointsService } from 'projects/application/src/app/services/endpoint
 export class MenuApiService {
 
   constructor(
-    // private db: AngularFireDatabase,
-    private http: HttpClient,
-    private endpoints: EndpointsService
+    private afs: AngularFirestore,
   ) { }
 
-  // menuGroupsRef!: AngularFireList<any>;
-  // menuGroupRef!: AngularFireObject<any>;
+  menuGroupRef = this.afs.collection('restaurant/module_menu/menu_menu_group');
+  menuItemRef = this.afs.collection('restaurant/module_menu/menu_menu_item');
 
-  // // Fetch menu group List
-  // getMenuGroupList() {
-  //   this.menuGroupsRef = this.db.list('menu-group-list');
-  //   return this.menuGroupsRef;
-  // }
+  // menu group
 
-  // // Create menu group
-  // addMenuGroup(menuGroup: MenuGroup) {
-  //   this.menuGroupsRef.push({
-  //     menuGroup: menuGroup.menuGroup,
-  //     category: menuGroup.category,
-  //   })
-  // }
-
-  // // Fetch Single menu griup Object
-  // getMenuGroup(id: string) {
-  //   this.menuGroupRef = this.db.object('menu-group-list/' + id);
-  //   return this.menuGroupRef;
-  // }
-
-  // // Update menu group Object
-  // updateStudent(menuGroup: MenuGroup) {
-  //   this.menuGroupRef.update({
-  //     menuGroup: menuGroup.menuGroup,
-  //     category: menuGroup.category,
-  //   })
-  // }
-
-  // // Delete Student Object
-  // deleteStudent(id: string) {
-  //   this.menuGroupRef = this.db.object('menu-group-list/'+id);
-  //   this.menuGroupRef.remove();
-  // }
-
-
-
-
-  restaurantUrl = environment.restaurantUrl;
-
-  // create and get all menu groups belonging to user
-
-  public getMenuGroups(): Observable<any>{
-    return this.http.get(this.restaurantUrl + "module-menu/menu-group?account=" + localStorage.getItem('restaurant_id'));
+  createMenuGroup(menuGroup: any){
+    return this.menuGroupRef.add(menuGroup);
   }
 
-  public postMenuGroup(group: any): Observable<any>{
-    return this.http.post(this.restaurantUrl + "module-menu/menu-group/", group);
+  getMenuGroup(){
+    return this.menuGroupRef.doc(String(sessionStorage.getItem('restaurant_menu_group_id'))).ref.get();
   }
 
-  // retreive, update and delete menu group
-
-  public getSingleMenuGroup(): Observable<any>{
-    return this.http.get(this.restaurantUrl + "module-menu/menu-group/" + sessionStorage.getItem('restaurant_menu_group_id'));
+  updateMenuGroup(menuGroup: any){
+    return this.menuGroupRef.doc(String(sessionStorage.getItem('restaurant_menu_group_id'))).update(menuGroup);
   }
 
-  public putMenuGroup(item: any): Observable<any>{
-    return this.http.put(this.restaurantUrl + "module-menu/menu-group/" + sessionStorage.getItem('restaurant_menu_group_id'), item);
+  deleteMenuGroup(){
+    return this.menuGroupRef.doc(String(sessionStorage.getItem('restaurant_menu_group_id'))).delete();
   }
 
-  public deleteMenuGroup(): Observable<any>{
-    return this.http.delete(this.restaurantUrl + "module-menu/menu-group/" + sessionStorage.getItem('restaurant_menu_group_id'));
+  getAccountMenuGroup(sorting: any, pageSize: any){
+    return this.menuGroupRef.ref
+      .where("account", "==", localStorage.getItem('restaurant_id'))
+      // .orderBy(sorting?.field, sorting?.direction)
+      .limit(pageSize)
+      .get();
   }
 
-  // get all menu items belonging to a user
-  public getAllMenuItems(): Observable<any>{
-    return this.http.get(this.restaurantUrl + "module-menu/menu-item?account=" + localStorage.getItem('restaurant_id'));
+  getAccountMenuGroupNext(sorting: any, pageSize: any, pageStart: any){
+    return this.menuGroupRef.ref
+      .where("account", "==", localStorage.getItem('restaurant_id'))
+      // .orderBy(sorting?.field, sorting?.direction)
+      .startAfter(pageStart)
+      .limit(pageSize)
+      .get();
   }
 
-  // create and get all menu items belonging to a menu group
-
-  public getMenuItems(): Observable<any>{
-    return this.http.get(this.restaurantUrl + "module-menu/menu-item?account=" + sessionStorage.getItem('restaurant_menu_group_id'));
+  getAccountMenuGroupPrev(sorting: any, pageSize: any, pageStart: any){
+    return this.menuGroupRef.ref
+      .where("account", "==", localStorage.getItem('restaurant_id'))
+      // .orderBy(sorting?.field, sorting?.direction)
+      .startAt(pageStart)
+      .limit(pageSize)
+      .get();
   }
 
-  public postMenuItem(item: any): Observable<any>{
-    return this.http.post(this.restaurantUrl + "module-menu/menu-item/", item);
+  // menu item
+
+  createMenuItem(menuItem: any){
+    return this.menuItemRef.add(menuItem);
   }
 
-  // retreive, update and delete menu item
-
-  public getSingleMenuItem(): Observable<any>{
-    return this.http.get(this.restaurantUrl + "module-menu/menu-item/" + sessionStorage.getItem('restaurant_menu_item_id'));
+  getMenuItem(){
+    return this.menuItemRef.doc(String(sessionStorage.getItem('restaurant_menu_group_id'))).ref.get();
   }
 
-  public putMenuItem(item: any): Observable<any>{
-    return this.http.put(this.restaurantUrl + "module-menu/menu-item/" + sessionStorage.getItem('restaurant_menu_item_id'), item);
+  updateMenuItem(menuItem: any){
+    return this.menuItemRef.doc(String(sessionStorage.getItem('restaurant_menu_group_id'))).update(menuItem);
   }
 
-  public deleteMenuItem(): Observable<any>{
-    return this.http.delete(this.restaurantUrl + "module-menu/menu-item/" + sessionStorage.getItem('restaurant_menu_item_id'));
+  deleteMenuItem(){
+    return this.menuItemRef.doc(String(sessionStorage.getItem('restaurant_menu_group_id'))).delete();
   }
 
-  // dashboard
-
-  public getCounts(model: any): Observable<any>{
-    return this.http.get(this.restaurantUrl + "module-menu/count?account=" + localStorage.getItem('restaurant_id') + "&model=" + model);
+  getMenuGroupMenuItem(){
+    return this.menuItemRef.ref
+      .where("menu_group.id", "==", sessionStorage.getItem('restaurant_menu_group_id'))
+      // .orderBy("created_at", "desc")
+      .get();
   }
 
-  public getAnnotation(model: any): Observable<any>{
-    return this.http.get(this.restaurantUrl + "module-menu/annotate?account=" + localStorage.getItem('restaurant_id') + "&model=" + model);
+  getAccountMenuItem(sorting: any, pageSize: any){
+    return this.menuItemRef.ref
+      .where("menu_group.data.account", "==", localStorage.getItem('restaurant_id'))
+      // .orderBy(sorting?.field, sorting?.direction)
+      .limit(pageSize)
+      .get();
+  }
+
+  getAccountMenuItemNext(sorting: any, pageSize: any, pageStart: any){
+    return this.menuItemRef.ref
+      .where("menu_group.data.account", "==", localStorage.getItem('restaurant_id'))
+      // .orderBy(sorting?.field, sorting?.direction)
+      .startAfter(pageStart)
+      .limit(pageSize)
+      .get();
+  }
+
+  getAccountMenuItemPrev(sorting: any, pageSize: any, pageStart: any){
+    return this.menuItemRef.ref
+      .where("menu_group.data.account", "==", localStorage.getItem('restaurant_id'))
+      // .orderBy(sorting?.field, sorting?.direction)
+      .startAt(pageStart)
+      .limit(pageSize)
+      .get();
   }
 
 }
