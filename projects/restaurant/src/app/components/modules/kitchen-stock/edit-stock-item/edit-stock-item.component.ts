@@ -1,8 +1,10 @@
 import { Component, OnInit, ViewChild, Output, EventEmitter, ElementRef } from '@angular/core';
 
+import { StockItemFormComponent } from '../stock-item-form/stock-item-form.component';
+
 import { KitchenStockApiService } from 'projects/restaurant/src/app/services/modules/kitchen-stock-api/kitchen-stock-api.service';
 
-import { StockItemFormComponent } from '../stock-item-form/stock-item-form.component';
+import { StockItem } from 'projects/restaurant/src/app/models/modules/kitchen-stock/kitchen-stock.model';
 
 
 @Component({
@@ -28,6 +30,8 @@ export class EditStockItemComponent implements OnInit {
     { text: "View Item", url: "/home/kitchen-stock/view-stock-item" },
   ];
 
+  stockItemData: any;
+
   selectedIndex: any = 0;
   selectedId: any = "";
 
@@ -35,6 +39,8 @@ export class EditStockItemComponent implements OnInit {
   }
 
   openModal(index: any, data: any){
+    this.stockItemData = data;
+
     this.selectedIndex = index;
     this.selectedId = data.id;
 
@@ -49,17 +55,21 @@ export class EditStockItemComponent implements OnInit {
   }
 
   saveItem(){
-    let data = {
-      index: this.selectedIndex,
-      id: this.selectedId,
-
-      account: localStorage.getItem('restaurant_id'),
+    let stock_item: StockItem = {
+      created_at: this.stockItemData.created_at,
+      account: localStorage.getItem('restaurant_id') as string,
       item_code: this.stockItemForm.stockItemForm.controls.itemCode.value,
       item_name: this.stockItemForm.stockItemForm.controls.itemName.value,
       category: this.stockItemForm.stockItemForm.controls.category.value,
       item_type: this.stockItemForm.stockItemForm.controls.itemType.value,
       quantity: this.stockItemForm.stockItemForm.controls.quantity.value,
       refill_ordered: this.stockItemForm.stockItemForm.controls.refillOrdered.value,
+    }
+
+    let data = {
+      index: this.selectedIndex,
+      id: this.selectedId,
+      stock_item: stock_item
     }
 
     this.saveItemEvent.emit(data);

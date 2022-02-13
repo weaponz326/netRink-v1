@@ -1,11 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { StaffApiService } from 'projects/restaurant/src/app/services/modules/staff-api/staff-api.service';
-
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
-import { TablePaginationComponent } from 'projects/personal/src/app/components/module-utilities/table-pagination/table-pagination.component'
-import { TableSortingComponent } from 'projects/personal/src/app/components/module-utilities/table-sorting/table-sorting.component'
+
+import { StaffApiService } from 'projects/restaurant/src/app/services/modules/staff-api/staff-api.service';
 
 
 @Component({
@@ -21,11 +19,6 @@ export class AllStaffComponent implements OnInit {
   ) { }
 
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
-  @ViewChild('tablePaginationComponentReference', { read: TablePaginationComponent, static: false }) tablePagination!: TablePaginationComponent;
-  @ViewChild('staffCodeSortingComponentReference', { read: TableSortingComponent, static: false }) staffCodeSorting!: TableSortingComponent;
-  @ViewChild('staffNameSortingComponentReference', { read: TableSortingComponent, static: false }) staffNameSorting!: TableSortingComponent;
-  @ViewChild('departmentSortingComponentReference', { read: TableSortingComponent, static: false }) departmentSorting!: TableSortingComponent;
-  @ViewChild('jobSortingComponentReference', { read: TableSortingComponent, static: false }) jobSorting!: TableSortingComponent;
 
   navHeading: any[] = [
     { text: "All Staff", url: "/home/staff/all-staff" },
@@ -33,57 +26,131 @@ export class AllStaffComponent implements OnInit {
 
   staffGridData: any[] = [];
 
-  currentPage = 0;
-  totalPages = 0;
-  totalItems = 0;
+  isFetchingGridData: boolean =  false;
+  isDataAvailable: boolean =  true;
+
+  firstInResponse: any = [];
+  lastInResponse: any = [];
+  nextStartAfter: any = [];
+  prevStartAt: any = [];
+  pageNumber = 0;
+  disableNext: boolean = false;
+  disablePrev: boolean = true;
+
+  sortParams = {
+    field: "created_at",
+    direction: "desc"
+  }
 
   ngOnInit(): void {
   }
 
   ngAfterViewInit(): void {
-    this.getStaff();
+    this.getAccountStaff();
   }
 
-  getStaff(){
-    this.staffApi.getStaff()
-      .subscribe(
-        res => {
+  getAccountStaff(){
+    this.isFetchingGridData = true;
+
+    this.staffApi.getAccountStaff(this.sortParams, 20)
+      .then(
+        (res: any) => {
           console.log(res);
-          this.staffGridData = res;
-          this.currentPage = res.current_page;
-          this.totalPages = res.total_pages;
-          this.totalItems = res.count;
+
+          this.staffGridData = res.docs;
+          this.isFetchingGridData = false;
+          if (!res.docs.length) this.isDataAvailable = false;
+
+          this.prevStartAt = this.firstInResponse;
+          this.nextStartAfter = res.docs[res.docs.length - 1];
+          this.firstInResponse = res.docs[0];
+          this.pageNumber = 1;
+
+          this.disableNext = false;
+          this.disablePrev = true;
         },
-        err => {
+        (err: any) => {
           console.log(err);
+          this.isFetchingGridData = false;
           this.connectionToast.openToast();
         }
       )
   }
 
-  viewStaff(staffId: any){
-    console.log(staffId);
-    sessionStorage.setItem('restaurant_staff_id', staffId);
+  nextPage(e: any){
+    e.preventDefault();
+    this.isFetchingGridData = true;
 
-    this.router.navigateByUrl('/home/staff/view-staff');
+    this.staffApi.getAccountStaffNext(this.sortParams, 20, this.nextStartAfter)
+      .then(
+        (res: any) => {
+          console.log(res);
+
+          this.staffGridData = res.docs;
+          this.isFetchingGridData = false;
+          if (!res.docs.length) this.isDataAvailable = false;
+
+          this.prevStartAt = this.firstInResponse;
+          this.nextStartAfter = res.docs[res.docs.length - 1];
+          this.firstInResponse = res.docs[0];
+          this.pageNumber++;
+
+          if (res.docs.length < 20){
+            this.disableNext = true;
+            this.disablePrev = false;
+          }
+        },
+        (err: any) => {
+          console.log(err);
+          this.isFetchingGridData = false;
+          this.connectionToast.openToast();
+        }
+      )
   }
 
-  sortTable(field: any){
-    console.log(field);
-    this.getStaff();
+  previousPage(e: any){
+    e.preventDefault();
+    this.isFetchingGridData = true;
 
-    if((field == 'staff_code') || (field == "-staff_code")){
-      this.staffCodeSorting.resetSort();
-    }
-    else if((field == 'staff_name') || (field == "-staff_name")){
-      this.staffNameSorting.resetSort();
-    }
-    else if((field == 'department') || (field == "-department")){
-      this.departmentSorting.resetSort();
-    }
-    else if((field == 'job') || (field == "-job")){
-      this.jobSorting.resetSort();
-    }
+    this.staffApi.getAccountStaffPrev(this.sortParams, 20, this.prevStartAt)
+      .then(
+        (res: any) => {
+          console.log(res);
+
+          this.staffGridData = res.docs;
+          this.isFetchingGridData = false;
+          if (!res.docs.length) this.isDataAvailable = false;
+
+          this.prevStartAt = this.firstInResponse;
+          this.nextStartAfter = res.docs[res.docs.length - 1];
+          this.firstInResponse = res.docs[0];
+          this.pageNumber++;
+
+          if (this.pageNumber == 1){
+            this.disableNext = false;
+            this.disablePrev = true;
+          }
+        },
+        (err: any) => {
+          console.log(err);
+          this.isFetchingGridData = false;
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  sortTable(field: any, direction: any){
+    this.sortParams.field = field;
+    this.sortParams.direction = direction;
+
+    this.getAccountStaff();
+  }
+
+  viewStaff(staffId: any){
+    console.log(staffId);
+
+    sessionStorage.setItem('restaurant_staff_id', staffId);
+    this.router.navigateByUrl('/home/staff/view-staff');
   }
 
   onPrint(){

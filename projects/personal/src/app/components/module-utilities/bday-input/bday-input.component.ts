@@ -13,13 +13,27 @@ export class BdayInputComponent implements OnInit {
   dayInput = "";
   monthInput = "";
   yearInput = "";
-  value = this.dayInput + "-" + this.monthInput + "-" + this.yearInput;
+
+  // TODO: to be removed
+  value = this.yearInput + "-" + this.monthInput + "-" + this.dayInput;
 
   dobDaySource = this.getDays();
   dobMonthSource = this.getMonths();
   dobYearSource = this.getYears();
 
   ngOnInit(): void {
+  }
+
+  getValue(){
+    let value = this.yearInput + "-" + this.monthInput + "-" + this.dayInput;
+    return value;
+  }
+
+  setValue(date: any){
+    var dateArray = date.split('-');
+    this.yearInput = dateArray[0];
+    this.monthInput = dateArray[1];
+    this.dayInput = dateArray[2];
   }
 
   getDays(): any[] {
@@ -46,7 +60,7 @@ export class BdayInputComponent implements OnInit {
 
   getYears(): any[] {
     var i, n=[];
-    for (i=1900; i<=2022; i++) n.push(i.toString());
+    for (i=2022; i>=1900; i--) n.push(i.toString());
     return n;
   }
 

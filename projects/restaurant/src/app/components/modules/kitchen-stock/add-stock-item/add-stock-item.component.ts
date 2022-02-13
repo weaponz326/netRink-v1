@@ -1,8 +1,13 @@
 import { Component, OnInit, ViewChild, Output, EventEmitter, ElementRef } from '@angular/core';
 
-import { KitchenStockApiService } from 'projects/restaurant/src/app/services/modules/kitchen-stock-api/kitchen-stock-api.service';
+import * as firebase from 'firebase/compat/app';
 
 import { StockItemFormComponent } from '../stock-item-form/stock-item-form.component';
+
+import { KitchenStockApiService } from 'projects/restaurant/src/app/services/modules/kitchen-stock-api/kitchen-stock-api.service';
+
+import { StockItem } from 'projects/restaurant/src/app/models/modules/kitchen-stock/kitchen-stock.model';
+
 
 
 @Component({
@@ -34,8 +39,9 @@ export class AddStockItemComponent implements OnInit {
   }
 
   saveItem(){
-    let data = {
-      account: localStorage.getItem('restaurant_id'),
+    let data: StockItem = {
+      created_at: firebase.default.firestore.FieldValue.serverTimestamp(),
+      account: localStorage.getItem('restaurant_id') as string,
       item_code: this.stockItemForm.stockItemForm.controls.itemCode.value,
       item_name: this.stockItemForm.stockItemForm.controls.itemName.value,
       category: this.stockItemForm.stockItemForm.controls.category.value,

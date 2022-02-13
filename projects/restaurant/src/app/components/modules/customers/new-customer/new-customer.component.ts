@@ -1,10 +1,14 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { CustomersApiService } from 'projects/restaurant/src/app/services/modules/customers-api/customers-api.service';
+import * as firebase from 'firebase/compat/app';
 
 import { CustomerFormComponent } from '../customer-form/customer-form.component';
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
+
+import { CustomersApiService } from 'projects/restaurant/src/app/services/modules/customers-api/customers-api.service';
+
+import { Customer } from 'projects/restaurant/src/app/models/modules/customers/customers.model';
 
 
 @Component({
@@ -31,11 +35,12 @@ export class NewCustomerComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  saveCustomer(){
+  createCustomer(){
     console.log('u are saving a new customer');
 
-    var customerData = {
-      account: localStorage.getItem('restaurant_id'),
+    var data: Customer = {
+      created_at: firebase.default.firestore.FieldValue.serverTimestamp(),
+      account: localStorage.getItem('restaurant_id') as string,
       customer_code: this.customerForm.customerForm.controls.customerCode.value,
       customer_name: this.customerForm.customerForm.controls.customerName.value,
       customer_type: this.customerForm.customerForm.controls.customerType.value,
@@ -48,19 +53,19 @@ export class NewCustomerComponent implements OnInit {
       preferences: this.customerForm.customerForm.controls.preferences.value,
     }
 
-    console.log(customerData);
+    console.log(data);
     this.isCustomerSaving = true;
 
-    this.customersApi.postCustomer(customerData)
-      .subscribe(
-        res => {
+    this.customersApi.createCustomer(data)
+      .then(
+        (res: any) => {
           console.log(res);
           this.isCustomerSaving = false;
 
           sessionStorage.setItem('restaurant_customer_id', res.id);
           this.router.navigateByUrl('/suite/customers/view-customer');
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.isCustomerSaving = false;
           this.connectionToast.openToast();

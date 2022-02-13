@@ -1,11 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { StaffApiService } from 'projects/restaurant/src/app/services/modules/staff-api/staff-api.service';
-
 import { StaffFormComponent } from '../staff-form/staff-form.component';
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 import { DeleteModalComponent } from 'projects/personal/src/app/components/module-utilities/delete-modal/delete-modal.component'
+
+import { StaffApiService } from 'projects/restaurant/src/app/services/modules/staff-api/staff-api.service';
+
+import { Staff } from 'projects/restaurant/src/app/models/modules/staff/staff.model';
 
 
 @Component({
@@ -29,6 +31,8 @@ export class ViewStaffComponent implements OnInit {
     { text: "View Staff", url: "/home/staff/view-staff" },
   ];
 
+  staffFormData: any;
+
   isStaffSaving = false;
   isStaffDeleting = false;
 
@@ -40,50 +44,52 @@ export class ViewStaffComponent implements OnInit {
   }
 
   getStaff(){
-    this.staffApi.getSingleStaff()
-      .subscribe(
-        res => {
+    this.staffApi.getStaff()
+      .then(
+        (res: any) => {
           console.log(res);
+          this.staffFormData = res;
 
-          this.staffForm.staffForm.controls.firstName.setValue(res.first_name);
-          this.staffForm.staffForm.controls.lastName.setValue(res.last_name);
-          this.staffForm.staffForm.controls.sex.setValue(res.sex);
-          // this.staffForm.staffForm.controls.dobCustomWidget.value = res.date_of_birth;
-          // this.staffForm.staffForm.controls.photoCustomWidget.image = res.photo;
-          this.staffForm.staffForm.controls.nationality.setValue(res.nationality);
-          this.staffForm.staffForm.controls.religion.setValue(res.religion);
-          this.staffForm.staffForm.controls.phone.setValue(res.phone);
-          this.staffForm.staffForm.controls.email.setValue(res.email);
-          this.staffForm.staffForm.controls.address.setValue(res.address);
-          this.staffForm.staffForm.controls.state.setValue(res.state);
-          this.staffForm.staffForm.controls.city.setValue(res.city);
-          this.staffForm.staffForm.controls.postCode.setValue(res.post_code);
-          this.staffForm.staffForm.controls.staffCode.setValue(res.staff_code);
-          this.staffForm.staffForm.controls.department.setValue(res.department);
-          this.staffForm.staffForm.controls.job.setValue(res.job);
+          this.staffForm.staffForm.controls.firstName.setValue(this.staffFormData.data().first_name);
+          this.staffForm.staffForm.controls.lastName.setValue(this.staffFormData.data().last_name);
+          this.staffForm.staffForm.controls.sex.setValue(this.staffFormData.data().sex);
+          this.staffForm.bday.setValue(this.staffFormData.data().date_of_birth);
+          this.staffForm.photo.imgSrc = this.staffFormData.data().photo;
+          this.staffForm.staffForm.controls.nationality.setValue(this.staffFormData.data().nationality);
+          this.staffForm.staffForm.controls.religion.setValue(this.staffFormData.data().religion);
+          this.staffForm.staffForm.controls.phone.setValue(this.staffFormData.data().phone);
+          this.staffForm.staffForm.controls.email.setValue(this.staffFormData.data().email);
+          this.staffForm.staffForm.controls.address.setValue(this.staffFormData.data().address);
+          this.staffForm.staffForm.controls.state.setValue(this.staffFormData.data().state);
+          this.staffForm.staffForm.controls.city.setValue(this.staffFormData.data().city);
+          this.staffForm.staffForm.controls.postCode.setValue(this.staffFormData.data().post_code);
+          this.staffForm.staffForm.controls.staffCode.setValue(this.staffFormData.data().staff_code);
+          this.staffForm.staffForm.controls.department.setValue(this.staffFormData.data().department);
+          this.staffForm.staffForm.controls.job.setValue(this.staffFormData.data().job);
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }
       )
   }
 
-  saveStaff(){
+  updateStaff(){
     console.log('u are saving a new staff');
 
-    var staffData = {
-      account: localStorage.getItem('restaurant_id'),
+    var data: Staff = {
+      created_at: this.staffFormData.data().created_at,
+      account: localStorage.getItem('restaurant_id') as string,
       first_name: this.staffForm.staffForm.controls.firstName.value,
       last_name: this.staffForm.staffForm.controls.lastName.value,
-      sex: this.staffForm.staffForm.controls.sexDropDownList.value,
-      // date_of_birth: this.staffForm.staffForm.controls.dobCustomWidget.value,
-      // photo: this.staffForm.staffForm.controls.photoCustomWidget.image,
+      sex: this.staffForm.staffForm.controls.sex.value,
+      date_of_birth: this.staffForm.bday.value,
+      photo: this.staffForm.photo.imgSrc,
       nationality: this.staffForm.staffForm.controls.nationality.value,
       religion: this.staffForm.staffForm.controls.religion.value,
       phone: this.staffForm.staffForm.controls.phone.value,
       email: this.staffForm.staffForm.controls.email.value,
-      address: this.staffForm.staffForm.controls.addressTextBox.value,
+      address: this.staffForm.staffForm.controls.address.value,
       state: this.staffForm.staffForm.controls.state.value,
       city: this.staffForm.staffForm.controls.city.value,
       post_code: this.staffForm.staffForm.controls.postCode.value,
@@ -92,16 +98,16 @@ export class ViewStaffComponent implements OnInit {
       job: this.staffForm.staffForm.controls.job.value,
     }
 
-    console.log(staffData);
+    console.log(data);
     this.isStaffSaving = true;
 
-    this.staffApi.putStaff(staffData)
-      .subscribe(
-        res => {
+    this.staffApi.updateStaff(data)
+      .then(
+        (res: any) => {
           console.log(res);
           this.isStaffSaving = false;
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.isStaffSaving = false;
           this.connectionToast.openToast();
@@ -117,13 +123,13 @@ export class ViewStaffComponent implements OnInit {
     this.isStaffDeleting = true;
 
     this.staffApi.deleteStaff()
-      .subscribe(
-        res => {
+      .then(
+        (res: any) => {
           console.log(res);
 
           this.router.navigateByUrl('/home/staff/all-staff');
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }

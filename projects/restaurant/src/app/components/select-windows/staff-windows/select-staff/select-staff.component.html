@@ -1,13 +1,95 @@
-<div class="module-select-window">
+<button [hidden]="true" #openButtonElementReference data-bs-toggle="modal" data-bs-target="#selectStaffModal">
+    Launch demo modal
+</button>
 
-    <smart-window #window [label]="'Select Restaurant Staff'">
-        <smart-grid #grid class="w-100"
-        [dataSource]="dataSource" [columns]="columns" [sorting]="sorting" (onRowDoubleClick)="selectRow($event)">
-        </smart-grid>
-    </smart-window>
+<div class="modal fade select-table-modal" id="selectStaffModal" tabindex="-1" aria-labelledby="selectStaffModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
 
+            <div class="modal-header bg-light">
+                <span class="modal-title" id="selectStaffModalLabel">Select Restaurant Staff</span>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <table class="table table-bordered table-sm w-100 page-table">
+                    <thead>
+                        <tr class="bg-light">
+                            <th width="20%">
+                                Staff ID
+                                <i *ngIf="sortParams.field != 'staff_code'" class="bi bi-filter float-end list-pointer" (click)="sortTable('staff_code', 'desc')"></i>
+                                <i *ngIf="sortParams.field == 'staff_code' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('staff_code', 'asc')"></i>
+                                <i *ngIf="sortParams.field == 'staff_code' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('staff_code', 'desc')"></i>
+                            </th>
+                            <th width="50%">
+                                Staff Name
+                                <i *ngIf="sortParams.field != 'staff_name'" class="bi bi-filter float-end list-pointer" (click)="sortTable('staff_name', 'desc')"></i>
+                                <i *ngIf="sortParams.field == 'staff_name' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('staff_name', 'asc')"></i>
+                                <i *ngIf="sortParams.field == 'staff_name' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('staff_name', 'desc')"></i>
+                            </th>
+                            <th width="30%">
+                                Job
+                                <i *ngIf="sortParams.field != 'job'" class="bi bi-filter float-end list-pointer" (click)="sortTable('job', 'desc')"></i>
+                                <i *ngIf="sortParams.field == 'job' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('job', 'asc')"></i>
+                                <i *ngIf="sortParams.field == 'job' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('job', 'desc')"></i>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let data of staffGridData" (dblclick)="selectRow(data)" class="table-pointer">
+                            <td>{{data?.data().staff_code}}</td>
+                            <td>{{data?.data().first_name}} {{data?.data().last_name}}</td>
+                            <td>{{data?.data().job}}</td>
+                        </tr>
+                        <tr *ngIf="isFetchingGridData" class="text-center">
+                            <td colspan="4">
+                                <div class="spinner-grow m-4" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr *ngIf="!isDataAvailable && !isFetchingGridData" class="text-center">
+                            <td colspan="4">
+                                <p class="m-4">No data available</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr class="bg-light">
+                            <td colspan="4">
+                                <nav class="nav-light float-end" aria-label="Page navigation">
+                                    <ul class="pagination pagination-sm mb-0 justify-content-end">
+                                        <li class="page-item">
+                                            <a class="page-link" href="#" aria-label="First" (click)="previousPage($event)">
+                                                <i class="bi bi-caret-left-fill"></i>
+                                            </a>
+                                        </li>
+                                        <li class="page-item">
+                                            <a class="page-link" href="#" aria-label="Current" (click)="$event.preventDefault()">
+                                                {{pageNumber}}
+                                            </a>
+                                        </li>
+                                        <li class="page-item">
+                                            <a class="page-link" href="#" aria-label="Last" (click)="nextPage($event)">
+                                                <i class="bi bi-caret-right-fill"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <button [hidden]="true" #closeButtonElementReference data-bs-toggle="modal" data-bs-target="#selectStaffModal">
+                Launch demo modal
+            </button>
+
+        </div>
+    </div>
 </div>
 
-<!-- connection error prompt component -->
+<!-- connection error toast component -->
 
 <app-connection-toast #connectionToastComponentReference></app-connection-toast>

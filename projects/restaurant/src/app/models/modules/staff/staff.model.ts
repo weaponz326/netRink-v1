@@ -1,4 +1,5 @@
 export class Staff {
+  created_at!: any;
   account!: string;
   first_name!: string;
   last_name!: string;

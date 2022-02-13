@@ -12,8 +12,8 @@ export class MenuApiService {
     private afs: AngularFirestore,
   ) { }
 
-  menuGroupRef = this.afs.collection('restaurant/module_menu/menu_menu_group');
-  menuItemRef = this.afs.collection('restaurant/module_menu/menu_menu_item');
+  menuGroupRef = this.afs.collection('restaurant/module_menu/restaurant_menu_group');
+  menuItemRef = this.afs.collection('restaurant/module_menu/restaurant_menu_item');
 
   // menu group
 

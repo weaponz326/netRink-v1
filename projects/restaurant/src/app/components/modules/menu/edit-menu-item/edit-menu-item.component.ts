@@ -33,22 +33,22 @@ export class EditMenuItemComponent implements OnInit {
     this.selectedIndex = index;
     this.selectedId = data.id;
 
-    this.menuItemForm.menuItemForm.controls.itemCode.setValue(data.data().item_code);
-    this.menuItemForm.menuItemForm.controls.itemName.setValue(data.data().item_name);
-    this.menuItemForm.menuItemForm.controls.price.setValue(data.data().price);
+    this.menuItemForm.menuItemForm.controls.itemCode.setValue(data.item_code);
+    this.menuItemForm.menuItemForm.controls.itemName.setValue(data.item_name);
+    this.menuItemForm.menuItemForm.controls.price.setValue(data.price);
 
     this.buttonElement.nativeElement.click();
   }
 
   saveMenuItem(){
     let menu_item: MenuItem = {
-      created_at: this.menuItemData.data().created_at,
+      created_at: this.menuItemData.created_at,
       item_code: this.menuItemForm.menuItemForm.controls.itemCode.value,
       item_name: this.menuItemForm.menuItemForm.controls.itemName.value,
       price: this.menuItemForm.menuItemForm.controls.price.value,
       menu_group: {
         id: sessionStorage.getItem('restaurant_menu_group_id') as string,
-        data: this.menuItemData.data().menu_group,
+        data: this.menuItemData.menu_group,
       }
     }
 

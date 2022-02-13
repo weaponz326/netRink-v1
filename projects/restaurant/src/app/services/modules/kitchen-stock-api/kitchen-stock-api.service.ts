@@ -1,9 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs'
 
-import { environment } from 'projects/restaurant/src/environments/environment'
-import { EndpointsService } from 'projects/application/src/app/services/endpoints/endpoints.service';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 
 
 @Injectable({
@@ -12,40 +9,53 @@ import { EndpointsService } from 'projects/application/src/app/services/endpoint
 export class KitchenStockApiService {
 
   constructor(
-    private http: HttpClient,
-    private endpoints: EndpointsService
+    private afs: AngularFirestore,
   ) { }
 
-  restaurantUrl = environment.restaurantUrl;
+  stockItemRef = this.afs.collection('restaurant/module_kitchen_stock/restaurant_stock_item');
 
-  // create and get all items belonging to user
+  // stock item
 
-  public getItems(): Observable<any>{
-    return this.http.get(this.restaurantUrl + "module-kitchen-stock/stock-item?account=" + localStorage.getItem('restaurant_id'));
+  createStockItem(itemData: any){
+    return this.stockItemRef.add(itemData);
   }
 
-  public postItem(item: any): Observable<any>{
-    return this.http.post(this.restaurantUrl + "module-kitchen-stock/stock-item/", item);
+  getStockItem(itemId: any){
+    return this.stockItemRef.doc(itemId).ref.get();
   }
 
-  // retreive, update and delete item
-
-  public getSingleItem(): Observable<any>{
-    return this.http.get(this.restaurantUrl + "module-kitchen-stock/stock-item/" + sessionStorage.getItem('restaurant_stock_item_id'));
+  updateStockItem(itemId: any, itemData: any){
+    return this.stockItemRef.doc(itemId).update(itemData);
   }
 
-  public putItem(itemId: any, itemData: any): Observable<any>{
-    return this.http.put(this.restaurantUrl + "module-kitchen-stock/stock-item/" + itemId, itemData);
+  deleteStockItem(itemId: any){
+    return this.stockItemRef.doc(itemId).delete();
   }
 
-  public deleteItem(itemId: any): Observable<any>{
-    return this.http.delete(this.restaurantUrl + "module-kitchen-stock/stock-item/" + itemId);
+  getAccountStockItem(sorting: any, pageSize: any){
+    return this.stockItemRef.ref
+      .where("account", "==", localStorage.getItem('restaurant_id'))
+      // .orderBy(sorting?.field, sorting?.direction)
+      .limit(pageSize)
+      .get();
   }
 
-  // dashboard
+  getAccountStockItemNext(sorting: any, pageSize: any, pageStart: any){
+    return this.stockItemRef.ref
+      .where("account", "==", localStorage.getItem('restaurant_id'))
+      // .orderBy(sorting?.field, sorting?.direction)
+      .startAfter(pageStart)
+      .limit(pageSize)
+      .get();
+  }
 
-  public getCounts(model: any): Observable<any>{
-    return this.http.get(this.restaurantUrl + "module-kitchen-stock/count?account=" + localStorage.getItem('restaurant_id') + "&model=" + model);
+  getAccountStockItemPrev(sorting: any, pageSize: any, pageStart: any){
+    return this.stockItemRef.ref
+      .where("account", "==", localStorage.getItem('restaurant_id'))
+      // .orderBy(sorting?.field, sorting?.direction)
+      .startAt(pageStart)
+      .limit(pageSize)
+      .get();
   }
 
 }

@@ -1,10 +1,14 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { StaffApiService } from 'projects/restaurant/src/app/services/modules/staff-api/staff-api.service';
+import * as firebase from 'firebase/compat/app';
 
 import { StaffFormComponent } from '../staff-form/staff-form.component';
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
+
+import { StaffApiService } from 'projects/restaurant/src/app/services/modules/staff-api/staff-api.service';
+
+import { Staff } from 'projects/restaurant/src/app/models/modules/staff/staff.model';
 
 
 @Component({
@@ -31,16 +35,17 @@ export class NewStaffComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  saveStaff(){
+  createStaff(){
     console.log('u are saving a new staff');
 
-    var staffData = {
-      account: localStorage.getItem('restaurant_id'),
+    var data: Staff = {
+      created_at: firebase.default.firestore.FieldValue.serverTimestamp(),
+      account: localStorage.getItem('restaurant_id') as string,
       first_name: this.staffForm.staffForm.controls.firstName.value,
       last_name: this.staffForm.staffForm.controls.lastName.value,
       sex: this.staffForm.staffForm.controls.sex.value,
-      // date_of_birth: this.staffForm.staffForm.controls.dobCustomWidget.value,
-      // photo: this.staffForm.staffForm.controls.photoCustomWidget.image,
+      date_of_birth: this.staffForm.bday.value,
+      photo: this.staffForm.photo.imgSrc,
       nationality: this.staffForm.staffForm.controls.nationality.value,
       religion: this.staffForm.staffForm.controls.religion.value,
       phone: this.staffForm.staffForm.controls.phone.value,
@@ -54,19 +59,19 @@ export class NewStaffComponent implements OnInit {
       job: this.staffForm.staffForm.controls.job.value,
     }
 
-    console.log(staffData);
+    console.log(data);
     this.isStaffSaving = true;
 
-    this.staffApi.postStaff(staffData)
-      .subscribe(
-        res => {
+    this.staffApi.createStaff(data)
+      .then(
+        (res: any) => {
           console.log(res);
           this.isStaffSaving = false;
 
           sessionStorage.setItem('staff_id', res.id);
-          this.router.navigateByUrl('/suite/staff/view-staff');
+          this.router.navigateByUrl('/home/staff/view-staff');
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.isStaffSaving = false;
           this.connectionToast.openToast();

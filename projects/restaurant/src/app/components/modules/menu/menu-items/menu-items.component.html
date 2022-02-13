@@ -13,7 +13,7 @@
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let data of menuItemsGridData; index as i" (dblClick)="openEditMenuItem(i)" class="table-pointer">
+        <tr *ngFor="let data of menuItemsGridData; index as i" (dblclick)="openEditMenuItem(i)" class="table-pointer">
             <td>{{data?.item_code}}</td>
             <td>{{data?.item_name}}</td>
             <td>{{data?.price}}</td>

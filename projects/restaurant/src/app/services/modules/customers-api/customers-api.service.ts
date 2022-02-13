@@ -1,9 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs'
 
-import { environment } from 'projects/restaurant/src/environments/environment'
-import { EndpointsService } from 'projects/application/src/app/services/endpoints/endpoints.service';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 
 
 @Injectable({
@@ -12,40 +9,53 @@ import { EndpointsService } from 'projects/application/src/app/services/endpoint
 export class CustomersApiService {
 
   constructor(
-    private http: HttpClient,
-    private endpoints: EndpointsService
+    private afs: AngularFirestore,
   ) { }
 
-  restaurantUrl = environment.restaurantUrl;
+  customerRef = this.afs.collection('restaurant/module_customers/restaurant_customer');
 
-  // create and get all customer customers belonging to account
+  // customers
 
-  public getCustomers(): Observable<any>{
-    return this.http.get(this.restaurantUrl + "module-customers/customer?account=" + localStorage.getItem('restaurant_id'));
+  createCustomer(customer: any){
+    return this.customerRef.add(customer);
   }
 
-  public postCustomer(customer: any): Observable<any>{
-    return this.http.post(this.restaurantUrl + "module-customers/customer/", customer);
+  getCustomer(){
+    return this.customerRef.doc(String(sessionStorage.getItem('restaurant_customer_id'))).ref.get();
   }
 
-  // retreive, update and delete customer
-
-  public getSingleCustomer(): Observable<any>{
-    return this.http.get(this.restaurantUrl + "module-customers/customer/" + sessionStorage.getItem('restaurant_customer_id'));
+  updateCustomer(customer: any){
+    return this.customerRef.doc(String(sessionStorage.getItem('restaurant_customer_id'))).update(customer);
   }
 
-  public putCustomer(customer: any): Observable<any>{
-    return this.http.put(this.restaurantUrl + "module-customers/customer/" + sessionStorage.getItem('restaurant_customer_id'), customer);
+  deleteCustomer(){
+    return this.customerRef.doc(String(sessionStorage.getItem('restaurant_customer_id'))).delete();
   }
 
-  public deleteCustomer(): Observable<any>{
-    return this.http.delete(this.restaurantUrl + "module-customers/customer/" + sessionStorage.getItem('restaurant_customer_id'));
+  getAccountCustomer(sorting: any, pageSize: any){
+    return this.customerRef.ref
+      .where("account", "==", localStorage.getItem('restaurant_id'))
+      // .orderBy(sorting?.field, sorting?.direction)
+      .limit(pageSize)
+      .get();
   }
 
-  // dashboard
+  getAccountCustomerNext(sorting: any, pageSize: any, pageStart: any){
+    return this.customerRef.ref
+      .where("account", "==", localStorage.getItem('restaurant_id'))
+      // .orderBy(sorting?.field, sorting?.direction)
+      .startAfter(pageStart)
+      .limit(pageSize)
+      .get();
+  }
 
-  public getCounts(model: any): Observable<any>{
-    return this.http.get(this.restaurantUrl + "module-customers/count?account=" + localStorage.getItem('restaurant_id') + "&model=" + model);
+  getAccountCustomerPrev(sorting: any, pageSize: any, pageStart: any){
+    return this.customerRef.ref
+      .where("account", "==", localStorage.getItem('restaurant_id'))
+      // .orderBy(sorting?.field, sorting?.direction)
+      .startAt(pageStart)
+      .limit(pageSize)
+      .get();
   }
 
 }

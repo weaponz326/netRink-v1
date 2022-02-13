@@ -1,11 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { CustomersApiService } from 'projects/restaurant/src/app/services/modules/customers-api/customers-api.service';
-
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
-import { TablePaginationComponent } from 'projects/personal/src/app/components/module-utilities/table-pagination/table-pagination.component'
-import { TableSortingComponent } from 'projects/personal/src/app/components/module-utilities/table-sorting/table-sorting.component'
+
+import { CustomersApiService } from 'projects/restaurant/src/app/services/modules/customers-api/customers-api.service';
 
 
 @Component({
@@ -21,10 +19,6 @@ export class AllCustomersComponent implements OnInit {
   ) { }
 
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
-  @ViewChild('tablePaginationComponentReference', { read: TablePaginationComponent, static: false }) tablePagination!: TablePaginationComponent;
-  @ViewChild('customerCodeSortingComponentReference', { read: TableSortingComponent, static: false }) customerCodeSorting!: TableSortingComponent;
-  @ViewChild('customerNameSortingComponentReference', { read: TableSortingComponent, static: false }) customerNameSorting!: TableSortingComponent;
-  @ViewChild('phoneSortingComponentReference', { read: TableSortingComponent, static: false }) phoneSorting!: TableSortingComponent;
 
   navHeading: any[] = [
     { text: "All Customers", url: "/home/customers/all-customers" },
@@ -32,55 +26,131 @@ export class AllCustomersComponent implements OnInit {
 
   customersGridData: any[] = [];
 
-  currentPage = 0;
-  totalPages = 0;
-  totalItems = 0;
+  isFetchingGridData: boolean =  false;
+  isDataAvailable: boolean =  true;
+
+  firstInResponse: any = [];
+  lastInResponse: any = [];
+  nextStartAfter: any = [];
+  prevStartAt: any = [];
+  pageNumber = 0;
+  disableNext: boolean = false;
+  disablePrev: boolean = true;
+
+  sortParams = {
+    field: "created_at",
+    direction: "desc"
+  }
 
   ngOnInit(): void {
   }
 
   ngAfterViewInit(): void {
-    this.getCustomers();
+    this.getAccountCustomer();
   }
 
+  getAccountCustomer(){
+    this.isFetchingGridData = true;
 
-  getCustomers(){
-    this.customersApi.getCustomers()
-      .subscribe(
-        res => {
+    this.customersApi.getAccountCustomer(this.sortParams, 20)
+      .then(
+        (res: any) => {
           console.log(res);
-          this.customersGridData = res;
-          this.currentPage = res.current_page;
-          this.totalPages = res.total_pages;
-          this.totalItems = res.count;
+
+          this.customersGridData = res.docs;
+          this.isFetchingGridData = false;
+          if (!res.docs.length) this.isDataAvailable = false;
+
+          this.prevStartAt = this.firstInResponse;
+          this.nextStartAfter = res.docs[res.docs.length - 1];
+          this.firstInResponse = res.docs[0];
+          this.pageNumber = 1;
+
+          this.disableNext = false;
+          this.disablePrev = true;
         },
-        err => {
+        (err: any) => {
           console.log(err);
+          this.isFetchingGridData = false;
           this.connectionToast.openToast();
         }
       )
   }
 
-  viewCustomer(customerId: any){
-    console.log(customerId);
-    sessionStorage.setItem('restaurant_customer_id', customerId);
+  nextPage(e: any){
+    e.preventDefault();
+    this.isFetchingGridData = true;
 
-    this.router.navigateByUrl('/home/customers/view-customer');
+    this.customersApi.getAccountCustomerNext(this.sortParams, 20, this.nextStartAfter)
+      .then(
+        (res: any) => {
+          console.log(res);
+
+          this.customersGridData = res.docs;
+          this.isFetchingGridData = false;
+          if (!res.docs.length) this.isDataAvailable = false;
+
+          this.prevStartAt = this.firstInResponse;
+          this.nextStartAfter = res.docs[res.docs.length - 1];
+          this.firstInResponse = res.docs[0];
+          this.pageNumber++;
+
+          if (res.docs.length < 20){
+            this.disableNext = true;
+            this.disablePrev = false;
+          }
+        },
+        (err: any) => {
+          console.log(err);
+          this.isFetchingGridData = false;
+          this.connectionToast.openToast();
+        }
+      )
   }
 
-  sortTable(field: any){
-    console.log(field);
-    this.getCustomers();
+  previousPage(e: any){
+    e.preventDefault();
+    this.isFetchingGridData = true;
 
-    if((field == 'customer_code') || (field == "-customer_code")){
-      this.customerCodeSorting.resetSort();
-    }
-    else if((field == 'customer_name') || (field == "-customer_name")){
-      this.customerNameSorting.resetSort();
-    }
-    else if((field == 'phone') || (field == "-phone")){
-      this.phoneSorting.resetSort();
-    }
+    this.customersApi.getAccountCustomerPrev(this.sortParams, 20, this.prevStartAt)
+      .then(
+        (res: any) => {
+          console.log(res);
+
+          this.customersGridData = res.docs;
+          this.isFetchingGridData = false;
+          if (!res.docs.length) this.isDataAvailable = false;
+
+          this.prevStartAt = this.firstInResponse;
+          this.nextStartAfter = res.docs[res.docs.length - 1];
+          this.firstInResponse = res.docs[0];
+          this.pageNumber++;
+
+          if (this.pageNumber == 1){
+            this.disableNext = false;
+            this.disablePrev = true;
+          }
+        },
+        (err: any) => {
+          console.log(err);
+          this.isFetchingGridData = false;
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  sortTable(field: any, direction: any){
+    this.sortParams.field = field;
+    this.sortParams.direction = direction;
+
+    this.getAccountCustomer();
+  }
+
+  viewCustomer(customerId: any){
+    console.log(customerId);
+
+    sessionStorage.setItem('restaurant_customer_id', customerId);
+    this.router.navigateByUrl('/home/customers/view-customer');
   }
 
   onPrint(){

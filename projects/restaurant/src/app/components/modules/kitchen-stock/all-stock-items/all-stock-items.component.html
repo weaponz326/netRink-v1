@@ -16,44 +16,44 @@
                     <tr class="bg-light">
                         <th width="15%">
                             Stock Item ID
-                            <app-table-sorting #itemCodeSortingComponentReference
-                            [sortField]="'item_code'" (sortDirection)="sortTable($event)"
-                            ></app-table-sorting>
+                            <i *ngIf="sortParams.field != 'item_code'" class="bi bi-filter float-end list-pointer" (click)="sortTable('item_code', 'desc')"></i>
+                            <i *ngIf="sortParams.field == 'item_code' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('item_code', 'asc')"></i>
+                            <i *ngIf="sortParams.field == 'item_code' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('item_code', 'desc')"></i>
                         </th>
                         <th width="25%">
                             Stock Item Name
-                            <app-table-sorting #itemNameSortingComponentReference
-                            [sortField]="'item_name'" (sortDirection)="sortTable($event)"
-                            ></app-table-sorting>
+                            <i *ngIf="sortParams.field != 'item_name'" class="bi bi-filter float-end list-pointer" (click)="sortTable('item_name', 'desc')"></i>
+                            <i *ngIf="sortParams.field == 'item_name' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('item_name', 'asc')"></i>
+                            <i *ngIf="sortParams.field == 'item_name' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('item_name', 'desc')"></i>
                         </th>
                         <th width="10%">
                             Quantity
-                            <app-table-sorting #quantitySortingComponentReference
-                            [sortField]="'quantity'" (sortDirection)="sortTable($event)"
-                            ></app-table-sorting>
+                            <i *ngIf="sortParams.field != 'quantity'" class="bi bi-filter float-end list-pointer" (click)="sortTable('quantity', 'desc')"></i>
+                            <i *ngIf="sortParams.field == 'quantity' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('quantity', 'asc')"></i>
+                            <i *ngIf="sortParams.field == 'quantity' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('quantity', 'desc')"></i>
                         </th>
-                        <th width="20%">
+                        <th width="18%">
                             Category
-                            <app-table-sorting #categorySortingComponentReference
-                            [sortField]="'category'" (sortDirection)="sortTable($event)"
-                            ></app-table-sorting>
+                            <i *ngIf="sortParams.field != 'category'" class="bi bi-filter float-end list-pointer" (click)="sortTable('category', 'desc')"></i>
+                            <i *ngIf="sortParams.field == 'category' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('category', 'asc')"></i>
+                            <i *ngIf="sortParams.field == 'category' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('category', 'desc')"></i>
                         </th>
-                        <th width="20%">
+                        <th width="18%">
                             Item Type
-                            <app-table-sorting #itemTypeSortingComponentReference
-                            [sortField]="'item_type'" (sortDirection)="sortTable($event)"
-                            ></app-table-sorting>
+                            <i *ngIf="sortParams.field != 'item_type'" class="bi bi-filter float-end list-pointer" (click)="sortTable('item_type', 'desc')"></i>
+                            <i *ngIf="sortParams.field == 'item_type' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('item_type', 'asc')"></i>
+                            <i *ngIf="sortParams.field == 'item_type' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('item_type', 'desc')"></i>
                         </th>
-                        <th width="10%">
+                        <th width="14%">
                             Refill Ordered
-                            <app-table-sorting #refillOrderdSortingComponentReference
-                            [sortField]="'refill_ordered'" (sortDirection)="sortTable($event)"
-                            ></app-table-sorting>
+                            <i *ngIf="sortParams.field != 'refill_ordered'" class="bi bi-filter float-end list-pointer" (click)="sortTable('refill_ordered', 'desc')"></i>
+                            <i *ngIf="sortParams.field == 'refill_ordered' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('refill_ordered', 'asc')"></i>
+                            <i *ngIf="sortParams.field == 'refill_ordered' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('refill_ordered', 'desc')"></i>
                         </th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let data of itemsGridData; index as i" (dblClick)="openEditItem(i)" class="table-pointer">
+                    <tr *ngFor="let data of itemsGridData; index as i" (dblclick)="openEditItem(i)" class="table-pointer">
                         <td>{{data?.item_code}}</td>
                         <td>{{data?.item_name}}</td>
                         <td>{{data?.quantity}}</td>
@@ -61,13 +61,41 @@
                         <td>{{data?.category}}</td>
                         <td>{{data?.refill_ordered}}</td>
                     </tr>
+                    <tr *ngIf="isFetchingGridData" class="text-center">
+                        <td colspan="6">
+                            <div class="spinner-grow m-4" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="!isDataAvailable && !isFetchingGridData" class="text-center">
+                        <td colspan="6">
+                            <p class="m-4">No data available</p>
+                        </td>
+                    </tr>
                 </tbody>
                 <tfoot>
                     <tr class="bg-light">
                         <td colspan="6">
-                            <app-table-pagination #tablePaginationComponentReference
-                            [currentPage]="currentPage" [totalPages]="totalPages" (pageSelected)="getItems()"
-                            ></app-table-pagination>
+                            <nav class="nav-light float-end" aria-label="Page navigation">
+                                <ul class="pagination pagination-sm mb-0 justify-content-end">
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" aria-label="First" (click)="previousPage($event)">
+                                            <i class="bi bi-caret-left-fill"></i>
+                                        </a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" aria-label="Current" (click)="$event.preventDefault()">
+                                            {{pageNumber}}
+                                        </a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" aria-label="Last" (click)="nextPage($event)">
+                                            <i class="bi bi-caret-right-fill"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
                         </td>
                     </tr>
                 </tfoot>
@@ -80,9 +108,9 @@
 
 <!-- add and edit item modal components -->
 
-<app-add-stock-item #addStockItemComponentReference (saveItemEvent)="postItem($event)"></app-add-stock-item>
+<app-add-stock-item #addStockItemComponentReference (saveItemEvent)="createStockItem($event)"></app-add-stock-item>
 
-<app-edit-stock-item #editStockItemComponentReference (saveItemEvent)="putItem($event)" (deleteItem)="confirmDelete($event)"></app-edit-stock-item>
+<app-edit-stock-item #editStockItemComponentReference (saveItemEvent)="updateStockItem($event)" (deleteItem)="confirmDelete($event)"></app-edit-stock-item>
 
 <!-- connection error toast component -->
 
@@ -90,4 +118,4 @@
 
 <!-- delete confirmation modal component -->
 
-<app-delete-modal #deleteModalComponentReference (confirmEvent)="deleteItem()"></app-delete-modal>
+<app-delete-modal #deleteModalComponentReference (confirmEvent)="deleteStockItem()"></app-delete-modal>

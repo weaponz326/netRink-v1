@@ -1,9 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs'
 
-import { environment } from 'projects/restaurant/src/environments/environment'
-import { EndpointsService } from 'projects/application/src/app/services/endpoints/endpoints.service';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 
 
 @Injectable({
@@ -12,40 +9,53 @@ import { EndpointsService } from 'projects/application/src/app/services/endpoint
 export class StaffApiService {
 
   constructor(
-    private http: HttpClient,
-    private endpoints: EndpointsService
+    private afs: AngularFirestore,
   ) { }
 
-  restaurantUrl = environment.restaurantUrl;
+  staffRef = this.afs.collection('restaurant/module_staff/restaurant_staff');
 
-  // create and get all staffs belonging to user
+  // staff
 
-  public getStaff(): Observable<any>{
-    return this.http.get(this.restaurantUrl + "module-staff/staff?account=" + localStorage.getItem('restaurant_id'));
+  createStaff(staff: any){
+    return this.staffRef.add(staff);
   }
 
-  public postStaff(staff: any): Observable<any>{
-    return this.http.post(this.restaurantUrl + "module-staff/staff/", staff);
+  getStaff(){
+    return this.staffRef.doc(String(sessionStorage.getItem('restaurant_staff_id'))).ref.get();
   }
 
-  // retreive, update and delete staff
-
-  public getSingleStaff(): Observable<any>{
-    return this.http.get(this.restaurantUrl + "module-staff/staff/" + sessionStorage.getItem('restaurant_staff_id'));
+  updateStaff(staff: any){
+    return this.staffRef.doc(String(sessionStorage.getItem('restaurant_staff_id'))).update(staff);
   }
 
-  public putStaff(staff: any): Observable<any>{
-    return this.http.put(this.restaurantUrl + "module-staff/staff/" + sessionStorage.getItem('restaurant_staff_id'), staff);
+  deleteStaff(){
+    return this.staffRef.doc(String(sessionStorage.getItem('restaurant_staff_id'))).delete();
   }
 
-  public deleteStaff(): Observable<any>{
-    return this.http.delete(this.restaurantUrl + "module-staff/staff/" + sessionStorage.getItem('restaurant_staff_id'));
+  getAccountStaff(sorting: any, pageSize: any){
+    return this.staffRef.ref
+      .where("account", "==", localStorage.getItem('restaurant_id'))
+      // .orderBy(sorting?.field, sorting?.direction)
+      .limit(pageSize)
+      .get();
   }
 
-  // dashboard
+  getAccountStaffNext(sorting: any, pageSize: any, pageStart: any){
+    return this.staffRef.ref
+      .where("account", "==", localStorage.getItem('restaurant_id'))
+      // .orderBy(sorting?.field, sorting?.direction)
+      .startAfter(pageStart)
+      .limit(pageSize)
+      .get();
+  }
 
-  public getCounts(model: any): Observable<any>{
-    return this.http.get(this.restaurantUrl + "module-staff/count?account=" + localStorage.getItem('restaurant_id') + "&model=" + model);
+  getAccountStaffPrev(sorting: any, pageSize: any, pageStart: any){
+    return this.staffRef.ref
+      .where("account", "==", localStorage.getItem('restaurant_id'))
+      // .orderBy(sorting?.field, sorting?.direction)
+      .startAt(pageStart)
+      .limit(pageSize)
+      .get();
   }
 
 }

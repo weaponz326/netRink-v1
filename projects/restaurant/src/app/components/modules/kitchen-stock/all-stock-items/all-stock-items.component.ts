@@ -5,8 +5,6 @@ import { KitchenStockApiService } from 'projects/restaurant/src/app/services/mod
 import { AddStockItemComponent } from '../add-stock-item/add-stock-item.component'
 import { EditStockItemComponent } from '../edit-stock-item/edit-stock-item.component'
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
-import { TablePaginationComponent } from 'projects/personal/src/app/components/module-utilities/table-pagination/table-pagination.component'
-import { TableSortingComponent } from 'projects/personal/src/app/components/module-utilities/table-sorting/table-sorting.component'
 import { DeleteModalComponent } from 'projects/personal/src/app/components/module-utilities/delete-modal/delete-modal.component'
 
 
@@ -22,13 +20,6 @@ export class AllStockItemsComponent implements OnInit {
   @ViewChild('addStockItemComponentReference', { read: AddStockItemComponent, static: false }) addStockItem!: AddStockItemComponent;
   @ViewChild('editStockItemComponentReference', { read: EditStockItemComponent, static: false }) editStockItem!: EditStockItemComponent;
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
-  @ViewChild('tablePaginationComponentReference', { read: TablePaginationComponent, static: false }) tablePagination!: TablePaginationComponent;
-  @ViewChild('itemCodeSortingComponentReference', { read: TableSortingComponent, static: false }) itemCodeSorting!: TableSortingComponent;
-  @ViewChild('itemNameSortingComponentReference', { read: TableSortingComponent, static: false }) itemNameSorting!: TableSortingComponent;
-  @ViewChild('quantitySortingComponentReference', { read: TableSortingComponent, static: false }) quantitySorting!: TableSortingComponent;
-  @ViewChild('itemTypeSortingComponentReference', { read: TableSortingComponent, static: false }) itemTypeSorting!: TableSortingComponent;
-  @ViewChild('categorySortingComponentReference', { read: TableSortingComponent, static: false }) categorySorting!: TableSortingComponent;
-  @ViewChild('refillOrderedSortingComponentReference', { read: TableSortingComponent, static: false }) refillOrderedSorting!: TableSortingComponent;
   @ViewChild('deleteModalComponentReference', { read: DeleteModalComponent, static: false }) deleteModal!: DeleteModalComponent;
 
   navHeading: any[] = [
@@ -37,108 +28,185 @@ export class AllStockItemsComponent implements OnInit {
 
   itemsGridData: any[] = [];
 
-  currentPage = 0;
-  totalPages = 0;
-  totalItems = 0;
-
   deleteId = "";
   deleteIndex = 0;
+
+  isFetchingGridData: boolean =  false;
+  isDataAvailable: boolean =  true;
+
+  firstInResponse: any = [];
+  lastInResponse: any = [];
+  nextStartAfter: any = [];
+  prevStartAt: any = [];
+  pageNumber = 0;
+  disableNext: boolean = false;
+  disablePrev: boolean = true;
+
+  sortParams = {
+    field: "created_at",
+    direction: "desc"
+  }
 
   ngOnInit(): void {
   }
 
   ngAfterViewInit(): void {
-    this.getItems();
+    this.getAccountStockItem();
   }
 
-  getItems(){
-    this.kitchenStockApi.getItems()
-      .subscribe(
-        res => {
+  getAccountStockItem(){
+    this.isFetchingGridData = true;
+
+    this.kitchenStockApi.getAccountStockItem(this.sortParams, 20)
+      .then(
+        (res: any) => {
           console.log(res);
-          this.itemsGridData = res;
-          this.currentPage = res.current_page;
-          this.totalPages = res.total_pages;
-          this.totalItems = res.count;
+
+          for (let item of res.docs) {
+            this.itemsGridData.push(item.data());
+          }
+
+          this.isFetchingGridData = false;
+          if (!res.docs.length) this.isDataAvailable = false;
+
+          this.prevStartAt = this.firstInResponse;
+          this.nextStartAfter = res.docs[res.docs.length - 1];
+          this.firstInResponse = res.docs[0];
+          this.pageNumber = 1;
+
+          this.disableNext = false;
+          this.disablePrev = true;
         },
-        err => {
+        (err: any) => {
           console.log(err);
+          this.isFetchingGridData = false;
           this.connectionToast.openToast();
         }
       )
   }
 
-  sortTable(field: any){
-    console.log(field);
-    this.getItems();
+  nextPage(e: any){
+    e.preventDefault();
+    this.isFetchingGridData = true;
 
-    if((field == 'item_Code') || (field == "-item_Code")){
-      this.itemCodeSorting.resetSort();
-    }
-    else if((field == 'item_name') || (field == "-item_name")){
-      this.itemNameSorting.resetSort();
-    }
-    else if((field == 'quantity') || (field == "-quantity")){
-      this.quantitySorting.resetSort();
-    }
-    else if((field == 'item_type') || (field == "-item_type")){
-      this.itemTypeSorting.resetSort();
-    }
-    else if((field == 'category') || (field == "-category")){
-      this.categorySorting.resetSort();
-    }
-    else if((field == 'refill_ordered') || (field == "-refill_ordered")){
-      this.refillOrderedSorting.resetSort();
-    }
+    this.kitchenStockApi.getAccountStockItemNext(this.sortParams, 20, this.nextStartAfter)
+      .then(
+        (res: any) => {
+          console.log(res);
+
+          for (let item of res.docs) {
+            this.itemsGridData.push(item.data());
+          }
+
+          this.isFetchingGridData = false;
+          if (!res.docs.length) this.isDataAvailable = false;
+
+          this.prevStartAt = this.firstInResponse;
+          this.nextStartAfter = res.docs[res.docs.length - 1];
+          this.firstInResponse = res.docs[0];
+          this.pageNumber++;
+
+          if (res.docs.length < 20){
+            this.disableNext = true;
+            this.disablePrev = false;
+          }
+        },
+        (err: any) => {
+          console.log(err);
+          this.isFetchingGridData = false;
+          this.connectionToast.openToast();
+        }
+      )
   }
 
-  postItem(data: any){
+  previousPage(e: any){
+    e.preventDefault();
+    this.isFetchingGridData = true;
+
+    this.kitchenStockApi.getAccountStockItemPrev(this.sortParams, 20, this.prevStartAt)
+      .then(
+        (res: any) => {
+          console.log(res);
+
+          for (let item of res.docs) {
+            this.itemsGridData.push(item.data());
+          }
+
+          this.isFetchingGridData = false;
+          if (!res.docs.length) this.isDataAvailable = false;
+
+          this.prevStartAt = this.firstInResponse;
+          this.nextStartAfter = res.docs[res.docs.length - 1];
+          this.firstInResponse = res.docs[0];
+          this.pageNumber++;
+
+          if (this.pageNumber == 1){
+            this.disableNext = false;
+            this.disablePrev = true;
+          }
+        },
+        (err: any) => {
+          console.log(err);
+          this.isFetchingGridData = false;
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  sortTable(field: any, direction: any){
+    this.sortParams.field = field;
+    this.sortParams.direction = direction;
+
+    this.getAccountStockItem();
+  }
+
+  createStockItem(data: any){
     console.log(data);
 
-    this.kitchenStockApi.postItem(data)
-      .subscribe(
-        res => {
+    this.kitchenStockApi.createStockItem(data)
+      .then(
+        (res: any) => {
           console.log(res);
 
           if(res.id){
-            this.itemsGridData.push(res);
+            this.itemsGridData.push(data);
             this.addStockItem.resetForm();
           }
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }
       )
   }
 
-  putItem(data: any){
+  updateStockItem(data: any){
     console.log(data);
 
-    this.kitchenStockApi.putItem(data.id, data)
-      .subscribe(
-        res => {
+    this.kitchenStockApi.updateStockItem(data.id, data.stock_item)
+      .then(
+        (res: any) => {
           console.log(res);
 
           if(res.id){
-            this.itemsGridData[data.index] = res;
+            this.itemsGridData[data.index] = data.stock_item;
           }
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }
       )
   }
 
-  deleteItem(){
-    this.kitchenStockApi.deleteItem(this.deleteId)
-      .subscribe(
-        res => {
+  deleteStockItem(){
+    this.kitchenStockApi.deleteStockItem(this.deleteId)
+      .then(
+        (res: any) => {
           console.log(res);
           this.itemsGridData.splice(this.deleteIndex, 1);
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }

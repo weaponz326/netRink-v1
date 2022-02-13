@@ -14,6 +14,9 @@ export class StaffFormComponent implements OnInit {
 
   constructor() { }
 
+  @ViewChild('bdayInputComponentReference', { read: BdayInputComponent, static: false }) bday!: BdayInputComponent;
+  @ViewChild('imageInputComponentReference', { read: ImageInputComponent, static: false }) photo!: ImageInputComponent;
+
   staffForm: FormGroup = new FormGroup({});
 
   ngOnInit(): void {
@@ -25,8 +28,6 @@ export class StaffFormComponent implements OnInit {
       firstName: new FormControl(''),
       lastName: new FormControl(''),
       sex: new FormControl(''),
-      dob: new FormControl(''),
-      photo: new FormControl(''),
       nationality: new FormControl(''),
       religion: new FormControl(''),
       phone: new FormControl(''),
