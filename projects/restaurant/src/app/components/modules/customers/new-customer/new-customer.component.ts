@@ -63,7 +63,7 @@ export class NewCustomerComponent implements OnInit {
           this.isCustomerSaving = false;
 
           sessionStorage.setItem('restaurant_customer_id', res.id);
-          this.router.navigateByUrl('/suite/customers/view-customer');
+          this.router.navigateByUrl('/home/customers/view-customer');
         },
         (err: any) => {
           console.log(err);

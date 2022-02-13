@@ -5,6 +5,8 @@ import { Observable } from 'rxjs'
 import { environment } from 'projects/restaurant/src/environments/environment'
 import { EndpointsService } from 'projects/application/src/app/services/endpoints/endpoints.service';
 
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+
 
 @Injectable({
   providedIn: 'root'
@@ -12,40 +14,55 @@ import { EndpointsService } from 'projects/application/src/app/services/endpoint
 export class ReservationsApiService {
 
   constructor(
+    private afs: AngularFirestore,
     private http: HttpClient,
     private endpoints: EndpointsService
   ) { }
 
-  restaurantUrl = environment.restaurantUrl;
+  reservationRef = this.afs.collection('restaurant/module_reservations/restaurant_reservation');
 
-  // create and get all reservations belonging to account
+  // reservations
 
-  public getReservations(): Observable<any>{
-    return this.http.get(this.restaurantUrl + "module-reservations/reservation?account=" + localStorage.getItem('restaurant_id'));
+  createReservation(reservationData: any){
+    return this.reservationRef.add(reservationData);
   }
 
-  public postReservation(reservation: any): Observable<any>{
-    return this.http.post(this.restaurantUrl + "module-reservations/reservation/", reservation);
+  getReservation(reservationId: any){
+    return this.reservationRef.doc(reservationId).ref.get();
   }
 
-  // retreive, update and delete reservation
-
-  public getSingleReservation(): Observable<any>{
-    return this.http.get(this.restaurantUrl + "module-reservations/reservation/" + sessionStorage.getItem("restaurant_reservation_id"));
+  updateReservation(reservationId: any, reservationData: any){
+    return this.reservationRef.doc(reservationId).update(reservationData);
   }
 
-  public putReservation(reservationId: any, reservationData: any): Observable<any>{
-    return this.http.put(this.restaurantUrl + "module-reservations/reservation/" + reservationId, reservationData);
+  deleteReservation(reservationId: any){
+    return this.reservationRef.doc(reservationId).delete();
   }
 
-  public deleteReservation(reservationId: any): Observable<any>{
-    return this.http.delete(this.restaurantUrl + "module-reservations/reservation/" + reservationId);
+  getAccountReservation(sorting: any, pageSize: any){
+    return this.reservationRef.ref
+      .where("account", "==", localStorage.getItem('restaurant_id'))
+      // .orderBy(sorting?.field, sorting?.direction)
+      .limit(pageSize)
+      .get();
   }
 
-  // dashboard
+  getAccountReservationNext(sorting: any, pageSize: any, pageStart: any){
+    return this.reservationRef.ref
+      .where("account", "==", localStorage.getItem('restaurant_id'))
+      // .orderBy(sorting?.field, sorting?.direction)
+      .startAfter(pageStart)
+      .limit(pageSize)
+      .get();
+  }
 
-  public getCounts(model: any): Observable<any>{
-    return this.http.get(this.restaurantUrl + "module-reservations/count?account=" + localStorage.getItem('restaurant_id') + "&model=" + model);
+  getAccountReservationPrev(sorting: any, pageSize: any, pageStart: any){
+    return this.reservationRef.ref
+      .where("account", "==", localStorage.getItem('restaurant_id'))
+      // .orderBy(sorting?.field, sorting?.direction)
+      .startAt(pageStart)
+      .limit(pageSize)
+      .get();
   }
 
 }

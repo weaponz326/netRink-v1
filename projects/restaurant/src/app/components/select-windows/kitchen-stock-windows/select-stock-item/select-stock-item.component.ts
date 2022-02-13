@@ -42,8 +42,9 @@ export class SelectStockItemComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  ngAfterViewInit(): void {
+  openModal(){
     this.getAccountStockItem();
+    this.openButton.nativeElement.click();
   }
 
   getAccountStockItem(){

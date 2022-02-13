@@ -7,6 +7,7 @@ import { ChartsModule } from 'ng2-charts';
 
 import { ModuleUtilitiesModule } from 'projects/personal/src/app/components/module-utilities/module-utilities.module';
 import { CustomersWindowsModule } from '../../select-windows/customers-windows/customers-windows.module';
+import { MenuWindowsModule } from '../../select-windows/menu-windows/menu-windows.module';
 
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { SettingsComponent } from './settings/settings.component';
@@ -40,6 +41,7 @@ import { ItemFormComponent } from './item-form/item-form.component';
     ReactiveFormsModule,
     ModuleUtilitiesModule,
     CustomersWindowsModule,
+    MenuWindowsModule,
   ]
 })
 export class OrdersModule { }

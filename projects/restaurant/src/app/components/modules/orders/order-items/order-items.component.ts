@@ -24,10 +24,12 @@ export class OrderItemsComponent implements OnInit {
 
   itemsGridData: any[] = [];
 
-  totalPrice = 0;
+  totalAmount = 0;
 
   deleteId = "";
   deleteIndex = 0;
+
+  isFetchingGridData = false;
 
   ngOnInit(): void {
   }
@@ -37,74 +39,102 @@ export class OrderItemsComponent implements OnInit {
   }
 
   getItems(){
-    this.ordersApi.getItems()
-      .subscribe(
-        res => {
+    this.isFetchingGridData = true;
+
+    this.ordersApi.getAccountOrderItem()
+      .then(
+        (res: any) => {
           console.log(res);
-          this.itemsGridData = res;
+          this.isFetchingGridData = false;
+
+          for (let item of res.docs) {
+            this.itemsGridData.push(item.data());
+          }
+
           this.calculateTotalPrice();
         },
-        err => {
+        (err: any) => {
           console.log(err);
+          this.isFetchingGridData = false;
           this.connectionToast.openToast();
         }
       )
   }
 
   calculateTotalPrice(){
-    this.totalPrice = this.itemsGridData.reduce((total, {price}) => total + Number(price), 0);
-    console.log(this.totalPrice);
+    for (let item of this.itemsGridData){
+      this.totalAmount += item.menu_item.price * item.quantity;
+    }
+
+    this.updateTotalAmount();
+    console.log(this.totalAmount);
   }
 
-  postItem(data: any){
+  createOrderItem(data: any){
     console.log(data);
 
-    this.ordersApi.postItem(data)
-      .subscribe(
-        res => {
+    this.ordersApi.createOrderItem(data)
+      .then(
+        (res: any) => {
           console.log(res);
 
           if(res.id){
-            this.itemsGridData.push(res);
+            this.itemsGridData.push(data);
             this.calculateTotalPrice();
             this.addItem.resetForm();
           }
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }
       )
   }
 
-  putItem(data: any){
+  updateOrderItem(data: any){
     console.log(data);
 
-    this.ordersApi.putItem(data.id, data)
-      .subscribe(
-        res => {
+    this.ordersApi.updateOrderItem(data.id, data.order_item)
+      .then(
+        (res: any) => {
           console.log(res);
 
           if(res.id){
-            this.itemsGridData[data.index] = res;
+            this.itemsGridData[data.index] = data.order_item;
             this.calculateTotalPrice();
           }
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }
       )
   }
 
-  deleteItem(){
-    this.ordersApi.deleteItem(this.deleteId)
-      .subscribe(
-        res => {
+  deleteOrderItem(){
+    this.ordersApi.deleteOrderItem(this.deleteId)
+      .then(
+        (res: any) => {
           console.log(res);
           this.itemsGridData.splice(this.deleteIndex, 1);
+          this.calculateTotalPrice();
         },
-        err => {
+        (err: any) => {
+          console.log(err);
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  updateTotalAmount(){
+    let data = {total_amount: this.totalAmount}
+
+    this.ordersApi.updateOrder(data)
+      .then(
+        (res: any) => {
+          console.log(res);
+        },
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }

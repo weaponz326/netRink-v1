@@ -19,7 +19,7 @@
         <div class="col-md-8">
             <div class="input-group input-group-sm w-100">
                 <input formControlName="customerName" [disabled]="true" class="form-control">
-                <button type="button" class="btn btn-secondary">
+                <button type="button" class="btn btn-secondary" (click)="openCustomerWindow()">
                     <i class="bi bi-three-dots"></i>
                 </button>
             </div>
@@ -36,14 +36,14 @@
     <div class="row mb-1">
         <div class="col-md-4"><label class="float-end mt-1">No. of Guests :</label></div>
         <div class="col-md-8">
-            <input formControlName="guestsNumber" class="form-control form-control-sm w-100">
+            <input type="number" formControlName="numberGuests" class="form-control form-control-sm w-100">
         </div>
     </div>
 
     <div class="row mb-1">
         <div class="col-md-4"><label class="float-end mt-1">No. of Tables :</label></div>
         <div class="col-md-8">
-            <input formControlName="tablesNumber" class="form-control form-control-sm w-100">
+            <input type="number" formControlName="numberTables" class="form-control form-control-sm w-100">
         </div>
     </div>
 
@@ -55,3 +55,7 @@
     </div>
 
 </form>
+
+<!-- select customer window component -->
+
+<app-select-customer #selectCustomerComponentReference (rowSelected)="onCustomerSelected($event)"></app-select-customer>

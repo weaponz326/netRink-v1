@@ -1,9 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs'
 
-import { environment } from 'projects/restaurant/src/environments/environment'
-import { EndpointsService } from 'projects/application/src/app/services/endpoints/endpoints.service';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 
 
 @Injectable({
@@ -12,40 +9,53 @@ import { EndpointsService } from 'projects/application/src/app/services/endpoint
 export class DeliveriesApiService {
 
   constructor(
-    private http: HttpClient,
-    private endpoints: EndpointsService
+    private afs: AngularFirestore,
   ) { }
 
-  restaurantUrl = environment.restaurantUrl;
+  deliveryRef = this.afs.collection('restaurant/module_deliveries/restaurant_delivery');
 
-  // create and get all delveiries belonging to user
+  // deliveries
 
-  public getDeliveries(): Observable<any>{
-    return this.http.get(this.restaurantUrl + "module-deliveries/delivery?account=" + localStorage.getItem('restaurant_id'));
+  createDelivery(deliveryData: any){
+    return this.deliveryRef.add(deliveryData);
   }
 
-  public postDelivery(item: any): Observable<any>{
-    return this.http.post(this.restaurantUrl + "module-deliveries/delivery/", item);
+  getDelivery(deliveryId: any){
+    return this.deliveryRef.doc(deliveryId).ref.get();
   }
 
-  // retreive, update and delete order
-
-  public getSingleDelivery(itemId: any): Observable<any>{
-    return this.http.get(this.restaurantUrl + "module-deliveries/delivery/" + itemId);
+  updateDelivery(deliveryId: any, deliveryData: any){
+    return this.deliveryRef.doc(deliveryId).update(deliveryData);
   }
 
-  public putDelivery(itemId: any, itemData: any): Observable<any>{
-    return this.http.put(this.restaurantUrl + "module-deliveries/delivery/" + itemId, itemData);
+  deleteDelivery(deliveryId: any){
+    return this.deliveryRef.doc(deliveryId).delete();
   }
 
-  public deleteDelivery(itemId: any): Observable<any>{
-    return this.http.delete(this.restaurantUrl + "module-deliveries/delivery/" + itemId);
+  getAccountDelivery(sorting: any, pageSize: any){
+    return this.deliveryRef.ref
+      .where("account", "==", localStorage.getItem('restaurant_id'))
+      // .orderBy(sorting?.field, sorting?.direction)
+      .limit(pageSize)
+      .get();
   }
 
-  // dashboard
+  getAccountDeliveryNext(sorting: any, pageSize: any, pageStart: any){
+    return this.deliveryRef.ref
+      .where("account", "==", localStorage.getItem('restaurant_id'))
+      // .orderBy(sorting?.field, sorting?.direction)
+      .startAfter(pageStart)
+      .limit(pageSize)
+      .get();
+  }
 
-  public getCounts(model: any): Observable<any>{
-    return this.http.get(this.restaurantUrl + "module-deliveries/count?account=" + localStorage.getItem('restaurant_id') + "&model=" + model);
+  getAccountDeliveryPrev(sorting: any, pageSize: any, pageStart: any){
+    return this.deliveryRef.ref
+      .where("account", "==", localStorage.getItem('restaurant_id'))
+      // .orderBy(sorting?.field, sorting?.direction)
+      .startAt(pageStart)
+      .limit(pageSize)
+      .get();
   }
 
 }

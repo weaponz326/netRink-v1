@@ -1,10 +1,8 @@
-import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 
-import { WindowComponent } from 'smart-webcomponents-angular/window';
-import { GridComponent, GridColumn, DataAdapter, Smart } from 'smart-webcomponents-angular/grid';
+import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component';
 
 import { ReservationsApiService } from 'projects/restaurant/src/app/services/modules/reservations-api/reservations-api.service';
-import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component';
 
 
 @Component({
@@ -18,61 +16,138 @@ export class SelectReservationComponent implements OnInit {
 
   @Output() rowSelected = new EventEmitter<object>();
 
-  @ViewChild('window', { read: WindowComponent, static: false }) window!: WindowComponent;
-  @ViewChild('grid', { read: GridComponent, static: false }) grid!: GridComponent;
+  @ViewChild('openButtonElementReference', { read: ElementRef, static: false }) openButton!: ElementRef;
+  @ViewChild('closeButtonElementReference', { read: ElementRef, static: false }) closeButton!: ElementRef;
 
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
 
-  sorting = { enabled: true }
-  filtering = { enabled: true }
-  dataSource = [];
-  columns: GridColumn[] = <GridColumn[]>[];
+  reservationsGridData: any[] = [];
+
+  isFetchingGridData: boolean =  false;
+  isDataAvailable: boolean =  true;
+
+  firstInResponse: any = [];
+  lastInResponse: any = [];
+  nextStartAfter: any = [];
+  prevStartAt: any = [];
+  pageNumber = 0;
+  disableNext: boolean = false;
+  disablePrev: boolean = true;
+
+  sortParams = {
+    field: "created_at",
+    direction: "desc"
+  }
 
   ngOnInit(): void {
-    this.initGrid();
   }
 
-  getReservations(){
-    // this.reservationsApi.getReservations()
-    //   .subscribe(
-    //     res => {
-    //       console.log(res);
-    //       this.dataSource = res;
-    //     },
-    //     err => {
-    //       console.log(err);
-    //       this.connectionToast.openToast();
-    //     }
-    //   )
+  openModal(){
+    this.getAccountReservation();
+    this.openButton.nativeElement.click();
   }
 
-  selectRow(event: any){
-    this.rowSelected.emit(event.detail.row.data);
-    this.window.close();
-    console.log(event);
+  getAccountReservation(){
+    this.isFetchingGridData = true;
+
+    this.reservationsApi.getAccountReservation(this.sortParams, 15)
+      .then(
+        (res: any) => {
+          console.log(res);
+
+          this.reservationsGridData = res.docs;
+          this.isFetchingGridData = false;
+          if (!res.docs.length) this.isDataAvailable = false;
+
+          this.prevStartAt = this.firstInResponse;
+          this.nextStartAfter = res.docs[res.docs.length - 1];
+          this.firstInResponse = res.docs[0];
+          this.pageNumber = 1;
+
+          this.disableNext = false;
+          this.disablePrev = true;
+        },
+        (err: any) => {
+          console.log(err);
+          this.isFetchingGridData = false;
+          this.connectionToast.openToast();
+        }
+      )
   }
 
-  initGrid(){
-    this.dataSource = new Smart.DataAdapter (
-      <DataAdapter>{
-        id: 'id',
-        dataSource: this.getReservations(),
-        dataFields:[
-          'id: string',
-          'reservation_code: string',
-          'reservation_date: string',
-          'customer_name: string',
-          'reservation_status: string',
-        ]
-      }
-    );
+  nextPage(e: any){
+    e.preventDefault();
+    this.isFetchingGridData = true;
 
-    this.columns = <GridColumn[]>[
-      { label: "Reservation ID", dataField: "reservation_code", width: "20%" },
-      { label: "Reservation Date", dataField: "reservation_date", width: "20%" },
-      { label: "Customer Name", dataField: "customer_name", width: "40%" },
-      { label: "Reservation Status", dataField: "reservation_status", width: "20%" },
-    ]
+    this.reservationsApi.getAccountReservationNext(this.sortParams, 15, this.nextStartAfter)
+      .then(
+        (res: any) => {
+          console.log(res);
+
+          this.reservationsGridData = res.docs;
+          this.isFetchingGridData = false;
+          if (!res.docs.length) this.isDataAvailable = false;
+
+          this.prevStartAt = this.firstInResponse;
+          this.nextStartAfter = res.docs[res.docs.length - 1];
+          this.firstInResponse = res.docs[0];
+          this.pageNumber++;
+
+          if (res.docs.length < 15){
+            this.disableNext = true;
+            this.disablePrev = false;
+          }
+        },
+        (err: any) => {
+          console.log(err);
+          this.isFetchingGridData = false;
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  previousPage(e: any){
+    e.preventDefault();
+    this.isFetchingGridData = true;
+
+    this.reservationsApi.getAccountReservationPrev(this.sortParams, 15, this.prevStartAt)
+      .then(
+        (res: any) => {
+          console.log(res);
+
+          this.reservationsGridData = res.docs;
+          this.isFetchingGridData = false;
+          if (!res.docs.length) this.isDataAvailable = false;
+
+          this.prevStartAt = this.firstInResponse;
+          this.nextStartAfter = res.docs[res.docs.length - 1];
+          this.firstInResponse = res.docs[0];
+          this.pageNumber++;
+
+          if (this.pageNumber == 1){
+            this.disableNext = false;
+            this.disablePrev = true;
+          }
+        },
+        (err: any) => {
+          console.log(err);
+          this.isFetchingGridData = false;
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  sortTable(field: any, direction: any){
+    this.sortParams.field = field;
+    this.sortParams.direction = direction;
+
+    this.getAccountReservation();
+  }
+
+  selectRow(row: any){
+    this.rowSelected.emit(row);
+    this.closeButton.nativeElement.click();
+    console.log(row);
   }
 
 }

@@ -1,9 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs'
 
-import { environment } from 'projects/restaurant/src/environments/environment'
-import { EndpointsService } from 'projects/application/src/app/services/endpoints/endpoints.service';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 
 
 @Injectable({
@@ -12,40 +9,53 @@ import { EndpointsService } from 'projects/application/src/app/services/endpoint
 export class PaymentsApiService {
 
   constructor(
-    private http: HttpClient,
-    private endpoints: EndpointsService
+    private afs: AngularFirestore,
   ) { }
 
-  restaurantUrl = environment.restaurantUrl;
+  paymentRef = this.afs.collection('restaurant/module_payments/restaurant_payment');
 
-  // create and get all payments belonging to user
+  // payments
 
-  public getPayments(): Observable<any>{
-    return this.http.get(this.restaurantUrl + "module-payments/payment?account=" + localStorage.getItem('restaurant_id'));
+  createPayment(payment: any){
+    return this.paymentRef.add(payment);
   }
 
-  public postPayment(payment: any): Observable<any>{
-    return this.http.post(this.restaurantUrl + "module-payments/payment/", payment);
+  getPayment(){
+    return this.paymentRef.doc(String(sessionStorage.getItem('restaurant_payment_id'))).ref.get();
   }
 
-  // retreive, update and delete payment
-
-  public getSinglePayment(): Observable<any>{
-    return this.http.get(this.restaurantUrl + "module-payments/payment/" + sessionStorage.getItem('restaurant_payment_id'));
+  updatePayment(payment: any){
+    return this.paymentRef.doc(String(sessionStorage.getItem('restaurant_payment_id'))).update(payment);
   }
 
-  public putPayment(payment: any): Observable<any>{
-    return this.http.put(this.restaurantUrl + "module-payments/payment/" + sessionStorage.getItem('restaurant_payment_id'), payment);
+  deletePayment(){
+    return this.paymentRef.doc(String(sessionStorage.getItem('restaurant_payment_id'))).delete();
   }
 
-  public deletePayment(): Observable<any>{
-    return this.http.delete(this.restaurantUrl + "module-payments/payment/" + sessionStorage.getItem('restaurant_payment_id'));
+  getAccountPayment(sorting: any, pageSize: any){
+    return this.paymentRef.ref
+      .where("account", "==", localStorage.getItem('restaurant_id'))
+      // .orderBy(sorting?.field, sorting?.direction)
+      .limit(pageSize)
+      .get();
   }
 
-  // dashboard
+  getAccountPaymentNext(sorting: any, pageSize: any, pageStart: any){
+    return this.paymentRef.ref
+      .where("account", "==", localStorage.getItem('restaurant_id'))
+      // .orderBy(sorting?.field, sorting?.direction)
+      .startAfter(pageStart)
+      .limit(pageSize)
+      .get();
+  }
 
-  public getCounts(model: any): Observable<any>{
-    return this.http.get(this.restaurantUrl + "module-payments/count?account=" + localStorage.getItem('restaurant_id') + "&model=" + model);
+  getAccountPaymentPrev(sorting: any, pageSize: any, pageStart: any){
+    return this.paymentRef.ref
+      .where("account", "==", localStorage.getItem('restaurant_id'))
+      // .orderBy(sorting?.field, sorting?.direction)
+      .startAt(pageStart)
+      .limit(pageSize)
+      .get();
   }
 
 }

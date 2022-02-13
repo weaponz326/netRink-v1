@@ -1,10 +1,14 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { TablesApiService } from 'projects/restaurant/src/app/services/modules/tables-api/tables-api.service';
+import * as firebase from 'firebase/compat/app';
 
 import { TableFormComponent } from '../table-form/table-form.component';
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
+
+import { TablesApiService } from 'projects/restaurant/src/app/services/modules/tables-api/tables-api.service';
+
+import { Table } from 'projects/restaurant/src/app/models/modules/tables/tables.model';
 
 
 @Component({
@@ -31,11 +35,12 @@ export class AddTableComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  saveTable(){
+  createTable(){
     console.log('u are saving a new table');
 
-    var tableData = {
-      account: localStorage.getItem('restaurant_id'),
+    var data: Table = {
+      created_at: firebase.default.firestore.FieldValue.serverTimestamp(),
+      account: localStorage.getItem('restaurant_id') as string,
       table_number: this.tableForm.tableForm.controls.tableNumber.value,
       table_type: this.tableForm.tableForm.controls.tableType.value,
       capacity: this.tableForm.tableForm.controls.capacity.value,
@@ -43,19 +48,19 @@ export class AddTableComponent implements OnInit {
       table_status: this.tableForm.tableForm.controls.tableStatus.value,
     }
 
-    console.log(tableData);
+    console.log(data);
     this.isTableSaving = true;
 
-    this.tablesApi.postTable(tableData)
-      .subscribe(
-        res => {
+    this.tablesApi.createTable(data)
+      .then(
+        (res: any) => {
           console.log(res);
           this.isTableSaving = false;
 
           sessionStorage.setItem('restaurant_table_id', res.id);
-          this.router.navigateByUrl('/suite/tables/view-table');
+          this.router.navigateByUrl('/home/tables/view-table');
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.isTableSaving = false;
           this.connectionToast.openToast();

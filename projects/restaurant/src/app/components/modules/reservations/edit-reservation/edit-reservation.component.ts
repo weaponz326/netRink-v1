@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild, Output, EventEmitter, ElementRef } from '
 
 import { ReservationFormComponent } from '../reservation-form/reservation-form.component';
 
+import { Reservation } from 'projects/restaurant/src/app/models/modules/reservations/reservations.model';
+
 
 @Component({
   selector: 'app-edit-reservation',
@@ -19,6 +21,8 @@ export class EditReservationComponent implements OnInit {
 
   @ViewChild('reservationFormComponentReference', { read: ReservationFormComponent, static: false }) reservationForm!: ReservationFormComponent;
 
+  reservationData: any;
+
   selectedIndex: any = 0;
   selectedId: any = "";
 
@@ -26,6 +30,8 @@ export class EditReservationComponent implements OnInit {
   }
 
   openModal(index: any, data: any){
+    this.reservationData = data;
+
     this.selectedIndex = index;
     this.selectedId = data.id;
 
@@ -41,18 +47,24 @@ export class EditReservationComponent implements OnInit {
   }
 
   saveReservation(){
-    let data = {
-      index: this.selectedIndex,
-      id: this.selectedId,
-
-      account: localStorage.getReservation('restaurant_id'),
+    let reservation = {
+      created_at: this.reservationData.created_at,
+      account: localStorage.getItem('restaurant_id') as string,
       reservation_code: this.reservationForm.reservationForm.controls.reservationCode.value,
       reservation_date: this.reservationForm.reservationForm.controls.reservationDate.value,
-      customer_name: this.reservationForm.reservationForm.controls.customerName.value,
       number_guests: this.reservationForm.reservationForm.controls.numberGuests.value,
       number_tables: this.reservationForm.reservationForm.controls.numberTables.value,
       arrival_date: this.reservationForm.reservationForm.controls.arrivalDate.value,
       status: this.reservationForm.reservationForm.controls.status.value,
+      customer: {
+        id: this.reservationForm.selectedCustomerId,
+        customer_name: this.reservationForm.reservationForm.controls.customerName.value,
+      }
+    }
+    let data = {
+      index: this.selectedIndex,
+      id: this.selectedId,
+      reservation: reservation,
     }
 
     this.deleteReservationEvent.emit(data);

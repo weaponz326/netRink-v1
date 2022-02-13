@@ -13,6 +13,8 @@ export class ReservationFormComponent implements OnInit {
 
   constructor() { }
 
+  @ViewChild('selectCustomerComponentReference', { read: SelectCustomerComponent, static: false }) selectCustomer!: SelectCustomerComponent;
+
   reservationForm: FormGroup = new FormGroup({});
 
   selectedCustomerId: any;
@@ -26,11 +28,23 @@ export class ReservationFormComponent implements OnInit {
       reservationCode: new FormControl(''),
       reservationDate: new FormControl(''),
       customerName: new FormControl(''),
-      guestsNumber: new FormControl(''),
-      tablesNumber: new FormControl(''),
+      numberGuests: new FormControl(''),
+      numberTables: new FormControl(''),
       arrivalDate: new FormControl(''),
       status: new FormControl(''),
     })
+  }
+
+  openCustomerWindow(){
+    console.log("You are opening select customer window")
+    this.selectCustomer.openModal();
+  }
+
+  onCustomerSelected(customerData: any){
+    console.log(customerData);
+
+    this.reservationForm.controls.customerName.setValue(customerData.data().customer_name);
+    this.selectedCustomerId = customerData.id;
   }
 
 }

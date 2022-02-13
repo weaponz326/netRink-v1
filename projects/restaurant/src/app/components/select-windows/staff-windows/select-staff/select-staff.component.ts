@@ -42,8 +42,9 @@ export class SelectStaffComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  ngAfterViewInit(): void {
+  openModal(){
     this.getAccountStaff();
+    this.openButton.nativeElement.click();
   }
 
   getAccountStaff(){

@@ -42,8 +42,9 @@ export class SelectMenuItemComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  ngAfterViewInit(): void {
+  openModal(){
     this.getAccountMenuItem();
+    this.openButton.nativeElement.click();
   }
 
   getAccountMenuItem(){

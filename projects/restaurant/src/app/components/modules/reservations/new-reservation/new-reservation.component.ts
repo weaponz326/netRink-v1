@@ -1,6 +1,10 @@
 import { Component, OnInit, ViewChild, Output, EventEmitter, ElementRef } from '@angular/core';
 
+import * as firebase from 'firebase/compat/app';
+
 import { ReservationFormComponent } from '../reservation-form/reservation-form.component';
+
+import { Reservation } from 'projects/restaurant/src/app/models/modules/reservations/reservations.model';
 
 
 @Component({
@@ -26,15 +30,19 @@ export class NewReservationComponent implements OnInit {
   }
 
   saveReservation(){
-    let data = {
-      account: localStorage.getReservation('restaurant_id'),
+    let data: Reservation = {
+      created_at: firebase.default.firestore.FieldValue.serverTimestamp(),
+      account: localStorage.getItem('restaurant_id') as string,
       reservation_code: this.reservationForm.reservationForm.controls.reservationCode.value,
       reservation_date: this.reservationForm.reservationForm.controls.reservationDate.value,
-      customer_name: this.reservationForm.reservationForm.controls.customerName.value,
       number_guests: this.reservationForm.reservationForm.controls.numberGuests.value,
       number_tables: this.reservationForm.reservationForm.controls.numberTables.value,
       arrival_date: this.reservationForm.reservationForm.controls.arrivalDate.value,
       status: this.reservationForm.reservationForm.controls.status.value,
+      customer: {
+        id: this.reservationForm.selectedCustomerId,
+        customer_name: this.reservationForm.reservationForm.controls.customerName.value,
+      }
     }
 
     this.saveReservationEvent.emit(data);

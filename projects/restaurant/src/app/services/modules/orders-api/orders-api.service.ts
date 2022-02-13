@@ -1,9 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs'
 
-import { environment } from 'projects/restaurant/src/environments/environment'
-import { EndpointsService } from 'projects/application/src/app/services/endpoints/endpoints.service';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 
 
 @Injectable({
@@ -12,72 +9,79 @@ import { EndpointsService } from 'projects/application/src/app/services/endpoint
 export class OrdersApiService {
 
   constructor(
-    private http: HttpClient,
-    private endpoints: EndpointsService
+    private afs: AngularFirestore,
   ) { }
 
-  restaurantUrl = environment.restaurantUrl;
+  orderRef = this.afs.collection('restaurant/module_orders/restaurant_order');
+  orderItemRef = this.afs.collection('restaurant/module_orders/restaurant_order_item');
 
-  // create and get all order belonging to user
+  // orders
 
-  public getOrders(): Observable<any>{
-    return this.http.get(this.restaurantUrl + "module-orders/order?account=" + localStorage.getItem('restaurant_id'));
+  createOrder(order: any){
+    return this.orderRef.add(order);
   }
 
-  public postOrder(order: any): Observable<any>{
-    return this.http.post(this.restaurantUrl + "module-orders/order/", order);
+  getOrder(){
+    return this.orderRef.doc(String(sessionStorage.getItem('restaurant_order_id'))).ref.get();
   }
 
-  // retreive, update and delete order
-
-  public getSingleOrder(): Observable<any>{
-    return this.http.get(this.restaurantUrl + "module-orders/order/" + sessionStorage.getItem('restaurant_order_id'));
+  updateOrder(order: any){
+    return this.orderRef.doc(String(sessionStorage.getItem('restaurant_order_id'))).update(order);
   }
 
-  public putOrder(order: any): Observable<any>{
-    return this.http.put(this.restaurantUrl + "module-orders/order/" + sessionStorage.getItem('restaurant_order_id'), order);
+  deleteOrder(){
+    return this.orderRef.doc(String(sessionStorage.getItem('restaurant_order_id'))).delete();
   }
 
-  public deleteOrder(): Observable<any>{
-    return this.http.delete(this.restaurantUrl + "module-orders/order/" + sessionStorage.getItem('restaurant_order_id'));
+  getAccountOrder(sorting: any, pageSize: any){
+    return this.orderRef.ref
+      .where("account", "==", localStorage.getItem('restaurant_id'))
+      // .orderBy(sorting?.field, sorting?.direction)
+      .limit(pageSize)
+      .get();
   }
 
-// -----------------------------------------------------------------------------------------------------------------
+  getAccountOrderNext(sorting: any, pageSize: any, pageStart: any){
+    return this.orderRef.ref
+      .where("account", "==", localStorage.getItem('restaurant_id'))
+      // .orderBy(sorting?.field, sorting?.direction)
+      .startAfter(pageStart)
+      .limit(pageSize)
+      .get();
+  }
+
+  getAccountOrderPrev(sorting: any, pageSize: any, pageStart: any){
+    return this.orderRef.ref
+      .where("account", "==", localStorage.getItem('restaurant_id'))
+      // .orderBy(sorting?.field, sorting?.direction)
+      .startAt(pageStart)
+      .limit(pageSize)
+      .get();
+  }
 
   // order items
 
-  // create and get all order items belonging to order
-
-  public getItems(): Observable<any>{
-    return this.http.get(this.restaurantUrl + "module-orders/order-item?order=" + sessionStorage.getItem('restaurant_order_id'));
+  createOrderItem(orderItem: any){
+    return this.orderItemRef.add(orderItem);
   }
 
-  public postItem(item: any): Observable<any>{
-    return this.http.post(this.restaurantUrl + "module-orders/order-item/", item);
+  getOrderItem(orderItemData: any){
+    return this.orderItemRef.doc(orderItemData).ref.get();
   }
 
-  // retreive, update and delete order
-
-  public getSingleItem(itemId: any): Observable<any>{
-    return this.http.get(this.restaurantUrl + "module-orders/order-item/" + itemId);
+  updateOrderItem(orderItemId: any, orderItemData: any){
+    return this.orderItemRef.doc(orderItemId).update(orderItemData);
   }
 
-  public putItem(itemId: any, itemData: any): Observable<any>{
-    return this.http.put(this.restaurantUrl + "module-orders/order-item/" + itemId, itemData);
+  deleteOrderItem(orderItemId: any){
+    return this.orderItemRef.doc(orderItemId).delete();
   }
 
-  public deleteItem(itemId: any): Observable<any>{
-    return this.http.delete(this.restaurantUrl + "module-orders/order-item/" + itemId);
-  }
-
-  public patchTotal(totalData: any): Observable<any>{
-    return this.http.patch(this.restaurantUrl + "module-orders/order-total/" + sessionStorage.getItem('restaurant_order_id'), totalData);
-  }
-
-  // dashboard
-
-  public getCounts(model: any): Observable<any>{
-    return this.http.get(this.restaurantUrl + "module-orders/count?account=" + localStorage.getItem('restaurant_id') + "&model=" + model);
+  getAccountOrderItem(){
+    return this.orderItemRef.ref
+      .where("order", "==", sessionStorage.getItem('restaurant_order_id'))
+      // .orderBy("created_at", "desc")
+      .get();
   }
 
 }

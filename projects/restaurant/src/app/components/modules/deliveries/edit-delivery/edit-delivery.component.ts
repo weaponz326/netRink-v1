@@ -40,17 +40,17 @@ export class EditDeliveryComponent implements OnInit {
   }
 
   saveDelivery(){
+    let delivery = {
+      delivery_code: this.deliveryForm.deliveryForm.controls.deliveryCode.value,
+      delivery_date: this.deliveryForm.deliveryForm.controls.deliveryDate.value,
+      delivery_location: this.deliveryForm.deliveryForm.controls.deliveryLocation.value,
+      delivery_status: this.deliveryForm.deliveryForm.controls.deliveryStatus.value,
+    }
+
     let data = {
       index: this.selectedIndex,
       id: this.selectedId,
-
-      account: localStorage.getDelivery('restaurant_id'),
-      delivery_code: this.deliveryForm.deliveryForm.controls.deliveryCode.value,
-      delivery_date: this.deliveryForm.deliveryForm.controls.deliveryDate.value,
-      order_code: this.deliveryForm.deliveryForm.controls.orderCode.value,
-      customer_name: this.deliveryForm.deliveryForm.controls.customerName.value,
-      delivery_location: this.deliveryForm.deliveryForm.controls.deliveryLocation.value,
-      delivery_status: this.deliveryForm.deliveryForm.controls.deliveryStatus.value,
+      delivery: delivery
     }
 
     this.saveDeliveryEvent.emit(data);

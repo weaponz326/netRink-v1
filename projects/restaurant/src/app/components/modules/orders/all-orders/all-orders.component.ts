@@ -5,8 +5,6 @@ import { OrdersApiService } from 'projects/restaurant/src/app/services/modules/o
 
 import { AddOrderComponent } from '../add-order/add-order.component'
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
-import { TablePaginationComponent } from 'projects/personal/src/app/components/module-utilities/table-pagination/table-pagination.component'
-import { TableSortingComponent } from 'projects/personal/src/app/components/module-utilities/table-sorting/table-sorting.component'
 
 
 @Component({
@@ -23,10 +21,6 @@ export class AllOrdersComponent implements OnInit {
 
   @ViewChild('addOrderComponentReference', { read: AddOrderComponent, static: false }) addOrder!: AddOrderComponent;
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
-  @ViewChild('tablePaginationComponentReference', { read: TablePaginationComponent, static: false }) tablePagination!: TablePaginationComponent;
-  @ViewChild('orderCodeSortingComponentReference', { read: TableSortingComponent, static: false }) orderCodeSorting!: TableSortingComponent;
-  @ViewChild('customerNameSortingComponentReference', { read: TableSortingComponent, static: false }) customerNameSorting!: TableSortingComponent;
-  @ViewChild('orderDateSortingComponentReference', { read: TableSortingComponent, static: false }) orderDateSorting!: TableSortingComponent;
 
   navHeading: any[] = [
     { text: "All Orders", url: "/home/orders/all-orders" },
@@ -34,32 +28,124 @@ export class AllOrdersComponent implements OnInit {
 
   ordersGridData: any[] = [];
 
-  currentPage = 0;
-  totalPages = 0;
-  totalItems = 0;
+  isFetchingGridData: boolean =  false;
+  isDataAvailable: boolean =  true;
+
+  firstInResponse: any = [];
+  lastInResponse: any = [];
+  nextStartAfter: any = [];
+  prevStartAt: any = [];
+  pageNumber = 0;
+  disableNext: boolean = false;
+  disablePrev: boolean = true;
+
+  sortParams = {
+    field: "created_at",
+    direction: "desc"
+  }
 
   ngOnInit(): void {
   }
 
   ngAfterViewInit(): void {
-    this.getOrders();
+    this.getAccountOrder();
   }
 
-  getOrders(){
-    this.ordersApi.getOrders()
-      .subscribe(
-        res => {
+  getAccountOrder(){
+    this.isFetchingGridData = true;
+
+    this.ordersApi.getAccountOrder(this.sortParams, 20)
+      .then(
+        (res: any) => {
           console.log(res);
-          this.ordersGridData = res;
-          this.currentPage = res.current_page;
-          this.totalPages = res.total_pages;
-          this.totalItems = res.count;
+
+          this.ordersGridData = res.docs;
+          this.isFetchingGridData = false;
+          if (!res.docs.length) this.isDataAvailable = false;
+
+          this.prevStartAt = this.firstInResponse;
+          this.nextStartAfter = res.docs[res.docs.length - 1];
+          this.firstInResponse = res.docs[0];
+          this.pageNumber = 1;
+
+          this.disableNext = false;
+          this.disablePrev = true;
         },
-        err => {
+        (err: any) => {
           console.log(err);
+          this.isFetchingGridData = false;
           this.connectionToast.openToast();
         }
       )
+  }
+
+  nextPage(e: any){
+    e.preventDefault();
+    this.isFetchingGridData = true;
+
+    this.ordersApi.getAccountOrderNext(this.sortParams, 20, this.nextStartAfter)
+      .then(
+        (res: any) => {
+          console.log(res);
+
+          this.ordersGridData = res.docs;
+          this.isFetchingGridData = false;
+          if (!res.docs.length) this.isDataAvailable = false;
+
+          this.prevStartAt = this.firstInResponse;
+          this.nextStartAfter = res.docs[res.docs.length - 1];
+          this.firstInResponse = res.docs[0];
+          this.pageNumber++;
+
+          if (res.docs.length < 20){
+            this.disableNext = true;
+            this.disablePrev = false;
+          }
+        },
+        (err: any) => {
+          console.log(err);
+          this.isFetchingGridData = false;
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  previousPage(e: any){
+    e.preventDefault();
+    this.isFetchingGridData = true;
+
+    this.ordersApi.getAccountOrderPrev(this.sortParams, 20, this.prevStartAt)
+      .then(
+        (res: any) => {
+          console.log(res);
+
+          this.ordersGridData = res.docs;
+          this.isFetchingGridData = false;
+          if (!res.docs.length) this.isDataAvailable = false;
+
+          this.prevStartAt = this.firstInResponse;
+          this.nextStartAfter = res.docs[res.docs.length - 1];
+          this.firstInResponse = res.docs[0];
+          this.pageNumber++;
+
+          if (this.pageNumber == 1){
+            this.disableNext = false;
+            this.disablePrev = true;
+          }
+        },
+        (err: any) => {
+          console.log(err);
+          this.isFetchingGridData = false;
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  sortTable(field: any, direction: any){
+    this.sortParams.field = field;
+    this.sortParams.direction = direction;
+
+    this.getAccountOrder();
   }
 
   viewOrder(orderId: any){
@@ -67,21 +153,6 @@ export class AllOrdersComponent implements OnInit {
 
     sessionStorage.setItem("restaurant_order_id", orderId);
     this.router.navigateByUrl("/home/orders/view-order");
-  }
-
-  sortTable(field: any){
-    console.log(field);
-    this.getOrders();
-
-    if((field == 'order_code') || (field == "-orderCode")){
-      this.orderCodeSorting.resetSort();
-    }
-    else if((field == 'customer_name') || (field == "-customer_name")){
-      this.customerNameSorting.resetSort();
-    }
-    else if((field == 'order_date') || (field == "-order_date")){
-      this.orderDateSorting.resetSort();
-    }
   }
 
   onPrint(){

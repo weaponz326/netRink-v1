@@ -1,9 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs'
 
-import { environment } from 'projects/restaurant/src/environments/environment'
-import { EndpointsService } from 'projects/application/src/app/services/endpoints/endpoints.service';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 
 
 @Injectable({
@@ -12,38 +9,53 @@ import { EndpointsService } from 'projects/application/src/app/services/endpoint
 export class TablesApiService {
 
   constructor(
-    private http: HttpClient,
-    private endpoints: EndpointsService
+    private afs: AngularFirestore,
   ) { }
 
-  restaurantUrl = environment.restaurantUrl;
+  tableRef = this.afs.collection('restaurant/module_tables/restaurant_table');
 
-  public getTables(): Observable<any>{
-    return this.http.get(this.restaurantUrl + "module-tables/table?account=" + localStorage.getItem('restaurant_id'));
+  // tables
+
+  createTable(table: any){
+    return this.tableRef.add(table);
   }
 
-  public postTable(table: any): Observable<any>{
-    return this.http.post(this.restaurantUrl + "module-tables/table/", table);
+  getTable(){
+    return this.tableRef.doc(String(sessionStorage.getItem('restaurant_table_id'))).ref.get();
   }
 
-  // retreive, update and delete table
-
-  public getSingleTable(): Observable<any>{
-    return this.http.get(this.restaurantUrl + "module-tables/table/" + sessionStorage.getItem('restaurant_table_id'));
+  updateTable(table: any){
+    return this.tableRef.doc(String(sessionStorage.getItem('restaurant_table_id'))).update(table);
   }
 
-  public putTable(table: any): Observable<any>{
-    return this.http.put(this.restaurantUrl + "module-tables/table/" + sessionStorage.getItem('restaurant_table_id'), table);
+  deleteTable(){
+    return this.tableRef.doc(String(sessionStorage.getItem('restaurant_table_id'))).delete();
   }
 
-  public deleteTable(): Observable<any>{
-    return this.http.delete(this.restaurantUrl + "module-tables/table/" + sessionStorage.getItem('restaurant_table_id'));
+  getAccountTable(sorting: any, pageSize: any){
+    return this.tableRef.ref
+      .where("account", "==", localStorage.getItem('restaurant_id'))
+      // .orderBy(sorting?.field, sorting?.direction)
+      .limit(pageSize)
+      .get();
   }
 
-  // dashboard
+  getAccountTableNext(sorting: any, pageSize: any, pageStart: any){
+    return this.tableRef.ref
+      .where("account", "==", localStorage.getItem('restaurant_id'))
+      // .orderBy(sorting?.field, sorting?.direction)
+      .startAfter(pageStart)
+      .limit(pageSize)
+      .get();
+  }
 
-  public getCounts(model: any): Observable<any>{
-    return this.http.get(this.restaurantUrl + "module-tables/count?account=" + localStorage.getItem('restaurant_id') + "&model=" + model);
+  getAccountTablePrev(sorting: any, pageSize: any, pageStart: any){
+    return this.tableRef.ref
+      .where("account", "==", localStorage.getItem('restaurant_id'))
+      // .orderBy(sorting?.field, sorting?.direction)
+      .startAt(pageStart)
+      .limit(pageSize)
+      .get();
   }
 
 }

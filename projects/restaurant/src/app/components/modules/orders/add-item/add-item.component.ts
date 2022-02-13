@@ -1,6 +1,10 @@
 import { Component, OnInit, ViewChild, Output, EventEmitter, ElementRef } from '@angular/core';
 
+import * as firebase from 'firebase/compat/app';
+
 import { ItemFormComponent } from '../item-form/item-form.component'
+
+import { OrderItem } from 'projects/restaurant/src/app/models/modules/orders/orders.model';
 
 
 @Component({
@@ -26,12 +30,15 @@ export class AddItemComponent implements OnInit {
   }
 
   saveItem(){
-    let data = {
-      account: sessionStorage.getItem('restaurant_menu_item_id'),
-      menu_item: this.itemForm.itemForm.controls.menuItem.value,
-      price: this.itemForm.itemForm.controls.price.value,
+    let data: OrderItem = {
+      created_at: firebase.default.firestore.FieldValue.serverTimestamp(),
+      order: sessionStorage.getItem('restaurant_order_id') as string,
       quantity: this.itemForm.itemForm.controls.quantity.value,
-      menu_item_id: this.itemForm.selectedMenuItemId
+      menu_item: {
+        id: this.itemForm.selectedMenuItemId,
+        item_name: this.itemForm.itemForm.controls.menuItem.value,
+        price: this.itemForm.itemForm.controls.price.value,
+      }
     }
 
     this.saveItemEvent.emit(data);

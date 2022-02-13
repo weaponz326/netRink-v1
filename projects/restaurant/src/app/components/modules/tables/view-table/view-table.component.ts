@@ -1,11 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { TablesApiService } from 'projects/restaurant/src/app/services/modules/tables-api/tables-api.service';
-
 import { TableFormComponent } from '../table-form/table-form.component';
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 import { DeleteModalComponent } from 'projects/personal/src/app/components/module-utilities/delete-modal/delete-modal.component'
+
+import { TablesApiService } from 'projects/restaurant/src/app/services/modules/tables-api/tables-api.service';
+
+import { Table } from 'projects/restaurant/src/app/models/modules/tables/tables.model';
 
 
 @Component({
@@ -29,6 +31,8 @@ export class ViewTableComponent implements OnInit {
     { text: "View Table", url: "/home/tables/view-table" },
   ];
 
+  tableData: any;
+
   isTableSaving = false;
   isTableDeleting = false;
 
@@ -36,31 +40,34 @@ export class ViewTableComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    this.getSingleTable();
+    this.getTable();
   }
 
-  getSingleTable(){
-    this.tablesApi.getSingleTable()
-      .subscribe(
-        res => {
+  getTable(){
+    this.tablesApi.getTable()
+      .then(
+        (res: any) => {
           console.log(res);
-          this.tableForm.tableForm.controls.tableNumber.setValue(res.table_number);
-          this.tableForm.tableForm.controls.tableType.setValue(res.table_type);
-          this.tableForm.tableForm.controls.capacity.setValue(res.capacity);
-          this.tableForm.tableForm.controls.location.setValue(res.location);
-          this.tableForm.tableForm.controls.tableStatus.setValue(res.table_status);
+          this.tableData = res;
+
+          this.tableForm.tableForm.controls.tableNumber.setValue(res.data().table_number);
+          this.tableForm.tableForm.controls.tableType.setValue(res.data().table_type);
+          this.tableForm.tableForm.controls.capacity.setValue(res.data().capacity);
+          this.tableForm.tableForm.controls.location.setValue(res.data().location);
+          this.tableForm.tableForm.controls.tableStatus.setValue(res.data().table_status);
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }
       )
   }
 
-  saveTable(){
+  updateTable(){
     console.log('u are saving a new table');
 
-    var tableData = {
+    var data = {
+      created_at: this.tableData.data().created_at,
       account: localStorage.getItem('restaurant_id'),
       table_number: this.tableForm.tableForm.controls.tableNumber.value,
       table_type: this.tableForm.tableForm.controls.tableType.value,
@@ -69,16 +76,16 @@ export class ViewTableComponent implements OnInit {
       table_status: this.tableForm.tableForm.controls.tableStatus.value,
     }
 
-    console.log(tableData);
+    console.log(data);
     this.isTableSaving = true;
 
-    this.tablesApi.postTable(tableData)
-      .subscribe(
-        res => {
+    this.tablesApi.updateTable(data)
+      .then(
+        (res: any) => {
           console.log(res);
           this.isTableSaving = false;
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.isTableSaving = false;
           this.connectionToast.openToast();
@@ -94,13 +101,12 @@ export class ViewTableComponent implements OnInit {
     this.isTableDeleting = true;
 
     this.tablesApi.deleteTable()
-      .subscribe(
-        res => {
+      .then(
+        (res: any) => {
           console.log(res);
-
           this.router.navigateByUrl('/home/tables/all-tables');
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }

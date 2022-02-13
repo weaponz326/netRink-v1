@@ -7,7 +7,7 @@
         <div class="col-md-8">
             <div class="input-group input-group-sm w-100">
                 <input formControlName="menuItem" [disabled]="true" class="form-control">
-                <button type="button" class="btn btn-secondary">
+                <button type="button" class="btn btn-secondary" (click)="openMenuItemWindow()">
                     <i class="bi bi-three-dots"></i>
                 </button>
             </div>
@@ -19,7 +19,7 @@
             <label class="float-end mt-1">Price :</label>
         </div>
         <div class="col-md-8">
-            <input type="number" formControlName="itemName" class="form-control form-control-sm w-100" [disabled]="true">
+            <input type="number" formControlName="price" class="form-control form-control-sm w-100" [disabled]="true">
         </div>
     </div>
 
@@ -33,3 +33,7 @@
     </div>
 
 </form>
+
+<!-- select menunitem window component -->
+
+<app-select-menu-item #selectMenuItemComponentReference (rowSelected)="onMenuItemSelected($event)"></app-select-menu-item>

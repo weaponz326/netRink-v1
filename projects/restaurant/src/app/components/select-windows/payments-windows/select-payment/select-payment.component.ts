@@ -1,10 +1,8 @@
-import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 
-import { WindowComponent } from 'smart-webcomponents-angular/window';
-import { GridComponent, GridColumn, DataAdapter, Smart } from 'smart-webcomponents-angular/grid';
+import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component';
 
 import { PaymentsApiService } from 'projects/restaurant/src/app/services/modules/payments-api/payments-api.service';
-import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component';
 
 
 @Component({
@@ -18,59 +16,138 @@ export class SelectPaymentComponent implements OnInit {
 
   @Output() rowSelected = new EventEmitter<object>();
 
-  @ViewChild('window', { read: WindowComponent, static: false }) window!: WindowComponent;
-  @ViewChild('grid', { read: GridComponent, static: false }) grid!: GridComponent;
+  @ViewChild('openButtonElementReference', { read: ElementRef, static: false }) openButton!: ElementRef;
+  @ViewChild('closeButtonElementReference', { read: ElementRef, static: false }) closeButton!: ElementRef;
 
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
 
-  sorting = { enabled: true }
-  filtering = { enabled: true }
-  dataSource = [];
-  columns: GridColumn[] = <GridColumn[]>[];
+  paymentsGridData: any[] = [];
+
+  isFetchingGridData: boolean =  false;
+  isDataAvailable: boolean =  true;
+
+  firstInResponse: any = [];
+  lastInResponse: any = [];
+  nextStartAfter: any = [];
+  prevStartAt: any = [];
+  pageNumber = 0;
+  disableNext: boolean = false;
+  disablePrev: boolean = true;
+
+  sortParams = {
+    field: "created_at",
+    direction: "desc"
+  }
 
   ngOnInit(): void {
-    this.initGrid();
   }
 
-  getPayments(){
-    // this.paymentsApi.getPayments()
-    //   .subscribe(
-    //     res => {
-    //       console.log(res);
-    //       this.dataSource = res;
-    //     },
-    //     err => {
-    //       console.log(err);
-    //       this.connectionToast.openToast();
-    //     }
-    //   )
+  openModal(){
+    this.getAccountPayment();
+    this.openButton.nativeElement.click();
   }
 
-  selectRow(event: any){
-    this.rowSelected.emit(event.detail.row.data);
-    this.window.close();
-    console.log(event);
+  getAccountPayment(){
+    this.isFetchingGridData = true;
+
+    this.paymentsApi.getAccountPayment(this.sortParams, 15)
+      .then(
+        (res: any) => {
+          console.log(res);
+
+          this.paymentsGridData = res.docs;
+          this.isFetchingGridData = false;
+          if (!res.docs.length) this.isDataAvailable = false;
+
+          this.prevStartAt = this.firstInResponse;
+          this.nextStartAfter = res.docs[res.docs.length - 1];
+          this.firstInResponse = res.docs[0];
+          this.pageNumber = 1;
+
+          this.disableNext = false;
+          this.disablePrev = true;
+        },
+        (err: any) => {
+          console.log(err);
+          this.isFetchingGridData = false;
+          this.connectionToast.openToast();
+        }
+      )
   }
 
-  initGrid(){
-    this.dataSource = new Smart.DataAdapter (
-      <DataAdapter>{
-        id: 'id',
-        dataSource: this.getPayments(),
-        dataFields:[
-          'id: string',
-          'payment_code: string',
-          'payment_date: string',
-          'amount_paid: string',
-        ]
-      }
-    );
+  nextPage(e: any){
+    e.preventDefault();
+    this.isFetchingGridData = true;
 
-    this.columns = <GridColumn[]>[
-      { label: "Payment ID", dataField: "payment_code", width: "30%" },
-      { label: "Payment Date", dataField: "payment_date", width: "40%" },
-      { label: 'Amount Paid', dataField: 'amount_paid', width: "30%" }
-    ]
+    this.paymentsApi.getAccountPaymentNext(this.sortParams, 15, this.nextStartAfter)
+      .then(
+        (res: any) => {
+          console.log(res);
+
+          this.paymentsGridData = res.docs;
+          this.isFetchingGridData = false;
+          if (!res.docs.length) this.isDataAvailable = false;
+
+          this.prevStartAt = this.firstInResponse;
+          this.nextStartAfter = res.docs[res.docs.length - 1];
+          this.firstInResponse = res.docs[0];
+          this.pageNumber++;
+
+          if (res.docs.length < 15){
+            this.disableNext = true;
+            this.disablePrev = false;
+          }
+        },
+        (err: any) => {
+          console.log(err);
+          this.isFetchingGridData = false;
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  previousPage(e: any){
+    e.preventDefault();
+    this.isFetchingGridData = true;
+
+    this.paymentsApi.getAccountPaymentPrev(this.sortParams, 15, this.prevStartAt)
+      .then(
+        (res: any) => {
+          console.log(res);
+
+          this.paymentsGridData = res.docs;
+          this.isFetchingGridData = false;
+          if (!res.docs.length) this.isDataAvailable = false;
+
+          this.prevStartAt = this.firstInResponse;
+          this.nextStartAfter = res.docs[res.docs.length - 1];
+          this.firstInResponse = res.docs[0];
+          this.pageNumber++;
+
+          if (this.pageNumber == 1){
+            this.disableNext = false;
+            this.disablePrev = true;
+          }
+        },
+        (err: any) => {
+          console.log(err);
+          this.isFetchingGridData = false;
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  sortTable(field: any, direction: any){
+    this.sortParams.field = field;
+    this.sortParams.direction = direction;
+
+    this.getAccountPayment();
+  }
+
+  selectRow(row: any){
+    this.rowSelected.emit(row);
+    this.closeButton.nativeElement.click();
+    console.log(row);
   }
 
 }

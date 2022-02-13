@@ -42,8 +42,9 @@ export class SelectCustomerComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  ngAfterViewInit(): void {
+  openModal(){
     this.getAccountCustomer();
+    this.openButton.nativeElement.click();
   }
 
   getAccountCustomer(){

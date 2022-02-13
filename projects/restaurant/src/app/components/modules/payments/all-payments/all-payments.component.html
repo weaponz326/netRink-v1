@@ -9,56 +9,90 @@
     </div>
 
     <div class="row">
-        <div class="col-md-9">
+        <div class="col-md-10">
 
             <table class="table table-bordered table-sm w-100 page-table">
                 <thead>
                     <tr class="bg-light">
-                        <th width="20%">
+                        <th width="15%">
                             Payment ID
-                            <app-table-sorting #paymentCodeSortingComponentReference
-                            [sortField]="'payment_code'" (sortDirection)="sortTable($event)"
-                            ></app-table-sorting>
+                            <i *ngIf="sortParams.field != 'payment_code'" class="bi bi-filter float-end list-pointer" (click)="sortTable('payment_code', 'desc')"></i>
+                            <i *ngIf="sortParams.field == 'payment_code' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('payment_code', 'asc')"></i>
+                            <i *ngIf="sortParams.field == 'payment_code' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('payment_code', 'desc')"></i>
                         </th>
                         <th width="20%">
                             Payment Date
-                            <app-table-sorting #paymentDateComponentReference
-                            [sortField]="'payment_date'" (sortDirection)="sortTable($event)"
-                            ></app-table-sorting>
-                        </th>
-                        <th width="40%">
-                            Customer Name
-                            <app-table-sorting #customerComponentReference
-                            [sortField]="'customer'" (sortDirection)="sortTable($event)"
-                            ></app-table-sorting>
+                            <i *ngIf="sortParams.field != 'payment_date'" class="bi bi-filter float-end list-pointer" (click)="sortTable('payment_date', 'desc')"></i>
+                            <i *ngIf="sortParams.field == 'payment_date' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('payment_date', 'asc')"></i>
+                            <i *ngIf="sortParams.field == 'payment_date' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('payment_date', 'desc')"></i>
                         </th>
                         <th width="20%">
-                            Amount
-                            <app-table-sorting #amountComponentReference
-                            [sortField]="'amount'" (sortDirection)="sortTable($event)"
-                            ></app-table-sorting>
+                            Amount Paid
+                            <i *ngIf="sortParams.field != 'amount_paid'" class="bi bi-filter float-end list-pointer" (click)="sortTable('amount_paid', 'desc')"></i>
+                            <i *ngIf="sortParams.field == 'amount_paid' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('amount_paid', 'asc')"></i>
+                            <i *ngIf="sortParams.field == 'amount_paid' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('amount_paid', 'desc')"></i>
+                        </th>
+                        <th width="15%">
+                            Order ID
+                            <i *ngIf="sortParams.field != 'order_code'" class="bi bi-filter float-end list-pointer" (click)="sortTable('order_code', 'desc')"></i>
+                            <i *ngIf="sortParams.field == 'order_code' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('order_code', 'asc')"></i>
+                            <i *ngIf="sortParams.field == 'order_code' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('order_code', 'desc')"></i>
+                        </th>
+                        <th width="30%">
+                            Customer Name
+                            <i *ngIf="sortParams.field != 'customer_name'" class="bi bi-filter float-end list-pointer" (click)="sortTable('customer_name', 'desc')"></i>
+                            <i *ngIf="sortParams.field == 'customer_name' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('customer_name', 'asc')"></i>
+                            <i *ngIf="sortParams.field == 'customer_name' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('customer_name', 'desc')"></i>
                         </th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let data of paymentsGridData" (dblclick)="viewPayment(data.id)" class="table-pointer">
-                        <td>{{data?.payment_code}}</td>
-                        <td>{{data?.payment_name}}</td>
-                        <td>{{data?.customer}}</td>
-                        <td>{{data?.amount}}</td>
+                        <td>{{data?.data().payment_code}}</td>
+                        <td>{{data?.data().payment_date}}</td>
+                        <td>{{data?.data().amount_paid}}</td>
+                        <td>{{data?.data().order.order_code}}</td>
+                        <td>{{data?.data().order.customer_name}}</td>
+                    </tr>
+                    <tr *ngIf="isFetchingGridData" class="text-center">
+                        <td colspan="5">
+                            <div class="spinner-grow m-4" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="!isDataAvailable && !isFetchingGridData" class="text-center">
+                        <td colspan="5">
+                            <p class="m-4">No data available</p>
+                        </td>
                     </tr>
                 </tbody>
                 <tfoot>
                     <tr class="bg-light">
-                        <td colspan="4">
-                            <app-table-pagination #tablePaginationComponentReference
-                            [currentPage]="currentPage" [totalPages]="totalPages" (pageSelected)="getPayments()"
-                            ></app-table-pagination>
+                        <td colspan="5">
+                            <nav class="nav-light float-end" aria-label="Page navigation">
+                                <ul class="pagination pagination-sm mb-0 justify-content-end">
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" aria-label="First" (click)="previousPage($event)">
+                                            <i class="bi bi-caret-left-fill"></i>
+                                        </a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" aria-label="Current" (click)="$event.preventDefault()">
+                                            {{pageNumber}}
+                                        </a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" aria-label="Last" (click)="nextPage($event)">
+                                            <i class="bi bi-caret-right-fill"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
                         </td>
                     </tr>
                 </tfoot>
             </table>
-
 
         </div>
     </div>

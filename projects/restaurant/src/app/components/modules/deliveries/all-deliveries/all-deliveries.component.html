@@ -2,65 +2,100 @@
 
 <div class="container">
 
-    <div class="row mb-3">
-        <div class="col-md-12">
-            <button class="btn btn-secondary page-add-btn" (click)="newDelivery.openModal()">New Delivery</button>
-        </div>
-    </div>
-
     <div class="row">
-        <div class="col-md-10">
+        <div class="col-md-12">
 
             <table class="table table-bordered table-sm w-100 page-table">
                 <thead>
                     <tr class="bg-light">
-                        <th width="15%">
+                        <th width="10%">
                             Delivery ID
-                            <app-table-sorting #deliveryCodeSortingComponentReference
-                            [sortField]="'delivery_code'" (sortDirection)="sortTable($event)"
-                            ></app-table-sorting>
-                        </th>
-                        <th width="20%">
-                            Delivery Date
-                            <app-table-sorting #deliveryDateSortingComponentReference
-                            [sortField]="'delivery_date'" (sortDirection)="sortTable($event)"
-                            ></app-table-sorting>
+                            <i *ngIf="sortParams.field != 'delivery_code'" class="bi bi-filter float-end list-pointer" (click)="sortTable('delivery_code', 'desc')"></i>
+                            <i *ngIf="sortParams.field == 'delivery_code' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('delivery_code', 'asc')"></i>
+                            <i *ngIf="sortParams.field == 'delivery_code' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('delivery_code', 'desc')"></i>
                         </th>
                         <th width="15%">
-                            Order ID
-                            <app-table-sorting #orderCodeSortingComponentReference
-                            [sortField]="'order_code'" (sortDirection)="sortTable($event)"
-                            ></app-table-sorting>
+                            Delivery Date
+                            <i *ngIf="sortParams.field != 'delivery_date'" class="bi bi-filter float-end list-pointer" (click)="sortTable('delivery_date', 'desc')"></i>
+                            <i *ngIf="sortParams.field == 'delivery_date' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('delivery_date', 'asc')"></i>
+                            <i *ngIf="sortParams.field == 'delivery_date' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('delivery_date', 'desc')"></i>
                         </th>
-                        <th width="30%">
-                            Delivery Location
-                            <app-table-sorting #deliveryLocationSortingComponentReference
-                            [sortField]="'delivery_location'" (sortDirection)="sortTable($event)"
-                            ></app-table-sorting>
+                        <th width="10%">
+                            Order ID
+                            <i *ngIf="sortParams.field != 'order_code'" class="bi bi-filter float-end list-pointer" (click)="sortTable('order_code', 'desc')"></i>
+                            <i *ngIf="sortParams.field == 'order_code' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('order_code', 'asc')"></i>
+                            <i *ngIf="sortParams.field == 'order_code' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('order_code', 'desc')"></i>
                         </th>
                         <th width="20%">
+                            Customer Name
+                            <i *ngIf="sortParams.field != 'customer_name'" class="bi bi-filter float-end list-pointer" (click)="sortTable('customer_name', 'desc')"></i>
+                            <i *ngIf="sortParams.field == 'customer_name' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('customer_name', 'asc')"></i>
+                            <i *ngIf="sortParams.field == 'customer_name' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('customer_name', 'desc')"></i>
+                        </th>
+                        <th width="23%">
+                            Delivery Location
+                            <i *ngIf="sortParams.field != 'delivery_location'" class="bi bi-filter float-end list-pointer" (click)="sortTable('delivery_location', 'desc')"></i>
+                            <i *ngIf="sortParams.field == 'delivery_location' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('delivery_location', 'asc')"></i>
+                            <i *ngIf="sortParams.field == 'delivery_location' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('delivery_location', 'desc')"></i>
+                        </th>
+                        <th width="15%">
                             Delivery Status
-                            <app-table-sorting #deliveryStatusSortingComponentReference
-                            [sortField]="'delivery_status'" (sortDirection)="sortTable($event)"
-                            ></app-table-sorting>
+                            <i *ngIf="sortParams.field != 'delivery_status'" class="bi bi-filter float-end list-pointer" (click)="sortTable('delivery_status', 'desc')"></i>
+                            <i *ngIf="sortParams.field == 'delivery_status' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('delivery_status', 'asc')"></i>
+                            <i *ngIf="sortParams.field == 'delivery_status' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('delivery_status', 'desc')"></i>
+                        </th>
+                        <th width="7%">
                         </th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let data of deliveriesGridData; index as i" (dblClick)="openEditDelivery(i)" class="table-pointer">
-                        <td>{{data?.delivery_code}}</td>
-                        <td>{{data?.delivery_date | date}}</td>
-                        <td>{{data?.order_code}}</td>
-                        <td>{{data?.delivery_location}}</td>
-                        <td>{{data?.delivery_status}}</td>
+                    <tr *ngFor="let data of deliveriesGridData; index as i">
+                        <td>{{data?.data().delivery_code}}</td>
+                        <td>{{data?.data().delivery_date | date}}</td>
+                        <td>{{data?.data().order.order_code}}</td>
+                        <td>{{data?.data().customer.customer_name}}</td>
+                        <td>{{data?.data().delivery_location}}</td>
+                        <td>{{data?.data().delivery_status}}</td>
+                        <td class="p-0">
+                            <button class="btn btn-sm border w-50" (click)="openEditDelivery(i)"><i class="bi bi-pen"></i></button>
+                            <button class="btn btn-sm border w-50" (click)="confirmDelete(i, data.id)"><i class="bi bi-trash"></i></button>
+                        </td>
+                    </tr>
+                    <tr *ngIf="isFetchingGridData" class="text-center">
+                        <td colspan="7">
+                            <div class="spinner-grow m-4" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="!isDataAvailable && !isFetchingGridData" class="text-center">
+                        <td colspan="7">
+                            <p class="m-4">No data available</p>
+                        </td>
                     </tr>
                 </tbody>
                 <tfoot>
                     <tr class="bg-light">
-                        <td colspan="5">
-                            <app-table-pagination #tablePaginationComponentReference
-                            [currentPage]="currentPage" [totalPages]="totalPages" (pageSelected)="getDeliveries()"
-                            ></app-table-pagination>
+                        <td colspan="7">
+                            <nav class="nav-light float-end" aria-label="Page navigation">
+                                <ul class="pagination pagination-sm mb-0 justify-content-end">
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" aria-label="First" (click)="previousPage($event)">
+                                            <i class="bi bi-caret-left-fill"></i>
+                                        </a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" aria-label="Current" (click)="$event.preventDefault()">
+                                            {{pageNumber}}
+                                        </a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" aria-label="Last" (click)="nextPage($event)">
+                                            <i class="bi bi-caret-right-fill"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
                         </td>
                     </tr>
                 </tfoot>
@@ -73,9 +108,7 @@
 
 <!-- new and edit delivery modal components -->
 
-<app-new-delivery #newDeliveryComponentReference (saveDeliveryEvent)="postDelivery($event)"></app-new-delivery>
-
-<app-edit-delivery #editDeliveryComponentReference (saveDeliveryEvent)="putDelivery($event)" (deleteDelivery)="confirmDelete($event)"></app-edit-delivery>
+<app-edit-delivery #editDeliveryComponentReference (saveDeliveryEvent)="updateDelivery($event)"></app-edit-delivery>
 
 <!-- connection error toast component -->
 

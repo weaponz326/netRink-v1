@@ -1,11 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { PaymentsApiService } from 'projects/restaurant/src/app/services/modules/payments-api/payments-api.service';
-
 import { PaymentFormComponent } from '../payment-form/payment-form.component';
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 import { DeleteModalComponent } from 'projects/personal/src/app/components/module-utilities/delete-modal/delete-modal.component'
+
+import { PaymentsApiService } from 'projects/restaurant/src/app/services/modules/payments-api/payments-api.service';
+
+import { Payment } from 'projects/restaurant/src/app/models/modules/payments/payments.model';
 
 
 @Component({
@@ -28,6 +30,8 @@ export class ViewPaymentComponent implements OnInit {
     { text: "New Payment", url: "/home/payments/new-payment" },
   ];
 
+  paymentData: any;
+
   isPaymentSaving = false;
   isPaymentDeleting = false;
 
@@ -39,47 +43,57 @@ export class ViewPaymentComponent implements OnInit {
   }
 
   getPayment(){
-    this.paymentsApi.getSinglePayment()
-      .subscribe(
-        res => {
+    this.paymentsApi.getPayment()
+      .then(
+        (res: any) => {
           console.log(res);
+          this.paymentData = res;
 
-          this.paymentForm.paymentForm.controls.paymentCode.setValue(res.payment_code);
-          this.paymentForm.paymentForm.controls.paymentDate.setValue(res.payment_date);
-          this.paymentForm.paymentForm.controls.amountPaid.setValue(res.amount_paid);
+          this.paymentForm.paymentForm.controls.paymentCode.setValue(res.data().payment_code);
+          this.paymentForm.paymentForm.controls.paymentDate.setValue(res.data().payment_date);
+          this.paymentForm.paymentForm.controls.amountPaid.setValue(res.data().amount_paid);
 
-          this.paymentForm.paymentForm.controls.selectedOrderId = res.order.id;
-          this.paymentForm.paymentForm.controls.paymentCode.setValue(res.order.order_code);
-          this.paymentForm.paymentForm.controls.totalAmount.setValue(res.order.total_amount);
+          this.paymentForm.paymentForm.controls.selectedOrderId = res.data().order.id;
+          this.paymentForm.paymentForm.controls.orderCode.setValue(res.data().order.order_code);
+          this.paymentForm.paymentForm.controls.customerName.setValue(res.data().order.customer_name);
+          this.paymentForm.paymentForm.controls.totalAmount.setValue(res.data().order.total_amount);
+
+          this.paymentForm.setBalance()
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }
       )
   }
 
-  savePayment(){
+  updatePayment(){
     console.log('u are saving a new payment');
 
-    var paymentData = {
-      account: localStorage.getItem('restaurant_id'),
+    var data: Payment = {
+      created_at: this.paymentData.data().created_at,
+      account: localStorage.getItem('restaurant_id') as string,
       payment_code: this.paymentForm.paymentForm.controls.paymentCode.value,
       payment_date: this.paymentForm.paymentForm.controls.paymentDate.value,
-      order: this.paymentForm.paymentForm.controls.selectedOrderId,
       amount_paid: this.paymentForm.paymentForm.controls.amountPaid.value,
+      order: {
+        id: this.paymentForm.selectedOrderId,
+        order_code: this.paymentForm.paymentForm.controls.orderCode.value,
+        customer_name: this.paymentForm.paymentForm.controls.customerName.value,
+        total_amount: this.paymentForm.paymentForm.controls.totalAmount.value,
+      }
     }
 
-    console.log(paymentData);
+    console.log(data);
     this.isPaymentSaving = false;
 
-    this.paymentsApi.putPayment(paymentData)
-      .subscribe(
-        res => {
+    this.paymentsApi.updatePayment(data)
+      .then(
+        (res: any) => {
           console.log(res);
           this.isPaymentSaving = true;
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.isPaymentSaving = true;
           this.connectionToast.openToast();
@@ -95,13 +109,13 @@ export class ViewPaymentComponent implements OnInit {
     this.isPaymentDeleting = true;
 
     this.paymentsApi.deletePayment()
-      .subscribe(
-        res => {
+      .then(
+        (res: any) => {
           console.log(res);
 
           this.router.navigateByUrl('/home/payments/all-payments');
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }

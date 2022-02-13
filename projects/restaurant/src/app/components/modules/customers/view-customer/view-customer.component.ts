@@ -50,16 +50,16 @@ export class ViewCustomerComponent implements OnInit {
           console.log(res);
           this.customerData = res;
 
-          this.customerForm.customerForm.controls.customerCodeInput.setValue(this.customerData.data().customer_code);
-          this.customerForm.customerForm.controls.customerNameInput.setValue(this.customerData.data().customer_name);
-          this.customerForm.customerForm.controls.customerTypeInput.setValue(this.customerData.data().customer_type);
-          this.customerForm.customerForm.controls.phoneInput.setValue(this.customerData.data().phone);
-          this.customerForm.customerForm.controls.emailInput.setValue(this.customerData.data().email);
-          this.customerForm.customerForm.controls.addressTextBox.setValue(this.customerData.data().address);
-          this.customerForm.customerForm.controls.stateInput.setValue(this.customerData.data().state);
-          this.customerForm.customerForm.controls.cityInput.setValue(this.customerData.data().city);
-          this.customerForm.customerForm.controls.allergiesTextBox.setValue(this.customerData.data().allergies);
-          this.customerForm.customerForm.controls.preferencesTextBox.setValue(this.customerData.data().preferences);
+          this.customerForm.customerForm.controls.customerCode.setValue(this.customerData.data().customer_code);
+          this.customerForm.customerForm.controls.customerName.setValue(this.customerData.data().customer_name);
+          this.customerForm.customerForm.controls.customerType.setValue(this.customerData.data().customer_type);
+          this.customerForm.customerForm.controls.phone.setValue(this.customerData.data().phone);
+          this.customerForm.customerForm.controls.email.setValue(this.customerData.data().email);
+          this.customerForm.customerForm.controls.address.setValue(this.customerData.data().address);
+          this.customerForm.customerForm.controls.state.setValue(this.customerData.data().state);
+          this.customerForm.customerForm.controls.city.setValue(this.customerData.data().city);
+          this.customerForm.customerForm.controls.allergies.setValue(this.customerData.data().allergies);
+          this.customerForm.customerForm.controls.preferences.setValue(this.customerData.data().preferences);
         },
         (err: any) => {
           console.log(err);

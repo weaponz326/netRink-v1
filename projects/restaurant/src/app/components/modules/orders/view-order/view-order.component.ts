@@ -2,10 +2,14 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormControl, FormGroup } from '@angular/forms';
 
-import { OrdersApiService } from 'projects/restaurant/src/app/services/modules/orders-api/orders-api.service';
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 import { DeleteModalComponent } from 'projects/personal/src/app/components/module-utilities/delete-modal/delete-modal.component'
 import { OrderItemsComponent } from '../order-items/order-items.component';
+import { SelectCustomerComponent } from '../../../select-windows/customers-windows/select-customer/select-customer.component';
+
+import { OrdersApiService } from 'projects/restaurant/src/app/services/modules/orders-api/orders-api.service';
+
+import { Order } from 'projects/restaurant/src/app/models/modules/orders/orders.model';
 
 
 @Component({
@@ -21,8 +25,10 @@ export class ViewOrderComponent implements OnInit {
   ) { }
 
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
-  @ViewChild('orderItemsComponentReference', { read: OrderItemsComponent, static: false }) orderItems!: OrderItemsComponent;
   @ViewChild('deleteModalComponentReference', { read: DeleteModalComponent, static: false }) deleteModal!: DeleteModalComponent;
+  @ViewChild('orderItemsComponentReference', { read: OrderItemsComponent, static: false }) orderItems!: OrderItemsComponent;
+
+  @ViewChild('selectCustomerComponentComponentReference', { read: SelectCustomerComponent, static: false }) selectCustomer!: SelectCustomerComponent;
 
   navHeading: any[] = [
     { text: "All Orders", url: "/home/orders/all-orders" },
@@ -30,6 +36,7 @@ export class ViewOrderComponent implements OnInit {
   ];
 
   orderForm: FormGroup = new FormGroup({});
+  orderFormData: any;
 
   selectedCustomerId: any;
 
@@ -41,7 +48,7 @@ export class ViewOrderComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    this.getOrders();
+    this.getOrder();
   }
 
   initOrderForm(){
@@ -50,59 +57,62 @@ export class ViewOrderComponent implements OnInit {
       orderDate: new FormControl(''),
       orderType: new FormControl(''),
       orderStatus: new FormControl(''),
-      customerName: new FormControl(''),
+      customerName: new FormControl(),
     })
   }
 
-  getOrders(){
-    this.ordersApi.getOrders()
-      .subscribe(
-        res => {
+  getOrder(){
+    this.ordersApi.getOrder()
+      .then(
+        (res: any) => {
           console.log(res);
+          this.orderFormData = res;
 
-          this.orderForm.controls.orderCodeInput.setValue(res.order_code);
-          this.orderForm.controls.orderDateTimePicker.setValue(res.order_date);
-          this.orderForm.controls.orderTypeDropDownList.setValue(res.order_type);
-          this.orderForm.controls.orderStatusDropDownList.setValue(res.order_status);
+          this.orderForm.controls.orderCode.setValue(this.orderFormData.data().order_code);
+          this.orderForm.controls.orderDate.setValue(this.orderFormData.data().order_date);
+          this.orderForm.controls.orderType.setValue(this.orderFormData.data().order_type);
+          this.orderForm.controls.orderStatus.setValue(this.orderFormData.data().order_status);
 
-          this.selectedCustomerId = res.customer.id;
-          this.orderForm.controls.customerNameInput.setValue(res.customer.customer_name);
+          this.selectedCustomerId = this.orderFormData.data().customer.id;
+          this.orderForm.controls.customerName.setValue(this.orderFormData.data().customer.customer_name);
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }
       )
   }
 
-  putOrder(){
-    let orderData = {
-      account: localStorage.getItem('restaurant_id'),
+  updateOrder(){
+    let data: Order = {
+      created_at: this.orderFormData.created_at,
+      account: localStorage.getItem('restaurant_id') as string,
       order_code: this.orderForm.controls.orderCode.value,
       order_date: this.orderForm.controls.orderDate.value,
-      customer_name: this.orderForm.controls.customerName.value,
       order_type: this.orderForm.controls.orderType.value,
       order_status: this.orderForm.controls.orderStatus.value,
-      customer: this.selectedCustomerId,
+      total_amount: this.orderItems.totalAmount,
+      customer: {
+        id: this.selectedCustomerId,
+        customer_name: this.orderForm.controls.customerName.value,
+      }
     }
 
-    console.log(orderData);
+    console.log(data);
     this.isOrderSaving = true;
 
-    this.ordersApi.putOrder(orderData)
-      .subscribe(
-        res => {
+    this.ordersApi.updateOrder(data)
+      .then(
+        (res: any) => {
           console.log(res);
           this.isOrderSaving = false;
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.isOrderSaving = false;
           this.connectionToast.openToast();
         }
       )
-
-    console.log(orderData);
   }
 
   confirmDelete(){
@@ -113,17 +123,29 @@ export class ViewOrderComponent implements OnInit {
     this.isOrderDeleting = true;
 
     this.ordersApi.deleteOrder()
-      .subscribe(
-        res => {
+      .then(
+        (res: any) => {
           console.log(res);
 
           this.router.navigateByUrl('/home/orders/all-orders');
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }
       )
+  }
+
+  openCustomerWindow(){
+    console.log("You are opening select customer window")
+    this.selectCustomer.openModal();
+  }
+
+  onCustomerSelected(customerData: any){
+    console.log(customerData);
+
+    this.orderForm.controls.customerName.setValue(customerData.data().customer_name);
+    this.selectedCustomerId = customerData.id;
   }
 
   onPrint(){

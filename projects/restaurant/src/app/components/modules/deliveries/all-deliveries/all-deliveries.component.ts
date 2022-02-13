@@ -6,8 +6,6 @@ import { DeliveriesApiService } from 'projects/restaurant/src/app/services/modul
 import { NewDeliveryComponent } from '../new-delivery/new-delivery.component'
 import { EditDeliveryComponent } from '../edit-delivery/edit-delivery.component'
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
-import { TablePaginationComponent } from 'projects/personal/src/app/components/module-utilities/table-pagination/table-pagination.component'
-import { TableSortingComponent } from 'projects/personal/src/app/components/module-utilities/table-sorting/table-sorting.component'
 import { DeleteModalComponent } from 'projects/personal/src/app/components/module-utilities/delete-modal/delete-modal.component'
 
 
@@ -23,15 +21,8 @@ export class AllDeliveriesComponent implements OnInit {
     private deliveriesApi: DeliveriesApiService
   ) { }
 
-  @ViewChild('newDeliveryComponentReference', { read: NewDeliveryComponent, static: false }) newDelivery!: NewDeliveryComponent;
   @ViewChild('editDeliveryComponentReference', { read: EditDeliveryComponent, static: false }) editDelivery!: EditDeliveryComponent;
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
-  @ViewChild('tablePaginationComponentReference', { read: TablePaginationComponent, static: false }) tablePagination!: TablePaginationComponent;
-  @ViewChild('deliveryCodeSortingComponentReference', { read: TableSortingComponent, static: false }) deliveryCodeSorting!: TableSortingComponent;
-  @ViewChild('deliveryDateSortingComponentReference', { read: TableSortingComponent, static: false }) deliveryDateSorting!: TableSortingComponent;
-  @ViewChild('orderCodeSortingComponentReference', { read: TableSortingComponent, static: false }) orderCodeSorting!: TableSortingComponent;
-  @ViewChild('deliveryLocationSortingComponentReference', { read: TableSortingComponent, static: false }) deliveryLocationSorting!: TableSortingComponent;
-  @ViewChild('deliveryStatusSortingComponentReference', { read: TableSortingComponent, static: false }) deliveryStatusSorting!: TableSortingComponent;
   @ViewChild('deleteModalComponentReference', { read: DeleteModalComponent, static: false }) deleteModal!: DeleteModalComponent;
 
   navHeading: any[] = [
@@ -40,91 +31,142 @@ export class AllDeliveriesComponent implements OnInit {
 
   deliveriesGridData: any[] = [];
 
-  currentPage = 0;
-  totalPages = 0;
-  totalDeliveries = 0;
-
   deleteId = "";
   deleteIndex = 0;
+
+  isFetchingGridData: boolean =  false;
+  isDataAvailable: boolean =  true;
+
+  firstInResponse: any = [];
+  lastInResponse: any = [];
+  nextStartAfter: any = [];
+  prevStartAt: any = [];
+  pageNumber = 0;
+  disableNext: boolean = false;
+  disablePrev: boolean = true;
+
+  sortParams = {
+    field: "created_at",
+    direction: "desc"
+  }
 
   ngOnInit(): void {
   }
 
   ngAfterViewInit(): void {
-    this.getDeliveries();
+    this.getAccountDelivery();
   }
 
-  getDeliveries(){
-    this.deliveriesApi.getDeliveries()
-      .subscribe(
-        res => {
+  getAccountDelivery(){
+    this.isFetchingGridData = true;
+
+    this.deliveriesApi.getAccountDelivery(this.sortParams, 20)
+      .then(
+        (res: any) => {
           console.log(res);
-          this.deliveriesGridData = res;
-          this.currentPage = res.current_page;
-          this.totalPages = res.total_pages;
-          this.totalDeliveries = res.count;
+
+          this.deliveriesGridData = res.docs;
+          this.isFetchingGridData = false;
+          if (!res.docs.length) this.isDataAvailable = false;
+
+          this.prevStartAt = this.firstInResponse;
+          this.nextStartAfter = res.docs[res.docs.length - 1];
+          this.firstInResponse = res.docs[0];
+          this.pageNumber = 1;
+
+          this.disableNext = false;
+          this.disablePrev = true;
         },
-        err => {
+        (err: any) => {
           console.log(err);
+          this.isFetchingGridData = false;
           this.connectionToast.openToast();
         }
       )
   }
 
-  sortTable(field: any){
-    console.log(field);
-    this.getDeliveries();
+  nextPage(e: any){
+    e.preventDefault();
+    this.isFetchingGridData = true;
 
-    if((field == 'delivery_code') || (field == "-delivery_code")){
-      this.deliveryCodeSorting.resetSort();
-    }
-    else if((field == 'delivery_date') || (field == "-delivery_date")){
-      this.deliveryDateSorting.resetSort();
-    }
-    else if((field == 'order_id') || (field == "-order_id")){
-      this.orderCodeSorting.resetSort();
-    }
-    else if((field == 'delivery_location') || (field == "-delivery_location")){
-      this.deliveryLocationSorting.resetSort();
-    }
-    else if((field == 'delivery_status') || (field == "-delivery_status")){
-      this.deliveryStatusSorting.resetSort();
-    }
-  }
-
-  postDelivery(data: any){
-    console.log(data);
-
-    this.deliveriesApi.postDelivery(data)
-      .subscribe(
-        res => {
+    this.deliveriesApi.getAccountDeliveryNext(this.sortParams, 20, this.nextStartAfter)
+      .then(
+        (res: any) => {
           console.log(res);
 
-          if(res.id){
-            this.deliveriesGridData.push(res);
-            this.newDelivery.resetForm();
+          this.deliveriesGridData = res.docs;
+          this.isFetchingGridData = false;
+          if (!res.docs.length) this.isDataAvailable = false;
+
+          this.prevStartAt = this.firstInResponse;
+          this.nextStartAfter = res.docs[res.docs.length - 1];
+          this.firstInResponse = res.docs[0];
+          this.pageNumber++;
+
+          if (res.docs.length < 20){
+            this.disableNext = true;
+            this.disablePrev = false;
           }
         },
-        err => {
+        (err: any) => {
           console.log(err);
+          this.isFetchingGridData = false;
           this.connectionToast.openToast();
         }
       )
   }
 
-  putDelivery(data: any){
+  previousPage(e: any){
+    e.preventDefault();
+    this.isFetchingGridData = true;
+
+    this.deliveriesApi.getAccountDeliveryPrev(this.sortParams, 20, this.prevStartAt)
+      .then(
+        (res: any) => {
+          console.log(res);
+
+          this.deliveriesGridData = res.docs;
+          this.isFetchingGridData = false;
+          if (!res.docs.length) this.isDataAvailable = false;
+
+          this.prevStartAt = this.firstInResponse;
+          this.nextStartAfter = res.docs[res.docs.length - 1];
+          this.firstInResponse = res.docs[0];
+          this.pageNumber++;
+
+          if (this.pageNumber == 1){
+            this.disableNext = false;
+            this.disablePrev = true;
+          }
+        },
+        (err: any) => {
+          console.log(err);
+          this.isFetchingGridData = false;
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  sortTable(field: any, direction: any){
+    this.sortParams.field = field;
+    this.sortParams.direction = direction;
+
+    this.getAccountDelivery();
+  }
+
+  updateDelivery(data: any){
     console.log(data);
 
-    this.deliveriesApi.putDelivery(data.id, data)
-      .subscribe(
-        res => {
+    this.deliveriesApi.updateDelivery(data.id, data.delivery)
+      .then(
+        (res: any) => {
           console.log(res);
 
           if(res.id){
             this.deliveriesGridData[data.index] = res;
           }
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }
@@ -133,12 +175,12 @@ export class AllDeliveriesComponent implements OnInit {
 
   deleteDelivery(){
     this.deliveriesApi.deleteDelivery(this.deleteId)
-      .subscribe(
-        res => {
+      .then(
+        (res: any) => {
           console.log(res);
           this.deliveriesGridData.splice(this.deleteIndex, 1);
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }
@@ -150,9 +192,9 @@ export class AllDeliveriesComponent implements OnInit {
     this.editDelivery.openModal(index, this.deliveriesGridData[index]);
   }
 
-  confirmDelete(e: any){
-    this.deleteIndex = e.index;
-    this.deleteId = e.id;
+  confirmDelete(index: any, id: any){
+    this.deleteIndex = index;
+    this.deleteId = id;
 
     this.deleteModal.openModal();
   }

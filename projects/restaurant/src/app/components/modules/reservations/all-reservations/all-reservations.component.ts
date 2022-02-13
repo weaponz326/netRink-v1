@@ -1,13 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
-import { ReservationsApiService } from 'projects/restaurant/src/app/services/modules/reservations-api/reservations-api.service';
-
 import { NewReservationComponent } from '../new-reservation/new-reservation.component'
 import { EditReservationComponent } from '../edit-reservation/edit-reservation.component'
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
-import { TablePaginationComponent } from 'projects/personal/src/app/components/module-utilities/table-pagination/table-pagination.component'
-import { TableSortingComponent } from 'projects/personal/src/app/components/module-utilities/table-sorting/table-sorting.component'
 import { DeleteModalComponent } from 'projects/personal/src/app/components/module-utilities/delete-modal/delete-modal.component'
+
+import { ReservationsApiService } from 'projects/restaurant/src/app/services/modules/reservations-api/reservations-api.service';
 
 
 @Component({
@@ -22,12 +20,6 @@ export class AllReservationsComponent implements OnInit {
   @ViewChild('newReservationComponentReference', { read: NewReservationComponent, static: false }) newReservation!: NewReservationComponent;
   @ViewChild('editReservationComponentReference', { read: EditReservationComponent, static: false }) editReservation!: EditReservationComponent;
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
-  @ViewChild('tablePaginationComponentReference', { read: TablePaginationComponent, static: false }) tablePagination!: TablePaginationComponent;
-  @ViewChild('reservationCodeSortingComponentReference', { read: TableSortingComponent, static: false }) reservationCodeSorting!: TableSortingComponent;
-  @ViewChild('reservationDateSortingComponentReference', { read: TableSortingComponent, static: false }) reservationDateSorting!: TableSortingComponent;
-  @ViewChild('customerNameSortingComponentReference', { read: TableSortingComponent, static: false }) customerNameSorting!: TableSortingComponent;
-  @ViewChild('arrivalDateSortingComponentReference', { read: TableSortingComponent, static: false }) arrivalDateSorting!: TableSortingComponent;
-  @ViewChild('statusSortingComponentReference', { read: TableSortingComponent, static: false }) statusSorting!: TableSortingComponent;
   @ViewChild('deleteModalComponentReference', { read: DeleteModalComponent, static: false }) deleteModal!: DeleteModalComponent;
 
   navHeading: any[] = [
@@ -36,91 +28,171 @@ export class AllReservationsComponent implements OnInit {
 
   reservationsGridData: any[] = [];
 
-  currentPage = 0;
-  totalPages = 0;
-  totalReservations = 0;
-
   deleteId = "";
   deleteIndex = 0;
+
+  isFetchingGridData: boolean =  false;
+  isDataAvailable: boolean =  true;
+
+  firstInResponse: any = [];
+  lastInResponse: any = [];
+  nextStartAfter: any = [];
+  prevStartAt: any = [];
+  pageNumber = 0;
+  disableNext: boolean = false;
+  disablePrev: boolean = true;
+
+  sortParams = {
+    field: "created_at",
+    direction: "desc"
+  }
 
   ngOnInit(): void {
   }
 
   ngAfterViewInit(): void {
-    this.getReservations();
+    this.getAccountReservation();
   }
 
-  getReservations(){
-    this.reservationsApi.getReservations()
-      .subscribe(
-        res => {
+  getAccountReservation(){
+    this.isFetchingGridData = true;
+
+    this.reservationsApi.getAccountReservation(this.sortParams, 20)
+      .then(
+        (res: any) => {
           console.log(res);
-          this.reservationsGridData = res;
-          this.currentPage = res.current_page;
-          this.totalPages = res.total_pages;
-          this.totalReservations = res.count;
+
+          for (let item of res.docs) {
+            this.reservationsGridData.push(item.data());
+          }
+
+          this.isFetchingGridData = false;
+          if (!res.docs.length) this.isDataAvailable = false;
+
+          this.prevStartAt = this.firstInResponse;
+          this.nextStartAfter = res.docs[res.docs.length - 1];
+          this.firstInResponse = res.docs[0];
+          this.pageNumber = 1;
+
+          this.disableNext = false;
+          this.disablePrev = true;
         },
-        err => {
+        (err: any) => {
           console.log(err);
+          this.isFetchingGridData = false;
           this.connectionToast.openToast();
         }
       )
   }
 
-  sortTable(field: any){
-    console.log(field);
-    this.getReservations();
+  nextPage(e: any){
+    e.preventDefault();
+    this.isFetchingGridData = true;
 
-    if((field == 'reservation_code') || (field == "-reservation_code")){
-      this.reservationCodeSorting.resetSort();
-    }
-    else if((field == 'reservation_date') || (field == "-reservation_date")){
-      this.reservationDateSorting.resetSort();
-    }
-    else if((field == 'customer_name') || (field == "-customer_name")){
-      this.customerNameSorting.resetSort();
-    }
-    else if((field == 'arrival_date') || (field == "-arrival_date")){
-      this.arrivalDateSorting.resetSort();
-    }
-    else if((field == 'status') || (field == "-status")){
-      this.statusSorting.resetSort();
-    }
+    this.reservationsApi.getAccountReservationNext(this.sortParams, 20, this.nextStartAfter)
+      .then(
+        (res: any) => {
+          console.log(res);
+
+          for (let item of res.docs) {
+            this.reservationsGridData.push(item.data());
+          }
+
+          this.isFetchingGridData = false;
+          if (!res.docs.length) this.isDataAvailable = false;
+
+          this.prevStartAt = this.firstInResponse;
+          this.nextStartAfter = res.docs[res.docs.length - 1];
+          this.firstInResponse = res.docs[0];
+          this.pageNumber++;
+
+          if (res.docs.length < 20){
+            this.disableNext = true;
+            this.disablePrev = false;
+          }
+        },
+        (err: any) => {
+          console.log(err);
+          this.isFetchingGridData = false;
+          this.connectionToast.openToast();
+        }
+      )
   }
 
-  postReservation(data: any){
+  previousPage(e: any){
+    e.preventDefault();
+    this.isFetchingGridData = true;
+
+    this.reservationsApi.getAccountReservationPrev(this.sortParams, 20, this.prevStartAt)
+      .then(
+        (res: any) => {
+          console.log(res);
+
+          for (let item of res.docs) {
+            this.reservationsGridData.push(item.data());
+          }
+
+          this.isFetchingGridData = false;
+          if (!res.docs.length) this.isDataAvailable = false;
+
+          this.prevStartAt = this.firstInResponse;
+          this.nextStartAfter = res.docs[res.docs.length - 1];
+          this.firstInResponse = res.docs[0];
+          this.pageNumber++;
+
+          if (this.pageNumber == 1){
+            this.disableNext = false;
+            this.disablePrev = true;
+          }
+        },
+        (err: any) => {
+          console.log(err);
+          this.isFetchingGridData = false;
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  sortTable(field: any, direction: any){
+    this.sortParams.field = field;
+    this.sortParams.direction = direction;
+
+    this.getAccountReservation();
+  }
+
+  createReservation(data: any){
     console.log(data);
 
-    this.reservationsApi.postReservation(data)
-      .subscribe(
-        res => {
+    this.reservationsApi.createReservation(data)
+      .then(
+        (res: any) => {
           console.log(res);
 
           if(res.id){
-            this.reservationsGridData.push(res);
+            this.reservationsGridData.push(data);
             this.newReservation.resetForm();
           }
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }
       )
   }
 
-  putReservation(data: any){
+  updateReservation(data: any){
     console.log(data);
 
-    this.reservationsApi.putReservation(data.id, data)
-      .subscribe(
-        res => {
+    this.reservationsApi.updateReservation(data.id, data.reservation)
+      .then(
+        (res: any) => {
           console.log(res);
 
           if(res.id){
-            this.reservationsGridData[data.index] = res;
+            this.reservationsGridData[data.index] = data.reservation;
           }
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }
@@ -129,12 +201,12 @@ export class AllReservationsComponent implements OnInit {
 
   deleteReservation(){
     this.reservationsApi.deleteReservation(this.deleteId)
-      .subscribe(
-        res => {
+      .then(
+        (res: any) => {
           console.log(res);
           this.reservationsGridData.splice(this.deleteIndex, 1);
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }
