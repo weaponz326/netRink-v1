@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
-import { TableSortingComponent } from 'projects/personal/src/app/components/module-utilities/table-sorting/table-sorting.component'
 
 import { AdminApiService } from 'projects/restaurant/src/app/services/modules/admin-api/admin-api.service';
 
@@ -22,8 +21,6 @@ export class AllUsersComponent implements OnInit {
   ) { }
 
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
-  @ViewChild('personalNameCodeSortingComponentReference', { read: TableSortingComponent, static: false }) personalNameSorting!: TableSortingComponent;
-  @ViewChild('userLevelSortingComponentReference', { read: TableSortingComponent, static: false }) userLevelSorting!: TableSortingComponent;
 
   navHeading: any[] = [
     { text: "All Users", url: "/home/admin/all-users" },
@@ -31,44 +28,51 @@ export class AllUsersComponent implements OnInit {
 
   usersGridData: any[] = [];
 
+  isFetchingGridData = false;
+
+  sortParams = {
+    field: "created_at",
+    direction: "desc"
+  }
+
   ngOnInit(): void {
   }
 
   ngAfterViewInit(): void {
-    this.getAllAccountAdminUser();
+    this.getAccountAccountUser();
   }
 
-  getAllAccountAdminUser() {
-    this.adminApi.getAllAccountAccountUser()
+  getAccountAccountUser() {
+    this.isFetchingGridData = true;
+
+    this.adminApi.getAccountAccountUser(this.sortParams)
       .then(
         (res: any) => {
           console.log(res);
-          this.usersGridData = res;
+
+          this.usersGridData = res.docs;
+          this.isFetchingGridData = false;
         },
         (err: any) => {
           console.log(err);
+          this.isFetchingGridData = false;
           this.connectionToast.openToast();
         }
       )
   }
 
-  viewUser(personalId: any){
-    console.log(personalId);
-    sessionStorage.setItem('restaurant_admin_user_id', personalId);
+  sortTable(field: any, direction: any){
+    this.sortParams.field = field;
+    this.sortParams.direction = direction;
 
-    this.router.navigateByUrl('/home/admin/view-user');
+    this.getAccountAccountUser();
   }
 
-  sortTable(field: any){
-    console.log(field);
-    this.getAllAccountAdminUser();
+  viewUser(personalId: any){
+    console.log(personalId);
+    sessionStorage.setItem('restaurant_account_user_id', personalId);
 
-    if((field == 'personal_name') || (field == "-personal_name")){
-      this.personalNameSorting.resetSort();
-    }
-    else if((field == 'user_level') || (field == "-user_level")){
-      this.userLevelSorting.resetSort();
-    }
+    this.router.navigateByUrl('/home/admin/view-user');
   }
 
 }

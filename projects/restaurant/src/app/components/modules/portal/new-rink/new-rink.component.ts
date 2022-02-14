@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormControl, FormGroup } from '@angular/forms';
 
+import * as firebase from 'firebase/compat/app';
+
 import { SelectMenuGroupComponent } from '../../../select-windows/menu-windows/select-menu-group/select-menu-group.component';
 import { SelectMenuItemComponent } from '../../../select-windows/menu-windows/select-menu-item/select-menu-item.component';
 import { SelectStaffComponent } from '../../../select-windows/staff-windows/select-staff/select-staff.component';
@@ -9,6 +11,10 @@ import { SelectOrderComponent } from '../../../select-windows/orders-windows/sel
 import { SelectDeliveryComponent } from '../../../select-windows/deliveries-windows/select-delivery/select-delivery.component';
 import { SelectCustomerComponent } from '../../../select-windows/customers-windows/select-customer/select-customer.component';
 import { SelectReservationComponent } from '../../../select-windows/reservations-windows/select-reservation/select-reservation.component';
+import { SelectStockItemComponent } from '../../../select-windows/kitchen-stock-windows/select-stock-item/select-stock-item.component';
+import { SelectPaymentComponent } from '../../../select-windows/payments-windows/select-payment/select-payment.component';
+import { SelectRosterComponent } from '../../../select-windows/roster-windows/select-roster/select-roster.component';
+import { SelectTableComponent } from '../../../select-windows/tables-windows/select-table/select-table.component';
 
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 
@@ -41,6 +47,10 @@ export class NewRinkComponent implements OnInit {
   @ViewChild('selectDeliveryComponentReference', { read: SelectDeliveryComponent, static: false }) selectDelivery!: SelectDeliveryComponent;
   @ViewChild('selectCustomerComponentReference', { read: SelectCustomerComponent, static: false }) selectCustomer!: SelectCustomerComponent;
   @ViewChild('selectReservationComponentReference', { read: SelectReservationComponent, static: false }) selectReservation!: SelectReservationComponent;
+  @ViewChild('selectStockItemComponentReference', { read: SelectStockItemComponent, static: false }) selectStockItem!: SelectStockItemComponent;
+  @ViewChild('selectPaymentComponentReference', { read: SelectPaymentComponent, static: false }) selectPayment!: SelectPaymentComponent;
+  @ViewChild('selectRosterComponentReference', { read: SelectRosterComponent, static: false }) selectRoster!: SelectRosterComponent;
+  @ViewChild('selectTableComponentReference', { read: SelectTableComponent, static: false }) selectTable!: SelectTableComponent;
 
   navHeading: any[] = [
     { text: "New Rink", url: "/home/portal/search" },
@@ -48,9 +58,8 @@ export class NewRinkComponent implements OnInit {
   ];
 
   rinkForm: FormGroup = new FormGroup({});
-  senderData: Account = {created_at: "", name: "", location: "", about: "", created_by: ""};
-  recipientData: Account = {created_at: "", name: "", location: "", about: "", created_by: ""};
-  rinkFormData: Rink = {uid: "", sender: this.senderData, recipient: this.recipientData, rink_date: new Date, rink_type: "", rink_source: "", comment: "" };
+  senderData: any;
+  recipientData: any;
 
   selectedSourceId: any;
   typeSource: any[] = [
@@ -59,36 +68,41 @@ export class NewRinkComponent implements OnInit {
     'Menu Item',
     'Menu Group',
     'Order',
-    'Staff',
+    'Payment',
     'Reservation',
+    'Roster',
+    'Staff',
+    'Stock Item',
+    'Table',
   ];
 
   isRinkSending = false;
 
   ngOnInit(): void {
+    this.initRinkForm();
   }
 
   ngAfterViewInit(): void {
-    this.getAccountDetail()
-    this.getSearchDetail();
+    this.getSenderDetail()
+    this.getRecipientDetail();
   }
 
   initRinkForm(){
     this.rinkForm = new FormGroup({
       recipientName: new FormControl(''),
       recipientLocation: new FormControl(''),
-      rinkType: new FormControl('Calendar'),
+      rinkType: new FormControl('Customer'),
       rinkSource: new FormControl(''),
       comment: new FormControl('')
     })
   }
 
-  getAccountDetail(){
+  getSenderDetail(){
     this.accountApi.getAccount()
       .then(
         (res: any) => {
           console.log(res);
-          this.senderData = res;
+          this.senderData = res.data();
         },
         (err: any) => {
           console.log(err);
@@ -97,13 +111,12 @@ export class NewRinkComponent implements OnInit {
       )
   }
 
-  getSearchDetail(){
-    this.portalApi.getSearchDetail(String(sessionStorage.getItem('restaurantSearchUser')))
+  getRecipientDetail(){
+    this.portalApi.getSearchDetail(String(sessionStorage.getItem('restaurantSearchAccount')))
       .then(
         (res: any) => {
           console.log(res);
-
-          this.recipientData = res;
+          this.recipientData = res.data();
 
           this.rinkForm.controls.recipientName.setValue(this.recipientData.name);
           this.rinkForm.controls.recipientLocation.setValue(this.recipientData.location);
@@ -116,13 +129,19 @@ export class NewRinkComponent implements OnInit {
   }
 
   createRink(){
-    let data = {
-      uid: "",
-      sender: this.senderData,
-      recipient: this.recipientData,
+    let data: Rink = {
+      created_at: firebase.default.firestore.FieldValue.serverTimestamp(),
       rink_type: this.rinkForm.controls.rinkType.value,
-      rink_source: this.rinkForm.controls.rinkSource.value,
-      comment: this.rinkForm.controls.comment.value
+      rink_source: this.selectedSourceId,
+      comment: this.rinkForm.controls.comment.value,
+      sender: {
+        id: localStorage.getItem('restaurant_id') as string,
+        data: this.senderData,
+      },
+      recipient: {
+        id: sessionStorage.getItem('restaurantSearchAccount') as string,
+        data: this.recipientData
+      }
     }
 
     console.log(data);
@@ -134,7 +153,7 @@ export class NewRinkComponent implements OnInit {
           console.log(res);
           this.isRinkSending = false;
 
-          sessionStorage.setItem('restaurant_rink_id', res.data.uid);
+          sessionStorage.setItem('restaurant_rink_id', res.id);
           this.router.navigateByUrl('/home/portal/view-rink');
         },
         err => {
@@ -151,15 +170,20 @@ export class NewRinkComponent implements OnInit {
   }
 
   openSourceWindow(){
-    // let type = this.typeDropDownList.value;
+    let type = this.rinkForm.controls.rinkType.value;
+    console.log("You are opening a " + type + " rink type")
 
-    // if (type == "Menu Group") this.selectMenuGroup.window.open();
-    // else if (type == "Menu Item") this.selectMenuItem.window.open();
-    // else if (type == "Staff") this.selectStaff.window.open();
-    // else if (type == "Order") this.selectOrder.window.open();
-    // else if (type == "Delivery") this.selectDelivery.window.open();
-    // else if (type == "Customer") this.selectCustomer.window.open();
-    // else if (type == "Reservation") this.selectReservation.window.open();
+    if (type == "Menu Group") this.selectMenuGroup.openModal();
+    else if (type == "Menu Item") this.selectMenuItem.openModal();
+    else if (type == "Staff") this.selectStaff.openModal();
+    else if (type == "Order") this.selectOrder.openModal();
+    else if (type == "Delivery") this.selectDelivery.openModal();
+    else if (type == "Customer") this.selectCustomer.openModal();
+    else if (type == "Reservation") this.selectReservation.openModal();
+    else if (type == "Stock Item") this.selectStockItem.openModal();
+    else if (type == "Payment") this.selectPayment.openModal();
+    // else if (type == "Roster") this.selectRoster.openModal();
+    else if (type == "Table") this.selectTable.openModal();
   }
 
   onSourceSelected(sourceData: any){
@@ -167,13 +191,17 @@ export class NewRinkComponent implements OnInit {
     let type = this.rinkForm.controls.rinkType.value;
     this.selectedSourceId = sourceData.id;
 
-    // if (type == "Menu Group") this.sourceInput.value = sourceData.menu_group;
-    // else if (type == "Menu Item") this.sourceInput.value = sourceData.item_name;
-    // else if (type == "Staff") this.sourceInput.value = sourceData.staff_name;
-    // else if (type == "Order") this.sourceInput.value = sourceData.order_code;
-    // else if (type == "Delivery") this.sourceInput.value = sourceData.delivery_code;
-    // else if (type == "Customer") this.sourceInput.value = sourceData.customer_name;
-    // else if (type == "Reservation") this.sourceInput.value = sourceData.reservation_code;
+    if (type == "Menu Group") this.rinkForm.controls.rinkSource.setValue(sourceData.data().menu_group);
+    else if (type == "Menu Item") this.rinkForm.controls.rinkSource.setValue(sourceData.data().item_name);
+    else if (type == "Staff") this.rinkForm.controls.rinkSource.setValue(sourceData.data().staff_name);
+    else if (type == "Order") this.rinkForm.controls.rinkSource.setValue(sourceData.data().order_code);
+    else if (type == "Delivery") this.rinkForm.controls.rinkSource.setValue(sourceData.data().delivery_code);
+    else if (type == "Customer") this.rinkForm.controls.rinkSource.setValue(sourceData.data().customer_name);
+    else if (type == "Reservation") this.rinkForm.controls.rinkSource.setValue(sourceData.data().reservation_code);
+    else if (type == "Stock Item") this.rinkForm.controls.rinkSource.setValue(sourceData.data().item_name);
+    else if (type == "Payment") this.rinkForm.controls.rinkSource.setValue(sourceData.data().payment_code);
+    // else if (type == "Roster") this.rinkForm.controls.rinkSource.setValue(sourceData.data().roster_name);
+    else if (type == "Table") this.rinkForm.controls.rinkSource.setValue(sourceData.data().table_number);
   }
 
 }

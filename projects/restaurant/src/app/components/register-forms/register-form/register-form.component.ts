@@ -81,7 +81,10 @@ export class RegisterFormComponent implements OnInit {
       personal_id: localStorage.getItem('personal_id') as string,
       personal_name: sessionStorage.getItem('personal_name') as string,
       access_level: "Admin",
-      account: account,
+      account: {
+        id: localStorage.getItem('restaurant_id') as string,
+        data: account,
+      }
     }
 
     this.adminApi.createAccountUser(userData)
@@ -121,6 +124,7 @@ export class RegisterFormComponent implements OnInit {
 
   createExtendedProfile(){
     let data: ExtendedProfile = {
+      email: "",
       phone: "",
       address: "",
       country: "",

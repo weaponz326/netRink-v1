@@ -70,7 +70,7 @@ export class SearchViewComponent implements OnInit {
       .then(
         (res: any) => {
           console.log(res);
-          this.searchResults = res;
+          this.searchResults = res.docs;
 
           this.isSearchResultsReady = true;
           this.isSearchDetailReady = false;
@@ -82,10 +82,10 @@ export class SearchViewComponent implements OnInit {
       )
   }
 
-  getSearchDetail(userId: any){
-    sessionStorage.setItem('restaurantSearchUser', userId);
+  getSearchDetail(accountId: any){
+    sessionStorage.setItem('restaurantSearchAccount', accountId);
 
-    this.portalApi.getSearchDetail(String(sessionStorage.getItem('restaurantSearchUser')))
+    this.portalApi.getSearchDetail(String(sessionStorage.getItem('restaurantSearchAccount')))
       .then(
         (res: any) => {
           console.log(res);

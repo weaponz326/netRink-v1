@@ -26,7 +26,7 @@ export class ViewInvitationComponent implements OnInit {
     { text: "View Invitation", url: "/home/admin/view-invitation" },
   ];
 
-  invitationData: Invitation = {uid: "", account: "", invitation_date: new Date(), invitee_id: "", invitee_name: "", invitation_status: ""};
+  invitationData: any;
 
   ngOnInit(): void {
     this.getInvitation();

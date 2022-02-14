@@ -13,7 +13,7 @@
                     <div class="row mb-2">
                         <div class="col-md-4"><label>Subscription Type :</label></div>
                         <div class="col-md-8">
-                            <select [(ngModel)]="subscriptionTypeValue" class="form-control form-control-sm w-100" (change)="setSubscription($event)">
+                            <select [(ngModel)]="subscriptionTypeValue" class="form-control form-control-sm w-100" (change)="setSubscription($any($event.target).value)">
                                 <option *ngFor="let subscription of subscriptionSource">{{subscription}}</option>
                             </select>
                         </div>

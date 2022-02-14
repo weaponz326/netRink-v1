@@ -36,8 +36,8 @@ export class ProfileComponent implements OnInit {
     { text: "Profile", url: "/home/settings/profile" },
   ];
 
-  accountData: Account = {created_at: "", name: "", location: "", about: "", created_by: ""};
-  extendedProfileData: ExtendedProfile = {phone: "", address: "", country: "", state: "", city: ""};
+  accountData: any;
+  extendedProfileData: any;
 
   ngOnInit(): void {
   }
@@ -55,9 +55,9 @@ export class ProfileComponent implements OnInit {
 
           this.accountData = res;
 
-          this.basic.basicForm.controls.name.setValue(this.accountData.name);
-          this.basic.basicForm.controls.about.setValue(this.accountData.about);
-          this.location.locationForm.controls.location.setValue(this.accountData.location);
+          this.basic.basicForm.controls.name.setValue(this.accountData.data().name);
+          this.basic.basicForm.controls.about.setValue(this.accountData.data().about);
+          this.location.locationForm.controls.location.setValue(this.accountData.data().location);
         },
         (err: any) => {
           console.log(err);
@@ -74,11 +74,12 @@ export class ProfileComponent implements OnInit {
 
           this.extendedProfileData = res;
 
-          this.location.locationForm.controls.country.setValue(this.extendedProfileData.country);
-          this.location.locationForm.controls.state.setValue(this.extendedProfileData.state);
-          this.location.locationForm.controls.city.setValue(this.extendedProfileData.city);
-          this.contact.contactForm.controls.phone.setValue(this.extendedProfileData.phone);
-          this.contact.contactForm.controls.address.setValue(this.extendedProfileData.address);
+          this.location.locationForm.controls.country.setValue(this.extendedProfileData.data().country);
+          this.location.locationForm.controls.state.setValue(this.extendedProfileData.data().state);
+          this.location.locationForm.controls.city.setValue(this.extendedProfileData.data().city);
+          this.contact.contactForm.controls.email.setValue(this.extendedProfileData.data().email);
+          this.contact.contactForm.controls.phone.setValue(this.extendedProfileData.data().phone);
+          this.contact.contactForm.controls.address.setValue(this.extendedProfileData.data().address);
         },
         (err: any) => {
           console.log(err);
@@ -121,6 +122,7 @@ export class ProfileComponent implements OnInit {
   // extended profile
   updateExtendedProfile(){
     let data: ExtendedProfile = {
+      email: this.contact.contactForm.controls.email.value,
       phone: this.contact.contactForm.controls.phone.value,
       address: this.contact.contactForm.controls.address.value,
       country: this.location.locationForm.controls.country.value,

@@ -12,6 +12,10 @@ import { OrdersWindowsModule } from '../../select-windows/orders-windows/orders-
 import { DeliveriesWindowsModule } from '../../select-windows/deliveries-windows/deliveries-windows.module';
 import { CustomersWindowsModule } from '../../select-windows/customers-windows/customers-windows.module';
 import { ReservationsWindowsModule } from '../../select-windows/reservations-windows/reservations-windows.module';
+import { KitchenStockWindowsModule } from '../../select-windows/kitchen-stock-windows/kitchen-stock-windows.module';
+import { PaymentsWindowsModule } from '../../select-windows/payments-windows/payments-windows.module';
+import { RosterWindowsModule } from '../../select-windows/roster-windows/roster-windows.module';
+import { TablesWindowsModule } from '../../select-windows/tables-windows/tables-windows.module';
 
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { SettingsComponent } from './settings/settings.component';
@@ -21,6 +25,7 @@ import { SearchDetailComponent } from './search-detail/search-detail.component';
 import { NewRinkComponent } from './new-rink/new-rink.component';
 import { TimelineComponent } from './timeline/timeline.component';
 import { ViewRinkComponent } from './view-rink/view-rink.component';
+
 import { StaffDetailsComponent } from './rink-details/staff-details/staff-details.component';
 import { CustomerDetailsComponent } from './rink-details/customer-details/customer-details.component';
 import { ReservationDetailsComponent } from './rink-details/reservation-details/reservation-details.component';
@@ -69,6 +74,10 @@ import { RosterDetailsComponent } from './rink-details/roster-details/roster-det
     DeliveriesWindowsModule,
     CustomersWindowsModule,
     ReservationsWindowsModule,
+    KitchenStockWindowsModule,
+    PaymentsWindowsModule,
+    RosterWindowsModule,
+    TablesWindowsModule,
   ]
 })
 export class PortalModule { }

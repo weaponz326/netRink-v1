@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 
+import * as firebase from 'firebase/compat/app';
+
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 
 import { AdminApiService } from 'projects/restaurant/src/app/services/modules/admin-api/admin-api.service';
@@ -60,7 +62,7 @@ export class UserSearchComponent implements OnInit {
       .then(
         (res: any) => {
           console.log(res);
-          this.searchResults = res;
+          this.searchResults = res.docs;
 
           this.isSearchResultsReady = true;
           this.isSearchDetailReady = false;
@@ -89,13 +91,12 @@ export class UserSearchComponent implements OnInit {
       )
   }
 
-  sendInvitation() {
+  createInvitation() {
     let data: Invitation = {
-      uid: "",
+      created_at: firebase.default.firestore.FieldValue.serverTimestamp(),
       account: localStorage.getItem('restaurant_id') as string,
-      invitation_date: new Date(),
       invitee_id: this.searchDetail.id,
-      invitee_name: this.searchDetail.first_name + " " + this.searchDetail.last_name,
+      invitee_name: this.searchDetail.data().first_name + " " + this.searchDetail.data().last_name,
       invitation_status: 'Awaiting',
     }
 
@@ -105,7 +106,7 @@ export class UserSearchComponent implements OnInit {
       .then(
         (res: any) => {
           console.log(res);
-          sessionStorage.setItem('restaurant_invitation_id', res.data.id);
+          sessionStorage.setItem('restaurant_invitation_id', res.id);
           this.router.navigateByUrl('/home/admin/view-invitation');
         },
         (err: any) => {

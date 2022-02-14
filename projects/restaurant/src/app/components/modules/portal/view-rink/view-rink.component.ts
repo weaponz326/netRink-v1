@@ -44,16 +44,7 @@ export class ViewRinkComponent implements OnInit {
         (res: any) => {
           console.log(res);
           this.rinkData = res;
-          sessionStorage.setItem('restaurant_rink_source_id', res.rink_source)
-
-          // // route to show rink detail
-          // if (res.rink_type == "Task"){
-          //   this.router.navigateByUrl('suite/suite/view-rink/task');
-          // }else if(res.rink_type == "Appointment"){
-          //   this.router.navigateByUrl('suite/suite/view-rink/appointment');
-          // }else if(res.rink_type == "Note"){
-          //   this.router.navigateByUrl('suite/suite/view-rink/note');
-          // }
+          sessionStorage.setItem('restaurant_rink_source_id', res.data().rink_source)
         },
         (err: any) => {
           console.log(err);

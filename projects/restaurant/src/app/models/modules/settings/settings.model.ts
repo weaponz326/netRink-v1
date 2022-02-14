@@ -1,4 +1,5 @@
 export class ExtendedProfile {
+  email!: string;
   phone!: string;
   address!: string;
   country!: string;

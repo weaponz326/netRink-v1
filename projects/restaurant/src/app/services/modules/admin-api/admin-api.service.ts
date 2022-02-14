@@ -12,25 +12,22 @@ export class AdminApiService {
     private afs: AngularFirestore,
   ) { }
 
-  personalAccountUserSearchRef = this.afs.collection('personal');
-  accountUserRef = this.afs.collection('restaurant/module_admin/admin_account_user');
-  userAccessRef = this.afs.collection('restaurant/module_admin/admin_user_access');
-  invitationRef = this.afs.collection('restaurant/module_admin/admin_invitation');
-
-  invitationId = sessionStorage.getItem('restaurant_invitation_id') as string;
+  personalUserSearchRef = this.afs.collection('personal/users/user');
+  accountUserRef = this.afs.collection('restaurant/module_admin/restaurant_account_user');
+  userAccessRef = this.afs.collection('restaurant/module_admin/restaurant_user_access');
+  invitationRef = this.afs.collection('restaurant/module_admin/restaurant_invitation');
 
   // accountUser search
 
   getSearchResult(searchQuery: string){
-    return this.personalAccountUserSearchRef.ref
-      .orderBy('accounts')
-      .startAt(searchQuery)
-      .startAt(searchQuery + '\uf8ff')
-      .get();
+    return this.personalUserSearchRef.ref
+    .where("last_name", ">=", searchQuery)
+    .where("last_name", "<", searchQuery + "z")
+    .get();
   }
 
-  getSearchDetail(restaurantId: any){
-    return this.personalAccountUserSearchRef.doc(restaurantId).ref.get();
+  getSearchDetail(personalId: any){
+    return this.personalUserSearchRef.doc(personalId).ref.get();
   }
 
   // accountUser
@@ -51,13 +48,14 @@ export class AdminApiService {
     return this.accountUserRef.doc(String(sessionStorage.getItem('restaurant_account_user_id'))).delete();
   }
 
-  getAllAccountAccountUser(){
+  getAccountAccountUser(ordering: any){
     return this.accountUserRef.ref
-      .where("account", "==", String(localStorage.getItem('restaurant_id')))
+      .where("account.id", "==", String(localStorage.getItem('restaurant_id')))
+      // .orderBy(ordering.field, ordering.direction)
       .get();
   }
 
-  getAllUserAccountUser(){
+  getUserAccountUser(){
     return this.accountUserRef.ref
       .where("personal_id", "==", String(localStorage.getItem('personal_id')))
       .get();
@@ -88,13 +86,30 @@ export class AdminApiService {
   }
 
   getInvitation(){
-    return this.invitationRef.doc(this.invitationId).ref.get();
+    return this.invitationRef.doc(String(sessionStorage.getItem('restaurant_invitation_id'))).ref.get();
   }
 
-  getAllAccountInvitation(ordering: any, pageSize: any, pageStart: any){
+  getAccountInvitation(sorting: any, pageSize: any){
     return this.invitationRef.ref
-      .where("account", "==", String(localStorage.getItem('restaurant_id')))
-      .orderBy(ordering.field, ordering.direction)
+      .where("account", "==", localStorage.getItem('restaurant_id'))
+      // .orderBy(sorting?.field, sorting?.direction)
+      .limit(pageSize)
+      .get();
+  }
+
+  getAccountInvitationNext(sorting: any, pageSize: any, pageStart: any){
+    return this.invitationRef.ref
+      .where("account", "==", localStorage.getItem('restaurant_id'))
+      // .orderBy(sorting?.field, sorting?.direction)
+      .startAfter(pageStart)
+      .limit(pageSize)
+      .get();
+  }
+
+  getAccountInvitationPrev(sorting: any, pageSize: any, pageStart: any){
+    return this.invitationRef.ref
+      .where("account", "==", localStorage.getItem('restaurant_id'))
+      // .orderBy(sorting?.field, sorting?.direction)
       .startAt(pageStart)
       .limit(pageSize)
       .get();

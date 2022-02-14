@@ -4,13 +4,15 @@ export class AccountUser {
   personal_id!: string;
   personal_name!:  string;
   access_level!: string;
-  account!: Account;
+  account!: {
+    id: string;
+    data: Account;
+  }
 }
 
 export class Invitation {
-  uid!: string;
+  created_at!: any;
   account!: string;
-  invitation_date!: Date;
   invitee_id!: string;
   invitee_name!: string;
   invitation_status!: string;

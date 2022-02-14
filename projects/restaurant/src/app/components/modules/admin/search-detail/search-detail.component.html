@@ -4,17 +4,17 @@
         <img *ngIf="searchDetail?.photo == null" src="../../../../../assets/images/utilities/photo-avatar.jpg" alt="Company" width="120" height="120" class="rounded-circle" />
     </div>
     <div class="col-md-8">
-        <div class="row mb-2">
+        <div class="row mb-3">
             <div class="col-md-2"><em><small>Name :</small></em></div>
-            <div class="col-md-10"><strong>{{searchDetail?.first_name}} {{searchDetail?.last_name}}</strong></div>
+            <div class="col-md-10"><strong>{{searchDetail?.data().first_name}} {{searchDetail?.last_name}}</strong></div>
         </div>
-        <div class="row mb-2">
+        <div class="row mb-3">
             <div class="col-md-2"><em><small>Location :</small></em></div>
-            <div class="col-md-10">{{searchDetail?.location}}</div>
+            <div class="col-md-10">{{searchDetail?.data().location}}</div>
         </div>
-        <div class="row mb-2">
+        <div class="row mb-3">
             <div class="col-md-2"><em><small>About :</small></em></div>
-            <div class="col-md-7">{{searchDetail?.about}}</div>
+            <div class="col-md-8">{{searchDetail?.data().about}}</div>
         </div>
     </div>
 </div>

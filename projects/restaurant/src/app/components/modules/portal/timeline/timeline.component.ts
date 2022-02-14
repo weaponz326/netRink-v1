@@ -37,11 +37,11 @@ export class TimelineComponent implements OnInit {
   }
 
   getAllRink(){
-    this.portalApi.getAllRink(20, {})
+    this.portalApi.getAccountRink()
       .then(
         (res: any) => {
           console.log(res);
-          this.rinksData = res;
+          this.rinksData = res.docs;
         },
         (err: any) => {
           console.log(err);

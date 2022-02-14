@@ -3,35 +3,35 @@
 <div class="container">
 
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-9">
 
             <div class="row mb-3">
                 <div class="col-md-3 text-muted"><label class="float-end"><em>Invitation Date :</em></label></div>
-                <div class="col-md-9">{{invitationData?.invitation_date | date: 'MMMM d, y, hh:mm:ss a'}}</div>
+                <div class="col-md-9">{{invitationData?.data().created_at.toDate() | date: 'MMMM d, y, hh:mm:ss a'}}</div>
             </div>
 
             <div class="row mb-3">
                 <div class="col-md-3 text-muted"><label class="float-end"><em>Invitee :</em></label></div>
                 <div class="col-md-9">
                     <!-- <div class="col-md-2">
-                        <img *ngIf="invitationData?.user.photo != null" [src]="personalUrl + invitation.user.photo" alt="" width="40" height="40" class="rounded-circle" />
-                        <img *ngIf="invitationData?.user.photo == null" src="../../../../../assets/images/utilities/photo-avatar.jpg" alt="Company" width="40" height="40" class="rounded-circle" />
+                        <img *ngIf="invitationData?.data().user.photo != null" [src]="personalUrl + invitation.user.photo" alt="" width="40" height="40" class="rounded-circle" />
+                        <img *ngIf="invitationData?.data().user.photo == null" src="../../../../../assets/images/utilities/photo-avatar.jpg" alt="Company" width="40" height="40" class="rounded-circle" />
                     </div> -->
                     <div class="col-md-5">
-                        <strong>{{invitationData?.invitee_name}}</strong>
+                        <strong>{{invitationData?.data().invitee_name}}</strong>
                     </div>
                     <!-- <div class="col-md-5 text-muted">
-                        {{invitationData?.user.location}}
+                        {{invitationData?.data().user.location}}
                     </div> -->
                 </div>
             </div>
 
             <div class="row mb-4">
                 <div class="col-md-3 text-muted"><label class="float-end"><em>Invitation Status :</em></label></div>
-                <div class="col-md-9">{{invitationData?.invitation_status}}</div>
+                <div class="col-md-9">{{invitationData?.data().invitation_status}}</div>
             </div>
 
-            <div *ngIf="invitationData?.invitation_status == 'Awaiting'" class="row">
+            <div *ngIf="invitationData?.data().invitation_status == 'Awaiting'" class="row">
                 <div class="offset-md-3 col">
                     <button class="btn btn-secondary page-add-btn">Cancel Invitation</button>
                 </div>

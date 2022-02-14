@@ -38,7 +38,7 @@
 
             <div *ngIf="isSearchDetailReady">
                 <app-search-detail
-                    (sendInvitationEvent)="sendInvitation()"
+                    (sendInvitationEvent)="createInvitation()"
                     [searchDetail]="searchDetail"
                 ></app-search-detail>
             </div>

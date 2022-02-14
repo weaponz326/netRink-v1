@@ -20,13 +20,13 @@ export class UserLandingPageComponent implements OnInit {
   isAccountLoading: boolean = false;
 
   ngOnInit(): void {
-    this.getAllUserAccountUser();
+    this.getUserAccountUser();
   }
 
-  getAllUserAccountUser(){
+  getUserAccountUser(){
     this.isAccountLoading = true;
 
-    this.adminApi.getAllUserAccountUser()
+    this.adminApi.getUserAccountUser()
       .then(
         (res: any) => {
           console.log(res);

@@ -61,8 +61,8 @@ export class ViewUserComponent implements OnInit {
 
           this.userFormData = res;
 
-          this.userForm.controls.personalName.setValue(this.userFormData.personal_name);
-          this.userForm.controls.accessLevel.setValue(this.userFormData.access_level);
+          this.userForm.controls.personalName.setValue(this.userFormData.data().personal_name);
+          this.userForm.controls.accessLevel.setValue(this.userFormData.data().access_level);
 
           this.accessFormComponent.getUserAccess();
         },
@@ -78,13 +78,9 @@ export class ViewUserComponent implements OnInit {
 
     this.isUserSaving = true;
 
-    // TODO: change x to account type
-    let x: any;
-    let data: AccountUser = {
-      personal_id: this.userFormData.personal_id,
+    let data = {
       personal_name: this.userFormData.personal_name,
       access_level: this.userForm.controls.accessLevel.value,
-      account: x
     }
 
     this.adminApi.updateAccountUser(data)
@@ -100,7 +96,7 @@ export class ViewUserComponent implements OnInit {
         }
       )
 
-    this.accessFormComponent.saveAccessLevel();
+    this.accessFormComponent.updateUserAccess();
   }
 
   changeLevel(event: any)  {

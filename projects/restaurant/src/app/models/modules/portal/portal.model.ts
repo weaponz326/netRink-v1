@@ -1,11 +1,16 @@
 import { Account } from '../../account/account.model'
 
 export class Rink {
-  uid!: string;
-  sender!: Account;
-  recipient!: Account;
-  rink_date!: Date;
+  created_at!: any;
   rink_type!: string;
   rink_source!: string;
   comment!: string;
+  sender!: {
+    id: string;
+    data: Account;
+  };
+  recipient!: {
+    id: string;
+    data: Account;
+  };
 }

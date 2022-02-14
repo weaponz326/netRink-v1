@@ -63,7 +63,7 @@
 
 </div>
 
-<!-- module sect windows -->
+<!-- module select windows -->
 
 <app-select-menu-group #selectMenuGroupComponentReference (rowSelected)="onSourceSelected($event)"></app-select-menu-group>
 
@@ -78,6 +78,14 @@
 <app-select-customer #selectCustomerComponentReference (rowSelected)="onSourceSelected($event)"></app-select-customer>
 
 <app-select-reservation #selectReservationComponentReference (rowSelected)="onSourceSelected($event)"></app-select-reservation>
+
+<app-select-stock-item #selectStockItemComponentReference (rowSelected)="onSourceSelected($event)"></app-select-stock-item>
+
+<app-select-payment #selectPaymentComponentReference (rowSelected)="onSourceSelected($event)"></app-select-payment>
+
+<app-select-roster #selectRosterComponentReference (rowSelected)="onSourceSelected($event)"></app-select-roster>
+
+<app-select-table #selectTableComponentReference (rowSelected)="onSourceSelected($event)"></app-select-table>
 
 <!-- connection error prompt component -->
 

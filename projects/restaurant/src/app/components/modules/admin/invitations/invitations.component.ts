@@ -2,8 +2,6 @@ import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
-import { TablePaginationComponent } from 'projects/personal/src/app/components/module-utilities/table-pagination/table-pagination.component'
-import { TableSortingComponent } from 'projects/personal/src/app/components/module-utilities/table-sorting/table-sorting.component'
 
 import { AdminApiService } from 'projects/restaurant/src/app/services/modules/admin-api/admin-api.service';
 
@@ -23,71 +21,138 @@ export class InvitationsComponent implements OnInit {
   ) { }
 
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
-  @ViewChild('tablePaginationComponentReference', { read: TablePaginationComponent, static: false }) tablePagination!: TablePaginationComponent;
-  @ViewChild('invitationDateSortingComponentReference', { read: TableSortingComponent, static: false }) invitationDateSorting!: TableSortingComponent;
-  @ViewChild('inviteeNameSortingComponentReference', { read: TableSortingComponent, static: false }) inviteeNameSorting!: TableSortingComponent;
-  @ViewChild('invitationStatusSortingComponentReference', { read: TableSortingComponent, static: false }) invitationStatusSorting!: TableSortingComponent;
 
   navHeading: any[] = [
     { text: "Invitations", url: "/home/admin/invitations" },
   ];
 
-  invitationsGridData: Invitation[] = [];
+  invitationsGridData: any[] = [];
 
-  currentPage = 0;
-  totalPages = 0;
-  totalItems = 0;
+  isFetchingGridData: boolean =  false;
+  isDataAvailable: boolean =  true;
+
+  firstInResponse: any = [];
+  lastInResponse: any = [];
+  nextStartAfter: any = [];
+  prevStartAt: any = [];
+  pageNumber = 0;
+  disableNext: boolean = false;
+  disablePrev: boolean = true;
+
+  sortParams = {
+    field: "created_at",
+    direction: "desc"
+  }
 
   ngOnInit(): void {
   }
 
   ngAfterViewInit(): void {
-    this.getAllAccountInvitation();
+    this.getAccountInvitation();
   }
 
-  getAllAccountInvitation(){
-    this.adminApi.getAllAccountInvitation({}, 20, {})
+  getAccountInvitation(){
+    this.isFetchingGridData = true;
+
+    this.adminApi.getAccountInvitation(this.sortParams, 20)
       .then(
         (res: any) => {
           console.log(res);
-          this.invitationsGridData = res;
-          this.currentPage = res.current_page;
-          this.totalPages = res.total_pages;
-          this.totalItems = res.count;
+
+          this.invitationsGridData = res.docs;
+          this.isFetchingGridData = false;
+          if (!res.docs.length) this.isDataAvailable = false;
+
+          this.prevStartAt = this.firstInResponse;
+          this.nextStartAfter = res.docs[res.docs.length - 1];
+          this.firstInResponse = res.docs[0];
+          this.pageNumber = 1;
+
+          this.disableNext = false;
+          this.disablePrev = true;
         },
         (err: any) => {
           console.log(err);
+          this.isFetchingGridData = false;
           this.connectionToast.openToast();
         }
       )
   }
 
+  nextPage(e: any){
+    e.preventDefault();
+    this.isFetchingGridData = true;
+
+    this.adminApi.getAccountInvitationNext(this.sortParams, 20, this.nextStartAfter)
+      .then(
+        (res: any) => {
+          console.log(res);
+
+          this.invitationsGridData = res.docs;
+          this.isFetchingGridData = false;
+          if (!res.docs.length) this.isDataAvailable = false;
+
+          this.prevStartAt = this.firstInResponse;
+          this.nextStartAfter = res.docs[res.docs.length - 1];
+          this.firstInResponse = res.docs[0];
+          this.pageNumber++;
+
+          if (res.docs.length < 20){
+            this.disableNext = true;
+            this.disablePrev = false;
+          }
+        },
+        (err: any) => {
+          console.log(err);
+          this.isFetchingGridData = false;
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  previousPage(e: any){
+    e.preventDefault();
+    this.isFetchingGridData = true;
+
+    this.adminApi.getAccountInvitationPrev(this.sortParams, 20, this.prevStartAt)
+      .then(
+        (res: any) => {
+          console.log(res);
+
+          this.invitationsGridData = res.docs;
+          this.isFetchingGridData = false;
+          if (!res.docs.length) this.isDataAvailable = false;
+
+          this.prevStartAt = this.firstInResponse;
+          this.nextStartAfter = res.docs[res.docs.length - 1];
+          this.firstInResponse = res.docs[0];
+          this.pageNumber++;
+
+          if (this.pageNumber == 1){
+            this.disableNext = false;
+            this.disablePrev = true;
+          }
+        },
+        (err: any) => {
+          console.log(err);
+          this.isFetchingGridData = false;
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  sortTable(field: any, direction: any){
+    this.sortParams.field = field;
+    this.sortParams.direction = direction;
+
+    this.getAccountInvitation();
+  }
+
   viewInvitation(invitationId: any){
     console.log(invitationId);
-    sessionStorage.setItem('restaurant_invitation_id', invitationId);
 
+    sessionStorage.setItem('restaurant_invitation_id', invitationId);
     this.router.navigateByUrl('/home/admin/view-invitation');
   }
-
-  sortTable(field: any){
-    console.log(field);
-    this.getAllAccountInvitation();
-
-    if((field == 'invitation_date') || (field == "-invitation_date")){
-      this.invitationDateSorting.resetSort();
-    }
-    else if((field == 'invitee_name') || (field == "-invitee_name")){
-      this.inviteeNameSorting.resetSort();
-    }
-    else if((field == 'invitation_status') || (field == "-invitation_status")){
-      this.invitationStatusSorting.resetSort();
-    }
-  }
-
-    // this.columns = <GridColumn[]>[
-    //   { label: "Invitation Date", dataField: "date_sent", width: "25%" },
-    //   { label: "User's Name", dataField: "invitee_name", width: "50%" },
-    //   { label: "Invitation Status", dataField: "invitation_status", width: "25%" },
-    // ];
 
 }

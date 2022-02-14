@@ -22,7 +22,7 @@ export class BillingComponent implements OnInit {
     { text: "Billing", url: "/home/settings/billing" },
   ];
 
-  subscriptionData: Subscription = {subscription_type: "", billing_frequency: "", number_users: 0}
+  subscriptionData: any;
 
   subscriptionTypeValue = "";
   billingFrequencyValue = "";
@@ -54,9 +54,11 @@ export class BillingComponent implements OnInit {
 
           this.subscriptionData = res;
 
-          this.subscriptionTypeValue = this.subscriptionData.subscription_type;
-          this.billingFrequencyValue = this.subscriptionData.billing_frequency;
-          this.numberUsersValue = this.subscriptionData.number_users;
+          this.subscriptionTypeValue = this.subscriptionData.data().subscription_type;
+          this.billingFrequencyValue = this.subscriptionData.data().billing_frequency;
+          this.numberUsersValue = this.subscriptionData.data().number_users;
+
+          this.setSubscription(this.subscriptionTypeValue);
         },
         (err: any) => {
           console.log(err);
@@ -84,8 +86,8 @@ export class BillingComponent implements OnInit {
       )
   }
 
-  setSubscription(event: any){
-    this.selectedSubscription = event.target.value;
+  setSubscription(subscription: any){
+    this.selectedSubscription = subscription;
     console.log(this.selectedSubscription);
 
     if (this.selectedSubscription == "Individual"){

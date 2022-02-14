@@ -12,13 +12,9 @@ export class PortalApiService {
     private afs: AngularFirestore,
   ) { }
 
-  rinkRef = this.afs.collection('restaurant/portal/rink');
-  personalUserRef = this.afs.collection('personal');
-  restaurantAccountRef = this.afs.collection('restaurant');
-
-  personalId = localStorage.getItem('personal_id') as string;
-  restaurantId = localStorage.getItem('restaurant_id') as string;
-  rinkId = sessionStorage.getItem('restaurant_rink_id') as string;
+  rinkRef = this.afs.collection('restaurant/module_portal/restaurant_rink');
+  personalUserSearchRef = this.afs.collection('personal/users/user');
+  restaurantAccountSearchRef = this.afs.collection('restaurant/accounts/account');
 
   // rinks
 
@@ -27,31 +23,28 @@ export class PortalApiService {
   }
 
   getRink(){
-    return this.rinkRef.doc(this.rinkId).ref.get();
+    return this.rinkRef.doc(String(sessionStorage.getItem('restaurant_rink_id'))).ref.get();
   }
 
-  getAllRink(pageSize: any, pageStart: any){
+  getAccountRink(){
     return this.rinkRef.ref
-      .where("sender", "==", this.personalId)
-      .where("recipent", "==", this.personalId)
-      .orderBy("rink_date", "desc")
-      .startAt(pageStart)
-      .limit(pageSize)
+      .where("sender.id", "==", String(localStorage.getItem('restaurant_id')))
+      .where("recipent.id", "==", String(localStorage.getItem('restaurant_id')))
+      // .orderBy("created_at", "desc")
       .get();
   }
 
   // restaurant search
 
   getSearchResult(searchQuery: string, searchFilter: string){
-    return this.restaurantAccountRef.ref
-      .orderBy('accounts')
-      .startAt(searchQuery)
-      .startAt(searchQuery + '\uf8ff')
+    return this.restaurantAccountSearchRef.ref
+      .where("name", ">=", searchQuery)
+      .where("name", "<", searchQuery + "z")
       .get();
   }
 
   getSearchDetail(restaurantId: any){
-    return this.restaurantAccountRef.doc(restaurantId).ref.get();
+    return this.restaurantAccountSearchRef.doc(restaurantId).ref.get();
   }
 
 }
