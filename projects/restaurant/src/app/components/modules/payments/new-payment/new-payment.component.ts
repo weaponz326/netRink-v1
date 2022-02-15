@@ -51,8 +51,11 @@ export class NewPaymentComponent implements OnInit {
       order: {
         id: this.paymentForm.selectedOrderId,
         order_code: this.paymentForm.paymentForm.controls.orderCode.value,
-        customer_name: this.paymentForm.paymentForm.controls.customerName.value,
         total_amount: this.paymentForm.paymentForm.controls.totalAmount.value,
+        customer: {
+          id: this.paymentForm.selectedCustomerId,
+          customer_name: this.paymentForm.paymentForm.controls.customerName.value,
+        }
       }
     }
 

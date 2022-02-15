@@ -7,7 +7,10 @@ export class Payment {
   order!: {
     id: string;
     order_code: string;
-    customer_name: string;
     total_amount: number;
+    customer: {
+      id: string;
+      customer_name: string;
+    }
   }
 }

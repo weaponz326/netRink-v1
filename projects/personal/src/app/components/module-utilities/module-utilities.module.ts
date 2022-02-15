@@ -5,9 +5,6 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
-import { ToastModule } from 'smart-webcomponents-angular/toast';
-import { WindowModule } from 'smart-webcomponents-angular/window';
-
 import { ModuleSidenavComponent } from './module-sidenav/module-sidenav.component';
 import { ModuleTopnavComponent } from './module-topnav/module-topnav.component';
 import { ConnectionToastComponent } from './connection-toast/connection-toast.component';
@@ -35,8 +32,6 @@ import { TableSortingComponent } from './table-sorting/table-sorting.component';
     CommonModule,
     RouterModule,
     FormsModule,
-    ToastModule,
-    WindowModule,
   ],
   exports: [
     ModuleSidenavComponent,

@@ -1,1 +1,47 @@
-<p>delivery-details works!</p>
+<div class="row">
+    <div class="col-md-9">
+
+        <div class="card shadow py-3">
+            <div class="card-body">
+
+                <p class="lead">Restaurant Delivery</p>
+
+                <div class="row mb-2">
+                    <div class="col-md-4"><em><small class="float-end">Delivery ID :</small></em></div>
+                    <div class="col-md-8">{{deliveryData?.data().delivery_code}}</div>
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col-md-4"><em><small class="float-end">Delivery Date :</small></em></div>
+                    <div class="col-md-8">{{deliveryData?.data().delivery_date | date}}</div>
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col-md-4"><em><small class="float-end">Order ID :</small></em></div>
+                    <div class="col-md-8">{{deliveryData?.data().order.order_code}}</div>
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col-md-4"><em><small class="float-end">Customer Name :</small></em></div>
+                    <div class="col-md-8">{{deliveryData?.data().order.customer.customer_name}}</div>
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col-md-4"><em><small class="float-end">Delivery Location :</small></em></div>
+                    <div class="col-md-8">{{deliveryData?.data().delivery_location}}</div>
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col-md-4"><em><small class="float-end">Delivery Status :</small></em></div>
+                    <div class="col-md-8">{{deliveryData?.data().delivery_status}}</div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- connection error prompt component -->
+
+<app-connection-toast #connectionToastComponentReference></app-connection-toast>

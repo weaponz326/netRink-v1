@@ -52,7 +52,7 @@
                         <td>{{data?.data().payment_date}}</td>
                         <td>{{data?.data().amount_paid}}</td>
                         <td>{{data?.data().order.order_code}}</td>
-                        <td>{{data?.data().order.customer_name}}</td>
+                        <td>{{data?.data().order.customer.customer_name}}</td>
                     </tr>
                     <tr *ngIf="isFetchingGridData" class="text-center">
                         <td colspan="5">
