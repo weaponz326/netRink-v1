@@ -1,10 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { OrdersApiService } from 'projects/restaurant/src/app/services/modules/orders-api/orders-api.service';
-
 import { AddOrderComponent } from '../add-order/add-order.component'
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
+
+import { OrdersApiService } from 'projects/restaurant/src/app/services/modules/orders-api/orders-api.service';
+import { OrdersPrintService } from 'projects/restaurant/src/app/services/printing/orders-print/orders-print.service';
 
 
 @Component({
@@ -16,7 +17,8 @@ export class AllOrdersComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private ordersApi: OrdersApiService
+    private ordersApi: OrdersApiService,
+    private ordersPrint: OrdersPrintService
   ) { }
 
   @ViewChild('addOrderComponentReference', { read: AddOrderComponent, static: false }) addOrder!: AddOrderComponent;
@@ -157,6 +159,7 @@ export class AllOrdersComponent implements OnInit {
 
   onPrint(){
     console.log("lets start printing...");
+    this.ordersPrint.printAllOrders()
   }
 
 }

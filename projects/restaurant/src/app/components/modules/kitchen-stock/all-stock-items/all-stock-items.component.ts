@@ -1,11 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
-import { KitchenStockApiService } from 'projects/restaurant/src/app/services/modules/kitchen-stock-api/kitchen-stock-api.service';
-
 import { AddStockItemComponent } from '../add-stock-item/add-stock-item.component'
 import { EditStockItemComponent } from '../edit-stock-item/edit-stock-item.component'
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 import { DeleteModalComponent } from 'projects/personal/src/app/components/module-utilities/delete-modal/delete-modal.component'
+
+import { KitchenStockApiService } from 'projects/restaurant/src/app/services/modules/kitchen-stock-api/kitchen-stock-api.service';
+import { KitchenStockPrintService } from 'projects/restaurant/src/app/services/printing/kitchen-stock-print/kitchen-stock-print.service';
 
 
 @Component({
@@ -15,7 +16,10 @@ import { DeleteModalComponent } from 'projects/personal/src/app/components/modul
 })
 export class AllStockItemsComponent implements OnInit {
 
-  constructor(private kitchenStockApi: KitchenStockApiService) { }
+  constructor(
+    private kitchenStockApi: KitchenStockApiService,
+    private kitchenStockPrint: KitchenStockPrintService
+  ) { }
 
   @ViewChild('addStockItemComponentReference', { read: AddStockItemComponent, static: false }) addStockItem!: AddStockItemComponent;
   @ViewChild('editStockItemComponentReference', { read: EditStockItemComponent, static: false }) editStockItem!: EditStockItemComponent;
@@ -227,6 +231,7 @@ export class AllStockItemsComponent implements OnInit {
 
   onPrint(){
     console.log("lets start printing...");
+    this.kitchenStockPrint.printAllStockItems();
   }
 
 }

@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 
 import { TablesApiService } from 'projects/restaurant/src/app/services/modules/tables-api/tables-api.service';
+import { TablesPrintService } from 'projects/restaurant/src/app/services/printing/tables-print/tables-print.service';
 
 
 @Component({
@@ -15,7 +16,8 @@ export class AllTablesComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private tablesApi: TablesApiService
+    private tablesApi: TablesApiService,
+    private tablesPrint: TablesPrintService
   ) { }
 
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
@@ -155,6 +157,7 @@ export class AllTablesComponent implements OnInit {
 
   onPrint(){
     console.log("lets start printing...");
+    this.tablesPrint.printAllTables()
   }
 
 }

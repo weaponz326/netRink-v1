@@ -58,4 +58,11 @@ export class PaymentsApiService {
       .get();
   }
 
+  getAllAccountPayment(){
+    return this.paymentRef.ref
+      .where("account", "==", localStorage.getItem('restaurant_id'))
+      // .orderBy("created_at", "desc")
+      .get();
+  }
+
 }

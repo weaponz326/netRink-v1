@@ -8,9 +8,9 @@ export class Delivery {
   order!: {
     id: string;
     order_code: string;
-  }
-  customer!: {
-    id: string;
-    customer_name: string;
+    customer: {
+      id: string;
+      customer_name: string;
+    }
   }
 }

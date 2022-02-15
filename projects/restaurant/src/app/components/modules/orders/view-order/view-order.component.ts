@@ -8,6 +8,7 @@ import { OrderItemsComponent } from '../order-items/order-items.component';
 import { SelectCustomerComponent } from '../../../select-windows/customers-windows/select-customer/select-customer.component';
 
 import { OrdersApiService } from 'projects/restaurant/src/app/services/modules/orders-api/orders-api.service';
+import { OrdersPrintService } from 'projects/restaurant/src/app/services/printing/orders-print/orders-print.service';
 
 import { Order } from 'projects/restaurant/src/app/models/modules/orders/orders.model';
 
@@ -21,7 +22,8 @@ export class ViewOrderComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private ordersApi: OrdersApiService
+    private ordersApi: OrdersApiService,
+    private ordersPrint: OrdersPrintService
   ) { }
 
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
@@ -150,6 +152,7 @@ export class ViewOrderComponent implements OnInit {
 
   onPrint(){
     console.log("lets start printing...");
+    this.ordersPrint.printViewOrder();
   }
 
 }

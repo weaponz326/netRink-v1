@@ -65,4 +65,11 @@ export class ReservationsApiService {
       .get();
   }
 
+  getAllAccountReservation(){
+    return this.reservationRef.ref
+      .where("account", "==", localStorage.getItem('restaurant_id'))
+      .orderBy("created_at" ,"desc")
+      .get();
+  }
+
 }

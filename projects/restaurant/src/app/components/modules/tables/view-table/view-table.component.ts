@@ -6,6 +6,7 @@ import { ConnectionToastComponent } from 'projects/personal/src/app/components/m
 import { DeleteModalComponent } from 'projects/personal/src/app/components/module-utilities/delete-modal/delete-modal.component'
 
 import { TablesApiService } from 'projects/restaurant/src/app/services/modules/tables-api/tables-api.service';
+import { TablesPrintService } from 'projects/restaurant/src/app/services/printing/tables-print/tables-print.service';
 
 import { Table } from 'projects/restaurant/src/app/models/modules/tables/tables.model';
 
@@ -19,7 +20,8 @@ export class ViewTableComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private tablesApi: TablesApiService
+    private tablesApi: TablesApiService,
+    private tablesPrint: TablesPrintService
   ) { }
 
   @ViewChild('tableFormComponentReference', { read: TableFormComponent, static: false }) tableForm!: TableFormComponent;
@@ -115,6 +117,7 @@ export class ViewTableComponent implements OnInit {
 
   onPrint(){
     console.log("lets start printing...");
+    this.tablesPrint.printViewTable();
   }
 
 }

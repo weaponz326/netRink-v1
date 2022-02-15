@@ -27,7 +27,7 @@
                                 <i *ngIf="sortParams.field == 'reservation_date' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('reservation_date', 'asc')"></i>
                                 <i *ngIf="sortParams.field == 'reservation_date' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('reservation_date', 'desc')"></i>
                             </th>
-                            <th width="25%">
+                            <th width="30%">
                                 Customer Name
                                 <i *ngIf="sortParams.field != 'customer_name'" class="bi bi-filter float-end list-pointer" (click)="sortTable('customer_name', 'desc')"></i>
                                 <i *ngIf="sortParams.field == 'customer_name' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('customer_name', 'asc')"></i>
@@ -39,7 +39,7 @@
                                 <i *ngIf="sortParams.field == 'arrival_date' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('arrival_date', 'asc')"></i>
                                 <i *ngIf="sortParams.field == 'arrival_date' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('arrival_date', 'desc')"></i>
                             </th>
-                            <th width="20%">
+                            <th width="15%">
                                 Status
                                 <i *ngIf="sortParams.field != 'status'" class="bi bi-filter float-end list-pointer" (click)="sortTable('status', 'desc')"></i>
                                 <i *ngIf="sortParams.field == 'status' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('status', 'asc')"></i>

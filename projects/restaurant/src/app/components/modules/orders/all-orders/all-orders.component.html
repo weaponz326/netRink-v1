@@ -34,9 +34,9 @@
                         </th>
                         <th width="20%">
                             Total Amount
-                            <i *ngIf="sortParams.field != 'order_date'" class="bi bi-filter float-end list-pointer" (click)="sortTable('order_date', 'desc')"></i>
-                            <i *ngIf="sortParams.field == 'order_date' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('order_date', 'asc')"></i>
-                            <i *ngIf="sortParams.field == 'order_date' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('order_date', 'desc')"></i>
+                            <i *ngIf="sortParams.field != 'total_amount'" class="bi bi-filter float-end list-pointer" (click)="sortTable('total_amount', 'desc')"></i>
+                            <i *ngIf="sortParams.field == 'total_amount' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('total_amount', 'asc')"></i>
+                            <i *ngIf="sortParams.field == 'total_amount' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('total_amount', 'desc')"></i>
                         </th>
                     </tr>
                 </thead>

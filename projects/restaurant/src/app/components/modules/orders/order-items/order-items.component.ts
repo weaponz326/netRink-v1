@@ -41,7 +41,7 @@ export class OrderItemsComponent implements OnInit {
   getItems(){
     this.isFetchingGridData = true;
 
-    this.ordersApi.getAccountOrderItem()
+    this.ordersApi.getOrderOrderItem()
       .then(
         (res: any) => {
           console.log(res);

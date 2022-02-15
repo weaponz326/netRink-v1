@@ -31,8 +31,8 @@ export class EditDeliveryComponent implements OnInit {
 
     this.deliveryForm.deliveryForm.controls.deliveryCode.setValue(data.delivery_code);
     this.deliveryForm.deliveryForm.controls.deliveryDate.setValue(data.delivery_date);
-    this.deliveryForm.deliveryForm.controls.orderCode.setValue(data.order_code);
-    this.deliveryForm.deliveryForm.controls.customerName.setValue(data.customer_name);
+    this.deliveryForm.deliveryForm.controls.orderCode.setValue(data.order.order_code);
+    this.deliveryForm.deliveryForm.controls.customerName.setValue(data.order.customer.customer_name);
     this.deliveryForm.deliveryForm.controls.deliveryLocation.setValue(data.delivery_location);
     this.deliveryForm.deliveryForm.controls.deliveryStatus.setValue(data.delivery_status);
 

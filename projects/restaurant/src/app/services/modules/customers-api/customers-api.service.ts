@@ -58,4 +58,11 @@ export class CustomersApiService {
       .get();
   }
 
+  getAllAccountCustomer(){
+    return this.customerRef.ref
+      .where("account", "==", localStorage.getItem('restaurant_id'))
+      // .orderBy("created_by" ,"desc")
+      .get();
+  }
+
 }

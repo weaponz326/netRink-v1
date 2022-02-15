@@ -1,12 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { DeliveriesApiService } from 'projects/restaurant/src/app/services/modules/deliveries-api/deliveries-api.service';
-
 import { NewDeliveryComponent } from '../new-delivery/new-delivery.component'
 import { EditDeliveryComponent } from '../edit-delivery/edit-delivery.component'
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 import { DeleteModalComponent } from 'projects/personal/src/app/components/module-utilities/delete-modal/delete-modal.component'
+
+import { DeliveriesApiService } from 'projects/restaurant/src/app/services/modules/deliveries-api/deliveries-api.service';
+import { DeliveriesPrintService } from 'projects/restaurant/src/app/services/printing/deliveries-print/deliveries-print.service';
 
 
 @Component({
@@ -18,7 +19,8 @@ export class AllDeliveriesComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private deliveriesApi: DeliveriesApiService
+    private deliveriesApi: DeliveriesApiService,
+    private deliveriesPrint: DeliveriesPrintService,
   ) { }
 
   @ViewChild('editDeliveryComponentReference', { read: EditDeliveryComponent, static: false }) editDelivery!: EditDeliveryComponent;
@@ -201,6 +203,7 @@ export class AllDeliveriesComponent implements OnInit {
 
   onPrint(){
     console.log("lets start printing...");
+    this.deliveriesPrint.printAllDeliveries();
   }
 
 }

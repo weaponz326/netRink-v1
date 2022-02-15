@@ -6,6 +6,7 @@ import { ConnectionToastComponent } from 'projects/personal/src/app/components/m
 import { DeleteModalComponent } from 'projects/personal/src/app/components/module-utilities/delete-modal/delete-modal.component'
 
 import { CustomersApiService } from 'projects/restaurant/src/app/services/modules/customers-api/customers-api.service';
+import { CustomersPrintService } from 'projects/restaurant/src/app/services/printing/customers-print/customers-print.service';
 
 import { Customer } from 'projects/restaurant/src/app/models/modules/customers/customers.model';
 
@@ -19,7 +20,8 @@ export class ViewCustomerComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private customersApi: CustomersApiService
+    private customersApi: CustomersApiService,
+    private customersPrint: CustomersPrintService,
   ) { }
 
   @ViewChild('customerFormComponentReference', { read: CustomerFormComponent, static: false }) customerForm!: CustomerFormComponent;
@@ -125,6 +127,7 @@ export class ViewCustomerComponent implements OnInit {
 
   onPrint(){
     console.log("lets start printing...");
+    this.customersPrint.printViewCustomer();
   }
 
 }

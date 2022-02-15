@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 
 import { StaffApiService } from 'projects/restaurant/src/app/services/modules/staff-api/staff-api.service';
+import { StaffPrintService } from 'projects/restaurant/src/app/services/printing/staff-print/staff-print.service';
 
 
 @Component({
@@ -15,7 +16,8 @@ export class AllStaffComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private staffApi: StaffApiService
+    private staffApi: StaffApiService,
+    private staffPrint: StaffPrintService,
   ) { }
 
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
@@ -155,6 +157,7 @@ export class AllStaffComponent implements OnInit {
 
   onPrint(){
     console.log("lets start printing...");
+    this.staffPrint.printAllStaff();
   }
 
 }

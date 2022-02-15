@@ -51,7 +51,7 @@
                         <tr *ngFor="let data of deliveriesGridData; index as i">
                             <td>{{data?.data().delivery_code}}</td>
                             <td>{{data?.data().delivery_date | date}}</td>
-                            <td>{{data?.data().customer.customer_name}}</td>
+                            <td>{{data?.data().order.customer.customer_name}}</td>
                             <td>{{data?.data().delivery_location}}</td>
                             <td>{{data?.data().delivery_status}}</td>
                         </tr>

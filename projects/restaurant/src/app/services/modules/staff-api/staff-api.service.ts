@@ -58,4 +58,11 @@ export class StaffApiService {
       .get();
   }
 
+  getAllAccountStaff(){
+    return this.staffRef.ref
+      .where("account", "==", localStorage.getItem('restaurant_id'))
+      // .orderBy("created_at", "desc")
+      .get();
+  }
+
 }

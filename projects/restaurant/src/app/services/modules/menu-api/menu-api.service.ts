@@ -59,6 +59,13 @@ export class MenuApiService {
       .get();
   }
 
+  getAllAccountMenuGroup(){
+    return this.menuGroupRef.ref
+      .where("account", "==", localStorage.getItem('restaurant_id'))
+      // .orderBy("created_at", "desc")
+      .get();
+  }
+
   // menu item
 
   createMenuItem(menuItem: any){
@@ -107,6 +114,13 @@ export class MenuApiService {
       // .orderBy(sorting?.field, sorting?.direction)
       .startAt(pageStart)
       .limit(pageSize)
+      .get();
+  }
+
+  getAllAccountMenuItem(){
+    return this.menuItemRef.ref
+      .where("menu_group.data.account", "==", localStorage.getItem('restaurant_id'))
+      // .orderBy("created_at", "desc")
       .get();
   }
 

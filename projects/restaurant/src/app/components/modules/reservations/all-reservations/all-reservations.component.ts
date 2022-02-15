@@ -6,6 +6,7 @@ import { ConnectionToastComponent } from 'projects/personal/src/app/components/m
 import { DeleteModalComponent } from 'projects/personal/src/app/components/module-utilities/delete-modal/delete-modal.component'
 
 import { ReservationsApiService } from 'projects/restaurant/src/app/services/modules/reservations-api/reservations-api.service';
+import { ReservationsPrintService } from 'projects/restaurant/src/app/services/printing/reservations-print/reservations-print.service';
 
 
 @Component({
@@ -15,7 +16,10 @@ import { ReservationsApiService } from 'projects/restaurant/src/app/services/mod
 })
 export class AllReservationsComponent implements OnInit {
 
-  constructor(private reservationsApi: ReservationsApiService) { }
+  constructor(
+    private reservationsApi: ReservationsApiService,
+    private reservationsPrint: ReservationsPrintService,
+  ) { }
 
   @ViewChild('newReservationComponentReference', { read: NewReservationComponent, static: false }) newReservation!: NewReservationComponent;
   @ViewChild('editReservationComponentReference', { read: EditReservationComponent, static: false }) editReservation!: EditReservationComponent;
@@ -227,6 +231,7 @@ export class AllReservationsComponent implements OnInit {
 
   onPrint(){
     console.log("lets start printing...");
+    this.reservationsPrint.printAllReservations();
   }
 
 }
