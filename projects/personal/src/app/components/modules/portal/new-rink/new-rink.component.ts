@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormControl, FormGroup } from '@angular/forms';
 
+import * as firebase from 'firebase/compat/app';
+
 import { ConnectionToastComponent } from '../../../module-utilities/connection-toast/connection-toast.component';
 
 import { SelectCalendarComponent } from '../../../select-windows/calendar-windows/select-calendar/select-calendar.component';
@@ -50,12 +52,20 @@ export class NewRinkComponent implements OnInit {
   ];
 
   rinkForm: FormGroup = new FormGroup({});
-  senderData: User = {first_name: "", last_name: "", location: "", about: ""};
-  recipientData: User = {first_name: "", last_name: "", location: "", about: ""};
-  rinkFormData: Rink = {uid: "", sender: this.senderData, recipient: this.recipientData, rink_date: new Date, rink_type: "", rink_source: "", comment: "" };
+  senderData: any;
+  recipientData: any;
 
   selectedSourceId: any;
-  typeSource: any[] = ['Calendar', 'Schedule', 'Budget', 'Note', 'Account', 'Transaction', 'Task Group', 'Task Item'];
+  typeSource: any[] = [
+    'Calendar',
+    'Schedule',
+    'Budget',
+    'Note',
+    'Account',
+    'Transaction',
+    'Task Group',
+    'Task Item'
+  ];
 
   isRinkSending = false;
 
@@ -93,7 +103,7 @@ export class NewRinkComponent implements OnInit {
   }
 
   getSearchDetail(){
-    this.portalApi.getSearchDetail(String(sessionStorage.getItem('restaurantSearchUser')))
+    this.portalApi.getSearchDetail(String(sessionStorage.getItem('personalSearchUser')))
       .then(
         (res: any) => {
           console.log(res);
@@ -111,13 +121,19 @@ export class NewRinkComponent implements OnInit {
   }
 
   createRink(){
-    let data = {
-      uid: "",
-      sender: this.senderData,
-      recipient: this.recipientData,
+    let data: Rink = {
+      created_at: firebase.default.firestore.FieldValue.serverTimestamp(),
       rink_type: this.rinkForm.controls.rinkType.value,
-      rink_source: this.rinkForm.controls.rinkSource.value,
-      comment: this.rinkForm.controls.comment.value
+      rink_source: this.selectedSourceId,
+      comment: this.rinkForm.controls.comment.value,
+      sender: {
+        id: localStorage.getItem('personal_id') as string,
+        data: this.senderData,
+      },
+      recipient: {
+        id: sessionStorage.getItem('personalSearchUser') as string,
+        data: this.recipientData
+      }
     }
 
     console.log(data);
@@ -129,7 +145,7 @@ export class NewRinkComponent implements OnInit {
           console.log(res);
           this.isRinkSending = false;
 
-          sessionStorage.setItem('restaurant_rink_id', res.data.uid);
+          sessionStorage.setItem('personal_rink_id', res.id);
           this.router.navigateByUrl('/home/portal/view-rink');
         },
         err => {

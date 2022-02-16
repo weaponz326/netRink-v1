@@ -12,9 +12,7 @@ export class SettingsApiService {
     private afs: AngularFirestore,
   ) { }
 
-  extendedProfileRef = this.afs.collection('personal/module_settings/settings_extended_profile');
-
-  personalId = localStorage.getItem('personal_id') as string;
+  extendedProfileRef = this.afs.collection('personal/module_settings/personal_extended_profile');
 
   // extended profile
 
@@ -23,11 +21,11 @@ export class SettingsApiService {
   }
 
   getExtendedProfile(){
-    return this.extendedProfileRef.doc(this.personalId).ref.get();
+    return this.extendedProfileRef.doc(String(localStorage.getItem('personal_id'))).ref.get();
   }
 
   updateExtendedProfile(extendedProfile: any){
-    return this.extendedProfileRef.doc(this.personalId).update(extendedProfile);
+    return this.extendedProfileRef.doc(String(localStorage.getItem('personal_id'))).update(extendedProfile);
   }
 
   // // get all suite accounts

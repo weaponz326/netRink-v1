@@ -15,14 +15,14 @@
 
             <div *ngFor="let rink of rinksData">
 
-                <div *ngIf="rink.sender.uid==personalId; then senderBlock else recipientBlock"></div>
+                <div *ngIf="rink?.data().sender.id==personalId; then senderBlock else recipientBlock"></div>
 
                 <ng-template #senderBlock>
-                    <div class="list-pointer" (click)="viewRink(rink.uid)">
+                    <div class="list-pointer" (click)="viewRink(rink?.id)">
                         <div class="row mb-1">
                             <div class="col-md-12">
                                 <i class="bi bi-arrow-up-circle-fill me-2 rinkout-icon"></i>
-                                <small><strong>RinkOut</strong> - {{rink.rink_date | date: 'MMMM d, y, hh:mm a'}}</small>
+                                <small><strong>RinkOut</strong> - {{rink?.data().rink_date.toDate() | date: 'MMMM d, y, hh:mm a'}}</small>
                             </div>
                         </div>
 
@@ -31,32 +31,32 @@
                                 <img src="../../../../../assets/images/utilities/photo-avatar.jpg" alt="" width="40" height="40" class="rounded-circle" />
                             </div>
                             <div class="col-md-5 mt-2">
-                                <strong>{{rink?.recipient?.first_name}} {{rink.recipient?.last_name}}</strong>
+                                <strong>{{rink?.data().recipient.data.first_name}} {{rink?.data().recipient.data.last_name}}</strong>
                             </div>
                             <div class="col-md-5 mt-2">
-                                {{rink.recipient.location}}
+                                {{rink?.data().recipient.data.location}}
                             </div>
                         </div>
 
                         <div class="row mt-1">
                             <div class="offset-md-1 col-md-5">
-                                Personal - {{rink.rink_type}}
-                                <img *ngIf="rink?.rink_type == 'Calendar' || rink?.rink_type == 'Schedule'" src="../../../../../assets/images/modules/calendar.png" alt="" width="25" height="25" class="ms-2" />
-                                <img *ngIf="rink?.rink_type == 'Budget'" src="../../../../../assets/images/modules/budget.png" alt="" width="25" height="25" class="ms-2" />
-                                <img *ngIf="rink?.rink_type == 'Note'" src="../../../../../assets/images/modules/notes.png" alt="" width="25" height="25" class="ms-2" />
-                                <img *ngIf="rink?.rink_type == 'Account' || rink?.rink_type == 'Transaction'" src="../../../../../assets/images/modules/accounts.png" alt="" width="25" height="25" class="ms-2" />
-                                <img *ngIf="rink?.rink_type == 'Task Group' || rink?.rink_type == 'Task Item'" src="../../../../../assets/images/modules/tasks.png" alt="" width="25" height="25" class="ms-2" />
+                                Personal - {{rink?.data().rink_type}}
+                                <img *ngIf="rink?.data().rink_type == 'Calendar' || rink?.data().rink_type == 'Schedule'" src="../../../../../assets/images/modules/calendar.png" alt="" width="25" height="25" class="ms-2" />
+                                <img *ngIf="rink?.data().rink_type == 'Budget'" src="../../../../../assets/images/modules/budget.png" alt="" width="25" height="25" class="ms-2" />
+                                <img *ngIf="rink?.data().rink_type == 'Note'" src="../../../../../assets/images/modules/notes.png" alt="" width="25" height="25" class="ms-2" />
+                                <img *ngIf="rink?.data().rink_type == 'Account' || rink?.data().rink_type == 'Transaction'" src="../../../../../assets/images/modules/accounts.png" alt="" width="25" height="25" class="ms-2" />
+                                <img *ngIf="rink?.data().rink_type == 'Task Group' || rink?.data().rink_type == 'Task Item'" src="../../../../../assets/images/modules/tasks.png" alt="" width="25" height="25" class="ms-2" />
                             </div>
                         </div>
                     </div>
                 </ng-template>
 
                 <ng-template #recipientBlock>
-                    <div class="list-pointer" (click)="viewRink(rink.uid)">
+                    <div class="list-pointer" (click)="viewRink(rink?.id)">
                         <div class="row mb-1">
                             <div class="col-md-12">
                                 <i class="bi bi-arrow-down-circle-fill me-2 rinkin-icon"></i>
-                                <small><strong>RinkIn</strong> - {{rink.rink_date | date: 'MMMM d, y, hh:mm a'}}</small>
+                                <small><strong>RinkIn</strong> - {{rink?.data().rink_date.toDate() | date: 'MMMM d, y, hh:mm a'}}</small>
                             </div>
                         </div>
 
@@ -65,21 +65,21 @@
                                 <img src="../../../../../assets/images/utilities/photo-avatar.jpg" alt="" width="40" height="40" class="rounded-circle" />
                             </div>
                             <div class="col-md-5 mt-2">
-                                <strong>{{rink?.sender?.first_name}} {{rink?.sender?.last_name}}</strong>
+                                <strong>{{rink?.data().sender.data.first_name}} {{rink?.data().sender.data.last_name}}</strong>
                             </div>
                             <div class="col-md-5 mt-2">
-                                {{rink.sender.location}}
+                                {{rink?.data().sender.data.location}}
                             </div>
                         </div>
 
                         <div class="row mt-1">
                             <div class="offset-md-1 col-md-5">
-                                Personal - {{rink.rink_type}}
-                                <img *ngIf="rink?.rink_type == 'Calendar' || rink?.rink_type == 'Schedule'" src="../../../../../assets/images/modules/calendar.png" alt="" width="25" height="25" class="ms-2" />
-                                <img *ngIf="rink?.rink_type == 'Budget'" src="../../../../../assets/images/modules/budget.png" alt="" width="25" height="25" class="ms-2" />
-                                <img *ngIf="rink?.rink_type == 'Note'" src="../../../../../assets/images/modules/notes.png" alt="" width="25" height="25" class="ms-2" />
-                                <img *ngIf="rink?.rink_type == 'Account' || rink?.rink_type == 'Transaction'" src="../../../../../assets/images/modules/accounts.png" alt="" width="25" height="25" class="ms-2" />
-                                <img *ngIf="rink?.rink_type == 'Task Group' || rink?.rink_type == 'Task Item'" src="../../../../../assets/images/modules/tasks.png" alt="" width="25" height="25" class="ms-2" />
+                                Personal - {{rink?.data().rink_type}}
+                                <img *ngIf="rink?.data().rink_type == 'Calendar' || rink?.data().rink_type == 'Schedule'" src="../../../../../assets/images/modules/calendar.png" alt="" width="25" height="25" class="ms-2" />
+                                <img *ngIf="rink?.data().rink_type == 'Budget'" src="../../../../../assets/images/modules/budget.png" alt="" width="25" height="25" class="ms-2" />
+                                <img *ngIf="rink?.data().rink_type == 'Note'" src="../../../../../assets/images/modules/notes.png" alt="" width="25" height="25" class="ms-2" />
+                                <img *ngIf="rink?.data().rink_type == 'Account' || rink?.data().rink_type == 'Transaction'" src="../../../../../assets/images/modules/accounts.png" alt="" width="25" height="25" class="ms-2" />
+                                <img *ngIf="rink?.data().rink_type == 'Task Group' || rink?.data().rink_type == 'Task Item'" src="../../../../../assets/images/modules/tasks.png" alt="" width="25" height="25" class="ms-2" />
                             </div>
                         </div>
                     </div>

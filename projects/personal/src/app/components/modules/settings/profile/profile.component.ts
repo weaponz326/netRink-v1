@@ -41,17 +41,31 @@ export class ProfileComponent implements OnInit {
     { text: "Profile", url: "/home/profile/dashboard" },
   ];
 
-  userData: User = {first_name: "", last_name: "", location: "", about: ""};
-  extendedProfileData: ExtendedProfile = {date_of_birth: "", gender: "", phone: "", address: "", country: "", state: "", city: ""};
+  userData: any;
+  extendedProfileData: any;
 
 
   ngOnInit(): void {
   }
 
   ngAfterViewInit(): void {
-    // TODO: this.getAuth
+    this.getAuth();
     this.getUser();
     this.getExtendedProfile();
+  }
+
+  getAuth(){
+    this.authApi.getAuth()
+      .subscribe(
+        (res: any) => {
+          console.log(res);
+          this.contact.contactForm.controls.email.setValue(res.email);
+        },
+        (err: any) => {
+          console.log(err);
+          this.connectionToast.openToast();
+        }
+      )
   }
 
   getUser(){
@@ -62,10 +76,10 @@ export class ProfileComponent implements OnInit {
 
           this.userData = res;
 
-          this.basic.basicForm.controls.firstName.setValue(this.userData.first_name);
-          this.basic.basicForm.controls.lastName.setValue(this.userData.last_name);
-          this.basic.basicForm.controls.about.setValue(this.userData.about);
-          this.location.locationForm.controls.location.setValue(this.userData.location);
+          this.basic.basicForm.controls.firstName.setValue(this.userData.data().first_name);
+          this.basic.basicForm.controls.lastName.setValue(this.userData.data().last_name);
+          this.basic.basicForm.controls.about.setValue(this.userData.data().about);
+          this.location.locationForm.controls.location.setValue(this.userData.data().location);
 
           // TODO: move to getAuth()
           // this.contact.contactForm.controls.email.setValue(res.email);
@@ -86,12 +100,12 @@ export class ProfileComponent implements OnInit {
           this.extendedProfileData = res;
 
           this.additional.bdayInput.value = this.extendedProfileData.date_of_birth;
-          this.additional.additionalForm.controls.gender.setValue(this.extendedProfileData.gender);
-          this.location.locationForm.controls.country.setValue(this.extendedProfileData.country);
-          this.location.locationForm.controls.state.setValue(this.extendedProfileData.state);
-          this.location.locationForm.controls.city.setValue(this.extendedProfileData.city);
-          this.contact.contactForm.controls.phone.setValue(this.extendedProfileData.phone);
-          this.contact.contactForm.controls.address.setValue(this.extendedProfileData.address);
+          this.additional.additionalForm.controls.gender.setValue(this.extendedProfileData.data().gender);
+          this.location.locationForm.controls.country.setValue(this.extendedProfileData.data().country);
+          this.location.locationForm.controls.state.setValue(this.extendedProfileData.data().state);
+          this.location.locationForm.controls.city.setValue(this.extendedProfileData.data().city);
+          this.contact.contactForm.controls.phone.setValue(this.extendedProfileData.data().phone);
+          this.contact.contactForm.controls.address.setValue(this.extendedProfileData.data().address);
         },
         (err: any) => {
           console.log(err);

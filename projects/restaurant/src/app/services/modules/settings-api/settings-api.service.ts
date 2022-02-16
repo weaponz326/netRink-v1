@@ -12,8 +12,8 @@ export class SettingsApiService {
     private afs: AngularFirestore,
   ) { }
 
-  extendedProfileRef = this.afs.collection('restaurant/module_settings/settings_extended_profile');
-  subscriptionRef = this.afs.collection('restaurant/module_settings/settings_subscription');
+  extendedProfileRef = this.afs.collection('restaurant/module_settings/restaurant_extended_profile');
+  subscriptionRef = this.afs.collection('restaurant/module_settings/restaurant_subscription');
 
   // extended profile
 
