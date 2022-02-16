@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
-import { OrdersApiService } from 'projects/restaurant/src/app/services/modules/orders-api/orders-api.service';
-
 import { AddItemComponent } from '../add-item/add-item.component'
 import { EditItemComponent } from '../edit-item/edit-item.component'
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 import { DeleteModalComponent } from 'projects/personal/src/app/components/module-utilities/delete-modal/delete-modal.component'
+
+import { OrdersApiService } from 'projects/restaurant/src/app/services/modules/orders-api/orders-api.service';
 
 
 @Component({
@@ -35,10 +35,10 @@ export class OrderItemsComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    this.getItems();
+    this.getOrderOrderItem();
   }
 
-  getItems(){
+  getOrderOrderItem(){
     this.isFetchingGridData = true;
 
     this.ordersApi.getOrderOrderItem()

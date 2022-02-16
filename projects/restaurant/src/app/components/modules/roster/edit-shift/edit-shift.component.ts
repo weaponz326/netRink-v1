@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewChild, Output, EventEmitter, ElementRef } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 
+import { Shift } from 'projects/restaurant/src/app/models/modules/roster/roster.model';
+
 
 @Component({
   selector: 'app-edit-shift',
@@ -16,6 +18,7 @@ export class EditShiftComponent implements OnInit {
   @ViewChild('buttonElementReference', { read: ElementRef, static: false }) buttonElement!: ElementRef;
 
   shiftForm: FormGroup = new FormGroup({});
+  shiftFormData: any;
 
   selectedIndex: any = 0;
   selectedId: any = "";
@@ -33,6 +36,8 @@ export class EditShiftComponent implements OnInit {
   }
 
   openModal(index: any, data: any){
+    this.shiftFormData = data;
+
     this.selectedIndex = index;
     this.selectedId = data.id;
 
@@ -44,14 +49,18 @@ export class EditShiftComponent implements OnInit {
   }
 
   saveShift(){
-    let data = {
-      index: this.selectedIndex,
-      id: this.selectedId,
-
-      roster: sessionStorage.getItem('restaurant_roster_id'),
+    let shift: Shift = {
+      created_at: this.shiftFormData.created_at,
+      roster: sessionStorage.getItem('restaurant_roster_id') as string,
       shift_name: this.shiftForm.controls.shiftName.value,
       start_time: this.shiftForm.controls.startTime.value,
       end_time: this.shiftForm.controls.endTime.value,
+    }
+
+    let data = {
+      index: this.selectedIndex,
+      id: this.selectedId,
+      shift: shift
     }
 
     this.saveShiftEvent.emit(data);

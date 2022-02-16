@@ -5,16 +5,16 @@
 export const environment = {
   production: false,
 
-  baseUrl: "https://netrink.com/",
-  personalUrl: "https://personal.netrink.com/",
-  restaurantUrl: "https://restaurant.netrink.com/",
-  schoolUrl: "https://school.netrink.com/",
-  enterpriseUrl: "https://enterprise.netrink.com/",
-  associationUrl: "https://association.netrink.com/",
-  hospitalUrl: "https://hospital.netrink.com/",
-  hotelUrl: "https://hotel.netrink.com/",
-  shopUrl: "https://shop.netrink.com/",
-  productionUrl: "https://production.netrink.com/",
+  baseUrl: "netrink-test-v1.web.app",
+  personalUrl: "netrink-test-personal-v1.web.app",
+  restaurantUrl: "netrink-test-restaurant-v1.web.app",
+  schoolUrl: "#",
+  enterpriseUrl: "#",
+  associationUrl: "#",
+  hospitalUrl: "#",
+  hotelUrl: "#",
+  shopUrl: "#",
+  productionUrl: "#",
 
   firebase: {
     apiKey: "AIzaSyC-pUZi6j5AecjEKiBaQL1nTZrKWB_J9w0",

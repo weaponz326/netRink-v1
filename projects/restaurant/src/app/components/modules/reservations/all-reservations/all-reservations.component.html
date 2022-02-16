@@ -47,7 +47,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let data of reservationsGridData; index as i" (dblclick)="openEditReservation(i)" class="table-pointer">
+                    <tr *ngFor="let data of reservationsGridData" (dblclick)="viewReservation(data.id)" class="table-pointer">
                         <td>{{data?.reservation_code}}</td>
                         <td>{{data?.reservation_date | date}}</td>
                         <td>{{data?.customer.customer_name}}</td>
@@ -99,16 +99,10 @@
 
 </div>
 
-<!-- new and edit reservation modal components -->
+<!-- new reservation modal component -->
 
-<app-new-reservation #newReservationComponentReference (saveReservationEvent)="createReservation($event)"></app-new-reservation>
-
-<app-edit-reservation #editReservationComponentReference (saveReservationEvent)="updateReservation($event)" (deleteReservation)="confirmDelete($event)"></app-edit-reservation>
+<app-new-reservation #newReservationComponentReference></app-new-reservation>
 
 <!-- connection error toast component -->
 
 <app-connection-toast #connectionToastComponentReference></app-connection-toast>
-
-<!-- delete confirmation modal component -->
-
-<app-delete-modal #deleteModalComponentReference (confirmEvent)="deleteReservation()"></app-delete-modal>

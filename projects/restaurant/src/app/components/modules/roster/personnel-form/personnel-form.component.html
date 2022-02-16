@@ -5,7 +5,7 @@
         <div class="col-md-8">
             <div class="input-group input-group-sm w-100">
                 <input formControlName="pesonnelCode" [disabled]="true" class="form-control">
-                <button type="button" class="btn btn-secondary">
+                <button type="button" class="btn btn-secondary" (click)="openStaffWindow()">
                     <i class="bi bi-three-dots"></i>
                 </button>
             </div>
@@ -17,7 +17,7 @@
         <div class="col-md-8">
             <div class="input-group input-group-sm w-100">
                 <input formControlName="pesonnelName" [disabled]="true" class="form-control">
-                <button type="button" class="btn btn-secondary">
+                <button type="button" class="btn btn-secondary" (click)="openStaffWindow()">
                     <i class="bi bi-three-dots"></i>
                 </button>
             </div>
@@ -28,9 +28,13 @@
         <div class="col-md-4"><label class="float-end mt-1">Batch :</label></div>
         <div class="col-md-8">
             <select formControlName="batch" class="form-control form-control-sm w-100">
-                <option *ngFor="let batch of batchSource">{{batch}}</option>
+                <option *ngFor="let batch of batchSource">{{batch.data().batch_symbol}}</option>
             </select>
         </div>
     </div>
 
 </form>
+
+<!-- select staff window component reference -->
+
+<app-select-staff #selectStaffComponentReference (rowSelected)="onStaffSelected($event)"></app-select-staff>

@@ -9,18 +9,18 @@
     </div>
 
     <div class="row">
-        <div class="col-md-9">
+        <div class="col-md-10">
 
             <table class="table table-bordered table-sm w-100 page-table">
                 <thead>
                     <tr class="bg-light">
-                        <th width="20%">
+                        <th width="15%">
                             Order ID
                             <i *ngIf="sortParams.field != 'order_code'" class="bi bi-filter float-end list-pointer" (click)="sortTable('order_code', 'desc')"></i>
                             <i *ngIf="sortParams.field == 'order_code' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('order_code', 'asc')"></i>
                             <i *ngIf="sortParams.field == 'order_code' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('order_code', 'desc')"></i>
                         </th>
-                        <th width="25%">
+                        <th width="20%">
                             Order Date
                             <i *ngIf="sortParams.field != 'order_date'" class="bi bi-filter float-end list-pointer" (click)="sortTable('order_date', 'desc')"></i>
                             <i *ngIf="sortParams.field == 'order_date' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('order_date', 'asc')"></i>
@@ -31,6 +31,12 @@
                             <i *ngIf="sortParams.field != 'customer_name'" class="bi bi-filter float-end list-pointer" (click)="sortTable('customer_name', 'desc')"></i>
                             <i *ngIf="sortParams.field == 'customer_name' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('customer_name', 'asc')"></i>
                             <i *ngIf="sortParams.field == 'customer_name' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('customer_name', 'desc')"></i>
+                        </th>
+                        <th width="10%">
+                            Table
+                            <i *ngIf="sortParams.field != 'table_number'" class="bi bi-filter float-end list-pointer" (click)="sortTable('table_number', 'desc')"></i>
+                            <i *ngIf="sortParams.field == 'table_number' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('table_number', 'asc')"></i>
+                            <i *ngIf="sortParams.field == 'table_number' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('table_number', 'desc')"></i>
                         </th>
                         <th width="20%">
                             Total Amount
@@ -45,24 +51,25 @@
                         <td>{{data?.data().order_code}}</td>
                         <td>{{data?.data().order_date | date}}</td>
                         <td>{{data?.data().customer.customer_name}}</td>
+                        <td>{{data?.data().table.table_number}}</td>
                         <td>{{data?.data().total_amount}}</td>
                     </tr>
                     <tr *ngIf="isFetchingGridData" class="text-center">
-                        <td colspan="4">
+                        <td colspan="5">
                             <div class="spinner-grow m-4" role="status">
                                 <span class="visually-hidden">Loading...</span>
                             </div>
                         </td>
                     </tr>
                     <tr *ngIf="!isDataAvailable && !isFetchingGridData" class="text-center">
-                        <td colspan="4">
+                        <td colspan="5">
                             <p class="m-4">No data available</p>
                         </td>
                     </tr>
                 </tbody>
                 <tfoot>
                     <tr class="bg-light">
-                        <td colspan="4">
+                        <td colspan="5">
                             <nav class="nav-light float-end" aria-label="Page navigation">
                                 <ul class="pagination pagination-sm mb-0 justify-content-end">
                                     <li class="page-item">

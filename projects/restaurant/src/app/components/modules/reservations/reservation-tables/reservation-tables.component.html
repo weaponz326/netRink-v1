@@ -1,0 +1,49 @@
+<div class="row">
+    <div class="col-md-6">
+
+        <h4>Reserved Tables</h4>
+
+        <table class="table table-bordered table-sm w-100 page-table">
+            <thead>
+                <tr class="bg-light">
+                    <th width="55%">Table No.</th>
+                    <th width="35%">Capacity</th>
+                    <th width="10%" class="p-0">
+                        <button class="btn btn-secondary btn-sm w-100" (click)="selectTable.openModal()">
+                            <i class="bi bi-plus"></i>
+                        </button>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let data of reservationTablesGridData; index as i">
+                    <td>{{data?.table.table_number}}</td>
+                    <td>{{data?.table.capacity}}</td>
+                    <td class="p-0">
+                        <button class="btn btn-sm border w-50" (click)="confirmDelete(i, data.id)"><i class="bi bi-trash"></i></button>
+                    </td>
+                </tr>
+                <tr *ngIf="isFetchingGridData" class="text-center">
+                    <td colspan="3">
+                        <div class="spinner-grow m-4" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+<!-- connection error toast component -->
+
+<app-connection-toast #connectionToastComponentReference></app-connection-toast>
+
+<!-- delete confirmation modal component -->
+
+<app-delete-modal #deleteModalComponentReference (confirmEvent)="deleteReservationTable()"></app-delete-modal>
+
+<!-- select table window component -->
+
+<app-select-table #selectTableComponentReference (rowSelected)="createReservationTable($event)"></app-select-table>

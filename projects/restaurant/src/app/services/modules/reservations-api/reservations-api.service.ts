@@ -1,9 +1,4 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs'
-
-import { environment } from 'projects/restaurant/src/environments/environment'
-import { EndpointsService } from 'projects/application/src/app/services/endpoints/endpoints.service';
 
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 
@@ -15,28 +10,27 @@ export class ReservationsApiService {
 
   constructor(
     private afs: AngularFirestore,
-    private http: HttpClient,
-    private endpoints: EndpointsService
   ) { }
 
   reservationRef = this.afs.collection('restaurant/module_reservations/restaurant_reservation');
+  reservationTableRef = this.afs.collection('restaurant/module_reservations/restaurant_reservation_table');
 
   // reservations
 
-  createReservation(reservationData: any){
-    return this.reservationRef.add(reservationData);
+  createReservation(reservation: any){
+    return this.reservationRef.add(reservation);
   }
 
-  getReservation(reservationId: any){
-    return this.reservationRef.doc(reservationId).ref.get();
+  getReservation(){
+    return this.reservationRef.doc(String(sessionStorage.getItem('restaurant_reservation_id'))).ref.get();
   }
 
-  updateReservation(reservationId: any, reservationData: any){
-    return this.reservationRef.doc(reservationId).update(reservationData);
+  updateReservation(reservation: any){
+    return this.reservationRef.doc(String(sessionStorage.getItem('restaurant_reservation_id'))).update(reservation);
   }
 
-  deleteReservation(reservationId: any){
-    return this.reservationRef.doc(reservationId).delete();
+  deleteReservation(){
+    return this.reservationRef.doc(String(sessionStorage.getItem('restaurant_reservation_id'))).delete();
   }
 
   getAccountReservation(sorting: any, pageSize: any){
@@ -69,6 +63,31 @@ export class ReservationsApiService {
     return this.reservationRef.ref
       .where("account", "==", localStorage.getItem('restaurant_id'))
       .orderBy("created_at" ,"desc")
+      .get();
+  }
+
+  // reservation tables
+
+  createReservationTable(reservationTableData: any){
+    return this.reservationTableRef.add(reservationTableData);
+  }
+
+  getReservationTable(reservationTableId: any){
+    return this.reservationTableRef.doc(reservationTableId).ref.get();
+  }
+
+  updateReservationTable(reservationTableId: any, reservationTableData: any){
+    return this.reservationTableRef.doc(reservationTableId).update(reservationTableData);
+  }
+
+  deleteReservationTable(reservationTableId: any){
+    return this.reservationTableRef.doc(reservationTableId).delete();
+  }
+
+  getReservationReservationTable(){
+    return this.reservationTableRef.ref
+      .where("reservation", "==", sessionStorage.getItem('restaurant_reservation_id'))
+      .orderBy("created_at", "desc")
       .get();
   }
 

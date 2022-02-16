@@ -34,84 +34,84 @@ export class RosterSheetComponent implements OnInit {
   }
 
   refreshSheet(){
-    this.rosterApi.refreshSheet()
-      .subscribe(
-        res => {
-          console.log(res);
-          this.getRosterDays();
-        },
-        err => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
+    // this.rosterApi.refreshSheet()
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.getRosterDays();
+    //     },
+    //     err => {
+    //       console.log(err);
+    //       this.connectionToast.openToast();
+    //     }
+    //   )
   }
 
   // for source of sheet custom cell edit widget
   getBatches(){
-    this.rosterApi.getBatches()
-      .subscribe(
-        res => {
-          console.log(res);
+    // this.rosterApi.getBatches()
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
 
-          this.sheetEditDropDownSource = [];
+    //       this.sheetEditDropDownSource = [];
 
-          res.forEach((batch: { batch_symbol: any; }) => {
-            this.sheetEditDropDownSource.push(batch.batch_symbol);
-          });
-          console.log(this.sheetEditDropDownSource);
-        },
-        err => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
+    //       res.forEach((batch: { batch_symbol: any; }) => {
+    //         this.sheetEditDropDownSource.push(batch.batch_symbol);
+    //       });
+    //       console.log(this.sheetEditDropDownSource);
+    //     },
+    //     err => {
+    //       console.log(err);
+    //       this.connectionToast.openToast();
+    //     }
+    //   )
   }
 
   // for populating columns
   getRosterDays(){
-    this.rosterApi.getRosterDays()
-      .subscribe(
-        res => {
-          console.log(res);
-          this.setRosterColumns(res);
+    // this.rosterApi.getRosterDays()
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.setRosterColumns(res);
 
-          this.getSheetShifts();
-        },
-        err => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
+    //       this.getSheetShifts();
+    //     },
+    //     err => {
+    //       console.log(err);
+    //       this.connectionToast.openToast();
+    //     }
+    //   )
   }
 
   getSheetShifts(){
-    this.rosterApi.getShifts()
-      .subscribe(
-        res => {
-          console.log(res);
-          this.populateSheetShifts(res);
-          this.getSheetBatches();
-        },
-        err => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
+    // this.rosterApi.getShifts()
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       this.populateSheetShifts(res);
+    //       this.getSheetBatches();
+    //     },
+    //     err => {
+    //       console.log(err);
+    //       this.connectionToast.openToast();
+    //     }
+    //   )
   }
 
   getSheetBatches(){
-    this.rosterApi.getRosterSheet()
-      .subscribe(
-        res => {
-          console.log(res);
-          // this.populateSheetBatches(res);
-        },
-        err => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
+    // this.rosterApi.getRosterSheet()
+    //   .subscribe(
+    //     res => {
+    //       console.log(res);
+    //       // this.populateSheetBatches(res);
+    //     },
+    //     err => {
+    //       console.log(err);
+    //       this.connectionToast.openToast();
+    //     }
+    //   )
   }
 
   setRosterColumns(shiftDays: any){

@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
+import { map, finalize } from 'rxjs/operators';
 
 import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
 
 
 @Injectable({
@@ -10,9 +12,13 @@ export class StaffApiService {
 
   constructor(
     private afs: AngularFirestore,
+    private storage: AngularFireStorage
   ) { }
 
   staffRef = this.afs.collection('restaurant/module_staff/restaurant_staff');
+
+  storagePath = "/restaurant/" + localStorage.getItem('restaurant_id');
+  storageRef = this.storage.ref(this.storagePath);
 
   // staff
 
@@ -65,4 +71,17 @@ export class StaffApiService {
       .get();
   }
 
+  uploadStaffPhoto(photo: File){
+    return this.storage.upload(this.storagePath, photo);
+    // const uploadTask = this.storage.upload(this.storagePath, photo);
+    // uploadTask.snapshotChanges().pipe(
+    //   finalize(() => {
+    //     this.storageRef.getDownloadURL().subscribe((downloadURL: any) => {
+    //       fileUpload.url = downloadURL;
+    //       fileUpload.name = fileUpload.file.name;
+    //       this.saveFileData(fileUpload);
+    //     });
+    //   })
+    // )
+  }
 }

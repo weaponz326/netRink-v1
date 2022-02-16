@@ -6,6 +6,7 @@ import { ConnectionToastComponent } from 'projects/personal/src/app/components/m
 import { DeleteModalComponent } from 'projects/personal/src/app/components/module-utilities/delete-modal/delete-modal.component'
 import { OrderItemsComponent } from '../order-items/order-items.component';
 import { SelectCustomerComponent } from '../../../select-windows/customers-windows/select-customer/select-customer.component';
+import { SelectTableComponent } from '../../../select-windows/tables-windows/select-table/select-table.component';
 
 import { OrdersApiService } from 'projects/restaurant/src/app/services/modules/orders-api/orders-api.service';
 import { OrdersPrintService } from 'projects/restaurant/src/app/services/printing/orders-print/orders-print.service';
@@ -30,7 +31,8 @@ export class ViewOrderComponent implements OnInit {
   @ViewChild('deleteModalComponentReference', { read: DeleteModalComponent, static: false }) deleteModal!: DeleteModalComponent;
   @ViewChild('orderItemsComponentReference', { read: OrderItemsComponent, static: false }) orderItems!: OrderItemsComponent;
 
-  @ViewChild('selectCustomerComponentComponentReference', { read: SelectCustomerComponent, static: false }) selectCustomer!: SelectCustomerComponent;
+  @ViewChild('selectCustomerComponentReference', { read: SelectCustomerComponent, static: false }) selectCustomer!: SelectCustomerComponent;
+  @ViewChild('selectTableComponentReference', { read: SelectTableComponent, static: false }) selectTable!: SelectTableComponent;
 
   navHeading: any[] = [
     { text: "All Orders", url: "/home/orders/all-orders" },
@@ -41,6 +43,7 @@ export class ViewOrderComponent implements OnInit {
   orderFormData: any;
 
   selectedCustomerId: any;
+  selectedTableId: any;
 
   isOrderSaving: boolean = false;
   isOrderDeleting: boolean = false;
@@ -60,6 +63,7 @@ export class ViewOrderComponent implements OnInit {
       orderType: new FormControl(''),
       orderStatus: new FormControl(''),
       customerName: new FormControl(),
+      tableNumber: new FormControl(''),
     })
   }
 
@@ -76,7 +80,9 @@ export class ViewOrderComponent implements OnInit {
           this.orderForm.controls.orderStatus.setValue(this.orderFormData.data().order_status);
 
           this.selectedCustomerId = this.orderFormData.data().customer.id;
+          this.selectedTableId = this.orderFormData.data().table.id;
           this.orderForm.controls.customerName.setValue(this.orderFormData.data().customer.customer_name);
+          this.orderForm.controls.tableNumber.setValue(this.orderFormData.data().table.table_number);
         },
         (err: any) => {
           console.log(err);
@@ -97,6 +103,10 @@ export class ViewOrderComponent implements OnInit {
       customer: {
         id: this.selectedCustomerId,
         customer_name: this.orderForm.controls.customerName.value,
+      },
+      table: {
+        id: this.selectedTableId,
+        table_number: this.orderForm.controls.tableNumber.value,
       }
     }
 
@@ -148,6 +158,18 @@ export class ViewOrderComponent implements OnInit {
 
     this.orderForm.controls.customerName.setValue(customerData.data().customer_name);
     this.selectedCustomerId = customerData.id;
+  }
+
+  openTableWindow(){
+    console.log("You are opening select table window")
+    this.selectTable.openModal();
+  }
+
+  onTableSelected(tableData: any){
+    console.log(tableData);
+
+    this.orderForm.controls.tableNumber.setValue(tableData.data().table_number);
+    this.selectedTableId = tableData.id;
   }
 
   onPrint(){

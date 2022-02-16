@@ -5,6 +5,8 @@ import { Observable } from 'rxjs'
 import { environment } from 'projects/restaurant/src/environments/environment'
 import { EndpointsService } from 'projects/application/src/app/services/endpoints/endpoints.service';
 
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+
 
 @Injectable({
   providedIn: 'root'
@@ -12,117 +14,140 @@ import { EndpointsService } from 'projects/application/src/app/services/endpoint
 export class RosterApiService {
 
   constructor(
+    private afs: AngularFirestore,
     private http: HttpClient,
     private endpoints: EndpointsService
   ) { }
 
-  restaurantUrl = environment.restaurantUrl;
+  rosterRef = this.afs.collection('restaurant/module_roster/restaurant_roster');
+  shiftRef = this.afs.collection('restaurant/module_roster/restaurant_roster_shift');
+  batchRef = this.afs.collection('restaurant/module_roster/restaurant_roster_batch');
+  personnelRef = this.afs.collection('restaurant/module_roster/restaurant_roster_personnel');
 
-  // create and get all roster belonging to user
+  // roster
 
-  public getRoster(): Observable<any>{
-    return this.http.get(this.restaurantUrl + "module-roster/roster?account=" + localStorage.getItem('restaurant_id'));
+  createRoster(roster: any){
+    return this.rosterRef.add(roster);
   }
 
-  public postRoster(roster: any): Observable<any>{
-    return this.http.post(this.restaurantUrl + "module-roster/roster/", roster);
+  getRoster(){
+    return this.rosterRef.doc(String(sessionStorage.getItem('restaurant_roster_id'))).ref.get();
   }
 
-  // retreive, update and delete roster
-
-  public getSingleRoster(): Observable<any>{
-    return this.http.get(this.restaurantUrl + "module-roster/roster/" + sessionStorage.getItem('restaurant_roster_id'));
+  updateRoster(roster: any){
+    return this.rosterRef.doc(String(sessionStorage.getItem('restaurant_roster_id'))).update(roster);
   }
 
-  public putRoster(roster: any): Observable<any>{
-    return this.http.put(this.restaurantUrl + "module-roster/roster/" + sessionStorage.getItem('restaurant_roster_id'), roster);
+  deleteRoster(){
+    return this.rosterRef.doc(String(sessionStorage.getItem('restaurant_roster_id'))).delete();
   }
 
-  public deleteRoster(): Observable<any>{
-    return this.http.delete(this.restaurantUrl + "module-roster/roster/" + sessionStorage.getItem('restaurant_roster_id'));
+  getAccountRoster(sorting: any, pageSize: any){
+    return this.rosterRef.ref
+      .where("account", "==", localStorage.getItem('restaurant_id'))
+      // .orderBy(sorting?.field, sorting?.direction)
+      .limit(pageSize)
+      .get();
   }
 
-  // ------------------------------------------------------------------------------------------------------------
+  getAccountRosterNext(sorting: any, pageSize: any, pageStart: any){
+    return this.rosterRef.ref
+      .where("account", "==", localStorage.getItem('restaurant_id'))
+      // .orderBy(sorting?.field, sorting?.direction)
+      .startAfter(pageStart)
+      .limit(pageSize)
+      .get();
+  }
+
+  getAccountRosterPrev(sorting: any, pageSize: any, pageStart: any){
+    return this.rosterRef.ref
+      .where("account", "==", localStorage.getItem('restaurant_id'))
+      // .orderBy(sorting?.field, sorting?.direction)
+      .startAt(pageStart)
+      .limit(pageSize)
+      .get();
+  }
+
+  getAllAccountRoster(){
+    return this.rosterRef.ref
+      .where("account", "==", localStorage.getItem('restaurant_id'))
+      // .orderBy("created_at", "desc")
+      .get();
+  }
+
   // shifts
 
-  public getShifts(): Observable<any>{
-    return this.http.get(this.restaurantUrl + "module-roster/shift?roster=" + sessionStorage.getItem('restaurant_roster_id'));
+  createShift(shiftData: any){
+    return this.shiftRef.add(shiftData);
   }
 
-  public postShift(shift: any): Observable<any>{
-    return this.http.post(this.restaurantUrl + "module-roster/shift/", shift);
+  getShift(shiftId: any){
+    return this.shiftRef.doc(shiftId).ref.get();
   }
 
-  public putShift(shiftId: any, shift: any): Observable<any>{
-    return this.http.put(this.restaurantUrl + "module-roster/shift/" + shiftId, shift);
+  updateShift(shiftId: any, shiftData: any){
+    return this.shiftRef.doc(shiftId).update(shiftData);
   }
 
-  public deleteShift(shiftId: any): Observable<any>{
-    return this.http.delete(this.restaurantUrl + "module-roster/shift/" + shiftId);
+  deleteShift(shiftId: any){
+    return this.shiftRef.doc(shiftId).delete();
   }
 
-  // ------------------------------------------------------------------------------------------------------------
+  getRosterShift(){
+    return this.shiftRef.ref
+      .where("roster", "==", sessionStorage.getItem('restaurant_roster_id'))
+      // .orderBy("created_at", "desc")
+      .get();
+  }
+
   // batches
 
-  public getBatches(): Observable<any>{
-    return this.http.get(this.restaurantUrl + "module-roster/batch?roster=" + sessionStorage.getItem('restaurant_roster_id'));
+  createBatch(batchData: any){
+    return this.batchRef.add(batchData);
   }
 
-  public postBatch(batch: any): Observable<any>{
-    return this.http.post(this.restaurantUrl + "module-roster/batch/", batch);
+  getBatch(batchId: any){
+    return this.batchRef.doc(batchId).ref.get();
   }
 
-  public putBatch(batchId: any, batch: any): Observable<any>{
-    return this.http.put(this.restaurantUrl + "module-roster/batch/" + batchId, batch);
+  updateBatch(batchId: any, batchData: any){
+    return this.batchRef.doc(batchId).update(batchData);
   }
 
-  public deleteBatch(batchId: any): Observable<any>{
-    return this.http.delete(this.restaurantUrl + "module-roster/batch/" + batchId);
+  deleteBatch(batchId: any){
+    return this.batchRef.doc(batchId).delete();
   }
 
-  public getShiftPersonnel(): Observable<any>{
-    return this.http.get(this.restaurantUrl + "module-roster/personnel?roster=" + sessionStorage.getItem('restaurant_roster_id'));
+  getRosterBatch(){
+    return this.batchRef.ref
+      .where("roster", "==", sessionStorage.getItem('restaurant_roster_id'))
+      // .orderBy("created_at", "desc")
+      .get();
   }
 
-  public postShiftPersonnel(personnel: any): Observable<any>{
-    return this.http.post(this.restaurantUrl + "module-roster/personnel/", personnel);
+  // shift personnel
+
+  createPersonnel(personnelData: any){
+    return this.personnelRef.add(personnelData);
   }
 
-  public putShiftPersonnel(personnelId: any, personnel: any): Observable<any>{
-    return this.http.put(this.restaurantUrl + "module-roster/personnel/" + personnelId, personnel);
+  getPersonnel(personnelId: any){
+    return this.personnelRef.doc(personnelId).ref.get();
   }
 
-  public deleteShiftPersonnel(personnelId: any): Observable<any>{
-    return this.http.delete(this.restaurantUrl + "module-roster/personnel/" + personnelId);
+  updatePersonnel(personnelId: any, personnelData: any){
+    return this.personnelRef.doc(personnelId).update(personnelData);
   }
 
-  public refreshPersonnel(): Observable<any>{
-    return this.http.get(this.restaurantUrl + "module-roster/refresh-personnel?roster=" + sessionStorage.getItem('restaurant_roster_id'));
+  deletePersonnel(personnelId: any){
+    return this.personnelRef.doc(personnelId).delete();
   }
 
-  // ---------------------------------------------------------------------------------------------------------------------
-  // sheet
-
-  public refreshSheet(): Observable<any>{
-    return this.http.get(this.restaurantUrl + "module-roster/refresh-sheet?roster=" + sessionStorage.getItem('restaurant_roster_id'));
-  }
-
-  public getRosterDays(): Observable<any>{
-    return this.http.get(this.restaurantUrl + "module-roster/roster-day?roster=" + sessionStorage.getItem('restaurant_roster_id'));
-  }
-
-  public getRosterSheet(): Observable<any>{
-    return this.http.get(this.restaurantUrl + "module-roster/roster-sheet?roster=" + sessionStorage.getItem('restaurant_roster_id'));
-  }
-
-  public postRosterSheet(sheet: any): Observable<any>{
-    return this.http.post(this.restaurantUrl + "module-roster/roster-sheet/", sheet);
-  }
-
-  // dashboard
-
-  public getCounts(model: any): Observable<any>{
-    return this.http.get(this.restaurantUrl + "module-roster/count?account=" + localStorage.getItem('restaurant_id') + "&model=" + model);
+  getRosterPersonnel(){
+    return this.personnelRef.ref
+      .where("roster", "==", sessionStorage.getItem('restaurant_roster_id'))
+      // .orderBy("created_at", "desc")
+      .get();
   }
 
 }

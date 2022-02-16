@@ -7,6 +7,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
+import { AngularFireStorageModule } from "@angular/fire/compat/storage";
 import { GooglePlaceModule } from "ngx-google-places-autocomplete";
 
 import { environment } from '../environments/environment';
@@ -27,6 +28,7 @@ import { AppComponent } from './app.component';
     ReactiveFormsModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireDatabaseModule,
+    AngularFireStorageModule,
     GooglePlaceModule,
     AppRoutingModule
   ],

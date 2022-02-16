@@ -6,6 +6,7 @@ import * as firebase from 'firebase/compat/app';
 
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 import { SelectCustomerComponent } from '../../../select-windows/customers-windows/select-customer/select-customer.component';
+import { SelectTableComponent } from '../../../select-windows/tables-windows/select-table/select-table.component';
 
 import { OrdersApiService } from 'projects/restaurant/src/app/services/modules/orders-api/orders-api.service';
 import { DeliveriesApiService } from 'projects/restaurant/src/app/services/modules/deliveries-api/deliveries-api.service';
@@ -31,10 +32,12 @@ export class AddOrderComponent implements OnInit {
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
 
   @ViewChild('selectCustomerComponentReference', { read: SelectCustomerComponent, static: false }) selectCustomer!: SelectCustomerComponent;
+  @ViewChild('selectTableComponentReference', { read: SelectTableComponent, static: false }) selectTable!: SelectTableComponent;
 
   orderForm: FormGroup = new FormGroup({});
 
   selectedCustomerId = "";
+  selectedTableId = "";
 
   ngOnInit(): void {
     this.initOrderForm();
@@ -50,6 +53,7 @@ export class AddOrderComponent implements OnInit {
       orderDate: new FormControl(''),
       customerName: new FormControl(''),
       orderType: new FormControl(''),
+      tableNumber: new FormControl(''),
     })
   }
 
@@ -65,6 +69,10 @@ export class AddOrderComponent implements OnInit {
       customer: {
         id: this.selectedCustomerId,
         customer_name: this.orderForm.controls.customerName.value,
+      },
+      table: {
+        id: this.selectedTableId,
+        table_number: this.orderForm.controls.tableNumber.value,
       }
     }
 
@@ -102,6 +110,18 @@ export class AddOrderComponent implements OnInit {
 
     this.orderForm.controls.customerName.setValue(customerData.data().customer_name);
     this.selectedCustomerId = customerData.id;
+  }
+
+  openTableWindow(){
+    console.log("You are opening select table window")
+    this.selectTable.openModal();
+  }
+
+  onTableSelected(tableData: any){
+    console.log(tableData);
+
+    this.orderForm.controls.tableNumber.setValue(tableData.data().table_number);
+    this.selectedTableId = tableData.id;
   }
 
   createDelivery(){

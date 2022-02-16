@@ -6,6 +6,10 @@ export class Order {
   order_type!: string;
   order_status!: string;
   total_amount!: number;
+  table!: {
+    id: string;
+    table_number: string;
+  };
   customer!: {
     id: string;
     customer_name: string;

@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import { map, finalize } from 'rxjs/operators';
 
 import * as firebase from 'firebase/compat/app';
 
@@ -30,12 +31,15 @@ export class NewStaffComponent implements OnInit {
     { text: "New Staff", url: "/home/staff/new-staff" },
   ];
 
+  storagePath = "/restaurant/" + localStorage.getItem('restaurant_id');
+  storageRef = this.storage.ref(this.storagePath);
+
   isStaffSaving = false;
 
   ngOnInit(): void {
   }
 
-  createStaff(){
+  async createStaff(){
     console.log('u are saving a new staff');
 
     var data: Staff = {
@@ -45,7 +49,7 @@ export class NewStaffComponent implements OnInit {
       last_name: this.staffForm.staffForm.controls.lastName.value,
       sex: this.staffForm.staffForm.controls.sex.value,
       date_of_birth: this.staffForm.bday.value,
-      photo: this.staffForm.photo.imgSrc,
+      photo: "",
       nationality: this.staffForm.staffForm.controls.nationality.value,
       religion: this.staffForm.staffForm.controls.religion.value,
       phone: this.staffForm.staffForm.controls.phone.value,

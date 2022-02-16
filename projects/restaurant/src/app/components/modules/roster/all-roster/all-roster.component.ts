@@ -1,12 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { RosterApiService } from 'projects/restaurant/src/app/services/modules/roster-api/roster-api.service';
-
 import { NewRosterComponent } from '../new-roster/new-roster.component'
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
-import { TablePaginationComponent } from 'projects/personal/src/app/components/module-utilities/table-pagination/table-pagination.component'
-import { TableSortingComponent } from 'projects/personal/src/app/components/module-utilities/table-sorting/table-sorting.component'
+
+import { RosterApiService } from 'projects/restaurant/src/app/services/modules/roster-api/roster-api.service';
 
 
 @Component({
@@ -23,9 +21,6 @@ export class AllRosterComponent implements OnInit {
 
   @ViewChild('newRosterComponentReference', { read: NewRosterComponent, static: false }) newRoster!: NewRosterComponent;
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
-  @ViewChild('tablePaginationComponentReference', { read: TablePaginationComponent, static: false }) tablePagination!: TablePaginationComponent;
-  @ViewChild('rosterCodeSortingComponentReference', { read: TableSortingComponent, static: false }) rosterCodeSorting!: TableSortingComponent;
-  @ViewChild('rosterNameSortingComponentReference', { read: TableSortingComponent, static: false }) rosterNameSorting!: TableSortingComponent;
 
   navHeading: any[] = [
     { text: "All Roster", url: "/home/roster/all-roster" },
@@ -33,51 +28,131 @@ export class AllRosterComponent implements OnInit {
 
   rosterGridData: any[] = [];
 
-  currentPage = 0;
-  totalPages = 0;
-  totalItems = 0;
+  isFetchingGridData: boolean =  false;
+  isDataAvailable: boolean =  true;
+
+  firstInResponse: any = [];
+  lastInResponse: any = [];
+  nextStartAfter: any = [];
+  prevStartAt: any = [];
+  pageNumber = 0;
+  disableNext: boolean = false;
+  disablePrev: boolean = true;
+
+  sortParams = {
+    field: "created_at",
+    direction: "desc"
+  }
 
   ngOnInit(): void {
   }
 
   ngAfterViewInit(): void {
-    this.getRoster();
+    this.getAccountRoster();
   }
 
-  getRoster(){
-    this.rosterApi.getRoster()
-      .subscribe(
-        res => {
+  getAccountRoster(){
+    this.isFetchingGridData = true;
+
+    this.rosterApi.getAccountRoster(this.sortParams, 20)
+      .then(
+        (res: any) => {
           console.log(res);
-          this.rosterGridData = res;
-          this.currentPage = res.current_page;
-          this.totalPages = res.total_pages;
-          this.totalItems = res.count;
+
+          this.rosterGridData = res.docs;
+          this.isFetchingGridData = false;
+          if (!res.docs.length) this.isDataAvailable = false;
+
+          this.prevStartAt = this.firstInResponse;
+          this.nextStartAfter = res.docs[res.docs.length - 1];
+          this.firstInResponse = res.docs[0];
+          this.pageNumber = 1;
+
+          this.disableNext = false;
+          this.disablePrev = true;
         },
-        err => {
+        (err: any) => {
           console.log(err);
+          this.isFetchingGridData = false;
           this.connectionToast.openToast();
         }
       )
   }
 
-  viewRoster(rosterId: any){
-    console.log(rosterId);
+  nextPage(e: any){
+    e.preventDefault();
+    this.isFetchingGridData = true;
 
-    sessionStorage.setItem("restaurant_roster_id", rosterId);
-    this.router.navigateByUrl("/home/roster/view-roster");
+    this.rosterApi.getAccountRosterNext(this.sortParams, 20, this.nextStartAfter)
+      .then(
+        (res: any) => {
+          console.log(res);
+
+          this.rosterGridData = res.docs;
+          this.isFetchingGridData = false;
+          if (!res.docs.length) this.isDataAvailable = false;
+
+          this.prevStartAt = this.firstInResponse;
+          this.nextStartAfter = res.docs[res.docs.length - 1];
+          this.firstInResponse = res.docs[0];
+          this.pageNumber++;
+
+          if (res.docs.length < 20){
+            this.disableNext = true;
+            this.disablePrev = false;
+          }
+        },
+        (err: any) => {
+          console.log(err);
+          this.isFetchingGridData = false;
+          this.connectionToast.openToast();
+        }
+      )
   }
 
-  sortTable(field: any){
-    console.log(field);
-    this.getRoster();
+  previousPage(e: any){
+    e.preventDefault();
+    this.isFetchingGridData = true;
 
-    if((field == 'roster_code') || (field == "-roster_code")){
-      this.rosterCodeSorting.resetSort();
-    }
-    else if((field == 'roster_name') || (field == "-roster_name")){
-      this.rosterNameSorting.resetSort();
-    }
+    this.rosterApi.getAccountRosterPrev(this.sortParams, 20, this.prevStartAt)
+      .then(
+        (res: any) => {
+          console.log(res);
+
+          this.rosterGridData = res.docs;
+          this.isFetchingGridData = false;
+          if (!res.docs.length) this.isDataAvailable = false;
+
+          this.prevStartAt = this.firstInResponse;
+          this.nextStartAfter = res.docs[res.docs.length - 1];
+          this.firstInResponse = res.docs[0];
+          this.pageNumber++;
+
+          if (this.pageNumber == 1){
+            this.disableNext = false;
+            this.disablePrev = true;
+          }
+        },
+        (err: any) => {
+          console.log(err);
+          this.isFetchingGridData = false;
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  sortTable(field: any, direction: any){
+    this.sortParams.field = field;
+    this.sortParams.direction = direction;
+
+    this.getAccountRoster();
+  }
+
+  viewRoster(rosterId: any){
+    console.log(rosterId);
+    sessionStorage.setItem("restaurant_roster_id", rosterId);
+
+    this.router.navigateByUrl("/home/roster/view-roster");
   }
 
   onPrint(){

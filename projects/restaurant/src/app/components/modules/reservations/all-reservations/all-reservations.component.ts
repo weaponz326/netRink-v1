@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { NewReservationComponent } from '../new-reservation/new-reservation.component'
-import { EditReservationComponent } from '../edit-reservation/edit-reservation.component'
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 import { DeleteModalComponent } from 'projects/personal/src/app/components/module-utilities/delete-modal/delete-modal.component'
 
@@ -17,12 +17,12 @@ import { ReservationsPrintService } from 'projects/restaurant/src/app/services/p
 export class AllReservationsComponent implements OnInit {
 
   constructor(
+    private router: Router,
     private reservationsApi: ReservationsApiService,
     private reservationsPrint: ReservationsPrintService,
   ) { }
 
   @ViewChild('newReservationComponentReference', { read: NewReservationComponent, static: false }) newReservation!: NewReservationComponent;
-  @ViewChild('editReservationComponentReference', { read: EditReservationComponent, static: false }) editReservation!: EditReservationComponent;
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
   @ViewChild('deleteModalComponentReference', { read: DeleteModalComponent, static: false }) deleteModal!: DeleteModalComponent;
 
@@ -31,9 +31,6 @@ export class AllReservationsComponent implements OnInit {
   ];
 
   reservationsGridData: any[] = [];
-
-  deleteId = "";
-  deleteIndex = 0;
 
   isFetchingGridData: boolean =  false;
   isDataAvailable: boolean =  true;
@@ -66,9 +63,7 @@ export class AllReservationsComponent implements OnInit {
         (res: any) => {
           console.log(res);
 
-          for (let item of res.docs) {
-            this.reservationsGridData.push(item.data());
-          }
+          this.reservationsGridData = res.docs;
 
           this.isFetchingGridData = false;
           if (!res.docs.length) this.isDataAvailable = false;
@@ -98,9 +93,7 @@ export class AllReservationsComponent implements OnInit {
         (res: any) => {
           console.log(res);
 
-          for (let item of res.docs) {
-            this.reservationsGridData.push(item.data());
-          }
+          this.reservationsGridData = res.docs;
 
           this.isFetchingGridData = false;
           if (!res.docs.length) this.isDataAvailable = false;
@@ -132,9 +125,7 @@ export class AllReservationsComponent implements OnInit {
         (res: any) => {
           console.log(res);
 
-          for (let item of res.docs) {
-            this.reservationsGridData.push(item.data());
-          }
+          this.reservationsGridData = res.docs;
 
           this.isFetchingGridData = false;
           if (!res.docs.length) this.isDataAvailable = false;
@@ -164,37 +155,13 @@ export class AllReservationsComponent implements OnInit {
     this.getAccountReservation();
   }
 
-  createReservation(data: any){
-    console.log(data);
-
-    this.reservationsApi.createReservation(data)
-      .then(
-        (res: any) => {
-          console.log(res);
-
-          if(res.id){
-            this.reservationsGridData.push(data);
-            this.newReservation.resetForm();
-          }
-        },
-        (err: any) => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
-  }
-
   updateReservation(data: any){
     console.log(data);
 
-    this.reservationsApi.updateReservation(data.id, data.reservation)
+    this.reservationsApi.updateReservation(data.reservation)
       .then(
         (res: any) => {
           console.log(res);
-
-          if(res.id){
-            this.reservationsGridData[data.index] = data.reservation;
-          }
         },
         (err: any) => {
           console.log(err);
@@ -204,11 +171,10 @@ export class AllReservationsComponent implements OnInit {
   }
 
   deleteReservation(){
-    this.reservationsApi.deleteReservation(this.deleteId)
+    this.reservationsApi.deleteReservation()
       .then(
         (res: any) => {
           console.log(res);
-          this.reservationsGridData.splice(this.deleteIndex, 1);
         },
         (err: any) => {
           console.log(err);
@@ -217,16 +183,11 @@ export class AllReservationsComponent implements OnInit {
       )
   }
 
-  openEditReservation(index: any){
-    console.log(index);
-    this.editReservation.openModal(index, this.reservationsGridData[index]);
-  }
+  viewReservation(reservationId: any){
+    console.log(reservationId);
 
-  confirmDelete(e: any){
-    this.deleteIndex = e.index;
-    this.deleteId = e.id;
-
-    this.deleteModal.openModal();
+    sessionStorage.setItem("restaurant_reservation_id", reservationId);
+    this.router.navigateByUrl("/home/reservations/view-reservation");
   }
 
   onPrint(){

@@ -2,12 +2,12 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormControl, FormGroup } from '@angular/forms';
 
-import { RosterApiService } from 'projects/restaurant/src/app/services/modules/roster-api/roster-api.service';
-
 import { AddPersonnelComponent } from '../add-personnel/add-personnel.component'
 import { EditPersonnelComponent } from '../edit-personnel/edit-personnel.component'
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 import { DeleteModalComponent } from 'projects/personal/src/app/components/module-utilities/delete-modal/delete-modal.component'
+
+import { RosterApiService } from 'projects/restaurant/src/app/services/modules/roster-api/roster-api.service';
 
 
 @Component({
@@ -36,29 +36,29 @@ export class ManagePersonnelComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    this.getPersonnel();
+    this.getRosterPersonnel();
   }
 
-  getPersonnel(){
-    this.rosterApi.getShiftPersonnel()
-      .subscribe(
-        res => {
+  getRosterPersonnel(){
+    this.rosterApi.getRosterPersonnel()
+      .then(
+        (res: any) => {
           console.log(res);
-          this.personnelGridData = res;
+          this.personnelGridData = res.docs;
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }
       )
   }
 
-  postPersonnel(data: any){
+  createPersonnel(data: any){
     console.log(data);
 
-    this.rosterApi.postShiftPersonnel(data)
-      .subscribe(
-        res => {
+    this.rosterApi.createPersonnel(data)
+      .then(
+        (res: any) => {
           console.log(res);
 
           if(res.id){
@@ -66,26 +66,23 @@ export class ManagePersonnelComponent implements OnInit {
             this.addPersonnel.resetForm();
           }
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }
       )
   }
 
-  putPersonnel(data: any){
+  updatePersonnel(data: any){
     console.log(data);
 
-    this.rosterApi.putShiftPersonnel(data.id, data)
-      .subscribe(
-        res => {
+    this.rosterApi.updatePersonnel(data.id, data.personnel)
+      .then(
+        (res: any) => {
           console.log(res);
-
-          if(res.id){
-            this.personnelGridData[data.index] = res;
-          }
+          this.personnelGridData[data.index] = data.personnel;
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }
@@ -93,13 +90,13 @@ export class ManagePersonnelComponent implements OnInit {
   }
 
   deletePersonnel(){
-    this.rosterApi.deleteShiftPersonnel(this.deleteId)
-      .subscribe(
-        res => {
+    this.rosterApi.deletePersonnel(this.deleteId)
+      .then(
+        (res: any) => {
           console.log(res);
           this.personnelGridData.splice(this.deleteIndex, 1);
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }

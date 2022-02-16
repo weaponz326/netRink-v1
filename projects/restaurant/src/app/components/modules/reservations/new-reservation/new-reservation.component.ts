@@ -1,8 +1,13 @@
-import { Component, OnInit, ViewChild, Output, EventEmitter, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Router } from '@angular/router';
+import { FormControl, FormGroup } from '@angular/forms';
 
 import * as firebase from 'firebase/compat/app';
 
-import { ReservationFormComponent } from '../reservation-form/reservation-form.component';
+import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
+import { SelectCustomerComponent } from '../../../select-windows/customers-windows/select-customer/select-customer.component';
+
+import { ReservationsApiService } from 'projects/restaurant/src/app/services/modules/reservations-api/reservations-api.service';
 
 import { Reservation } from 'projects/restaurant/src/app/models/modules/reservations/reservations.model';
 
@@ -14,48 +19,78 @@ import { Reservation } from 'projects/restaurant/src/app/models/modules/reservat
 })
 export class NewReservationComponent implements OnInit {
 
-  constructor() { }
-
-  @Output() saveReservationEvent = new EventEmitter<any>();
+  constructor(
+    private router: Router,
+    private reservationsApi: ReservationsApiService
+  ) { }
 
   @ViewChild('buttonElementReference', { read: ElementRef, static: false }) buttonElement!: ElementRef;
 
-  @ViewChild('reservationFormComponentReference', { read: ReservationFormComponent, static: false }) reservationForm!: ReservationFormComponent;
+  @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
+  @ViewChild('selectCustomerComponentReference', { read: SelectCustomerComponent, static: false }) selectCustomer!: SelectCustomerComponent;
+
+  reservationForm: FormGroup = new FormGroup({});
+
+  selectedCustomerId: any;
 
   ngOnInit(): void {
+    this.initItemForm();
+  }
+
+  initItemForm(){
+    this.reservationForm = new FormGroup({
+      reservationCode: new FormControl(''),
+      reservationDate: new FormControl(''),
+      customerName: new FormControl(''),
+      arrivalDate: new FormControl(''),
+      status: new FormControl(''),
+    })
   }
 
   openModal(){
     this.buttonElement.nativeElement.click();
   }
 
-  saveReservation(){
+  createReservation(){
     let data: Reservation = {
       created_at: firebase.default.firestore.FieldValue.serverTimestamp(),
       account: localStorage.getItem('restaurant_id') as string,
-      reservation_code: this.reservationForm.reservationForm.controls.reservationCode.value,
-      reservation_date: this.reservationForm.reservationForm.controls.reservationDate.value,
-      number_guests: this.reservationForm.reservationForm.controls.numberGuests.value,
-      number_tables: this.reservationForm.reservationForm.controls.numberTables.value,
-      arrival_date: this.reservationForm.reservationForm.controls.arrivalDate.value,
-      status: this.reservationForm.reservationForm.controls.status.value,
+      reservation_code: this.reservationForm.controls.reservationCode.value,
+      reservation_date: this.reservationForm.controls.reservationDate.value,
+      number_guests: null,
+      number_tables: null,
+      arrival_date: this.reservationForm.controls.arrivalDate.value,
+      status: this.reservationForm.controls.status.value,
       customer: {
-        id: this.reservationForm.selectedCustomerId,
-        customer_name: this.reservationForm.reservationForm.controls.customerName.value,
+        id: this.selectedCustomerId,
+        customer_name: this.reservationForm.controls.customerName.value,
       }
     }
 
-    this.saveReservationEvent.emit(data);
+    this.reservationsApi.createReservation(data)
+      .then(
+        (res: any) => {
+          console.log(res);
+          sessionStorage.setItem('restaurant_reservation_id', res.id);
+          this.router.navigateByUrl('/home/reservations/view-reservation')
+        },
+        (err: any) => {
+          console.log(err);
+          this.connectionToast.openToast();
+        }
+      )
   }
 
-  resetForm(){
-    this.reservationForm.reservationForm.controls.reservationCode.setValue('');
-    this.reservationForm.reservationForm.controls.reservationDate.setValue('');
-    this.reservationForm.reservationForm.controls.customerName.setValue('');
-    this.reservationForm.reservationForm.controls.numberGuests.setValue('');
-    this.reservationForm.reservationForm.controls.numberTables.setValue('');
-    this.reservationForm.reservationForm.controls.arrivalDate.setValue('');
-    this.reservationForm.reservationForm.controls.status.setValue('');
+  openCustomerWindow(){
+    console.log("You are opening select customer window")
+    this.selectCustomer.openModal();
+  }
+
+  onCustomerSelected(customerData: any){
+    console.log(customerData);
+
+    this.reservationForm.controls.customerName.setValue(customerData.data().customer_name);
+    this.selectedCustomerId = customerData.id;
   }
 
 }

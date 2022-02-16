@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
 
-import { RosterApiService } from 'projects/restaurant/src/app/services/modules/roster-api/roster-api.service';
-
 import { AddShiftComponent } from '../add-shift/add-shift.component'
 import { EditShiftComponent } from '../edit-shift/edit-shift.component'
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 import { DeleteModalComponent } from 'projects/personal/src/app/components/module-utilities/delete-modal/delete-modal.component'
+
+import { RosterApiService } from 'projects/restaurant/src/app/services/modules/roster-api/roster-api.service';
 
 
 @Component({
@@ -33,56 +33,56 @@ export class ShiftsComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    this.getShifts();
+    this.getRosterShift();
   }
 
-  getShifts(){
-    this.rosterApi.getShifts()
-      .subscribe(
-        res => {
+  getRosterShift(){
+    this.rosterApi.getRosterShift()
+      .then(
+        (res: any) => {
           console.log(res);
-          this.shiftsGridData = res;
+          this.shiftsGridData = res.docs;
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }
       )
   }
 
-  postShift(data: any){
+  createShift(data: any){
     console.log(data);
 
-    this.rosterApi.postShift(data)
-      .subscribe(
-        res => {
+    this.rosterApi.createShift(data)
+      .then(
+        (res: any) => {
           console.log(res);
 
           if(res.id){
-            this.shiftsGridData.push(res);
+            this.shiftsGridData.push(data);
             this.addShift.resetForm();
           }
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }
       )
   }
 
-  putShift(data: any){
+  updateShift(data: any){
     console.log(data);
 
-    this.rosterApi.putShift(data.id, data)
-      .subscribe(
-        res => {
+    this.rosterApi.updateShift(data.id, data.shift)
+      .then(
+        (res: any) => {
           console.log(res);
 
           if(res.id){
-            this.shiftsGridData[data.index] = res;
+            this.shiftsGridData[data.index] = data.shift;
           }
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }
@@ -93,12 +93,12 @@ export class ShiftsComponent implements OnInit {
     console.log(this.deleteId);
 
     this.rosterApi.deleteShift(this.deleteId)
-      .subscribe(
-        res => {
+      .then(
+        (res: any) => {
           console.log(res);
           this.shiftsGridData.splice(this.deleteIndex, 1);
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }

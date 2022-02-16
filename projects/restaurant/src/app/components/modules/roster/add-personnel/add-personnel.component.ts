@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild, Output, EventEmitter, ElementRef } from '
 
 import { PersonnelFormComponent } from '../personnel-form/personnel-form.component';
 
+import { Personnel } from 'projects/restaurant/src/app/models/modules/roster/roster.model';
+
 
 @Component({
   selector: 'app-add-personnel',
@@ -26,11 +28,14 @@ export class AddPersonnelComponent implements OnInit {
   }
 
   savePersonnel(){
-    let data = {
-      roster: sessionStorage.getItem('restaurant_roster_id'),
-      personnel_code: this.personnelForm.personnelForm.controls.personnelCode.value,
-      personnel_name: this.personnelForm.personnelForm.controls.personnelName.value,
-      batch: this.personnelForm.personnelForm.controls.symbol.value,
+    let data: Personnel = {
+      roster: sessionStorage.getItem('restaurant_roster_id') as string,      
+      batch_symbol: this.personnelForm.personnelForm.controls.symbol.value,
+      staff: {
+        id: this.personnelForm.selectedStaffId,
+        staff_code: this.personnelForm.personnelForm.controls.personnelCode.value,
+        staff_name: this.personnelForm.personnelForm.controls.personnelName.value,
+      }
     }
     this.savePersonnelEvent.emit(data);
   }

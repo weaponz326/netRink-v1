@@ -26,7 +26,7 @@ export class ReservationDetailsComponent implements OnInit {
   }
 
   getReservation(){
-    this.resrvationsApi.getReservation(sessionStorage.getItem("restaurant_reservation_id"))
+    this.resrvationsApi.getReservation()
       .then(
         (res: any) => {
           console.log(res);
