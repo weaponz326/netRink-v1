@@ -34,8 +34,8 @@ export class AllTaskItemsComponent implements OnInit {
   firstInResponse: any = [];
   lastInResponse: any = [];
   prevStartAt: any = [];
-  nextStartAt: any = [];
-  pageNumber = 1;
+  nextStartAfter: any = [];
+  pageNumber = 0;
   disableNext: boolean = false;
   disablePrev: boolean = true;
 
@@ -48,13 +48,13 @@ export class AllTaskItemsComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    this.getAllUserTaskItem(this.sortParams, 20, null);
+    this.getUserTaskItem();
   }
 
-  getAllUserTaskItem(sorting: any, pageSize: any, pageStart: any){
+  getUserTaskItem(){
     this.isFetchingGridData = true;
 
-    this.tasksApi.getAllUserTaskItem(sorting, pageSize, pageStart)
+    this.tasksApi.getUserTaskItem(this.sortParams, 20)
       .then(
         (res: any) => {
           console.log(res);
@@ -64,8 +64,9 @@ export class AllTaskItemsComponent implements OnInit {
           if (!res.docs.length) this.isDataAvailable = false;
 
           this.prevStartAt = this.firstInResponse;
-          this.nextStartAt = res.docs[res.docs.length - 1];
+          this.nextStartAfter = res.docs[res.docs.length - 1];
           this.firstInResponse = res.docs[0];
+          this.pageNumber = 1;
 
           this.disableNext = false;
           this.disablePrev = false;
@@ -80,32 +81,76 @@ export class AllTaskItemsComponent implements OnInit {
 
   nextPage(e: any){
     e.preventDefault();
-    this.disableNext = true;
+    this.isFetchingGridData = true;
 
-    this.sortParams = { field: "created_at", direction: "desc" };
-    this.getAllUserTaskItem(this.sortParams, 20, this.nextStartAt);
-    this.pageNumber++;
+    this.tasksApi.getUserTaskItemNext(this.sortParams, 20, this.nextStartAfter)
+      .then(
+        (res: any) => {
+          console.log(res);
+
+          this.taskItemsGridData = res.docs;
+          this.isFetchingGridData = false;
+          if (!res.docs.length) this.isDataAvailable = false;
+
+          this.prevStartAt = this.firstInResponse;
+          this.nextStartAfter = res.docs[res.docs.length - 1];
+          this.firstInResponse = res.docs[0];
+          this.pageNumber++;
+
+          if (res.docs.length < 20){
+            this.disableNext = true;
+            this.disablePrev = false;
+          }
+        },
+        (err: any) => {
+          console.log(err);
+          this.isFetchingGridData = false;
+          this.connectionToast.openToast();
+        }
+      )
   }
 
   previousPage(e: any){
     e.preventDefault();
-    this.disablePrev = true;
+    this.isFetchingGridData = true;
 
-    this.sortParams = { field: "created_at", direction: "desc" };
-    this.getAllUserTaskItem(this.sortParams, 20, this.prevStartAt);
-    this.pageNumber--;
+    this.tasksApi.getUserTaskItemPrev(this.sortParams, 20, this.prevStartAt)
+      .then(
+        (res: any) => {
+          console.log(res);
+
+          this.taskItemsGridData = res.docs;
+          this.isFetchingGridData = false;
+          if (!res.docs.length) this.isDataAvailable = false;
+
+          this.prevStartAt = this.firstInResponse;
+          this.nextStartAfter = res.docs[res.docs.length - 1];
+          this.firstInResponse = res.docs[0];
+          this.pageNumber++;
+
+          if (this.pageNumber == 1){
+            this.disableNext = false;
+            this.disablePrev = true;
+          }
+        },
+        (err: any) => {
+          console.log(err);
+          this.isFetchingGridData = false;
+          this.connectionToast.openToast();
+        }
+      )
   }
 
   sortTable(field: any, direction: any){
     this.sortParams.field = field;
     this.sortParams.direction = direction;
 
-    this.getAllUserTaskItem(this.sortParams, 20, null);
+    this.getUserTaskItem();
   }
 
   onPrint(){
     console.log("lets start printing...");
-    // this.tasksPrint.getPrintAllTaskItems(this.totalItems);
+    this.tasksPrint.printAllTaskItems();
   }
 
 }

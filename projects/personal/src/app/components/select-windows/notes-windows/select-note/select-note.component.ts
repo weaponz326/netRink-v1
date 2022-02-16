@@ -29,55 +29,131 @@ export class SelectNoteComponent implements OnInit {
 
   notesGridData: any[] = [];
 
-  currentPage = 0;
-  totalPages = 0;
+  isFetchingGridData: boolean =  false;
+  isDataAvailable: boolean =  true;
+
+  firstInResponse: any = [];
+  lastInResponse: any = [];
+  prevStartAt: any = [];
+  nextStartAfter: any = [];
+  pageNumber = 0;
+  disableNext: boolean = false;
+  disablePrev: boolean = true;
+
+  sortParams = {
+    field: "updated_at",
+    direction: "desc"
+  }
 
   ngOnInit(): void {
   }
 
   openModal(){
-    this.getNotes(1, 10, "");
+    this.getUserNote();
     this.openButton.nativeElement.click();
   }
 
-  getNotes(page: any, size: any, sortField: any){
-    // this.notesApi.getNotes(page, size, sortField)
-    //   .subscribe(
-    //     res => {
-    //       console.log(res);
-    //       this.notesGridData = res.results;
-    //       this.currentPage = res.current_page;
-    //       this.totalPages = res.total_pages;
-    //     },
-    //     err => {
-    //       console.log(err);
-    //       this.connectionToast.openToast();
-    //     }
-    //   )
+  getUserNote(){
+    this.isFetchingGridData = true;
+
+    this.notesApi.getUserNote(this.sortParams, 20)
+      .then(
+        (res: any) => {
+          console.log(res);
+
+          this.notesGridData = res.docs;
+          this.isFetchingGridData = false;
+          if (!res.docs.length) this.isDataAvailable = false;
+
+          this.prevStartAt = this.firstInResponse;
+          this.nextStartAfter = res.docs[res.docs.length - 1];
+          this.firstInResponse = res.docs[0];
+          this.pageNumber = 0;
+
+          this.disableNext = false;
+          this.disablePrev = false;
+        },
+        (err: any) => {
+          console.log(err);
+          this.isFetchingGridData = false;
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  nextPage(e: any){
+    e.preventDefault();
+    this.isFetchingGridData = true;
+
+    this.notesApi.getUserNoteNext(this.sortParams, 20, this.nextStartAfter)
+      .then(
+        (res: any) => {
+          console.log(res);
+
+          this.notesGridData = res.docs;
+          this.isFetchingGridData = false;
+          if (!res.docs.length) this.isDataAvailable = false;
+
+          this.prevStartAt = this.firstInResponse;
+          this.nextStartAfter = res.docs[res.docs.length - 1];
+          this.firstInResponse = res.docs[0];
+          this.pageNumber++;
+
+          if (res.docs.length < 20){
+            this.disableNext = true;
+            this.disablePrev = false;
+          }
+        },
+        (err: any) => {
+          console.log(err);
+          this.isFetchingGridData = false;
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  previousPage(e: any){
+    e.preventDefault();
+    this.isFetchingGridData = true;
+
+    this.notesApi.getUserNotePrev(this.sortParams, 20, this.prevStartAt)
+      .then(
+        (res: any) => {
+          console.log(res);
+
+          this.notesGridData = res.docs;
+          this.isFetchingGridData = false;
+          if (!res.docs.length) this.isDataAvailable = false;
+
+          this.prevStartAt = this.firstInResponse;
+          this.nextStartAfter = res.docs[res.docs.length - 1];
+          this.firstInResponse = res.docs[0];
+          this.pageNumber++;
+
+          if (this.pageNumber == 1){
+            this.disableNext = false;
+            this.disablePrev = true;
+          }
+        },
+        (err: any) => {
+          console.log(err);
+          this.isFetchingGridData = false;
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  sortTable(field: any, direction: any){
+    this.sortParams.field = field;
+    this.sortParams.direction = direction;
+
+    this.getUserNote();
   }
 
   selectRow(row: any){
     this.noteSelected.emit(row);
     this.closeButton.nativeElement.click();
     console.log(row);
-  }
-
-  sortTable(field: any){
-    console.log(field);
-    this.getNotes(1, 10, field);
-
-    if((field == 'subject') || (field == "-subject")){
-      this.createdAtSorting.resetSort();
-      this.updatedAtSorting.resetSort();
-    }
-    else if((field == 'created_at') || (field == "-created_at")){
-      this.subjectSorting.resetSort();
-      this.updatedAtSorting.resetSort();
-    }
-    else if((field == 'updated_at') || (field == "-updated_at")){
-      this.subjectSorting.resetSort();
-      this.createdAtSorting.resetSort();
-    }
   }
 
 }

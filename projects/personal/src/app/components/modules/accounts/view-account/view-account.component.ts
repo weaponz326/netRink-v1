@@ -125,7 +125,7 @@ export class ViewAccountComponent implements OnInit {
 
   onPrint(){
     console.log("lets start printing...");
-    this.accountsPrint.getPrintAccount();
+    this.accountsPrint.printViewAccount();
   }
 
 }

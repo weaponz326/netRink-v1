@@ -37,8 +37,8 @@ export class AllNotesComponent implements OnInit {
   firstInResponse: any = [];
   lastInResponse: any = [];
   prevStartAt: any = [];
-  nextStartAt: any = [];
-  pageNumber = 1;
+  nextStartAfter: any = [];
+  pageNumber = 0;
   disableNext: boolean = false;
   disablePrev: boolean = true;
 
@@ -51,13 +51,13 @@ export class AllNotesComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    this.getAllUserNote(this.sortParams, 20, null);
+    this.getUserNote();
   }
 
-  getAllUserNote(sorting: any, pageSize: any, pageStart: any){
+  getUserNote(){
     this.isFetchingGridData = true;
 
-    this.notesApi.getAllUserNote(sorting, pageSize, pageStart)
+    this.notesApi.getUserNote(this.sortParams, 20)
       .then(
         (res: any) => {
           console.log(res);
@@ -67,8 +67,9 @@ export class AllNotesComponent implements OnInit {
           if (!res.docs.length) this.isDataAvailable = false;
 
           this.prevStartAt = this.firstInResponse;
-          this.nextStartAt = res.docs[res.docs.length - 1];
+          this.nextStartAfter = res.docs[res.docs.length - 1];
           this.firstInResponse = res.docs[0];
+          this.pageNumber = 0;
 
           this.disableNext = false;
           this.disablePrev = false;
@@ -81,6 +82,75 @@ export class AllNotesComponent implements OnInit {
       )
   }
 
+  nextPage(e: any){
+    e.preventDefault();
+    this.isFetchingGridData = true;
+
+    this.notesApi.getUserNoteNext(this.sortParams, 20, this.nextStartAfter)
+      .then(
+        (res: any) => {
+          console.log(res);
+
+          this.notesGridData = res.docs;
+          this.isFetchingGridData = false;
+          if (!res.docs.length) this.isDataAvailable = false;
+
+          this.prevStartAt = this.firstInResponse;
+          this.nextStartAfter = res.docs[res.docs.length - 1];
+          this.firstInResponse = res.docs[0];
+          this.pageNumber++;
+
+          if (res.docs.length < 20){
+            this.disableNext = true;
+            this.disablePrev = false;
+          }
+        },
+        (err: any) => {
+          console.log(err);
+          this.isFetchingGridData = false;
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  previousPage(e: any){
+    e.preventDefault();
+    this.isFetchingGridData = true;
+
+    this.notesApi.getUserNotePrev(this.sortParams, 20, this.prevStartAt)
+      .then(
+        (res: any) => {
+          console.log(res);
+
+          this.notesGridData = res.docs;
+          this.isFetchingGridData = false;
+          if (!res.docs.length) this.isDataAvailable = false;
+
+          this.prevStartAt = this.firstInResponse;
+          this.nextStartAfter = res.docs[res.docs.length - 1];
+          this.firstInResponse = res.docs[0];
+          this.pageNumber++;
+
+          if (this.pageNumber == 1){
+            this.disableNext = false;
+            this.disablePrev = true;
+          }
+        },
+        (err: any) => {
+          console.log(err);
+          this.isFetchingGridData = false;
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  sortTable(field: any, direction: any){
+    this.sortParams.field = field;
+    this.sortParams.direction = direction;
+
+    this.getUserNote();
+  }
+
   viewNote(id: any){
     console.log(id);
 
@@ -88,34 +158,9 @@ export class AllNotesComponent implements OnInit {
     this.router.navigateByUrl('/home/notes/view-note')
   }
 
-  nextPage(e: any){
-    e.preventDefault();
-    this.disableNext = true;
-
-    this.sortParams = { field: "updated_at", direction: "desc" };
-    this.getAllUserNote(this.sortParams, 20, this.nextStartAt);
-    this.pageNumber++;
-  }
-
-  previousPage(e: any){
-    e.preventDefault();
-    this.disablePrev = true;
-
-    this.sortParams = { field: "updated_at", direction: "desc" };
-    this.getAllUserNote(this.sortParams, 20, this.prevStartAt);
-    this.pageNumber--;
-  }
-
-  sortTable(field: any, direction: any){
-    this.sortParams.field = field;
-    this.sortParams.direction = direction;
-
-    this.getAllUserNote(this.sortParams, 20, null);
-  }
-
   onPrint(){
     console.log("lets start printing...");
-    // this.notesPrint.getPrintNotes(this.totalItems);
+    this.notesPrint.printAllNotes();
   }
 
 }

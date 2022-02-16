@@ -14,42 +14,22 @@ export class NotesPrintService {
     private notesApi: NotesApiService,
   ) { }
 
-  notesGridData: any[] = [];
-
   // all notes
 
-  getPrintNotes(count: any){
-    // this.notesApi.getNotes(1, count, "")
-    //   .subscribe(
-    //     res => {
-    //       console.log(res);
-    //       this.notesGridData = res.results;
-    //       this.printAllNotes();
-    //     },
-    //     err => {
-    //       console.log(err);
-    //     }
-    //   )
-  }
-
-  printAllNotes(){
-    let mappedData = this.notesGridData.map(function(obj: any){
-      return {
-        subject: obj.subject,
-        created_at: new Date(obj.created_at).toISOString().slice(0, 16),
-        updated_at: new Date(obj.updated_at).toISOString().slice(0, 16),
-      }
-    });
+  async printAllNotes(){
+    const notesGridData = await this.notesApi.getAllUserNote();
 
     var body = [['Subject', 'Created At', 'Last Updated']];
 
-    mappedData.forEach((data: any) => {
+    for (let data of notesGridData.docs){
       var row = [];
-      for(let x in data){
-        row.push(data[x]);
-      }
+      let rowData: any = data.data();
+      row.push(rowData.subject);
+      row.push(rowData.created_at);
+      row.push(rowData.updated_at);
+
       body.push(row);
-    })
+    }
 
     let content = [
       {

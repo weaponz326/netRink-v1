@@ -36,7 +36,7 @@ export class ViewCalendarComponent implements OnInit {
 
   ngAfterViewInit(): void {
     this.getCalendar();
-    this.getAllCalendarSchedule();
+    this.getCalendarSchedule();
   }
 
   initClendarForm(){
@@ -84,8 +84,8 @@ export class ViewCalendarComponent implements OnInit {
       )
   }
 
-  getAllCalendarSchedule(){
-    this.calendarApi.getAllCalendarSchedule()
+  getCalendarSchedule(){
+    this.calendarApi.getCalendarSchedule()
       .then(
         (res: any) => {
           console.log(res);

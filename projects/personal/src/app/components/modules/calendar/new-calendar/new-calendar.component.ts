@@ -20,7 +20,6 @@ export class NewCalendarComponent implements OnInit {
 
   constructor(
     private router: Router,
-    // private afs: AngularFirestore,
     private calendarApi: CalendarApiService
   ) { }
 

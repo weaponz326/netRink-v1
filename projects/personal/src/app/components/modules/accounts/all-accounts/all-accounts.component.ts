@@ -38,8 +38,8 @@ export class AllAccountsComponent implements OnInit {
   firstInResponse: any = [];
   lastInResponse: any = [];
   prevStartAt: any = [];
-  nextStartAt: any = [];
-  pageNumber = 1;
+  nextStartAfter: any = [];
+  pageNumber = 0;
   disableNext: boolean = false;
   disablePrev: boolean = true;
 
@@ -52,13 +52,13 @@ export class AllAccountsComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    this.getAllUserAccount(this.sortParams, 20, null);
+    this.getUserAccount();
   }
 
-  getAllUserAccount(sorting: any, pageSize: any, pageStart: any){
+  getUserAccount(){
     this.isFetchingGridData = true;
 
-    this.accountsApi.getAllUserAccount(sorting, pageSize, pageStart)
+    this.accountsApi.getUserAccount(this.sortParams, 20)
       .then(
         (res: any) => {
           console.log(res);
@@ -68,8 +68,9 @@ export class AllAccountsComponent implements OnInit {
           if (!res.docs.length) this.isDataAvailable = false;
 
           this.prevStartAt = this.firstInResponse;
-          this.nextStartAt = res.docs[res.docs.length - 1];
+          this.nextStartAfter = res.docs[res.docs.length - 1];
           this.firstInResponse = res.docs[0];
+          this.pageNumber = 1;
 
           this.disableNext = false;
           this.disablePrev = false;
@@ -82,6 +83,75 @@ export class AllAccountsComponent implements OnInit {
       )
   }
 
+  nextPage(e: any){
+    e.preventDefault();
+    this.isFetchingGridData = true;
+
+    this.accountsApi.getUserAccountNext(this.sortParams, 20, this.nextStartAfter)
+      .then(
+        (res: any) => {
+          console.log(res);
+
+          this.accountsGridData = res.docs;
+          this.isFetchingGridData = false;
+          if (!res.docs.length) this.isDataAvailable = false;
+
+          this.prevStartAt = this.firstInResponse;
+          this.nextStartAfter = res.docs[res.docs.length - 1];
+          this.firstInResponse = res.docs[0];
+          this.pageNumber++;
+
+          if (res.docs.length < 20){
+            this.disableNext = true;
+            this.disablePrev = false;
+          }
+        },
+        (err: any) => {
+          console.log(err);
+          this.isFetchingGridData = false;
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  previousPage(e: any){
+    e.preventDefault();
+    this.isFetchingGridData = true;
+
+    this.accountsApi.getUserAccountPrev(this.sortParams, 20, this.prevStartAt)
+      .then(
+        (res: any) => {
+          console.log(res);
+
+          this.accountsGridData = res.docs;
+          this.isFetchingGridData = false;
+          if (!res.docs.length) this.isDataAvailable = false;
+
+          this.prevStartAt = this.firstInResponse;
+          this.nextStartAfter = res.docs[res.docs.length - 1];
+          this.firstInResponse = res.docs[0];
+          this.pageNumber++;
+
+          if (this.pageNumber == 1){
+            this.disableNext = false;
+            this.disablePrev = true;
+          }
+        },
+        (err: any) => {
+          console.log(err);
+          this.isFetchingGridData = false;
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  sortTable(field: any, direction: any){
+    this.sortParams.field = field;
+    this.sortParams.direction = direction;
+
+    this.getUserAccount();
+  }
+
   viewAccount(accountId: any){
     console.log(accountId);
 
@@ -89,34 +159,9 @@ export class AllAccountsComponent implements OnInit {
     this.router.navigateByUrl("/home/accounts/view-account");
   }
 
-  nextPage(e: any){
-    e.preventDefault();
-    this.disableNext = true;
-
-    this.sortParams = { field: "created_at", direction: "desc" };
-    this.getAllUserAccount(this.sortParams, 20, this.nextStartAt);
-    this.pageNumber++;
-  }
-
-  previousPage(e: any){
-    e.preventDefault();
-    this.disablePrev = true;
-
-    this.sortParams = { field: "created_at", direction: "desc" };
-    this.getAllUserAccount(this.sortParams, 20, this.prevStartAt);
-    this.pageNumber--;
-  }
-
-  sortTable(field: any, direction: any){
-    this.sortParams.field = field;
-    this.sortParams.direction = direction;
-
-    this.getAllUserAccount(this.sortParams, 20, null);
-  }
-
   onPrint(){
     console.log("lets start printing...");
-    // this.accountsPrint.getPrintAccounts(this.totalItems);
+    this.accountsPrint.printAllAccounts();
   }
 
 }

@@ -14,42 +14,21 @@ export class TasksPrintService {
     private tasksApi: TasksApiService,
   ) { }
 
-  taskGroupsGridData: any[] = [];
-  taskItemsGridData: any[] = [];
-
   // all task groups
 
-  getPrintTaskGroups(count: any){
-    // this.tasksApi.getTaskGroups(1, count, "")
-    //   .subscribe(
-    //     res => {
-    //       console.log(res);
-    //       this.taskGroupsGridData = res.results;
-    //       this.printAllTaskGroups();
-    //     },
-    //     err => {
-    //       console.log(err);
-    //     }
-    //   )
-  }
-
-  printAllTaskGroups(){
-    let mappedData = this.taskGroupsGridData.map(function(obj: any){
-      return {
-        task_group: obj.task_group,
-        created_at: new Date(obj.created_at).toISOString().slice(0, 16),
-      }
-    });
+  async printAllTaskGroups(){
+    const taskGroupsGridData = await this.tasksApi.getAllUserTaskGroup();
 
     var body = [['Task Group', 'Created At']];
 
-    mappedData.forEach((data: any) => {
+    for (let data of taskGroupsGridData.docs){
       var row = [];
-      for(let x in data){
-        row.push(data[x]);
-      }
+      let rowData: any = data.data();
+      row.push(rowData.task_group);
+      row.push(rowData.created_at);
+
       body.push(row);
-    })
+    }
 
     let content = [
       {
@@ -67,40 +46,22 @@ export class TasksPrintService {
 
   // all task items
 
-  getPrintAllTaskItems(count: any){
-    // this.tasksApi.getAllTaskItems(1, count, "")
-    //   .subscribe(
-    //     res => {
-    //       console.log(res);
-    //       this.taskItemsGridData = res.results;
-    //       this.printAllTaskItems();
-    //     },
-    //     err => {
-    //       console.log(err);
-    //     }
-    //   )
-  }
-
-  printAllTaskItems(){
-    let mappedData = this.taskItemsGridData.map(function(obj: any){
-      return {
-        task_item: obj.task_item,
-        priority: obj.priority,
-        start_date: new Date(obj.start_date).toISOString().slice(0, 16),
-        end_date: new Date(obj.end_date).toISOString().slice(0, 16),
-        status: obj.status,
-      }
-    });
+  async printAllTaskItems(){
+    const taskItemsGridData = await this.tasksApi.getAllUserTaskItem();
 
     var body = [['Task Item', 'Priority', 'Start Date', 'End Date', 'Status']];
 
-    mappedData.forEach((data: any) => {
+    for (let data of taskItemsGridData.docs){
       var row = [];
-      for(let x in data){
-        row.push(data[x]);
-      }
+      let rowData: any = data.data();
+      row.push(rowData.task_item);
+      row.push(rowData.priority);
+      row.push(rowData.start_date);
+      row.push(rowData.end_date);
+      row.push(rowData.status);
+
       body.push(row);
-    })
+    }
 
     let content = [
       {

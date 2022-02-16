@@ -12,8 +12,8 @@ export class AccountsApiService {
     private afs: AngularFirestore,
   ) { }
 
-  accountRef = this.afs.collection('personal/module_accounts/accounts_account');
-  incomeRef = this.afs.collection('personal/module_accounts/accounts_transaction');
+  accountRef = this.afs.collection('personal/module_accounts/personal_account');
+  transactionRef = this.afs.collection('personal/module_accounts/personal_account_transaction');
 
   // account
 
@@ -33,41 +33,90 @@ export class AccountsApiService {
     return this.accountRef.doc(String(sessionStorage.getItem('personal_account_id'))).delete();
   }
 
-  getAllUserAccount(sorting: any, pageSize: any, pageStart: any){
+  getUserAccount(sorting: any, pageSize: any){
     return this.accountRef.ref
       .where("user", "==", localStorage.getItem('personal_id'))
+      // .orderBy(sorting.field, sorting.direction)
       .limit(pageSize)
-      .orderBy(sorting.field, sorting.direction)
+      .get();
+  }
+
+  getUserAccountNext(sorting: any, pageSize: any, pageStart: any){
+    return this.accountRef.ref
+      .where("user", "==", localStorage.getItem('personal_id'))
+      // .orderBy(sorting.field, sorting.direction)
+      .startAfter(pageStart)
+      .limit(pageSize)
+      .get();
+  }
+
+  getUserAccountPrev(sorting: any, pageSize: any, pageStart: any){
+    return this.accountRef.ref
+      .where("user", "==", localStorage.getItem('personal_id'))
+      // .orderBy(sorting.field, sorting.direction)
       .startAt(pageStart)
+      .limit(pageSize)
+      .get();
+  }
+
+  getAllUserAccount(){
+    return this.accountRef.ref
+      .where("user", "==", localStorage.getItem('personal_id'))
+      // .orderBy("created_at", "desc")
       .get();
   }
 
   // transactions
 
   createTransaction(transaction: any){
-    return this.accountRef.add(transaction);
+    return this.transactionRef.add(transaction);
   }
 
   updateTransaction(transactionId: any, transaction: any){
-    return this.accountRef.doc(transactionId).update(transaction);
+    return this.transactionRef.doc(transactionId).update(transaction);
   }
 
   deleteTransaction(transactionId: any){
-    return this.accountRef.doc(transactionId).delete();
+    return this.transactionRef.doc(transactionId).delete();
   }
 
-  getAllAccountTransaction(){
-    return this.accountRef.ref
-      .where("user", "==", String(sessionStorage.getItem('personal_account_id')))
+  getAccountTransaction(){
+    return this.transactionRef.ref
+      .where("account.data.user", "==", String(sessionStorage.getItem('personal_account_id')))
+      // .orderBy("created_at", "desc")
       .get();
   }
 
-  getAllUserTransaction(sorting: any, pageSize: any, pageStart: any){
-    return this.accountRef.ref
-      .where("account.user", "==", localStorage.getItem('personal_id'))
+  getUserTransaction(sorting: any, pageSize: any){
+    return this.transactionRef.ref
+      .where("account.data.user", "==", localStorage.getItem('personal_id'))
+      // .orderBy(sorting.field, sorting.direction)
       .limit(pageSize)
-      .orderBy(sorting.field, sorting.direction)
+      .get();
+  }
+
+  getUserTransactionNext(sorting: any, pageSize: any, pageStart: any){
+    return this.transactionRef.ref
+      .where("account.data.user", "==", localStorage.getItem('personal_id'))
+      // .orderBy(sorting.field, sorting.direction)
+      .startAfter(pageStart)
+      .limit(pageSize)
+      .get();
+  }
+
+  getUserTransactionPrev(sorting: any, pageSize: any, pageStart: any){
+    return this.transactionRef.ref
+      .where("account.data.user", "==", localStorage.getItem('personal_id'))
+      // .orderBy(sorting.field, sorting.direction)
       .startAt(pageStart)
+      .limit(pageSize)
+      .get();
+  }
+
+  getAllUserTransaction(){
+    return this.transactionRef.ref
+      .where("account.data.user", "==", localStorage.getItem('personal_id'))
+      // .orderBy("created_at", "desc")
       .get();
   }
 

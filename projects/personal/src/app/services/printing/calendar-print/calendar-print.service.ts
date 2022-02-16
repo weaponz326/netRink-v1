@@ -14,42 +14,21 @@ export class CalendarPrintService {
     private calendarApi: CalendarApiService,
   ) { }
 
-  calendarGridData: any[] = [];
-  schedulesGridData: any[] = [];
-
   // all calendars
 
-  getPrintCalendars(count: any){
-    // this.calendarApi.getCalendars(1, count, "")
-    //   .subscribe(
-    //     res => {
-    //       console.log(res);
-    //       this.calendarGridData = res.results;
-    //       this.printAllCalendars();
-    //     },
-    //     err => {
-    //       console.log(err);
-    //     }
-    //   )
-  }
-
-  printAllCalendars(){
-    let mappedData = this.calendarGridData.map(function(obj: any){
-      return {
-        calendar_name: obj.calendar_name,
-        created_at: new Date(obj.created_at).toISOString().slice(0, 16),
-      }
-    });
+  async printAllCalendars(){
+    const calendarsGridData = await this.calendarApi.getAllUserCalendar();
 
     var body = [['Calendar Name', 'Created At']];
 
-    mappedData.forEach((data: any) => {
+    for (let data of calendarsGridData.docs){
       var row = [];
-      for(let x in data){
-        row.push(data[x]);
-      }
+      let rowData: any = data.data();
+      row.push(rowData.calendar_name);
+      row.push(rowData.created_at);
+
       body.push(row);
-    })
+    }
 
     let content = [
       {
@@ -67,39 +46,21 @@ export class CalendarPrintService {
 
   // all schedules
 
-  getPrintSchedules(count: any){
-    // this.calendarApi.getAllSchedules(1, count, "")
-    //   .subscribe(
-    //     res => {
-    //       console.log(res);
-    //       this.schedulesGridData = res.results;
-    //       this.printAllSchedules();
-    //     },
-    //     err => {
-    //       console.log(err);
-    //     }
-    //   )
-  }
-
-  printAllSchedules(){
-    let mappedData = this.schedulesGridData.map(function(obj: any){
-      return {
-        schedule_name: obj.schedule_name,
-        start_date: new Date(obj.start_date).toISOString().slice(0, 16),
-        end_date: new Date(obj.end_date).toISOString().slice(0, 16),
-        status: obj.status,
-      }
-    });
+  async printAllSchedules(){
+    const schedulesGridData = await this.calendarApi.getAllUserSchedule();
 
     var body = [['Schedule Name', 'Start Date', 'End Date', 'Status']];
 
-    mappedData.forEach((data: any) => {
+    for (let data of schedulesGridData.docs){
       var row = [];
-      for(let x in data){
-        row.push(data[x]);
-      }
+      let rowData: any = data.data();
+      row.push(rowData.schedule_name);
+      row.push(rowData.start_date);
+      row.push(rowData.end_date);
+      row.push(rowData.status);
+
       body.push(row);
-    })
+    }
 
     let content = [
       {

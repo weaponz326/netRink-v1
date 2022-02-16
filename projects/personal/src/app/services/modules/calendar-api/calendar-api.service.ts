@@ -11,8 +11,8 @@ export class CalendarApiService {
     private afs: AngularFirestore
   ) { }
 
-  calendarRef = this.afs.collection('personal/module_calendar/calendar_calendar');
-  scheduleRef = this.afs.collection('personal/module_calendar/calendar_schedule');
+  calendarRef = this.afs.collection('personal/module_calendar/personal_calendar');
+  scheduleRef = this.afs.collection('personal/module_calendar/personal_calendar_schedule');
 
   // calendar
 
@@ -32,12 +32,36 @@ export class CalendarApiService {
     return this.calendarRef.doc(String(sessionStorage.getItem('personal_calendar_id'))).delete();
   }
 
-  getAllUserCalendar(sorting: any, pageSize: any, pageStart: any){
+  getUserCalendar(sorting: any, pageSize: any){
     return this.calendarRef.ref
       .where("user", "==", localStorage.getItem('personal_id'))
-      .orderBy(sorting?.field, sorting?.direction)
+      // .orderBy(sorting?.field, sorting?.direction)
+      .limit(pageSize)
+      .get();
+  }
+
+  getUserCalendarNext(sorting: any, pageSize: any, pageStart: any){
+    return this.calendarRef.ref
+      .where("user", "==", localStorage.getItem('personal_id'))
+      // .orderBy(sorting?.field, sorting?.direction)
+      .startAfter(pageStart)
+      .limit(pageSize)
+      .get();
+  }
+
+  getUserCalendarPrev(sorting: any, pageSize: any, pageStart: any){
+    return this.calendarRef.ref
+      .where("user", "==", localStorage.getItem('personal_id'))
+      // .orderBy(sorting?.field, sorting?.direction)
       .startAt(pageStart)
       .limit(pageSize)
+      .get();
+  }
+
+  getAllUserCalendar(){
+    return this.calendarRef.ref
+      .where("user", "==", localStorage.getItem('personal_id'))
+      // .orderBy("created_at", "desc")
       .get();
   }
 
@@ -59,18 +83,42 @@ export class CalendarApiService {
     return this.scheduleRef.doc(scheduleId).delete();
   }
 
-  getAllCalendarSchedule(){
+  getCalendarSchedule(){
     return this.scheduleRef.ref
-      .where("calendar.uid", "==", sessionStorage.getItem('personal_calendar_id'))
+      .where("calendar.id", "==", sessionStorage.getItem('personal_calendar_id'))
       .get();
   }
 
-  getAllUserSchedule(sorting: any, pageSize: any, pageStart: any){
+  getUserSchedule(sorting: any, pageSize: any){
     return this.scheduleRef.ref
       .where("user", "==", localStorage.getItem('personal_id'))
-      .orderBy(sorting.field, sorting.direction)
+      // .orderBy(sorting.field, sorting.direction)
+      .limit(pageSize)
+      .get();
+  }
+
+  getUserScheduleNext(sorting: any, pageSize: any, pageStart: any){
+    return this.calendarRef.ref
+      .where("calendar.data.user", "==", localStorage.getItem('personal_id'))
+      // .orderBy(sorting?.field, sorting?.direction)
+      .startAfter(pageStart)
+      .limit(pageSize)
+      .get();
+  }
+
+  getUserSchedulePrev(sorting: any, pageSize: any, pageStart: any){
+    return this.calendarRef.ref
+      .where("calendar.data.user", "==", localStorage.getItem('personal_id'))
+      // .orderBy(sorting?.field, sorting?.direction)
       .startAt(pageStart)
       .limit(pageSize)
+      .get();
+  }
+
+  getAllUserSchedule(){
+    return this.scheduleRef.ref
+      .where("user", "==", localStorage.getItem('personal_id'))
+      // .orderBy("created_at", "desc")
       .get();
   }
 

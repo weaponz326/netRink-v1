@@ -33,12 +33,36 @@ export class TasksApiService {
     return this.taskGroupRef.doc(String(sessionStorage.getItem('personal_task_group_id'))).delete();
   }
 
-  getAllUserTaskGroup(ordering: any, pageSize: any, pageStart: any){
+  getUserTaskGroup(sorting: any, pageSize: any){
     return this.taskGroupRef.ref
       .where("user", "==", localStorage.getItem('personal_id'))
-      .orderBy(ordering.field, ordering.direction)
+      // .orderBy(sorting.field, sorting.direction)
+      .limit(pageSize)
+      .get();
+  }
+
+  getUserTaskGroupNext(sorting: any, pageSize: any, pageStart: any){
+    return this.taskGroupRef.ref
+      .where("user", "==", localStorage.getItem('personal_id'))
+      // .orderBy(sorting.field, sorting.direction)
+      .startAfter(pageStart)
+      .limit(pageSize)
+      .get();
+  }
+
+  getUserTaskGroupPrev(sorting: any, pageSize: any, pageStart: any){
+    return this.taskGroupRef.ref
+      .where("user", "==", localStorage.getItem('personal_id'))
+      // .orderBy(sorting.field, sorting.direction)
       .startAt(pageStart)
       .limit(pageSize)
+      .get();
+  }
+
+  getAllUserTaskGroup(){
+    return this.taskGroupRef.ref
+      .where("user", "==", localStorage.getItem('personal_id'))
+      // .orderBy("created_at", "desc")
       .get();
   }
 
@@ -60,18 +84,42 @@ export class TasksApiService {
     return this.taskItemRef.doc(taskItemId).delete();
   }
 
-  getAllTaskGroupTaskItem(){
+  getTaskGroupTaskItem(){
     return this.taskItemRef.ref
-      .where("calendar.uid", "==", String(sessionStorage.getItem('personal_task_group_id')))
+      .where("task_group.id", "==", String(sessionStorage.getItem('personal_task_group_id')))
       .get();
   }
 
-  getAllUserTaskItem(ordering: any, pageSize: any, pageStart: any){
+  getUserTaskItem(sorting: any, pageSize: any){
     return this.taskItemRef.ref
-      .where("user", "==", localStorage.getItem('personal_id'))
-      .orderBy(ordering.field, ordering.direction)
+      .where("task_group.data.user", "==", localStorage.getItem('personal_id'))
+      .orderBy(sorting.field, sorting.direction)
+      .limit(pageSize)
+      .get();
+  }
+
+  getUserTaskItemNext(sorting: any, pageSize: any, pageStart: any){
+    return this.taskItemRef.ref
+      .where("task_group.data.user", "==", localStorage.getItem('personal_id'))
+      // .orderBy(sorting.field, sorting.direction)
+      .startAfter(pageStart)
+      .limit(pageSize)
+      .get();
+  }
+
+  getUserTaskItemPrev(sorting: any, pageSize: any, pageStart: any){
+    return this.taskItemRef.ref
+      .where("task_group.data.user", "==", localStorage.getItem('personal_id'))
+      // .orderBy(sorting.field, sorting.direction)
       .startAt(pageStart)
       .limit(pageSize)
+      .get();
+  }
+
+  getAllUserTaskItem(){
+    return this.taskItemRef.ref
+      .where("task_group.data.user", "==", localStorage.getItem('personal_id'))
+      // .orderBy("created_at", "desc")
       .get();
   }
 

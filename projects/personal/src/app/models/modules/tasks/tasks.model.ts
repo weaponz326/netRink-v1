@@ -5,11 +5,14 @@ export class TaskGroup {
 }
 
 export class TaskItem {
-  uid!: string;
-  task_group!: TaskGroup;
+  created_at!: any;
   task_item!: string;
   priority!: string;
   start_date!: Date;
   end_date!: Date;
   status!: string;
+  task_group!: {
+    id: string;
+    data: TaskGroup;
+  };
 }

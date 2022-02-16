@@ -38,8 +38,8 @@ export class AllCalendarsComponent implements OnInit {
   firstInResponse: any = [];
   lastInResponse: any = [];
   prevStartAt: any = [];
-  nextStartAt: any = [];
-  pageNumber = 1;
+  nextStartAfter: any = [];
+  pageNumber = 0;
   disableNext: boolean = false;
   disablePrev: boolean = true;
 
@@ -52,13 +52,13 @@ export class AllCalendarsComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    this.getAllUserCalendar(this.sortParams, 20, 1);
+    this.getUserCalendar();
   }
 
-  getAllUserCalendar(sorting: any, pageSize: any, pageStart: any){
+  getUserCalendar(){
     this.isFetchingGridData = true;
 
-    this.calendarApi.getAllUserCalendar(sorting, pageSize, pageStart)
+    this.calendarApi.getUserCalendar(this.sortParams, 20)
       .then(
         (res: any) => {
           console.log(res);
@@ -68,18 +68,88 @@ export class AllCalendarsComponent implements OnInit {
           if (!res.docs.length) this.isDataAvailable = false;
 
           this.prevStartAt = this.firstInResponse;
-          this.nextStartAt = res.docs[res.docs.length - 1];
+          this.nextStartAfter = res.docs[res.docs.length - 1];
           this.firstInResponse = res.docs[0];
+          this.pageNumber = 1
 
           this.disableNext = false;
           this.disablePrev = false;
         },
         (err: any) => {
           console.log(err);
-          this.connectionToast.openToast();
           this.isFetchingGridData = false;
+          this.connectionToast.openToast();
         }
       )
+  }
+
+  nextPage(e: any){
+    e.preventDefault();
+    this.isFetchingGridData = true;
+
+    this.calendarApi.getUserCalendarNext(this.sortParams, 20, this.nextStartAfter)
+      .then(
+        (res: any) => {
+          console.log(res);
+
+          this.calendarGridData = res.docs;
+          this.isFetchingGridData = false;
+          if (!res.docs.length) this.isDataAvailable = false;
+
+          this.prevStartAt = this.firstInResponse;
+          this.nextStartAfter = res.docs[res.docs.length - 1];
+          this.firstInResponse = res.docs[0];
+          this.pageNumber++;
+
+          if (res.docs.length < 20){
+            this.disableNext = true;
+            this.disablePrev = false;
+          }
+        },
+        (err: any) => {
+          console.log(err);
+          this.isFetchingGridData = false;
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  previousPage(e: any){
+    e.preventDefault();
+    this.isFetchingGridData = true;
+
+    this.calendarApi.getUserCalendarPrev(this.sortParams, 20, this.prevStartAt)
+      .then(
+        (res: any) => {
+          console.log(res);
+
+          this.calendarGridData = res.docs;
+          this.isFetchingGridData = false;
+          if (!res.docs.length) this.isDataAvailable = false;
+
+          this.prevStartAt = this.firstInResponse;
+          this.nextStartAfter = res.docs[res.docs.length - 1];
+          this.firstInResponse = res.docs[0];
+          this.pageNumber++;
+
+          if (this.pageNumber == 1){
+            this.disableNext = false;
+            this.disablePrev = true;
+          }
+        },
+        (err: any) => {
+          console.log(err);
+          this.isFetchingGridData = false;
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  sortTable(field: any, direction: any){
+    this.sortParams.field = field;
+    this.sortParams.direction = direction;
+
+    this.getUserCalendar();
   }
 
   viewCalendar(id: any){
@@ -89,34 +159,9 @@ export class AllCalendarsComponent implements OnInit {
     this.router.navigateByUrl('/home/calendar/view-calendar')
   }
 
-  nextPage(e: any){
-    e.preventDefault();
-    this.disableNext = true;
-
-    this.sortParams = { field: "created_at", direction: "desc" };
-    this.getAllUserCalendar(this.sortParams, 20, this.nextStartAt);
-    this.pageNumber++;
-  }
-
-  previousPage(e: any){
-    e.preventDefault();
-    this.disablePrev = true;
-
-    this.sortParams = { field: "created_at", direction: "desc" };
-    this.getAllUserCalendar(this.sortParams, 20, this.prevStartAt);
-    this.pageNumber--;
-  }
-
-  sortTable(field: any, direction: any){
-    this.sortParams.field = field;
-    this.sortParams.direction = direction;
-
-    this.getAllUserCalendar(this.sortParams, 20, null);
-  }
-
   onPrint(){
     console.log("lets start printing...");
-    // this.calendarPrint.getPrintCalendars(this.totalItems);
+    this.calendarPrint.printAllCalendars();
   }
 
 }

@@ -65,15 +65,18 @@ export class BudgetTablesComponent implements OnInit {
   // income
 
   calculateTotalIncome(){
-    // this.totalIncome = this.incomeGridData.reduce((total, {amount}) => total + Number(amount), 0);
-    // console.log(this.totalIncome);
-    // this.calculateIoe();
+    for (let item of this.incomeGridData){
+      this.totalIncome += item.amount;
+    }
+
+    console.log(this.totalIncome);
+    this.calculateIoe();
   }
 
   getAllBudgetIncome(){
     this.isFetchingIncomeGridData = true;
 
-    this.budgetApi.getAllBudgetIncome(this.sortParams)
+    this.budgetApi.getBudgetIncome()
       .then(
         (res: any) => {
           console.log(res);
@@ -156,15 +159,18 @@ export class BudgetTablesComponent implements OnInit {
   // expenditure
 
   calculateTotalExpenditure(){
-    // this.totalExpenditure = this.expenditureGridData.reduce((total, {amount}) => total + Number(amount), 0);
-    // console.log(this.totalExpenditure);
-    // this.calculateIoe();
+    for (let item of this.expenditureGridData){
+      this.totalExpenditure += item.amount;
+    }
+
+    console.log(this.totalExpenditure);
+    this.calculateIoe();
   }
 
   getAllBudgetExpenditure(){
     this.isFetchingExpenditureGridData = true;
 
-    this.budgetApi.getAllBudgetExpenditure(this.sortParams)
+    this.budgetApi.getBudgetExpenditure()
       .then(
         (res: any) => {
           console.log(res);

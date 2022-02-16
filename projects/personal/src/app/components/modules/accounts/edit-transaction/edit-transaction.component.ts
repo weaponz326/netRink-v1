@@ -46,11 +46,14 @@ export class EditTransactionComponent implements OnInit {
   saveTransaction(){
     let transaction: Transaction = {
       created_at: this.transactionFormData.data().created_at,
-      account: this.transactionAccount,
       transaction_date: this.transactionForm.transactionForm.controls.transactionDate.value,
       description: this.transactionForm.transactionForm.controls.description.value,
       transaction_type: this.transactionForm.transactionForm.controls.transactionType.value,
       amount: this.transactionForm.transactionForm.controls.amount.value,
+      account: {
+        id: sessionStorage.getItem('personal_account_id') as string,
+        data: this.transactionAccount,
+      }
     }
 
     let data = {

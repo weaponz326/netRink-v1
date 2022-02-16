@@ -9,9 +9,12 @@ export class Account {
 
 export class Transaction {
   created_at!: any;
-  account!: Account;
   transaction_date!: Date;
   description!: string;
   transaction_type!: string;
   amount!: number;
+  account!: {
+    id: string;
+    data: Account;
+  };
 }

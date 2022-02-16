@@ -30,63 +30,131 @@ export class SelectTransactionComponent implements OnInit {
 
   transactionsGridData: any[] = [];
 
-  currentPage = 0;
-  totalPages = 0;
+  isFetchingGridData: boolean =  false;
+  isDataAvailable: boolean =  true;
+
+  firstInResponse: any = [];
+  lastInResponse: any = [];
+  prevStartAt: any = [];
+  nextStartAfter: any = [];
+  pageNumber = 0;
+  disableNext: boolean = false;
+  disablePrev: boolean = true;
+
+  sortParams = {
+    field: "created_at",
+    direction: "desc"
+  }
 
   ngOnInit(): void {
   }
 
   openModal(){
-    this.getAllTransactions(1, 10, "");
+    this.getUserTransaction();
     this.openButton.nativeElement.click();
   }
 
-  getAllTransactions(page: any, size: any, sortField: any){
-    // this.accountsApi.getAllTransactions(page, size, sortField)
-    //   .subscribe(
-    //     res => {
-    //       console.log(res);
-    //       this.transactionsGridData = res.results;
-    //       this.currentPage = res.current_page;
-    //       this.totalPages = res.total_pages;
-    //     },
-    //     err => {
-    //       console.log(err);
-    //       this.connectionToast.openToast();
-    //     }
-    //   )
+  getUserTransaction(){
+  this.isFetchingGridData = true;
+
+    this.accountsApi.getUserTransaction(this.sortParams, 20)
+      .then(
+        (res: any) => {
+          console.log(res);
+
+          this.transactionsGridData = res.docs;
+          this.isFetchingGridData = false;
+          if (!res.docs.length) this.isDataAvailable = false;
+
+          this.prevStartAt = this.firstInResponse;
+          this.nextStartAfter = res.docs[res.docs.length - 1];
+          this.firstInResponse = res.docs[0];
+          this.pageNumber = 1;
+
+          this.disableNext = false;
+          this.disablePrev = false;
+        },
+        (err: any) => {
+          console.log(err);
+          this.isFetchingGridData = false;
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  nextPage(e: any){
+    e.preventDefault();
+    this.isFetchingGridData = true;
+
+    this.accountsApi.getUserTransactionNext(this.sortParams, 20, this.nextStartAfter)
+      .then(
+        (res: any) => {
+          console.log(res);
+
+          this.transactionsGridData = res.docs;
+          this.isFetchingGridData = false;
+          if (!res.docs.length) this.isDataAvailable = false;
+
+          this.prevStartAt = this.firstInResponse;
+          this.nextStartAfter = res.docs[res.docs.length - 1];
+          this.firstInResponse = res.docs[0];
+          this.pageNumber++;
+
+          if (res.docs.length < 20){
+            this.disableNext = true;
+            this.disablePrev = false;
+          }
+        },
+        (err: any) => {
+          console.log(err);
+          this.isFetchingGridData = false;
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  previousPage(e: any){
+    e.preventDefault();
+    this.isFetchingGridData = true;
+
+    this.accountsApi.getUserTransactionPrev(this.sortParams, 20, this.prevStartAt)
+      .then(
+        (res: any) => {
+          console.log(res);
+
+          this.transactionsGridData = res.docs;
+          this.isFetchingGridData = false;
+          if (!res.docs.length) this.isDataAvailable = false;
+
+          this.prevStartAt = this.firstInResponse;
+          this.nextStartAfter = res.docs[res.docs.length - 1];
+          this.firstInResponse = res.docs[0];
+          this.pageNumber++;
+
+          if (this.pageNumber == 1){
+            this.disableNext = false;
+            this.disablePrev = true;
+          }
+        },
+        (err: any) => {
+          console.log(err);
+          this.isFetchingGridData = false;
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  sortTable(field: any, direction: any){
+    this.sortParams.field = field;
+    this.sortParams.direction = direction;
+
+    this.getUserTransaction();
   }
 
   selectRow(row: any){
     this.transactionSelected.emit(row);
     this.closeButton.nativeElement.click();
     console.log(row);
-  }
-
-  sortTable(field: any){
-    console.log(field);
-    this.getAllTransactions(1, 10, field);
-
-    if((field == 'transaction_date') || (field == "-transaction_date")){
-      this.descriptionSorting.resetSort();
-      this.transactionTypeSorting.resetSort();
-      this.amountSorting.resetSort();
-    }
-    else if((field == 'description') || (field == "-description")){
-      this.transactionDateSorting.resetSort();
-      this.transactionTypeSorting.resetSort();
-      this.amountSorting.resetSort();
-    }
-    else if((field == 'transaction_type') || (field == "-transaction_type")){
-      this.transactionDateSorting.resetSort();
-      this.descriptionSorting.resetSort();
-      this.amountSorting.resetSort();
-    }
-    else if((field == 'amount') || (field == "-amount")){
-      this.transactionDateSorting.resetSort();
-      this.descriptionSorting.resetSort();
-      this.transactionTypeSorting.resetSort();
-    }
   }
 
 }

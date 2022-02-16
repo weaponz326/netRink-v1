@@ -34,10 +34,11 @@ export class AllSchedulesComponent implements OnInit {
   firstInResponse: any = [];
   lastInResponse: any = [];
   prevStartAt: any = [];
-  nextStartAt: any = [];
-  pageNumber = 1;
-  disable_next: boolean = false;
-  disable_prev: boolean = true;
+  nextStartAfter: any = [];
+  pageNumber = 0;
+
+  disableNext: boolean = false;
+  disablePrev: boolean = true;
 
   sortParams = {
     field: "created_at",
@@ -48,13 +49,13 @@ export class AllSchedulesComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    this.getAllUserSchedule(this.sortParams, 20, null);
+    this.getUserSchedule();
   }
 
-  getAllUserSchedule(sorting: any, pageSize: any, pageStart: any){
+  getUserSchedule(){
     this.isFetchingGridData = true;
 
-    this.calendarApi.getAllUserSchedule(sorting, pageSize, pageStart)
+    this.calendarApi.getUserSchedule(this.sortParams, 20)
       .then(
         (res: any) => {
           console.log(res);
@@ -64,8 +65,12 @@ export class AllSchedulesComponent implements OnInit {
           if (!res.docs.length) this.isDataAvailable = false;
 
           this.prevStartAt = this.firstInResponse;
-          this.nextStartAt = res.docs[res.docs.length - 1];
+          this.nextStartAfter = res.docs[res.docs.length - 1];
           this.firstInResponse = res.docs[0];
+          this.pageNumber = 1;
+
+          this.disableNext = false;
+          this.disablePrev = false;
         },
         (err: any) => {
           this.connectionToast.openToast();
@@ -77,30 +82,76 @@ export class AllSchedulesComponent implements OnInit {
 
   nextPage(e: any){
     e.preventDefault();
+    this.isFetchingGridData = true;
 
-    this.sortParams = { field: "created_at", direction: "desc" };
-    this.getAllUserSchedule(this.sortParams, 20, this.nextStartAt);
-    this.pageNumber++;
+    this.calendarApi.getUserScheduleNext(this.sortParams, 20, this.nextStartAfter)
+      .then(
+        (res: any) => {
+          console.log(res);
+
+          this.schedulesGridData = res.docs;
+          this.isFetchingGridData = false;
+          if (!res.docs.length) this.isDataAvailable = false;
+
+          this.prevStartAt = this.firstInResponse;
+          this.nextStartAfter = res.docs[res.docs.length - 1];
+          this.firstInResponse = res.docs[0];
+          this.pageNumber++;
+
+          if (res.docs.length < 20){
+            this.disableNext = true;
+            this.disablePrev = false;
+          }
+        },
+        (err: any) => {
+          console.log(err);
+          this.isFetchingGridData = false;
+          this.connectionToast.openToast();
+        }
+      )
   }
 
   previousPage(e: any){
     e.preventDefault();
+    this.isFetchingGridData = true;
 
-    this.sortParams = { field: "created_at", direction: "desc" };
-    this.getAllUserSchedule(this.sortParams, 20, this.prevStartAt);
-    this.pageNumber--;
+    this.calendarApi.getUserSchedulePrev(this.sortParams, 20, this.prevStartAt)
+      .then(
+        (res: any) => {
+          console.log(res);
+
+          this.schedulesGridData = res.docs;
+          this.isFetchingGridData = false;
+          if (!res.docs.length) this.isDataAvailable = false;
+
+          this.prevStartAt = this.firstInResponse;
+          this.nextStartAfter = res.docs[res.docs.length - 1];
+          this.firstInResponse = res.docs[0];
+          this.pageNumber++;
+
+          if (this.pageNumber == 1){
+            this.disableNext = false;
+            this.disablePrev = true;
+          }
+        },
+        (err: any) => {
+          console.log(err);
+          this.isFetchingGridData = false;
+          this.connectionToast.openToast();
+        }
+      )
   }
 
   sortTable(field: any, direction: any){
     this.sortParams.field = field;
     this.sortParams.direction = direction;
 
-    this.getAllUserSchedule(this.sortParams, 20, null);
+    this.getUserSchedule();
   }
 
   onPrint(){
     console.log("lets start printing...");
-    // this.calendarPrint.getPrintSchedules(this.totalItems);
+    this.calendarPrint.printAllSchedules();
   }
 
 }

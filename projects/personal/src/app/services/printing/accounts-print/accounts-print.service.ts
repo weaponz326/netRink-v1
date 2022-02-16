@@ -14,45 +14,22 @@ export class AccountsPrintService {
     private accountsApi: AccountsApiService,
   ) { }
 
-  accountsGridData: any[] = [];
-  accountFormData: any;
-  transactionsGridData: any[] = [];
-  allTransactionsGridData: any[] = [];
-
   // all accounts
 
-  getPrintAccounts(count: any){
-    // this.accountsApi.getAccounts(1, count, "")
-    //   .subscribe(
-    //     res => {
-    //       console.log(res);
-    //       this.accountsGridData = res.results;
-    //       this.printAllAccounts();
-    //     },
-    //     err => {
-    //       console.log(err);
-    //     }
-    //   )
-  }
-
-  printAllAccounts(){
-    let mappedData = this.accountsGridData.map(function(obj: any){
-      return {
-        account_name: obj.account_name,
-        account_number: obj.account_number,
-        bank_name: obj.bank_name,
-      }
-    });
+  async printAllAccounts(){
+    const accountsGridData = await this.accountsApi.getAllUserAccount();
 
     var body = [['Account Name', 'Account Number', 'Bank Name']];
 
-    mappedData.forEach((data: any) => {
+    for (let data of accountsGridData.docs){
       var row = [];
-      for(let x in data){
-        row.push(data[x]);
-      }
+      let rowData: any = data.data();
+      row.push(rowData.account_name);
+      row.push(rowData.account_number);
+      row.push(rowData.bank_name);
+
       body.push(row);
-    })
+    }
 
     let content = [
       {
@@ -70,65 +47,48 @@ export class AccountsPrintService {
 
   // view account
 
-  getPrintAccount(){
-    // this.accountsApi.getSingleAccount()
-    //   .subscribe(
-    //     res => {
-    //       console.log(res);
-    //       this.accountFormData = res;
-    //       this.getPrintTransactions();
-    //     },
-    //     err => {
-    //       console.log(err);
-    //     }
-    //   )
-  }
+  async printViewAccount(){
+    const accountFormPromise = this.accountsApi.getAccount();
+    const transactionsGridPromise = this.accountsApi.getAccountTransaction();
+    const [accountFormData, transactionsGridData] = await Promise.all([accountFormPromise, transactionsGridPromise]);
 
-  getPrintTransactions(){
-    // this.accountsApi.getTransactions()
-    //   .subscribe(
-    //     res => {
-    //       console.log(res);
-    //       this.transactionsGridData = res;
-    //       this.printViewAccount();
-    //     },
-    //     err => {
-    //       console.log(err);
-    //     }
-    //   )
-  }
-
-  printViewAccount(){
-    let incomeMappedData = this.transactionsGridData.map(function(obj: any){
-      return {
-        transaction_date: new Date(obj.transaction_date).toISOString().slice(0, 16),
-        description: obj.description,
-        transaction_type: obj.transaction_type,
-        amount: obj.amount,
-      }
-    });
+    let formData: any = accountFormData.data();
 
     var body = [['Transaction Date', 'Description', 'Transaction Type', 'Amount']];
-    incomeMappedData.forEach((data: any) => {
+
+    for (let data of transactionsGridData.docs){
       var row = [];
-      for(let x in data){
-        row.push(data[x]);
-      }
+      let rowData: any = data.data();
+      row.push(rowData.transaction_date);
+      row.push(rowData.description);
+      row.push(rowData.transaction_type);
+      row.push(rowData.amount);
+
       body.push(row);
-    })
+    }
+
+    let balance = 0;
+    for (let item of transactionsGridData.docs){
+      let rowData: any = item.data();
+      if (rowData.transaction_type == "Credit")
+        balance += rowData.amount
+      else
+        balance -= rowData.amount
+    }
+    body.push(['', '', '', balance.toString()]);
 
     let content = [
       {
         columns: [
           [
-            { text: 'Account Name: ' + this.accountFormData.account_name },
-            { text: 'Account No: ' + this.accountFormData.account_number },
-            { text: 'Bank Name: ' + this.accountFormData.bank_name },
-            { text: 'Account Type: ' + this.accountFormData.account_type },
+            { text: 'Account Name: ' + formData.account_name },
+            { text: 'Account No: ' + formData.account_number },
+            { text: 'Bank Name: ' + formData.bank_name },
+            { text: 'Account Type: ' + formData.account_type },
           ],
           [
             { text: 'Account Balance', bold: true, alignment: 'center' },
-            { text: '$', bold: true, alignment: 'center' }
+            { text: '$' + balance, bold: true, alignment: 'center' }
           ]
         ]
       },
@@ -148,41 +108,23 @@ export class AccountsPrintService {
 
   // all transaction
 
-  getPrintAllTransactions(count: any){
-    // this.accountsApi.getAllTransactions(1, count, "")
-    //   .subscribe(
-    //     res => {
-    //       console.log(res);
-    //       this.allTransactionsGridData = res.results;
-    //       this.printAllTransactions();
-    //     },
-    //     err => {
-    //       console.log(err);
-    //     }
-    //   )
-  }
-
-  printAllTransactions(){
-    let mappedData = this.allTransactionsGridData.map(function(obj: any){
-      return {
-        transaction_date: new Date(obj.transaction_date).toISOString().slice(0, 16),
-        account_name: obj.account.account_name,
-        bank_name: obj.account.bank_name,
-        description: obj.description,
-        transaction_type: obj.transaction_type,
-        amount: obj.amount,
-      }
-    });
+  async printAllTransactions(){
+    const transactionsGridData = await this.accountsApi.getAllUserAccount();
 
     var body = [['Transaction Date', 'Account Name', 'Bank Name', 'Description', 'Transaction Type', 'Amount']];
 
-    mappedData.forEach((data: any) => {
+    for (let data of transactionsGridData.docs){
       var row = [];
-      for(let x in data){
-        row.push(data[x]);
-      }
+      let rowData: any = data.data();
+      row.push(rowData.transaction_date);
+      row.push(rowData.account_name);
+      row.push(rowData.bank_name);
+      row.push(rowData.description);
+      row.push(rowData.transaction_type);
+      row.push(rowData.amount);
+
       body.push(row);
-    })
+    }
 
     let content = [
       {

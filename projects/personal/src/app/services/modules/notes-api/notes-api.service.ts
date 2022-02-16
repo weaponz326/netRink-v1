@@ -12,7 +12,7 @@ export class NotesApiService {
     private afs: AngularFirestore,
   ) { }
 
-  noteRef = this.afs.collection('personal/module_notes/notes_note');
+  noteRef = this.afs.collection('personal/module_notes/personal_note');
 
   // note
 
@@ -32,12 +32,36 @@ export class NotesApiService {
     return this.noteRef.doc(String(sessionStorage.getItem('personal_note_id'))).delete();
   }
 
-  getAllUserNote(sorting: any, pageSize: any, pageStart: any){
+  getUserNote(sorting: any, pageSize: any){
     return this.noteRef.ref
       .where("user", "==", localStorage.getItem('personal_id'))
+      // .orderBy(sorting.field, sorting.direction)
       .limit(pageSize)
-      .orderBy(sorting.field, sorting.direction)
+      .get();
+  }
+
+  getUserNoteNext(sorting: any, pageSize: any, pageStart: any){
+    return this.noteRef.ref
+      .where("user", "==", localStorage.getItem('personal_id'))
+      // .orderBy(sorting.field, sorting.direction)
+      .startAfter(pageStart)
+      .limit(pageSize)
+      .get();
+  }
+
+  getUserNotePrev(sorting: any, pageSize: any, pageStart: any){
+    return this.noteRef.ref
+      .where("user", "==", localStorage.getItem('personal_id'))
+      // .orderBy(sorting.field, sorting.direction)
       .startAt(pageStart)
+      .limit(pageSize)
+      .get();
+  }
+
+  getAllUserNote(){
+    return this.noteRef.ref
+      .where("user", "==", localStorage.getItem('personal_id'))
+      // .orderBy("created_at", "desc")
       .get();
   }
 

@@ -37,11 +37,14 @@ export class AddTransactionComponent implements OnInit {
   saveTransaction(){
     let data: Transaction = {
       created_at: firebase.default.firestore.FieldValue.serverTimestamp(),
-      account: this.transactionAccount,
       transaction_date: this.transactionForm.transactionForm.controls.transactionDate.value,
       description: this.transactionForm.transactionForm.controls.description.value,
       transaction_type: this.transactionForm.transactionForm.controls.transactionType.value,
       amount: this.transactionForm.transactionForm.controls.amount.value,
+      account: {
+        id: sessionStorage.getItem('personal_account_id') as string,
+        data: this.transactionAccount,
+      }
     }
 
     this.saveTransactionEvent.emit(data);

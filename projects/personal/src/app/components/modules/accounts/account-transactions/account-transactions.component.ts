@@ -32,29 +32,33 @@ export class AccountTransactionsComponent implements OnInit {
   deleteId = "";
   deleteIndex = 0;
 
+  balance = 0;
+
   isFetchingGridData = false;
 
   ngOnInit(): void {
   }
 
   ngAfterViewInit(): void {
-    this.getAllAccountTransaction();
+    this.getAccountTransaction();
   }
 
   calculateBalance(){
-    // let balance = this.transactionsGridData.reduce((total, transaction) => {
-    //   (transaction.transaction_type == "Credit") ?
-    //     total + transaction.amount : total - transaction.amount;
-    // });
+    for (let transaction of this.transactionsGridData){
+      if (transaction.transaction_type == "Credit")
+        this.balance += transaction.amount;
+      else
+        this.balance -= transaction.amount;
+    }
 
-    // this.balanceEvent.emit(balance);
-    // console.log(balance);
+    this.balanceEvent.emit(this.balance);
+    console.log(this.balance);
   }
 
-  getAllAccountTransaction(){
+  getAccountTransaction(){
     this.isFetchingGridData = true;
 
-    this.accountsApi.getAllAccountTransaction()
+    this.accountsApi.getAccountTransaction()
       .then(
         (res: any) => {
           console.log(res);

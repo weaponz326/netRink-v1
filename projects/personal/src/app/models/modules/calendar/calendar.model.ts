@@ -6,10 +6,13 @@ export class Calendar {
 
 export class Schedule {
   created_at!: string;
-  calendar!: Calendar;
   schedule_name!: string;
   start_date!: Date;
   end_date!: Date;
   location!: string;
   status!: string;
+  calendar!: {
+    id: string;
+    data: Calendar;
+  };
 }

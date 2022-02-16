@@ -47,13 +47,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let data of allTransactionsGridData; index as i">
+                    <tr *ngFor="let data of transactionsGridData; index as i">
                         <td>{{data?.data().transaction_date | date}}</td>
                         <td>{{data?.data().description}}</td>
                         <td>{{data?.data().transaction_type}}</td>
                         <td>{{data?.data().amount}}</td>
-                        <td>{{data?.data().account?.account_name}}</td>
-                        <td>{{data?.data().account?.bank_name}}</td>
+                        <td>{{data?.data().account?.data.account_name}}</td>
+                        <td>{{data?.data().account?.data.bank_name}}</td>
                     </tr>
                     <tr *ngIf="isFetchingGridData" class="text-center">
                         <td colspan="6">

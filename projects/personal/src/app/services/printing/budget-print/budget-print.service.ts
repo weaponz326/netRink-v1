@@ -14,44 +14,21 @@ export class BudgetPrintService {
     private budgetApi: BudgetApiService,
   ) { }
 
-  budgetGridData: any[] = [];
-  budgetFormData: any;
-  incomeGridData: any[] = [];
-  expenditureGridData: any[] = [];
-
   // all budget
 
-  getPrintBudgets(count: any){
-    // this.budgetApi.getBudgets(1, count, "")
-    //   .subscribe(
-    //     res => {
-    //       console.log(res);
-    //       this.budgetGridData = res.results;
-    //       this.printAllBudget();
-    //     },
-    //     err => {
-    //       console.log(err);
-    //     }
-    //   )
-  }
-
-  printAllBudget(){
-    let mappedData = this.budgetGridData.map(function(obj: any){
-      return {
-        budget_name: obj.budget_name,
-        budget_type: obj.budget_type,
-      }
-    });
+  async printAllBudget(){
+    const budgetGridData = await this.budgetApi.getAllUserBudget();
 
     var body = [['Budget Name', 'Budget Type']];
 
-    mappedData.forEach((data: any) => {
+    for (let data of budgetGridData.docs){
       var row = [];
-      for(let x in data){
-        row.push(data[x]);
-      }
+      let rowData: any = data.data();
+      row.push(rowData.budget_name);
+      row.push(rowData.budget_type);
+
       body.push(row);
-    })
+    }
 
     let content = [
       {
@@ -69,95 +46,62 @@ export class BudgetPrintService {
 
   // view budget
 
-  getPrintBudget(){
-    // this.budgetApi.getSingleBudget()
-    //   .subscribe(
-    //     res => {
-    //       console.log(res);
-    //       this.budgetFormData = res;
-    //       this.getPrintIncome();
-    //     },
-    //     err => {
-    //       console.log(err);
-    //     }
-    //   )
-  }
+  async printViewBudget(){
+    const budgetFormPromise = this.budgetApi.getBudget();
+    const incomeGridPromise = this.budgetApi.getBudgetIncome();
+    const expenditureGridPromise = this.budgetApi.getBudgetExpenditure();
+    const [budgetFormData, incomeGridData, expenditureGridData] = await Promise.all([budgetFormPromise, incomeGridPromise, expenditureGridPromise]);
 
-  getPrintIncome(){
-    // this.budgetApi.getIncome()
-    //   .subscribe(
-    //     res => {
-    //       console.log(res);
-    //       this.incomeGridData = res;
-    //       this.getPrintExpenditure();
-    //     },
-    //     err => {
-    //       console.log(err);
-    //     }
-    //   )
-  }
+    let formData: any = budgetFormData.data();
 
-  getPrintExpenditure(){
-    // this.budgetApi.getExpenditure()
-    //   .subscribe(
-    //     res => {
-    //       console.log(res);
-    //       this.expenditureGridData = res;
-    //       this.printViewBudget();
-    //     },
-    //     err => {
-    //       console.log(err);
-    //     }
-    //   )
-  }
-
-  printViewBudget(){
-    let incomeMappedData = this.incomeGridData.map(function(obj: any){
-      return {
-        item_number: obj.item_number,
-        item_description: obj.item_description,
-        amount: obj.amount,
-      }
-    });
+    // income
 
     var incomeBody = [['Item No.', 'Description', 'Amount']];
-    incomeMappedData.forEach((data: any) => {
-      var row = [];
-      for(let x in data){
-        row.push(data[x]);
-      }
-      incomeBody.push(row);
-    })
 
-    let totalIncome = this.incomeGridData.reduce((total: number, {amount}: any) => total + Number(amount), 0);
+    for (let data of incomeGridData.docs){
+      var row = [];
+      let rowData: any = data.data();
+      row.push(rowData.item_number);
+      row.push(rowData.item_description);
+      row.push(rowData.amount);
+
+      incomeBody.push(row);
+    }
+
+    let totalIncome = 0;
+    for (let income of incomeGridData.docs){
+      let rowData: any = income.data();
+      totalIncome += rowData.amount
+    }
     incomeBody.push(['', '', totalIncome.toString()]);
 
-    let expenditureMappedData = this.expenditureGridData.map(function(obj: any){
-      return {
-        item_number: obj.item_number,
-        item_description: obj.item_description,
-        amount: obj.amount,
-      }
-    });
+    // expenditure
 
     var expenditureBody = [['Item No.', 'Description', 'Amount']];
-    expenditureMappedData.forEach((data: any) => {
-      var row = [];
-      for(let x in data){
-        row.push(data[x]);
-      }
-      expenditureBody.push(row);
-    })
 
-    let totalExpenditure = this.expenditureGridData.reduce((total: number, {amount}: any) => total + Number(amount), 0);
-    expenditureBody.push(['', '', totalExpenditure.toString()]);
+    for (let data of expenditureGridData.docs){
+      var row = [];
+      let rowData: any = data.data();
+      row.push(rowData.item_number);
+      row.push(rowData.item_description);
+      row.push(rowData.amount);
+
+      expenditureBody.push(row);
+    }
+
+    let totalExpenditure = 0;
+    for (let expenditure of expenditureGridData.docs){
+      let rowData: any = expenditure.data();
+      totalIncome += rowData.amount
+    }
+    expenditureBody.push(['', '', totalIncome.toString()]);
 
     let content = [
       {
         columns: [
           [
-            { text: 'Budget Name: ' + this.budgetFormData.budget_name },
-            { text: 'Budget Type: ' + this.budgetFormData.budget_type },
+            { text: 'Budget Name: ' + formData.budget_name },
+            { text: 'Budget Type: ' + formData.budget_type },
           ],
           [
             { text: 'Income over Expenditure', bold: true, alignment: 'center' },
