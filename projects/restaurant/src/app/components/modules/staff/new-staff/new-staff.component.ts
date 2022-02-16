@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { map, finalize } from 'rxjs/operators';
 
+import { AngularFireStorage } from '@angular/fire/compat/storage';
 import * as firebase from 'firebase/compat/app';
 
 import { StaffFormComponent } from '../staff-form/staff-form.component';
@@ -21,6 +22,7 @@ export class NewStaffComponent implements OnInit {
 
   constructor(
     private router: Router,
+    private storage: AngularFireStorage,
     private staffApi: StaffApiService
   ) { }
 
