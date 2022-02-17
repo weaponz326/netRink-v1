@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 import { MatStepper } from '@angular/material/stepper';
+import * as firebase from 'firebase/compat/app';
 
 import { AuthApiService } from '../../../services/user/auth-api/auth-api.service';
 import { UserApiService } from '../../../services/user/user-api/user-api.service';
@@ -99,6 +100,7 @@ export class SignupFormComponent implements OnInit {
 
   createUSer(){
     let userData: User = {
+      created_at: firebase.default.firestore.FieldValue.serverTimestamp(),
       first_name: this.signupForm.controls.firstName.value,
       last_name: this.signupForm.controls.lastName.value,
       location: this.signupForm.controls.location.value,

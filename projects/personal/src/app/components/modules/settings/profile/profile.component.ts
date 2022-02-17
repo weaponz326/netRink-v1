@@ -131,6 +131,7 @@ export class ProfileComponent implements OnInit {
     this.photo.saveButton.disabled = true;
 
     let data: User = {
+      created_at: this.userData.data().created_at,
       first_name: this.basic.basicForm.controls.first_name.value,
       last_name: this.basic.basicForm.controls.last_name.value,
       location: this.location.locationForm.controls.location.value,

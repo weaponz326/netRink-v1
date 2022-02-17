@@ -30,7 +30,7 @@ export class AllAccountsComponent implements OnInit {
     { text: "All Accounts", url: "/home/profile/all-accounts" },
   ];
 
-  userData: User = {first_name: "", last_name: "", location: "", about: ""};
+  userData: any;
 
   restaurantData: any = [];
   schoolData: any = [];
