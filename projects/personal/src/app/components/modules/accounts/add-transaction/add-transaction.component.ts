@@ -16,12 +16,13 @@ export class AddTransactionComponent implements OnInit {
 
   constructor() { }
 
-  @Input() transactionAccount!: Account;
   @Output() saveTransactionEvent = new EventEmitter<any>();
 
   @ViewChild('buttonElementReference', { read: ElementRef, static: false }) buttonElement!: ElementRef;
 
   @ViewChild('transactionFormComponentReference', { read: TransactionFormComponent, static: false }) transactionForm!: TransactionFormComponent;
+
+  transactionAccount!: Account;
 
   ngOnInit(): void {
   }

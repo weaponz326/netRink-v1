@@ -30,7 +30,7 @@ export class ProfileComponent implements OnInit {
   ) { }
 
   @ViewChild('basicComponentReference') basic!: BasicComponent;
-  @ViewChild('addtionalComponentReference') additional!: AdditionalComponent;
+  @ViewChild('additionalComponentReference') additional!: AdditionalComponent;
   @ViewChild('photoComponentReference') photo!: PhotoComponent;
   @ViewChild('locationComponentReference') location!: LocationComponent;
   @ViewChild('contactComponentReference') contact!: ContactComponent;
@@ -44,7 +44,6 @@ export class ProfileComponent implements OnInit {
   userData: any;
   extendedProfileData: any;
 
-
   ngOnInit(): void {
   }
 
@@ -55,11 +54,14 @@ export class ProfileComponent implements OnInit {
   }
 
   getAuth(){
+    this.contact.isAuthLoading = true;
+
     this.authApi.getAuth()
       .subscribe(
         (res: any) => {
           console.log(res);
           this.contact.contactForm.controls.email.setValue(res.email);
+          this.contact.isAuthLoading = false;
         },
         (err: any) => {
           console.log(err);
@@ -69,6 +71,9 @@ export class ProfileComponent implements OnInit {
   }
 
   getUser(){
+    this.basic.isUserLoading = true;
+    this.location.isUserLoading = true;
+
     this.userApi.getUser()
       .then(
         (res: any) => {
@@ -81,8 +86,8 @@ export class ProfileComponent implements OnInit {
           this.basic.basicForm.controls.about.setValue(this.userData.data().about);
           this.location.locationForm.controls.location.setValue(this.userData.data().location);
 
-          // TODO: move to getAuth()
-          // this.contact.contactForm.controls.email.setValue(res.email);
+          this.basic.isUserLoading = false;
+          this.location.isUserLoading = false;
         },
         (err: any) => {
           console.log(err);
@@ -92,6 +97,10 @@ export class ProfileComponent implements OnInit {
   }
 
   getExtendedProfile(){
+    this.additional.isExtendedProfileLoading = true;
+    this.location.isExtendedProfileLoading = true;
+    this.contact.isExtendedProfileLoading = true;
+
     this.settingsApi.getExtendedProfile()
       .then(
         (res: any) => {
@@ -106,6 +115,10 @@ export class ProfileComponent implements OnInit {
           this.location.locationForm.controls.city.setValue(this.extendedProfileData.data().city);
           this.contact.contactForm.controls.phone.setValue(this.extendedProfileData.data().phone);
           this.contact.contactForm.controls.address.setValue(this.extendedProfileData.data().address);
+
+          this.additional.isExtendedProfileLoading = false;
+          this.location.isExtendedProfileLoading = false;
+          this.contact.isExtendedProfileLoading = false;
         },
         (err: any) => {
           console.log(err);

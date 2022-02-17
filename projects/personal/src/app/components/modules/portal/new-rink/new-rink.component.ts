@@ -110,8 +110,8 @@ export class NewRinkComponent implements OnInit {
 
           this.recipientData = res;
 
-          this.rinkForm.controls.recipientName.setValue(this.recipientData.first_name + " " + this.recipientData.last_name);
-          this.rinkForm.controls.recipientLocation.setValue(this.recipientData.location);
+          this.rinkForm.controls.recipientName.setValue(this.recipientData.data().first_name + " " + this.recipientData.data().last_name);
+          this.rinkForm.controls.recipientLocation.setValue(this.recipientData.data().location);
         },
         (err: any) => {
           console.log(err);
@@ -128,11 +128,11 @@ export class NewRinkComponent implements OnInit {
       comment: this.rinkForm.controls.comment.value,
       sender: {
         id: localStorage.getItem('personal_id') as string,
-        data: this.senderData,
+        data: this.senderData.data(),
       },
       recipient: {
         id: sessionStorage.getItem('personalSearchUser') as string,
-        data: this.recipientData
+        data: this.recipientData.data(),
       }
     }
 
@@ -189,21 +189,21 @@ export class NewRinkComponent implements OnInit {
     this.selectedSourceId = sourceData.id;
 
     if (type == "Calendar")
-      this.rinkForm.controls.rinkSource.setValue(sourceData.calendar_name);
+      this.rinkForm.controls.rinkSource.setValue(sourceData.data().calendar_name);
     else if (type == "Schedule")
-      this.rinkForm.controls.rinkSource.setValue(sourceData.schedule_name);
+      this.rinkForm.controls.rinkSource.setValue(sourceData.data().schedule_name);
     else if (type == "Budget")
-      this.rinkForm.controls.rinkSource.setValue(sourceData.budget_name);
+      this.rinkForm.controls.rinkSource.setValue(sourceData.data().budget_name);
     else if (type == "Note")
-      this.rinkForm.controls.rinkSource.setValue(sourceData.subject);
+      this.rinkForm.controls.rinkSource.setValue(sourceData.data().subject);
     else if (type == "Account")
-      this.rinkForm.controls.rinkSource.setValue(sourceData.account_name);
+      this.rinkForm.controls.rinkSource.setValue(sourceData.data().account_name);
     else if (type == "Transaction")
-      this.rinkForm.controls.rinkSource.setValue(sourceData.description);
+      this.rinkForm.controls.rinkSource.setValue(sourceData.data().description);
     else if (type == "Task Group")
-      this.rinkForm.controls.rinkSource.setValue(sourceData.task_group);
+      this.rinkForm.controls.rinkSource.setValue(sourceData.data().task_group);
     else if (type == "Task Item")
-      this.rinkForm.controls.rinkSource.setValue(sourceData.item_description);
+      this.rinkForm.controls.rinkSource.setValue(sourceData.data().item_description);
   }
 
 }

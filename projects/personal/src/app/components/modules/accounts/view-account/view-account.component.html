@@ -71,9 +71,7 @@
 
     <!-- account transactions -->
 
-    <app-account-transactions #accountTransactionsComponentReference
-    [transactionAccount]="accountFormData" (balanceEvent)="balance = $event">
-    </app-account-transactions>
+    <app-account-transactions #accountTransactionsComponentReference (balanceEvent)="balance = $event"></app-account-transactions>
 
 </div>
 

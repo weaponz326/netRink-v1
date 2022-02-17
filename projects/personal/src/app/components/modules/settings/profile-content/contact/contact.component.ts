@@ -15,6 +15,9 @@ export class ContactComponent implements OnInit {
 
   contactForm: FormGroup = new FormGroup({});
 
+  isAuthLoading = false;
+  isExtendedProfileLoading = false;
+
   ngOnInit(): void {
     this.initContactForm();
   }

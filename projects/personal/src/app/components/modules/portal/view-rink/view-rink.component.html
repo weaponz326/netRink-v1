@@ -2,7 +2,15 @@
 
 <div class="container">
 
-    <div class="row">
+    <div *ngIf="isRinkLoading" class="row text-center">
+        <div class="col-md-9">            
+            <div class="spinner-grow m-3" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="!isRinkLoading" class="row">
         <div class="col-md-9">
 
             <div *ngIf="rinkData?.data().sender?.id==personalId; then senderBlock else recipientBlock"></div>
@@ -11,7 +19,7 @@
                 <div class="row mb-2">
                     <div class="col-md-12">
                         <i class="bi bi-arrow-up-circle-fill me-2 rinkout-icon"></i>
-                        <small><strong>RinkOut</strong> - {{rinkData?.data().rink_date.toDate() | date: 'MMMM d, y, hh:mm:ss a'}}</small>
+                        <small><strong>RinkOut</strong> - {{rinkData?.data().created_at.toDate() | date: 'MMMM d, y, hh:mm:ss a'}}</small>
                     </div>
                 </div>
 
@@ -53,7 +61,7 @@
                 <div class="row mb-2">
                     <div class="col-md-12">
                         <i class="bi bi-arrow-down-circle-fill me-2 rinkin-icon"></i>
-                        <small><strong>RinkIn</strong> - {{rinkData?.data().rink_date.toDate() | date: 'MMMM d, y, hh:mm:ss a'}}</small>
+                        <small><strong>RinkIn</strong> - {{rinkData?.data().created_at.toDate() | date: 'MMMM d, y, hh:mm:ss a'}}</small>
                     </div>
                 </div>
 

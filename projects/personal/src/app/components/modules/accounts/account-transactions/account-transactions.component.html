@@ -46,13 +46,9 @@
 
 <!-- add and edit transaction modal components -->
 
-<app-add-transaction #addTransactionComponentReference
-[transactionAccount]="transactionAccount" (saveTransactionEvent)="createTransaction($event)">
-</app-add-transaction>
+<app-add-transaction #addTransactionComponentReference (saveTransactionEvent)="createTransaction($event)"></app-add-transaction>
 
-<app-edit-transaction #editTransactionComponentReference
-[transactionAccount]="transactionAccount" (saveTransactionEvent)="updateTransaction($event)">
-</app-edit-transaction>
+<app-edit-transaction #editTransactionComponentReference (saveTransactionEvent)="updateTransaction($event)"></app-edit-transaction>
 
 <!-- connection error toast component -->
 

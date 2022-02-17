@@ -19,6 +19,8 @@ export class AdditionalComponent implements OnInit {
 
   additionalForm: FormGroup = new FormGroup({});
 
+  isExtendedProfileLoading = false;
+
   ngOnInit(): void {
     this.initAdditionalForm();
   }

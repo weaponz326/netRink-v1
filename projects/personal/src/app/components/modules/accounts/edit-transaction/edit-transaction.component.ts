@@ -14,7 +14,6 @@ export class EditTransactionComponent implements OnInit {
 
   constructor() { }
 
-  @Input() transactionAccount!: Account;
   @Output() saveTransactionEvent = new EventEmitter<any>();
 
   @ViewChild('buttonElementReference', { read: ElementRef, static: false }) buttonElement!: ElementRef;
@@ -22,6 +21,7 @@ export class EditTransactionComponent implements OnInit {
   @ViewChild('transactionFormComponentReference', { read: TransactionFormComponent, static: false }) transactionForm!: TransactionFormComponent;
 
   transactionFormData: any;
+  transactionAccount!: Account;
 
   ngOnInit(): void {
   }

@@ -15,6 +15,8 @@ export class BasicComponent implements OnInit {
 
   basicForm: FormGroup = new FormGroup({});
 
+  isUserLoading = false;
+
   ngOnInit(): void {
     this.initBasicForm();
   }
@@ -23,7 +25,6 @@ export class BasicComponent implements OnInit {
     this.basicForm = new FormGroup({
       firstName: new FormControl(''),
       lastName: new FormControl(''),
-      // location: new FormControl(''),
       about: new FormControl('')
     })
   }

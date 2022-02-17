@@ -67,12 +67,15 @@ export class ViewAccountComponent implements OnInit {
       .then(
         (res: any) => {
           console.log(res);
-          this.accountFormData = res.data();
+          this.accountFormData = res;
 
-          this.accountForm.controls.accountName.setValue(this.accountFormData.account_name);
-          this.accountForm.controls.accountNumber.setValue(this.accountFormData.account_number);
-          this.accountForm.controls.bankName.setValue(this.accountFormData.bank_name);
-          this.accountForm.controls.accountType.setValue(this.accountFormData.account_type);
+          this.accountForm.controls.accountName.setValue(this.accountFormData.data().account_name);
+          this.accountForm.controls.accountNumber.setValue(this.accountFormData.data().account_number);
+          this.accountForm.controls.bankName.setValue(this.accountFormData.data().bank_name);
+          this.accountForm.controls.accountType.setValue(this.accountFormData.data().account_type);
+
+          this.accountTransactions.addTransaction.transactionAccount = this.accountFormData.data();
+          this.accountTransactions.editTransaction.transactionAccount = this.accountFormData.data();
 
           this.isAccountLoading = false;
         },
@@ -86,7 +89,7 @@ export class ViewAccountComponent implements OnInit {
 
   updateAccount(){
     let data: Account = {
-      created_at: this.accountFormData.created_at,
+      created_at: this.accountFormData.data().created_at,
       user: localStorage.getItem('personal_id') as string,
       account_name: this.accountForm.controls.accountName.value,
       account_number: this.accountForm.controls.accountNumber.value,

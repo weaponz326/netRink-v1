@@ -19,7 +19,6 @@ export class AccountTransactionsComponent implements OnInit {
 
   constructor(private accountsApi: AccountsApiService) { }
 
-  @Input() transactionAccount!: Account;
   @Output() balanceEvent = new EventEmitter<any>();
 
   @ViewChild('addTransactionComponentReference', { read: AddTransactionComponent, static: false }) addTransaction!: AddTransactionComponent;

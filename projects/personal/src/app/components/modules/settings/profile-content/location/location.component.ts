@@ -15,6 +15,9 @@ export class LocationComponent implements OnInit {
 
   locationForm: FormGroup = new FormGroup({});
 
+  isUserLoading = false;
+  isExtendedProfileLoading = false;
+
   ngOnInit(): void {
     this.initLocationForm();
   }

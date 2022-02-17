@@ -34,6 +34,8 @@ export class ViewRinkComponent implements OnInit {
   recipientData: any;
   rinkData: any;
 
+  isRinkLoading = false;
+
   ngOnInit(): void {
   }
 
@@ -42,15 +44,19 @@ export class ViewRinkComponent implements OnInit {
   }
 
   getRink(){
+    this.isRinkLoading = true;
+
     this.portalApi.getRink()
       .then(
         (res: any) => {
           console.log(res);
-          this.rinkData = res.docs;
+          this.rinkData = res;
           sessionStorage.setItem('personal_rink_source_id', res.data().rink_source);
+          this.isRinkLoading = false;          
         },
         (err: any) => {
           console.log(err);
+          this.isRinkLoading = false;          
           this.connectionToast.openToast();
         }
       )
