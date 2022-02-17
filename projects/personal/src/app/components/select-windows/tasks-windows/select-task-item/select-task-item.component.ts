@@ -1,10 +1,8 @@
 import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 
-import { TasksApiService } from 'projects/personal/src/app/services/modules/tasks-api/tasks-api.service';
-
 import { ConnectionToastComponent } from '../../../module-utilities/connection-toast/connection-toast.component';
-import { TablePaginationComponent } from 'projects/personal/src/app/components/module-utilities/table-pagination/table-pagination.component'
-import { TableSortingComponent } from 'projects/personal/src/app/components/module-utilities/table-sorting/table-sorting.component'
+
+import { TasksApiService } from 'projects/personal/src/app/services/modules/tasks-api/tasks-api.service';
 
 
 @Component({
@@ -22,10 +20,6 @@ export class SelectTaskItemComponent implements OnInit {
   @ViewChild('closeButtonElementReference', { read: ElementRef, static: false }) closeButton!: ElementRef;
 
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
-  @ViewChild('tablePaginationComponentReference', { read: TablePaginationComponent, static: false }) tablePagination!: TablePaginationComponent;
-  @ViewChild('taskItemSortingComponentReference', { read: TableSortingComponent, static: false }) taskItemSorting!: TableSortingComponent;
-  @ViewChild('prioritySortingComponentReference', { read: TableSortingComponent, static: false }) prioritySorting!: TableSortingComponent;
-  @ViewChild('statusSortingComponentReference', { read: TableSortingComponent, static: false }) statusSorting!: TableSortingComponent;
 
   taskItemsGridData: any[] = [];
 
@@ -37,7 +31,7 @@ export class SelectTaskItemComponent implements OnInit {
   prevStartAt: any = [];
   nextStartAfter: any = [];
   pageNumber = 0;
-  disableNext: boolean = false;
+  disableNext: boolean = true;
   disablePrev: boolean = true;
 
   sortParams = {
@@ -60,18 +54,23 @@ export class SelectTaskItemComponent implements OnInit {
       .then(
         (res: any) => {
           console.log(res);
-
           this.taskItemsGridData = res.docs;
-          this.isFetchingGridData = false;
-          if (!res.docs.length) this.isDataAvailable = false;
 
+          this.isFetchingGridData = false;
           this.prevStartAt = this.firstInResponse;
           this.nextStartAfter = res.docs[res.docs.length - 1];
           this.firstInResponse = res.docs[0];
           this.pageNumber = 1;
+          if (!res.docs.length) this.isDataAvailable = false;
 
-          this.disableNext = false;
-          this.disablePrev = false;
+          if (!res.docs.length || res.docs.length < 20){
+            this.disableNext = true;
+            this.disablePrev = true;
+          }
+          else{
+            this.disableNext = false;
+            this.disablePrev = true;
+          }
         },
         (err: any) => {
           console.log(err);
@@ -89,8 +88,8 @@ export class SelectTaskItemComponent implements OnInit {
       .then(
         (res: any) => {
           console.log(res);
-
           this.taskItemsGridData = res.docs;
+
           this.isFetchingGridData = false;
           if (!res.docs.length) this.isDataAvailable = false;
 
@@ -120,8 +119,8 @@ export class SelectTaskItemComponent implements OnInit {
       .then(
         (res: any) => {
           console.log(res);
-
           this.taskItemsGridData = res.docs;
+          
           this.isFetchingGridData = false;
           if (!res.docs.length) this.isDataAvailable = false;
 

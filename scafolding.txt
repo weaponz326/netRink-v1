@@ -1,10 +1,8 @@
 + projects
 	+ application (A)
 		+ pages
-			- landing page (Mr)(C)'
-            + extras
-                - privacy page (Mr)(C)
-                - terms page (Mr)(C)
+			- landing page (Mr)(C)
+            - legalities page (Mr)(C)
             - help page (Mr)(C)
 		+ components
 			+ main navbar (M)
@@ -15,6 +13,13 @@
 				- landing top (C)
 				- suite left (C)
 				- suite right (C)
+			+ legalities (M)
+				- terms
+				- privacy
+			+ help
+				- getting started
+				- faq
+				- contact
 		+ services
 			- endpoints (S)
 			- main api (S)
