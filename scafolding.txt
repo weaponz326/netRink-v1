@@ -16,7 +16,7 @@
 			+ legalities (M)
 				- terms
 				- privacy
-			+ help
+			+ help (M)
 				- getting started
 				- faq
 				- contact

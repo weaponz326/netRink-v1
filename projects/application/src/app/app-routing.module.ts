@@ -10,7 +10,10 @@ const routes: Routes = [
     path: "auth",
     loadChildren: () => import("projects/personal/src/app/pages/auth-page/auth-page.module").then(m => m.AuthPageModule)
   },
-
+  {
+    path: "terms",
+    loadChildren: () => import("./pages/legalities-page/legalities-page.module").then(m => m.LegalitiesPageModule)
+  },
 ];
 
 @NgModule({
