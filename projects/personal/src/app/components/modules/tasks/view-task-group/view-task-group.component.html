@@ -14,8 +14,15 @@
                     <div class="col-md-6">
                         <input formControlName="taskGroupName" class="form-control form-control-sm w-100">
                     </div>
-                    <div class="col-md-3">
+                    <div *ngIf="!isTaskGroupLoading" class="col-md-3">
                         <button [disabled]="isTaskGroupSaving" type="submit" class="btn btn-sm btn-secondary page-form-btn">Save</button>
+                    </div>
+                    <div *ngIf="isTaskGroupLoading" class="col-md-3">
+                        <button type="button" class="btn btn-sm btn-light page-form-btn">
+                            <div class="spinner-grow spinner-grow-sm" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </button>
                     </div>
                 </div>
 

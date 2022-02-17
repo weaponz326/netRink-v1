@@ -20,18 +20,12 @@ export class EditIncomeComponent implements OnInit {
   editIncomeForm: FormGroup = new FormGroup({});
   incomeFormData: any;
 
-  selectedIndex: any = 0;
-  selectedId: any = "";
-
   ngOnInit(): void {
     this.initeditIncomeForm();
   }
 
-  openModal(index: any, data: any){
-    this.incomeFormData = data;
-
-    this.selectedIndex = index;
-    this.selectedId = data.id;
+  openModal(income: any){
+    this.incomeFormData = income;
 
     this.editIncomeForm.controls.itemNumber.setValue(this.incomeFormData.data().item_number);
     this.editIncomeForm.controls.itemDescription.setValue(this.incomeFormData.data().item_description);
@@ -49,7 +43,7 @@ export class EditIncomeComponent implements OnInit {
   }
 
   saveIncome(){
-    let income: Income = {
+    let data: Income = {
       created_at: this.incomeFormData.data().created_at,
       budget: sessionStorage.getItem('personal_budget_id') as string,
       item_number: this.editIncomeForm.controls.itemNumber.value,
@@ -57,13 +51,12 @@ export class EditIncomeComponent implements OnInit {
       amount: this.editIncomeForm.controls.amount.value
     }
 
-    let data = {
-      index: this.selectedIndex,
-      id: this.selectedId,
-      income: income
+    let income = {
+      id: this.incomeFormData.id,
+      data: data
     }
 
-    this.saveIncomeEvent.emit(data);
+    this.saveIncomeEvent.emit(income);
   }
 
 }

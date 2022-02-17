@@ -23,10 +23,13 @@ export class NewBudgetComponent implements OnInit {
     private budgetApi: BudgetApiService
   ) { }
 
-  @ViewChild('buttonElementReference', { read: ElementRef, static: false }) buttonElement!: ElementRef;
+  @ViewChild('newButtonElementReference', { read: ElementRef, static: false }) newButton!: ElementRef;
+  @ViewChild('dismissButtonElementReference', { read: ElementRef, static: false }) dismissButton!: ElementRef;
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
 
   budgetForm: FormGroup = new FormGroup({});
+
+  isSavingBudget = false;
 
   ngOnInit(): void {
     this.initBudgetForm();
@@ -34,8 +37,7 @@ export class NewBudgetComponent implements OnInit {
 
   openModal(){
     this.budgetForm.controls.budgetType.setValue("Monthly");
-
-    this.buttonElement.nativeElement.click();
+    this.newButton.nativeElement.click();
   }
 
   initBudgetForm(){
@@ -46,6 +48,8 @@ export class NewBudgetComponent implements OnInit {
   }
 
   createBudget(){
+    this.isSavingBudget = true;
+
     let data: Budget = {
       created_at: firebase.default.firestore.FieldValue.serverTimestamp(),
       user: localStorage.getItem('personal_id') as string,
@@ -63,10 +67,13 @@ export class NewBudgetComponent implements OnInit {
           if(res.id){
             sessionStorage.setItem('personal_budget_id', res.id);
             this.router.navigateByUrl('/home/budget/view-budget');
+            this.dismissButton.nativeElement.click();
           }
+          this.isSavingBudget = false;
         },
         (err: any) => {
           console.log(err);
+          this.isSavingBudget = false;
           this.connectionToast.openToast();
         }
       )

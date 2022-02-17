@@ -25,9 +25,9 @@ export class ViewCalendarComponent implements OnInit {
 
   calendarForm: FormGroup = new FormGroup({});
   schedulesGridData: Schedule[] = [];
-  // calendarFormData: Calendar = {user: "", calendar_name: "", created_at: new Date()};
   calendarFormData: any;
 
+  isCalendarLoading: boolean = false;
   isCalendarSaving: boolean = false;
 
   ngOnInit(): void {
@@ -46,15 +46,19 @@ export class ViewCalendarComponent implements OnInit {
   }
 
   getCalendar(){
+    this.isCalendarLoading = true;
+
     this.calendarApi.getCalendar()
       .then(
         (res: any) => {
           console.log(res);
           this.calendarFormData = res;
           this.calendarForm.controls.calendarName.setValue(this.calendarFormData.data().calendar_name);
+          this.isCalendarLoading = false;
         },
         (err: any) => {
           this.connectionToast.openToast();
+          this.isCalendarLoading = false;
           console.log(err);
         }
       )

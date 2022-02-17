@@ -20,18 +20,12 @@ export class EditExpenditureComponent implements OnInit {
   editExpenditureForm: FormGroup = new FormGroup({});
   expenditureFormData: any;
 
-  selectedIndex: any = 0;
-  selectedId: any = "";
-
   ngOnInit(): void {
     this.initeditExpenditureForm();
   }
 
-  openModal(index: any, data: any){
-    this.expenditureFormData = data;
-
-    this.selectedIndex = index;
-    this.selectedId = data.id;
+  openModal(expenditure: any){
+    this.expenditureFormData = expenditure;
 
     this.editExpenditureForm.controls.itemNumber.setValue(this.expenditureFormData.data().item_number);
     this.editExpenditureForm.controls.itemDescription.setValue(this.expenditureFormData.data().item_description);
@@ -49,7 +43,7 @@ export class EditExpenditureComponent implements OnInit {
   }
 
   saveExpenditure(){
-    let expenditure: Expenditure = {
+    let data: Expenditure = {
       created_at: this.expenditureFormData.data().created_at,
       budget: sessionStorage.getItem('personal_budget_id') as string,
       item_number: this.editExpenditureForm.controls.itemNumber.value,
@@ -57,13 +51,12 @@ export class EditExpenditureComponent implements OnInit {
       amount: this.editExpenditureForm.controls.amount.value
     }
 
-    let data = {
-      index: this.selectedIndex,
-      id: this.selectedId,
-      expediture: expenditure
+    let expenditure = {
+      id: this.expenditureFormData.id,
+      data: data
     }
 
-    this.saveExpenditureEvent.emit(data);
+    this.saveExpenditureEvent.emit(expenditure);
   }
 
 }

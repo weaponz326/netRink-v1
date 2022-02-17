@@ -42,11 +42,20 @@
 
                 <hr />
 
-                <div class="row">
+                <div *ngIf="!isAccountLoading" class="row">
                     <div class="col-md-12">
                         <button type="button" class="btn btn-secondary btn-sm float-end ms-1 page-form-btn" routerLink="/home/accounts/all-accounts">Cancel</button>
-                        <button type="button" class="btn btn-secondary btn-sm float-end ms-1 page-form-btn" (click)="confirmDelete()">Delete</button>
+                        <button [disabled]="isAccountDeleting" type="button" class="btn btn-secondary btn-sm float-end ms-1 page-form-btn" (click)="confirmDelete()">Delete</button>
                         <button [disabled]="isAccountSaving" type="submit" class="btn btn-secondary btn-sm float-end ms-1 page-form-btn">Save</button>
+                    </div>
+                </div>
+                <div *ngIf="isAccountLoading" class="row">
+                    <div class="col-md-12">
+                        <button type="button" class="btn btn-sm float-end ms-1 btn-light page-form-btn">
+                            <div class="spinner-grow spinner-grow-sm" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </button>
                     </div>
                 </div>
 

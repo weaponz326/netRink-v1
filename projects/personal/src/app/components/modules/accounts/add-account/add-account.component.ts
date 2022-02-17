@@ -23,10 +23,13 @@ export class AddAccountComponent implements OnInit {
     private accountsApi: AccountsApiService
   ) { }
 
-  @ViewChild('buttonElementReference', { read: ElementRef, static: false }) buttonElement!: ElementRef;
+  @ViewChild('newButtonElementReference', { read: ElementRef, static: false }) newButton!: ElementRef;
+  @ViewChild('dismissButtonElementReference', { read: ElementRef, static: false }) dismissButton!: ElementRef;
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
 
   accountForm: FormGroup = new FormGroup({});
+
+  isSavingAccount = false;
 
   ngOnInit(): void {
     this.initAccountForm();
@@ -34,8 +37,7 @@ export class AddAccountComponent implements OnInit {
 
   openModal(){
     this.accountForm.controls.accountType.setValue("Savings");
-
-    this.buttonElement.nativeElement.click();
+    this.newButton.nativeElement.click();
   }
 
   initAccountForm(){
@@ -48,6 +50,8 @@ export class AddAccountComponent implements OnInit {
   }
 
   createAccount(){
+    this.isSavingAccount = true;
+
     let data: Account = {
       created_at: firebase.default.firestore.FieldValue.serverTimestamp(),
       user: localStorage.getItem('personal_id') as string,
@@ -67,10 +71,13 @@ export class AddAccountComponent implements OnInit {
           if(res.id){
             sessionStorage.setItem('personal_account_id', res.id);
             this.router.navigateByUrl('/home/accounts/view-account');
+            this.dismissButton.nativeElement.click();
           }
+          this.isSavingAccount = false;
         },
         (err: any) => {
           console.log(err);
+          this.isSavingAccount = false;
           this.connectionToast.openToast();
         }
       )

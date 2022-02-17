@@ -39,7 +39,9 @@ export class ViewAccountComponent implements OnInit {
 
   balance = 0;
 
+  isAccountLoading: boolean = false;
   isAccountSaving: boolean = false;
+  isAccountDeleting: boolean = false;
 
   ngOnInit(): void {
     this.initAccountForm();
@@ -59,20 +61,24 @@ export class ViewAccountComponent implements OnInit {
   }
 
   getAccount(){
+    this.isAccountLoading = true;
+
     this.accountsApi.getAccount()
       .then(
         (res: any) => {
           console.log(res);
+          this.accountFormData = res.data();
 
-          this.accountFormData = res;
+          this.accountForm.controls.accountName.setValue(this.accountFormData.account_name);
+          this.accountForm.controls.accountNumber.setValue(this.accountFormData.account_number);
+          this.accountForm.controls.bankName.setValue(this.accountFormData.bank_name);
+          this.accountForm.controls.accountType.setValue(this.accountFormData.account_type);
 
-          this.accountForm.controls.accountName.setValue(this.accountFormData.data().account_name);
-          this.accountForm.controls.accountNumber.setValue(this.accountFormData.data().account_number);
-          this.accountForm.controls.bankName.setValue(this.accountFormData.data().bank_name);
-          this.accountForm.controls.accountType.setValue(this.accountFormData.data().account_type);
+          this.isAccountLoading = false;
         },
         (err: any) => {
           console.log(err);
+          this.isAccountLoading = false;
           this.connectionToast.openToast();
         }
       )
@@ -80,7 +86,7 @@ export class ViewAccountComponent implements OnInit {
 
   updateAccount(){
     let data: Account = {
-      created_at: this.accountFormData.data().created_at,
+      created_at: this.accountFormData.created_at,
       user: localStorage.getItem('personal_id') as string,
       account_name: this.accountForm.controls.accountName.value,
       account_number: this.accountForm.controls.accountNumber.value,
@@ -106,14 +112,18 @@ export class ViewAccountComponent implements OnInit {
   }
 
   deleteAccount(){
+    this.isAccountDeleting = true;
+
     this.accountsApi.deleteAccount()
       .then(
         (res: any) => {
           console.log(res);
           this.router.navigateByUrl('/home/accounts/all-accounts');
+          this.isAccountDeleting = false;
         },
         (err: any) => {
           console.log(err);
+          this.isAccountDeleting = false;
           this.connectionToast.openToast();
         }
       )

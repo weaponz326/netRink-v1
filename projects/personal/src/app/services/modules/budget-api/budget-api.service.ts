@@ -70,19 +70,19 @@ export class BudgetApiService {
   // income
 
   createIncome(budget: any){
-    return this.budgetRef.add(budget);
+    return this.incomeRef.add(budget);
   }
 
   updateIncome(incomeId: any, income: any){
-    return this.budgetRef.doc(incomeId).update(income);
+    return this.incomeRef.doc(incomeId).update(income);
   }
 
   deleteIncome(incomeId: any){
-    return this.budgetRef.doc(incomeId).delete();
+    return this.incomeRef.doc(incomeId).delete();
   }
 
   getBudgetIncome(){
-    return this.budgetRef.ref
+    return this.incomeRef.ref
       .where("budget", "==", String(sessionStorage.getItem('personal_budget_id')))
       // .orderBy("created_at", "desc")
       .get();
@@ -91,19 +91,19 @@ export class BudgetApiService {
   // expenditure
 
   createExpenditure(budget: any){
-    return this.budgetRef.add(budget);
+    return this.expenditureRef.add(budget);
   }
 
   updateExpenditure(expenditureId: any, expenditure: any){
-    return this.budgetRef.doc(expenditureId).update(expenditure);
+    return this.expenditureRef.doc(expenditureId).update(expenditure);
   }
 
   deleteExpenditure(expenditureId: any){
-    return this.budgetRef.doc(expenditureId).delete();
+    return this.expenditureRef.doc(expenditureId).delete();
   }
 
   getBudgetExpenditure(){
-    return this.budgetRef.ref
+    return this.expenditureRef.ref
       .where("budget", "==", String(sessionStorage.getItem('personal_budget_id')))
       // .orderBy("created_at", "desc")
       .get();

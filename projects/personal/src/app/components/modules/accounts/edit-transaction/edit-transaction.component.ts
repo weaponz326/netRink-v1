@@ -23,28 +23,22 @@ export class EditTransactionComponent implements OnInit {
 
   transactionFormData: any;
 
-  selectedIndex: any = 0;
-  selectedId: any = "";
-
   ngOnInit(): void {
   }
 
-  openModal(index: any, data: any){
+  openModal(data: any){
     this.transactionFormData = data;
 
-    this.selectedIndex = index;
-    this.selectedId = data.id;
-
-    this.transactionForm.transactionForm.controls.transactionDate.setValue(new Date(this.transactionFormData.transaction_date).toISOString().slice(0, 16));
-    this.transactionForm.transactionForm.controls.description.setValue(this.transactionFormData.description);
-    this.transactionForm.transactionForm.controls.transactionType.setValue(this.transactionFormData.transaction_type);
-    this.transactionForm.transactionForm.controls.amount.setValue(this.transactionFormData.amount);
+    this.transactionForm.transactionForm.controls.transactionDate.setValue(new Date(this.transactionFormData.data().transaction_date).toISOString().slice(0, 16));
+    this.transactionForm.transactionForm.controls.description.setValue(this.transactionFormData.data().description);
+    this.transactionForm.transactionForm.controls.transactionType.setValue(this.transactionFormData.data().transaction_type);
+    this.transactionForm.transactionForm.controls.amount.setValue(this.transactionFormData.data().amount);
 
     this.buttonElement.nativeElement.click();
   }
 
   saveTransaction(){
-    let transaction: Transaction = {
+    let data: Transaction = {
       created_at: this.transactionFormData.data().created_at,
       transaction_date: this.transactionForm.transactionForm.controls.transactionDate.value,
       description: this.transactionForm.transactionForm.controls.description.value,
@@ -56,13 +50,12 @@ export class EditTransactionComponent implements OnInit {
       }
     }
 
-    let data = {
-      index: this.selectedIndex,
-      id: this.selectedId,
-      transaction: transaction
+    let transaction = {
+      id: this.transactionFormData.id,
+      data: data
     }
 
-    this.saveTransactionEvent.emit(data);
+    this.saveTransactionEvent.emit(transaction);
   }
 
 }

@@ -12,7 +12,7 @@ export class AccountApiService {
     private afs: AngularFirestore,
   ) { }
 
-  accountRef = this.afs.collection('restaurant/accounts/account');
+  accountRef = this.afs.collection('restaurant/accounts/restaurant_account');
 
   // extended profile
 

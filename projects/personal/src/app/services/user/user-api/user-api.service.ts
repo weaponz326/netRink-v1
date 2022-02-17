@@ -10,7 +10,7 @@ export class UserApiService {
 
   constructor(private afs: AngularFirestore) { }
 
-  userRef = this.afs.collection('personal/users/user');
+  userRef = this.afs.collection('personal/users/personal_user');
 
   createUser(userId:any, userData: any){
     return this.userRef.doc(userId).set(userData);

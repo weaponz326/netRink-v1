@@ -36,12 +36,16 @@ export class BudgetTablesComponent implements OnInit {
   isFetchingIncomeGridData: boolean =  false;
   isFetchingExpenditureGridData: boolean =  false;
 
+  isIncomeSaving = false;
+  isExpenditureSaving = false;
+  isIncomeDeleting = false;
+  isExpenditureDeleting = false;
+
   totalIncome = 0;
   totalExpenditure = 0;
 
   deleteType = "";
   deleteId = "";
-  deleteIndex = 0;
 
   sortParams = {
     field: "created_at",
@@ -52,8 +56,8 @@ export class BudgetTablesComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    this.getAllBudgetIncome();
-    this.getAllBudgetExpenditure();
+    this.getBudgetIncome();
+    this.getBudgetExpenditure();
   }
 
   calculateIoe(){
@@ -65,15 +69,16 @@ export class BudgetTablesComponent implements OnInit {
   // income
 
   calculateTotalIncome(){
+    this.totalIncome = 0;
     for (let item of this.incomeGridData){
-      this.totalIncome += item.amount;
+      this.totalIncome += item.data().amount;
     }
 
     console.log(this.totalIncome);
     this.calculateIoe();
   }
 
-  getAllBudgetIncome(){
+  getBudgetIncome(){
     this.isFetchingIncomeGridData = true;
 
     this.budgetApi.getBudgetIncome()
@@ -95,79 +100,83 @@ export class BudgetTablesComponent implements OnInit {
 
   createIncome(data: any){
     console.log(data);
+    this.isIncomeSaving = true;
 
     this.budgetApi.createIncome(data)
       .then(
         (res: any) => {
           console.log(res);
+          this.isIncomeSaving = false;
 
-          if(res.uid){
-            this.incomeGridData.push(res);
-            this.calculateTotalIncome();
+          if(res.id){
+            this.getBudgetIncome();
             this.addIncome.resetForm();
           }
         },
         (err: any) => {
           console.log(err);
+          this.isIncomeSaving = false;
           this.connectionToast.openToast();
         }
       )
   }
 
-  updateIncome(data: any){
-    console.log(data);
+  updateIncome(income: any){
+    console.log(income);
+    this.isIncomeSaving = true;
 
-    this.budgetApi.updateIncome(data.id, data.income)
+    this.budgetApi.updateIncome(income.id, income.data)
       .then(
         (res: any) => {
           console.log(res);
-
-          if(res.id){
-            this.incomeGridData[data.index] = res;
-            this.calculateTotalIncome();
-          }
+          this.isIncomeSaving = false;
+          this.getBudgetIncome();
         },
         (err: any) => {
           console.log(err);
+          this.isIncomeSaving = false;
           this.connectionToast.openToast();
         }
       )
   }
 
-  deleteIncome(index: any, id: any){
+  deleteIncome(id: any){
     console.log(id);
+    this.isIncomeDeleting = true;
 
     this.budgetApi.deleteIncome(id)
       .then(
         (res: any) => {
           console.log(res);
-          this.incomeGridData.splice(index, 1);
-          this.calculateTotalIncome();
+          this.isIncomeDeleting = false;
+          this.getBudgetIncome();
         },
         (err: any) => {
           console.log(err);
+          this.isIncomeDeleting = false;
           this.connectionToast.openToast();
         }
       )
   }
 
-  openEditIncome(index: any){
-    console.log(index);
-    this.editIncome.openModal(index, this.incomeGridData[index]);
+  openEditIncome(data: any){
+    console.log(data);
+    this.editIncome.openModal(data);
   }
 
   // expenditure
 
   calculateTotalExpenditure(){
+    this.totalExpenditure = 0;
     for (let item of this.expenditureGridData){
-      this.totalExpenditure += item.amount;
+      this.totalExpenditure += item.data().amount;
     }
 
     console.log(this.totalExpenditure);
     this.calculateIoe();
   }
 
-  getAllBudgetExpenditure(){
+  getBudgetExpenditure(){
     this.isFetchingExpenditureGridData = true;
 
     this.budgetApi.getBudgetExpenditure()
@@ -189,75 +198,77 @@ export class BudgetTablesComponent implements OnInit {
 
   createExpenditure(data: any){
     console.log(data);
+    this.isExpenditureSaving = true;
 
     this.budgetApi.createExpenditure(data)
       .then(
         (res: any) => {
           console.log(res);
+          this.isExpenditureSaving = false;
 
           if(res.id){
-            this.expenditureGridData.push(res);
-            this.calculateTotalExpenditure();
+            this.getBudgetExpenditure();
             this.addExpenditure.resetForm();
           }
         },
         (err: any) => {
           console.log(err);
+          this.isExpenditureSaving = false;
           this.connectionToast.openToast();
         }
       )
   }
 
-  updateExpenditure(data: any){
-    console.log(data);
+  updateExpenditure(expenditure: any){
+    console.log(expenditure);
+    this.isExpenditureSaving = true;
 
-    this.budgetApi.updateExpenditure(data.uid, data.expenditure)
+    this.budgetApi.updateExpenditure(expenditure.id, expenditure.data)
       .then(
         (res: any) => {
           console.log(res);
-
-          if(res.id){
-            this.expenditureGridData[data.index] = res;
-            this.calculateTotalExpenditure();
-          }
+          this.isExpenditureSaving = false;
+          this.getBudgetExpenditure()
         },
         (err: any) => {
           console.log(err);
+          this.isExpenditureSaving = false;
           this.connectionToast.openToast();
         }
       )
   }
 
-  deleteExpenditure(index: any, id: any){
+  deleteExpenditure(id: any){
     console.log(id);
+    this.isExpenditureDeleting = true;
 
     this.budgetApi.deleteExpenditure(id)
       .then(
         (res: any) => {
           console.log(res);
-          this.expenditureGridData.splice(index, 1);
-          this.calculateTotalExpenditure();
+          this.isExpenditureDeleting = false;
+          this.getBudgetExpenditure();
         },
         (err: any) => {
           console.log(err);
+          this.isExpenditureDeleting = false;
           this.connectionToast.openToast();
         }
       )
   }
 
-  openEditExpenditure(index: any){
-    console.log(index);
-    this.editExpenditure.openModal(index, this.expenditureGridData[index]);
+  openEditExpenditure(data: any){
+    console.log(data);
+    this.editExpenditure.openModal(data);
   }
 
   // deletions
 
   // open confirm delete modal
-  confirmDelete(type: any, index: any, id: any){
+  confirmDelete(type: any, id: any){
     console.log(type);
 
     this.deleteType = type;
-    this.deleteIndex = index;
     this.deleteId = id;
 
     this.deleteModal.openModal();
@@ -266,9 +277,9 @@ export class BudgetTablesComponent implements OnInit {
   // delete income or expenditure
   deleteItem(){
     if(this.deleteType == "Income")
-      this.deleteIncome(this.deleteIndex, this.deleteId);
+      this.deleteIncome(this.deleteId);
     else if(this.deleteType == "Expenditure")
-      this.deleteExpenditure(this.deleteIndex, this.deleteId)
+      this.deleteExpenditure(this.deleteId)
   }
 
 }

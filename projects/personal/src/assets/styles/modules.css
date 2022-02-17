@@ -104,6 +104,10 @@ table.page-table .page-link{
   color: #858796;
 }
 
+table.page-table .disabled .page-link{
+  color: #85879683 !important;
+}
+
 /* modals */
 
 .form-modal{

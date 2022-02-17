@@ -23,17 +23,20 @@ export class NewCalendarComponent implements OnInit {
     private calendarApi: CalendarApiService
   ) { }
 
-  @ViewChild('buttonElementReference', { read: ElementRef, static: false }) buttonElement!: ElementRef;
+  @ViewChild('newButtonElementReference', { read: ElementRef, static: false }) newButton!: ElementRef;
+  @ViewChild('dismissButtonElementReference', { read: ElementRef, static: false }) dismissButton!: ElementRef;
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
 
   calendarForm: FormGroup = new FormGroup({});
+
+  isSavingCalendar = false;
 
   ngOnInit(): void {
     this.initClendarForm();
   }
 
   openModal(){
-    this.buttonElement.nativeElement.click();
+    this.newButton.nativeElement.click();
   }
 
   initClendarForm(){
@@ -43,6 +46,8 @@ export class NewCalendarComponent implements OnInit {
   }
 
   createCalendar(){
+    this.isSavingCalendar = true;
+
     let data: Calendar = {
       created_at: firebase.default.firestore.FieldValue.serverTimestamp(),
       user: localStorage.getItem('personal_id') as string,
@@ -59,11 +64,14 @@ export class NewCalendarComponent implements OnInit {
           if(res.id){
             sessionStorage.setItem('personal_calendar_id', res.id);
             this.router.navigateByUrl('/home/calendar/view-calendar');
+            this.dismissButton.nativeElement.click();
           }
+          this.isSavingCalendar = false;
         },
         (err: any) => {
-          this.connectionToast.openToast();
           console.log(err);
+          this.isSavingCalendar = false;
+          this.connectionToast.openToast();
         }
       )
   }

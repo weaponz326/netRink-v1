@@ -39,6 +39,10 @@ export class ViewNoteComponent implements OnInit {
   modules: any;
   styles: any;
 
+  isNoteLoading = false;
+  isNoteSaving = false;
+  isNoteDeleting = false;
+
   ngOnInit(): void {
     this.initModules();
     this.initStyles();
@@ -49,6 +53,8 @@ export class ViewNoteComponent implements OnInit {
   }
 
   getNote(){
+    this.isNoteLoading = true;
+
     this.notesApi.getNote()
       .then(
         (res: any) => {
@@ -58,15 +64,19 @@ export class ViewNoteComponent implements OnInit {
           this.subject = this.noteData.data().subject;
           this.body = this.noteData.data().body;
 
+          this.isNoteLoading = false;
         },
         err => {
           console.log(err);
+          this.isNoteLoading = false;
           this.connectionToast.openToast();
         }
       )
   }
 
   updateNote(){
+    this.isNoteSaving = true;
+
     let noteData: Note = {
       created_at: this.noteData.data().created_at,
       user: localStorage.getItem('personal_id') as string,
@@ -80,25 +90,31 @@ export class ViewNoteComponent implements OnInit {
     this.notesApi.updateNote(noteData)
       .then(
         (res: any) => {
-          console.log(res);
+        this.isNoteSaving = false;
+        console.log(res);
         },
         (err: any) => {
           console.log(err);
-          this.connectionToast.openToast();
+        this.isNoteSaving = false;
+        this.connectionToast.openToast();
         }
       )
   }
 
   deleteNote(){
+    this.isNoteDeleting = true;
+
     this.notesApi.deleteNote()
       .then(
         (res: any) => {
           console.log(res);
+          this.isNoteDeleting = false;
           sessionStorage.removeItem('personal_note_id');
           this.router.navigateByUrl('/home/notes/all-notes');
         },
         (err: any) => {
           console.log(err);
+          this.isNoteDeleting = false;
           this.connectionToast.openToast();
         }
       )

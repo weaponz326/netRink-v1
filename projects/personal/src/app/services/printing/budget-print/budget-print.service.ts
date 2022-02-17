@@ -92,9 +92,9 @@ export class BudgetPrintService {
     let totalExpenditure = 0;
     for (let expenditure of expenditureGridData.docs){
       let rowData: any = expenditure.data();
-      totalIncome += rowData.amount
+      totalExpenditure += rowData.amount
     }
-    expenditureBody.push(['', '', totalIncome.toString()]);
+    expenditureBody.push(['', '', totalExpenditure.toString()]);
 
     let content = [
       {

@@ -29,13 +29,13 @@
                             <td>{{data?.data().item_description}}</td>
                             <td>{{data?.data().amount}}</td>
                             <td class="p-0">
-                                <button class="btn btn-sm border w-50" (click)="openEditIncome(i)"><i class="bi bi-pen"></i></button>
-                                <button class="btn btn-sm border w-50" (click)="confirmDelete('Income', i, data.uid)"><i class="bi bi-trash"></i></button>
+                                <button class="btn btn-sm border w-50" (click)="openEditIncome(data)"><i class="bi bi-pen"></i></button>
+                                <button [disabled]="isIncomeDeleting" class="btn btn-sm border w-50" (click)="confirmDelete('Income', data.id)"><i class="bi bi-trash"></i></button>
                             </td>
                         </tr>
-                        <tr *ngIf="isFetchingIncomeGridData" class="text-center">
+                        <tr *ngIf="isFetchingIncomeGridData || isIncomeSaving" class="text-center">
                             <td colspan="4">
-                                <div class="spinner-grow m-4" role="status">
+                                <div class="spinner-grow spinner-grow-sm m-2" role="status">
                                     <span class="visually-hidden">Loading...</span>
                                 </div>
                             </td>
@@ -73,13 +73,13 @@
                             <td>{{data?.data().item_description}}</td>
                             <td>{{data?.data().amount}}</td>
                             <td class="p-0">
-                                <button class="btn btn-sm border w-50" (click)="openEditExpenditure(i)"><i class="bi bi-pen"></i></button>
-                                <button class="btn btn-sm border w-50" (click)="confirmDelete('Expenditure', i, data.uid)"><i class="bi bi-trash"></i></button>
+                                <button class="btn btn-sm border w-50" (click)="openEditExpenditure(data)"><i class="bi bi-pen"></i></button>
+                                <button [disabled]="isExpenditureDeleting" class="btn btn-sm border w-50" (click)="confirmDelete('Expenditure', data.id)"><i class="bi bi-trash"></i></button>
                             </td>
                         </tr>
-                        <tr *ngIf="isFetchingExpenditureGridData" class="text-center">
+                        <tr *ngIf="isFetchingExpenditureGridData || isExpenditureSaving" class="text-center">
                             <td colspan="4">
-                                <div class="spinner-grow m-4" role="status">
+                                <div class="spinner-grow spinner-grow-sm m-2" role="status">
                                     <span class="visually-hidden">Loading...</span>
                                 </div>
                             </td>

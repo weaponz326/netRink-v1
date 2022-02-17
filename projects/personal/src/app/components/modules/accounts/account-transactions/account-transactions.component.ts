@@ -30,11 +30,12 @@ export class AccountTransactionsComponent implements OnInit {
   transactionsGridData: any[] = [];
 
   deleteId = "";
-  deleteIndex = 0;
-
   balance = 0;
 
   isFetchingGridData = false;
+
+  isTransactionSaving = false;
+  isTransactionDeleting = false;
 
   ngOnInit(): void {
   }
@@ -45,10 +46,10 @@ export class AccountTransactionsComponent implements OnInit {
 
   calculateBalance(){
     for (let transaction of this.transactionsGridData){
-      if (transaction.transaction_type == "Credit")
-        this.balance += transaction.amount;
+      if (transaction.data().transaction_type == "Credit")
+        this.balance += transaction.data().amount;
       else
-        this.balance -= transaction.amount;
+        this.balance -= transaction.data().amount;
     }
 
     this.balanceEvent.emit(this.balance);
@@ -77,40 +78,39 @@ export class AccountTransactionsComponent implements OnInit {
 
   createTransaction(data: any){
     console.log(data);
+    this.isTransactionSaving = true;
 
     this.accountsApi.createTransaction(data)
       .then(
         (res: any) => {
           console.log(res);
 
-          if(res.id){
-            this.transactionsGridData.push(res);
-            this.calculateBalance();
-            this.addTransaction.resetForm();
-          }
+          this.isTransactionSaving = false;
+          this.getAccountTransaction();
+          this.addTransaction.resetForm();
         },
         (err: any) => {
           console.log(err);
+          this.isTransactionSaving = false;
           this.connectionToast.openToast();
         }
       )
   }
 
-  updateTransaction(data: any){
-    console.log(data);
+  updateTransaction(transaction: any){
+    console.log(transaction);
+    this.isTransactionSaving = true;
 
-    this.accountsApi.updateTransaction(data.id, data.transaction)
+    this.accountsApi.updateTransaction(transaction.id, transaction.data)
       .then(
         (res: any) => {
           console.log(res);
-
-          if(res.id){
-            this.transactionsGridData[data.index] = res;
-            this.calculateBalance();
-          }
+          this.isTransactionSaving = false;
+          this.getAccountTransaction();
         },
         (err: any) => {
           console.log(err);
+          this.isTransactionSaving = false;
           this.connectionToast.openToast();
         }
       )
@@ -118,30 +118,30 @@ export class AccountTransactionsComponent implements OnInit {
 
   deleteTransaction(){
     console.log(this.deleteId);
+    this.isTransactionDeleting = true;
 
     this.accountsApi.deleteTransaction(this.deleteId)
       .then(
         (res: any) => {
           console.log(res);
-          this.transactionsGridData.splice(this.deleteIndex, 1);
-          this.calculateBalance();
+        this.isTransactionDeleting = false;
+        this.getAccountTransaction();
         },
         (err: any) => {
           console.log(err);
+          this.isTransactionDeleting = false;
           this.connectionToast.openToast();
         }
       )
   }
 
-  openEditTransaction(index: any){
-    console.log(index);
-    this.editTransaction.openModal(index, this.transactionsGridData[index]);
+  openEditTransaction(data: any){
+    console.log(data);
+    this.editTransaction.openModal(data);
   }
 
-  confirmDelete(index: any, id: any){
-    this.deleteIndex = index;
+  confirmDelete(id: any){
     this.deleteId = id;
-
     this.deleteModal.openModal();
   }
 

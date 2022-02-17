@@ -39,6 +39,7 @@ export class ViewBudgetComponent implements OnInit {
 
   ioe = 0;
 
+  isBudgetLoading: boolean = false;
   isBudgetSaving: boolean = false;
   isBudgetDeleting: boolean = false;
 
@@ -58,6 +59,8 @@ export class ViewBudgetComponent implements OnInit {
   }
 
   getBudget(){
+    this.isBudgetLoading = true;
+
     this.budgetApi.getBudget()
       .then(
         (res: any) => {
@@ -65,9 +68,12 @@ export class ViewBudgetComponent implements OnInit {
           this.budgetFormData = res;
           this.budgetForm.controls.budgetName.setValue(this.budgetFormData.data().budget_name);
           this.budgetForm.controls.budgetType.setValue(this.budgetFormData.data().budget_type);
+
+          this.isBudgetLoading = false;
         },
         (err: any) => {
           console.log(err);
+          this.isBudgetLoading = false;
           this.connectionToast.openToast();
         }
       )

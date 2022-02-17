@@ -24,17 +24,20 @@ export class NewTaskGroupComponent implements OnInit {
     private tasksApi: TasksApiService
   ) { }
 
-  @ViewChild('buttonElementReference', { read: ElementRef, static: false }) buttonElement!: ElementRef;
+  @ViewChild('newButtonElementReference', { read: ElementRef, static: false }) newButton!: ElementRef;
+  @ViewChild('dismissButtonElementReference', { read: ElementRef, static: false }) dismissButton!: ElementRef;
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
 
   taskGroupForm: FormGroup = new FormGroup({});
+
+  isTaskGroupSaving = false;
 
   ngOnInit(): void {
     this.initTaskForm();
   }
 
   openModal(){
-    this.buttonElement.nativeElement.click();
+    this.newButton.nativeElement.click();
   }
 
   initTaskForm(){
@@ -51,6 +54,7 @@ export class NewTaskGroupComponent implements OnInit {
     }
 
     console.log(data);
+    this.isTaskGroupSaving = true;
 
     this.tasksApi.createTaskGroup(data)
       .then(
@@ -60,10 +64,13 @@ export class NewTaskGroupComponent implements OnInit {
           if(res.id){
             sessionStorage.setItem('personal_task_group_id', res.id);
             this.router.navigateByUrl('/home/tasks/view-task-group/kanban-view');
+            this.dismissButton.nativeElement.click();
           }
+          this.isTaskGroupSaving = false;
         },
         (err: any) => {
           console.log(err);
+          this.isTaskGroupSaving = false;
           this.connectionToast.openToast();
         }
       )

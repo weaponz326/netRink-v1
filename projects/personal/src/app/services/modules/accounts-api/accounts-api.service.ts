@@ -82,7 +82,7 @@ export class AccountsApiService {
 
   getAccountTransaction(){
     return this.transactionRef.ref
-      .where("account.data.user", "==", String(sessionStorage.getItem('personal_account_id')))
+      .where("account.id", "==", String(sessionStorage.getItem('personal_account_id')))
       // .orderBy("created_at", "desc")
       .get();
   }

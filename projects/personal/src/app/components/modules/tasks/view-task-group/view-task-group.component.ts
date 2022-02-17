@@ -26,6 +26,7 @@ export class ViewTaskGroupComponent implements OnInit {
   taskGroupForm: FormGroup = new FormGroup({});
   taskGroupFormData: any;
 
+  isTaskGroupLoading: boolean = false;
   isTaskGroupSaving: boolean = false;
 
   ngOnInit(): void {
@@ -43,15 +44,19 @@ export class ViewTaskGroupComponent implements OnInit {
   }
 
   getTaskGroup(){
+    this.isTaskGroupLoading = true;
+
     this.tasksApi.getTaskGroup()
       .then(
         (res: any) => {
           console.log(res);
           this.taskGroupFormData = res
           this.taskGroupForm.controls.taskGroupName.setValue(this.taskGroupFormData.data().task_group);
+          this.isTaskGroupLoading = false;
         },
         (err: any) => {
           console.log(err);
+          this.isTaskGroupLoading = false;
           this.connectionToast.openToast();
         }
       )
