@@ -23,7 +23,7 @@ export class SelectDeliveryComponent implements OnInit {
 
   deliveriesGridData: any[] = [];
 
-  isFetchingGridData: boolean =  false;
+  isFetchingGridData: boolean =  true;
   isDataAvailable: boolean =  true;
 
   firstInResponse: any = [];
@@ -54,18 +54,23 @@ export class SelectDeliveryComponent implements OnInit {
       .then(
         (res: any) => {
           console.log(res);
-
           this.deliveriesGridData = res.docs;
-          this.isFetchingGridData = false;
-          if (!res.docs.length) this.isDataAvailable = false;
 
+          this.isFetchingGridData = false;
           this.prevStartAt = this.firstInResponse;
           this.nextStartAfter = res.docs[res.docs.length - 1];
           this.firstInResponse = res.docs[0];
           this.pageNumber = 1;
+          if (!res.docs.length) this.isDataAvailable = false;
 
-          this.disableNext = false;
-          this.disablePrev = true;
+          if (!res.docs.length || res.docs.length < 15){
+            this.disableNext = true;
+            this.disablePrev = true;
+          }
+          else{
+            this.disableNext = false;
+            this.disablePrev = true;
+          }
         },
         (err: any) => {
           console.log(err);
@@ -83,11 +88,9 @@ export class SelectDeliveryComponent implements OnInit {
       .then(
         (res: any) => {
           console.log(res);
-
           this.deliveriesGridData = res.docs;
-          this.isFetchingGridData = false;
-          if (!res.docs.length) this.isDataAvailable = false;
 
+          this.isFetchingGridData = false;
           this.prevStartAt = this.firstInResponse;
           this.nextStartAfter = res.docs[res.docs.length - 1];
           this.firstInResponse = res.docs[0];
@@ -114,15 +117,15 @@ export class SelectDeliveryComponent implements OnInit {
       .then(
         (res: any) => {
           console.log(res);
-
           this.deliveriesGridData = res.docs;
+
           this.isFetchingGridData = false;
           if (!res.docs.length) this.isDataAvailable = false;
 
           this.prevStartAt = this.firstInResponse;
           this.nextStartAfter = res.docs[res.docs.length - 1];
           this.firstInResponse = res.docs[0];
-          this.pageNumber++;
+          this.pageNumber--;
 
           if (this.pageNumber == 1){
             this.disableNext = false;

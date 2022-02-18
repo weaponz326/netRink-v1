@@ -73,7 +73,7 @@
                             <td colspan="5">
                                 <nav class="nav-light float-end" aria-label="Page navigation">
                                     <ul class="pagination pagination-sm mb-0 justify-content-end">
-                                        <li class="page-item">
+                                        <li class="page-item" [ngClass]="disablePrev ? 'disabled' : ''">
                                             <a class="page-link" href="#" aria-label="First" (click)="previousPage($event)">
                                                 <i class="bi bi-caret-left-fill"></i>
                                             </a>
@@ -83,7 +83,7 @@
                                                 {{pageNumber}}
                                             </a>
                                         </li>
-                                        <li class="page-item">
+                                        <li class="page-item" [ngClass]="disableNext ? 'disabled' : ''">
                                             <a class="page-link" href="#" aria-label="Last" (click)="nextPage($event)">
                                                 <i class="bi bi-caret-right-fill"></i>
                                             </a>

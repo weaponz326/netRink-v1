@@ -90,7 +90,7 @@ export class AllPaymentsComponent implements OnInit {
         (res: any) => {
           console.log(res);
           this.paymentsGridData = res.docs;
-          
+
           this.isFetchingGridData = false;
           this.prevStartAt = this.firstInResponse;
           this.nextStartAfter = res.docs[res.docs.length - 1];
@@ -123,11 +123,10 @@ export class AllPaymentsComponent implements OnInit {
           this.isFetchingGridData = false;
           if (!res.docs.length) this.isDataAvailable = false;
 
-          this.isFetchingGridData = false;
           this.prevStartAt = this.firstInResponse;
           this.nextStartAfter = res.docs[res.docs.length - 1];
           this.firstInResponse = res.docs[0];
-          this.pageNumber++;
+          this.pageNumber--;
 
           if (this.pageNumber == 1){
             this.disableNext = false;
