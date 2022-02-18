@@ -57,6 +57,7 @@ export class MainNavbarComponent implements OnInit {
       .subscribe(
         (res: any) => {
           console.log(res);
+
           this.isAuthLoading = false;
 
           if (res.uid){
@@ -66,8 +67,11 @@ export class MainNavbarComponent implements OnInit {
         },
         (err: any) => {
           console.log(err);
+
           this.isLoggedIn = false;
           this.isAuthLoading = false;
+
+          this.connectionToast.openToast();
         }
       )
   }
@@ -87,6 +91,7 @@ export class MainNavbarComponent implements OnInit {
         },
         (err: any) => {
           console.log(err);
+          this.connectionToast.openToast();
         }
       )
   }

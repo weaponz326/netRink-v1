@@ -34,20 +34,26 @@ export class ViewRinkComponent implements OnInit {
   recipientData: any;
   rinkData: any;
 
+  isRinkLoading = false;
+
   ngOnInit(): void {
     this.getRink();
   }
 
   getRink(){
+    this.isRinkLoading = true;
+
     this.portalApi.getRink()
       .then(
         (res: any) => {
           console.log(res);
           this.rinkData = res;
           sessionStorage.setItem('restaurant_rink_source_id', res.data().rink_source)
+          this.isRinkLoading = false;
         },
         (err: any) => {
           console.log(err);
+          this.isRinkLoading = false;
           this.connectionToast.openToast();
         }
       )

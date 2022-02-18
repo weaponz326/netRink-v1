@@ -8,7 +8,17 @@
         </div>
     </div>
 
-    <div class="row">
+    <div *ngIf="isRinksLoading" class="row text-center">
+        <div class="col-md-8">
+            <hr />
+
+            <div class="spinner-grow m-5" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="!isRinksLoading" class="row">
         <div class="col-md-8">
 
             <hr />

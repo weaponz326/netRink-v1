@@ -15,11 +15,13 @@ export class SearchDetailComponent implements OnInit {
   constructor() { }
 
   @ViewChild('buttonReference', { read: ButtonComponent, static: false }) button!: ButtonComponent;
-  
+
   @Input() searchDetail: any;
   @Output() sendInvitationEvent = new EventEmitter<string>();
 
   personalUrl = environment.personalUrl;
+
+  isSending = false;
 
   ngOnInit(): void {
   }

@@ -29,6 +29,8 @@ export class TimelineComponent implements OnInit {
   restaurantId = localStorage.getItem('restaurant_id');
   rinksData: any[] = [];
 
+  isRinksLoading = false;
+
   ngOnInit(): void {
   }
 
@@ -37,14 +39,18 @@ export class TimelineComponent implements OnInit {
   }
 
   getAllRink(){
+    this.isRinksLoading = true;
+
     this.portalApi.getAccountRink()
       .then(
         (res: any) => {
           console.log(res);
           this.rinksData = res.docs;
+          this.isRinksLoading = false;
         },
         (err: any) => {
           console.log(err);
+          this.isRinksLoading = false;
           this.connectionToast.openToast();
         }
       )

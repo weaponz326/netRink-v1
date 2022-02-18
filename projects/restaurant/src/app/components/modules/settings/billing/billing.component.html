@@ -38,17 +38,26 @@
                 </div>
             </div>
 
+            <div *ngIf="!isSubscriptionLoading" class="row mb-3 page-form">
+                <div class="col-md-9">
+                    <button class="btn btn-secondary btn-sm float-end page-form-btn" (click)="updateSubscription()">Save</button>
+                </div>
+            </div>
+            <div *ngIf="isSubscriptionLoading" class="row mb-3 page-form">
+                <div class="col-md-9">
+                    <button type="button" class="btn btn-sm float-end ms-1 btn-light page-form-btn">
+                        <div class="spinner-grow spinner-grow-sm" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+
             <hr />
 
             <!-- ================================
             TODO: payment form
             ================================ -->
-
-            <div class="row my-4 page-form">
-                <div class="col-md-9">
-                    <button class="btn btn-secondary btn-sm float-end page-form-btn" (click)="updateSubscription()">Save</button>
-                </div>
-            </div>
 
         </div>
 

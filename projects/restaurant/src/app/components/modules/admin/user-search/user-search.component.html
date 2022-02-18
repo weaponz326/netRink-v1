@@ -32,14 +32,14 @@
                 <app-search-results
                     (viewDetailEvent)="gotoSearchDetail($event)"
                     [searchQuery]="searchQuery"
-                    [searchResults]="searchResults"
+                    [searchResults]="searchResultsData"
                 ></app-search-results>
             </div>
 
             <div *ngIf="isSearchDetailReady">
                 <app-search-detail
                     (sendInvitationEvent)="createInvitation()"
-                    [searchDetail]="searchDetail"
+                    [searchDetail]="searchDetailData"
                 ></app-search-detail>
             </div>
 

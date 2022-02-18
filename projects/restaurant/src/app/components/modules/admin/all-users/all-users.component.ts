@@ -36,9 +36,6 @@ export class AllUsersComponent implements OnInit {
   }
 
   ngOnInit(): void {
-  }
-
-  ngAfterViewInit(): void {
     this.getAccountAccountUser();
   }
 

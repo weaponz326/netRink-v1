@@ -35,15 +35,17 @@ export class ViewUserComponent implements OnInit {
   userForm: FormGroup = new FormGroup({});
   userFormData: any;
 
+  isUserLoading: boolean = false;
   isUserSaving: boolean = false;
   isUserDeleting: boolean = false;
 
   ngOnInit(): void {
     this.initUserForm();
+    this.getAccountUser();
   }
 
   ngAfterViewInit(): void {
-    this.getAdminUser();
+    this.accessFormComponent.getUserAccess();
   }
 
   initUserForm(){
@@ -53,21 +55,23 @@ export class ViewUserComponent implements OnInit {
     })
   }
 
-  getAdminUser() {
+  getAccountUser() {
+    this.isUserLoading = true;
+
     this.adminApi.getAccountUser()
       .then(
         (res: any) => {
           console.log(res);
-
           this.userFormData = res;
 
           this.userForm.controls.personalName.setValue(this.userFormData.data().personal_name);
           this.userForm.controls.accessLevel.setValue(this.userFormData.data().access_level);
 
-          this.accessFormComponent.getUserAccess();
+          this.isUserLoading = false;
         },
         (err: any) => {
           console.log(err);
+          this.isUserLoading = false;
           this.connectionToast.openToast();
         }
       )

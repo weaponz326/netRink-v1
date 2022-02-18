@@ -89,10 +89,10 @@ export class NewRinkComponent implements OnInit {
 
   initRinkForm(){
     this.rinkForm = new FormGroup({
-      recipientName: new FormControl(''),
-      recipientLocation: new FormControl(''),
+      recipientName: new FormControl({valaue: "", disabled: true}),
+      recipientLocation: new FormControl({valaue: "", disabled: true}),
       rinkType: new FormControl('Customer'),
-      rinkSource: new FormControl(''),
+      rinkSource: new FormControl({valaue: "", disabled: true}),
       comment: new FormControl('')
     })
   }

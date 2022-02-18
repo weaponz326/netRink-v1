@@ -23,6 +23,6 @@
 
 <div class="row">
     <div class="col-md-12 text-center">
-        <button class="btn btn-secondary page-add-btn" (click)="sendInvitation()">Send Invitation</button>
+        <button [disabled]="isSending" class="btn btn-secondary page-add-btn" (click)="sendInvitation()">Send Invitation</button>
     </div>
 </div>

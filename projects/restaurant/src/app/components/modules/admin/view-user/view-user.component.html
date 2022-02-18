@@ -46,11 +46,20 @@
         </div>
     </div>
 
-    <div class="row page-form">
+    <div *ngIf="!isUserLoading" class="row page-form">
         <div class="col-md-6">
             <button class="btn btn-secondary btn-sm float-end ms-1 page-form-btn" routerLink="/home/admin/all-users">Cancel</button>
             <button [disabled]="isUserDeleting" class="btn btn-secondary btn-sm float-end ms-1 page-form-btn" (click)="confirmDelete()">Delete</button>
             <button [disabled]="isUserSaving" class="btn btn-secondary btn-sm float-end ms-1 page-form-btn" (click)="updateAdminUser()">Save</button>
+        </div>
+    </div>
+    <div *ngIf="isUserLoading" class="row page-form">
+        <div class="col-md-6">
+            <button type="button" class="btn btn-sm float-end ms-1 btn-light page-form-btn">
+                <div class="spinner-grow spinner-grow-sm" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </button>
         </div>
     </div>
 

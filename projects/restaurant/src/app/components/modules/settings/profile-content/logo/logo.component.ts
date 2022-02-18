@@ -16,6 +16,7 @@ export class LogoComponent implements OnInit {
 
   @Output() logoEvent = new EventEmitter<any>();
 
+  isExtendedProfileLoading = false;
   isLogoSaving = false;
 
   ngOnInit(): void {

@@ -8,7 +8,6 @@ import { AllUsersComponent } from '../../../components/modules/admin/all-users/a
 import { ViewUserComponent } from '../../../components/modules/admin/view-user/view-user.component';
 import { InvitationsComponent } from '../../../components/modules/admin/invitations/invitations.component';
 import { UserSearchComponent } from '../../../components/modules/admin/user-search/user-search.component';
-import { ViewInvitationComponent } from '../../../components/modules/admin/view-invitation/view-invitation.component';
 
 
 const routes: Routes = [
@@ -22,7 +21,6 @@ const routes: Routes = [
       { path: 'all-users', component: AllUsersComponent },
       { path: 'view-user', component: ViewUserComponent },
       { path: 'invitations', component: InvitationsComponent },
-      { path: 'view-invitation', component: ViewInvitationComponent },
       { path: 'search', component: UserSearchComponent },
     ]
   }

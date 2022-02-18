@@ -22,6 +22,8 @@ export class BillingComponent implements OnInit {
     { text: "Billing", url: "/home/settings/billing" },
   ];
 
+  isSubscriptionLoading = false;
+
   subscriptionData: any;
 
   subscriptionTypeValue = "";
@@ -47,21 +49,24 @@ export class BillingComponent implements OnInit {
   }
 
   getSubscription(){
+    this.isSubscriptionLoading = true;
+
     this.settingsApi.getSubscription()
       .then(
         (res: any) => {
           console.log(res);
-
           this.subscriptionData = res;
 
           this.subscriptionTypeValue = this.subscriptionData.data().subscription_type;
           this.billingFrequencyValue = this.subscriptionData.data().billing_frequency;
           this.numberUsersValue = this.subscriptionData.data().number_users;
 
+          this.isSubscriptionLoading = false;
           this.setSubscription(this.subscriptionTypeValue);
         },
         (err: any) => {
           console.log(err);
+          this.isSubscriptionLoading = false;
           this.connectionToast.openToast();
         }
       )
