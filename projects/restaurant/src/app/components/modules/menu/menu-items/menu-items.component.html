@@ -13,14 +13,14 @@
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let data of menuItemsGridData; index as i" (dblclick)="openEditMenuItem(i)" class="table-pointer">
-            <td>{{data?.item_code}}</td>
-            <td>{{data?.item_name}}</td>
-            <td>{{data?.price}}</td>
+        <tr *ngFor="let data of menuItemsGridData; index as i" (dblclick)="openEditMenuItem(data)" class="table-pointer">
+            <td>{{data?.data().item_code}}</td>
+            <td>{{data?.data().item_name}}</td>
+            <td>{{data?.data().price}}</td>
         </tr>
         <tr *ngIf="isFetchingGridData" class="text-center">
             <td colspan="5">
-                <div class="spinner-grow m-4" role="status">
+                <div class="spinner-grow m-2" role="status">
                     <span class="visually-hidden">Loading...</span>
                 </div>
             </td>
@@ -30,7 +30,7 @@
 
 <!-- add and edit menu-item modal components -->
 
-<app-add-menu-item #addMenuItemComponentReference (saveMenuItemEvent)="createMenuItem($event)" [menuGroup]="menuGroup"></app-add-menu-item>
+<app-add-menu-item #addMenuItemComponentReference (saveMenuItemEvent)="createMenuItem($event)"></app-add-menu-item>
 
 <app-edit-menu-item #editMenuItemComponentReference (saveMenuItemEvent)="updateMenuItem($event)" (deleteMenuItem)="confirmDelete($event)"></app-edit-menu-item>
 

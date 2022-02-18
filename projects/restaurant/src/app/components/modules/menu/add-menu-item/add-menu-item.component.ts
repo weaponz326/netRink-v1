@@ -17,17 +17,21 @@ export class AddMenuItemComponent implements OnInit {
   constructor() { }
 
   @Output() saveMenuItemEvent = new EventEmitter<any>();
-  @Input() menuGroup!: MenuGroup;
 
-  @ViewChild('buttonElementReference', { read: ElementRef, static: false }) buttonElement!: ElementRef;
+  @ViewChild('addButtonElementReference', { read: ElementRef, static: false }) addButton!: ElementRef;
+  @ViewChild('dismissButtonElementReference', { read: ElementRef, static: false }) dismissButton!: ElementRef;
 
   @ViewChild('menuItemFormComponentReference', { read: MenuItemFormComponent, static: false }) menuItemForm!: MenuItemFormComponent;
+
+  menuGroupData!: MenuGroup;
+
+  isMenuItemSaving = false;
 
   ngOnInit(): void {
   }
 
   openModal(){
-    this.buttonElement.nativeElement.click();
+    this.addButton.nativeElement.click();
   }
 
   saveMenuItem(){
@@ -38,7 +42,7 @@ export class AddMenuItemComponent implements OnInit {
       price: this.menuItemForm.menuItemForm.controls.price.value,
       menu_group: {
         id: sessionStorage.getItem('restaurant_menu_group_id') as string,
-        data: this.menuGroup,
+        data: this.menuGroupData,
       }
     }
 

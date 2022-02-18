@@ -42,14 +42,12 @@ export class ViewReservationComponent implements OnInit {
   selectedCustomerId: any;
   selectedTableId: any;
 
+  isReservationLoading: boolean = false;
   isReservationSaving: boolean = false;
   isReservationDeleting: boolean = false;
 
   ngOnInit(): void {
     this.initReservationForm();
-  }
-
-  ngAfterViewInit(): void {
     this.getReservation();
   }
 
@@ -66,11 +64,14 @@ export class ViewReservationComponent implements OnInit {
   }
 
   getReservation(){
+    this.isReservationLoading = true;
+
     this.reservationsApi.getReservation()
       .then(
         (res: any) => {
           console.log(res);
           this.reservationFormData = res;
+          this.isReservationLoading = false;
 
           this.reservationForm.controls.reservationCode.setValue(this.reservationFormData.data().reservation_code);
           this.reservationForm.controls.reservationDate.setValue(this.reservationFormData.data().reservation_date);
@@ -84,6 +85,7 @@ export class ViewReservationComponent implements OnInit {
         },
         (err: any) => {
           console.log(err);
+          this.isReservationLoading = false;
           this.connectionToast.openToast();
         }
       )

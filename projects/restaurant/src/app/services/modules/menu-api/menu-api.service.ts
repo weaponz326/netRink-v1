@@ -68,20 +68,20 @@ export class MenuApiService {
 
   // menu item
 
-  createMenuItem(menuItem: any){
-    return this.menuItemRef.add(menuItem);
+  createMenuItem(menuItemData: any){
+    return this.menuItemRef.add(menuItemData);
   }
 
-  getMenuItem(){
-    return this.menuItemRef.doc(String(sessionStorage.getItem('restaurant_menu_group_id'))).ref.get();
+  getMenuItem(menuItemId: any){
+    return this.menuItemRef.doc(menuItemId).ref.get();
   }
 
-  updateMenuItem(menuItem: any){
-    return this.menuItemRef.doc(String(sessionStorage.getItem('restaurant_menu_group_id'))).update(menuItem);
+  updateMenuItem(menuItemId: any, menuItemData: any){
+    return this.menuItemRef.doc(menuItemId).update(menuItemData);
   }
 
-  deleteMenuItem(){
-    return this.menuItemRef.doc(String(sessionStorage.getItem('restaurant_menu_group_id'))).delete();
+  deleteMenuItem(menuItemId: any){
+    return this.menuItemRef.doc(menuItemId).delete();
   }
 
   getMenuGroupMenuItem(){

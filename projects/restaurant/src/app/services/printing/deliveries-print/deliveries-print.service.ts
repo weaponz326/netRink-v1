@@ -48,4 +48,31 @@ export class DeliveriesPrintService {
     this.pdfPrint.openPdf(content);
   }
 
+  // view delivery
+
+  async printViewDelivery(){
+    const deliveryFormDate = await this.deliveriesApi.getDelivery();
+
+    let formData: any = deliveryFormDate.data();
+
+    let content = [
+      {
+        columns: [
+          [
+            { text: 'Delivery ID: ' + formData.delivery_code },
+            { text: 'Delivery Date: ' + formData.delivery_date },
+            { text: 'Order ID: ' + formData.order.order_code },
+            { text: 'Order Date: ' + formData.order.order_date },
+            { text: 'Customer Name: ' + formData.order.customer.customer_name },
+            { text: 'Delivery Location: ' + formData.delivery_location },
+            { text: 'Delivery Status: ' + formData.delivery_status },
+          ],
+          []
+        ]
+      },
+    ]
+
+    this.pdfPrint.openPdf(content);
+  }
+
 }

@@ -8,7 +8,7 @@
             <table class="table table-bordered table-sm w-100 page-table">
                 <thead>
                     <tr class="bg-light">
-                        <th width="10%">
+                        <th width="15%">
                             Delivery ID
                             <i *ngIf="sortParams.field != 'delivery_code'" class="bi bi-filter float-end list-pointer" (click)="sortTable('delivery_code', 'desc')"></i>
                             <i *ngIf="sortParams.field == 'delivery_code' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('delivery_code', 'asc')"></i>
@@ -20,19 +20,19 @@
                             <i *ngIf="sortParams.field == 'delivery_date' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('delivery_date', 'asc')"></i>
                             <i *ngIf="sortParams.field == 'delivery_date' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('delivery_date', 'desc')"></i>
                         </th>
-                        <th width="10%">
+                        <th width="15%">
                             Order ID
                             <i *ngIf="sortParams.field != 'order_code'" class="bi bi-filter float-end list-pointer" (click)="sortTable('order_code', 'desc')"></i>
                             <i *ngIf="sortParams.field == 'order_code' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('order_code', 'asc')"></i>
                             <i *ngIf="sortParams.field == 'order_code' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('order_code', 'desc')"></i>
                         </th>
-                        <th width="20%">
-                            Customer Name
-                            <i *ngIf="sortParams.field != 'customer_name'" class="bi bi-filter float-end list-pointer" (click)="sortTable('customer_name', 'desc')"></i>
-                            <i *ngIf="sortParams.field == 'customer_name' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('customer_name', 'asc')"></i>
-                            <i *ngIf="sortParams.field == 'customer_name' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('customer_name', 'desc')"></i>
+                        <th width="15%">
+                            Order Date
+                            <i *ngIf="sortParams.field != 'order_date'" class="bi bi-filter float-end list-pointer" (click)="sortTable('order_date', 'desc')"></i>
+                            <i *ngIf="sortParams.field == 'order_date' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('order_date', 'asc')"></i>
+                            <i *ngIf="sortParams.field == 'order_date' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('order_date', 'desc')"></i>
                         </th>
-                        <th width="23%">
+                        <th width="25%">
                             Delivery Location
                             <i *ngIf="sortParams.field != 'delivery_location'" class="bi bi-filter float-end list-pointer" (click)="sortTable('delivery_location', 'desc')"></i>
                             <i *ngIf="sortParams.field == 'delivery_location' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('delivery_location', 'asc')"></i>
@@ -44,42 +44,36 @@
                             <i *ngIf="sortParams.field == 'delivery_status' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('delivery_status', 'asc')"></i>
                             <i *ngIf="sortParams.field == 'delivery_status' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('delivery_status', 'desc')"></i>
                         </th>
-                        <th width="7%">
-                        </th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let data of deliveriesGridData; index as i">
+                    <tr *ngFor="let data of deliveriesGridData" (dblclick)="viewDelivery(data.id)" class="table-pointer">
                         <td>{{data?.data().delivery_code}}</td>
                         <td>{{data?.data().delivery_date | date}}</td>
                         <td>{{data?.data().order.order_code}}</td>
-                        <td>{{data?.data().order.customer.customer_name}}</td>
+                        <td>{{data?.data().order.order_date}}</td>
                         <td>{{data?.data().delivery_location}}</td>
                         <td>{{data?.data().delivery_status}}</td>
-                        <td class="p-0">
-                            <button class="btn btn-sm border w-50" (click)="openEditDelivery(i)"><i class="bi bi-pen"></i></button>
-                            <button class="btn btn-sm border w-50" (click)="confirmDelete(i, data.id)"><i class="bi bi-trash"></i></button>
-                        </td>
                     </tr>
                     <tr *ngIf="isFetchingGridData" class="text-center">
-                        <td colspan="7">
+                        <td colspan="6">
                             <div class="spinner-grow m-4" role="status">
                                 <span class="visually-hidden">Loading...</span>
                             </div>
                         </td>
                     </tr>
                     <tr *ngIf="!isDataAvailable && !isFetchingGridData" class="text-center">
-                        <td colspan="7">
+                        <td colspan="6">
                             <p class="m-4">No data available</p>
                         </td>
                     </tr>
                 </tbody>
                 <tfoot>
                     <tr class="bg-light">
-                        <td colspan="7">
+                        <td colspan="6">
                             <nav class="nav-light float-end" aria-label="Page navigation">
                                 <ul class="pagination pagination-sm mb-0 justify-content-end">
-                                    <li class="page-item">
+                                    <li class="page-item" [ngClass]="disablePrev ? 'disabled' : ''">
                                         <a class="page-link" href="#" aria-label="First" (click)="previousPage($event)">
                                             <i class="bi bi-caret-left-fill"></i>
                                         </a>
@@ -89,7 +83,7 @@
                                             {{pageNumber}}
                                         </a>
                                     </li>
-                                    <li class="page-item">
+                                    <li class="page-item" [ngClass]="disableNext ? 'disabled' : ''">
                                         <a class="page-link" href="#" aria-label="Last" (click)="nextPage($event)">
                                             <i class="bi bi-caret-right-fill"></i>
                                         </a>
@@ -106,14 +100,6 @@
 
 </div>
 
-<!-- new and edit delivery modal components -->
-
-<app-edit-delivery #editDeliveryComponentReference (saveDeliveryEvent)="updateDelivery($event)"></app-edit-delivery>
-
 <!-- connection error toast component -->
 
 <app-connection-toast #connectionToastComponentReference></app-connection-toast>
-
-<!-- delete confirmation modal component -->
-
-<app-delete-modal #deleteModalComponentReference (confirmEvent)="deleteDelivery()"></app-delete-modal>

@@ -24,7 +24,8 @@ export class NewReservationComponent implements OnInit {
     private reservationsApi: ReservationsApiService
   ) { }
 
-  @ViewChild('buttonElementReference', { read: ElementRef, static: false }) buttonElement!: ElementRef;
+  @ViewChild('addButtonElementReference', { read: ElementRef, static: false }) addButton!: ElementRef;
+  @ViewChild('dismissButtonElementReference', { read: ElementRef, static: false }) dismissButton!: ElementRef;
 
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
   @ViewChild('selectCustomerComponentReference', { read: SelectCustomerComponent, static: false }) selectCustomer!: SelectCustomerComponent;
@@ -32,6 +33,8 @@ export class NewReservationComponent implements OnInit {
   reservationForm: FormGroup = new FormGroup({});
 
   selectedCustomerId: any;
+
+  isReservationSaving = false;
 
   ngOnInit(): void {
     this.initItemForm();
@@ -48,7 +51,8 @@ export class NewReservationComponent implements OnInit {
   }
 
   openModal(){
-    this.buttonElement.nativeElement.click();
+    this.addButton.nativeElement.click();
+    this.reservationForm.controls.reservationDate.setValue(new Date().toISOString().slice(0, 16))
   }
 
   createReservation(){
@@ -67,15 +71,20 @@ export class NewReservationComponent implements OnInit {
       }
     }
 
+    this.isReservationSaving = true;
+
     this.reservationsApi.createReservation(data)
       .then(
         (res: any) => {
           console.log(res);
           sessionStorage.setItem('restaurant_reservation_id', res.id);
-          this.router.navigateByUrl('/home/reservations/view-reservation')
+          this.router.navigateByUrl('/home/reservations/view-reservation');
+          this.dismissButton.nativeElement.click();
+          this.isReservationSaving = true;
         },
         (err: any) => {
           console.log(err);
+          this.isReservationSaving = true;
           this.connectionToast.openToast();
         }
       )

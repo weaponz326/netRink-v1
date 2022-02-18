@@ -28,9 +28,9 @@ export class PaymentFormComponent implements OnInit {
     this.paymentForm = new FormGroup({
       paymentCode: new FormControl(''),
       paymentDate: new FormControl(''),
-      orderCode: new FormControl(''),
-      customerName: new FormControl(''),
-      totalAmount: new FormControl(0),
+      orderCode: new FormControl({value: '', disabled: true}),
+      customerName: new FormControl({value: '', disabled: true}),
+      totalAmount: new FormControl({value: 0, disabled: true}),
       amountPaid: new FormControl(''),
       balance: new FormControl(''),
     })

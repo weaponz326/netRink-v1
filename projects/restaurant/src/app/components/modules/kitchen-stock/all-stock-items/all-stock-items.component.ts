@@ -33,7 +33,6 @@ export class AllStockItemsComponent implements OnInit {
   itemsGridData: any[] = [];
 
   deleteId = "";
-  deleteIndex = 0;
 
   isFetchingGridData: boolean =  false;
   isDataAvailable: boolean =  true;
@@ -43,7 +42,7 @@ export class AllStockItemsComponent implements OnInit {
   nextStartAfter: any = [];
   prevStartAt: any = [];
   pageNumber = 0;
-  disableNext: boolean = false;
+  disableNext: boolean = true;
   disablePrev: boolean = true;
 
   sortParams = {
@@ -52,9 +51,6 @@ export class AllStockItemsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-  }
-
-  ngAfterViewInit(): void {
     this.getAccountStockItem();
   }
 
@@ -65,21 +61,23 @@ export class AllStockItemsComponent implements OnInit {
       .then(
         (res: any) => {
           console.log(res);
-
-          for (let item of res.docs) {
-            this.itemsGridData.push(item.data());
-          }
+          this.itemsGridData = res.docs;
 
           this.isFetchingGridData = false;
-          if (!res.docs.length) this.isDataAvailable = false;
-
           this.prevStartAt = this.firstInResponse;
           this.nextStartAfter = res.docs[res.docs.length - 1];
           this.firstInResponse = res.docs[0];
           this.pageNumber = 1;
+          if (!res.docs.length) this.isDataAvailable = false;
 
-          this.disableNext = false;
-          this.disablePrev = true;
+          if (!res.docs.length || res.docs.length < 20){
+            this.disableNext = true;
+            this.disablePrev = true;
+          }
+          else{
+            this.disableNext = false;
+            this.disablePrev = true;
+          }
         },
         (err: any) => {
           console.log(err);
@@ -97,14 +95,9 @@ export class AllStockItemsComponent implements OnInit {
       .then(
         (res: any) => {
           console.log(res);
-
-          for (let item of res.docs) {
-            this.itemsGridData.push(item.data());
-          }
+          this.itemsGridData = res.docs;
 
           this.isFetchingGridData = false;
-          if (!res.docs.length) this.isDataAvailable = false;
-
           this.prevStartAt = this.firstInResponse;
           this.nextStartAfter = res.docs[res.docs.length - 1];
           this.firstInResponse = res.docs[0];
@@ -131,14 +124,12 @@ export class AllStockItemsComponent implements OnInit {
       .then(
         (res: any) => {
           console.log(res);
-
-          for (let item of res.docs) {
-            this.itemsGridData.push(item.data());
-          }
+          this.itemsGridData = res.docs;
 
           this.isFetchingGridData = false;
           if (!res.docs.length) this.isDataAvailable = false;
 
+          this.isFetchingGridData = false;
           this.prevStartAt = this.firstInResponse;
           this.nextStartAfter = res.docs[res.docs.length - 1];
           this.firstInResponse = res.docs[0];
@@ -166,6 +157,7 @@ export class AllStockItemsComponent implements OnInit {
 
   createStockItem(data: any){
     console.log(data);
+    this.addStockItem.isItemSaving = true;
 
     this.kitchenStockApi.createStockItem(data)
       .then(
@@ -173,59 +165,66 @@ export class AllStockItemsComponent implements OnInit {
           console.log(res);
 
           if(res.id){
-            this.itemsGridData.push(data);
+            this.getAccountStockItem();
+            this.addStockItem.isItemSaving = false;
+            this.addStockItem.addButton.nativeElement.click();
             this.addStockItem.resetForm();
           }
         },
         (err: any) => {
           console.log(err);
+          this.addStockItem.isItemSaving = false;
           this.connectionToast.openToast();
         }
       )
   }
 
-  updateStockItem(data: any){
-    console.log(data);
+  updateStockItem(item: any){
+    console.log(item);
+    this.editStockItem.isItemSaving = true;
 
-    this.kitchenStockApi.updateStockItem(data.id, data.stock_item)
+    this.kitchenStockApi.updateStockItem(item.id, item.data)
       .then(
         (res: any) => {
           console.log(res);
-
-          if(res.id){
-            this.itemsGridData[data.index] = data.stock_item;
-          }
+          this.editStockItem.isItemSaving = false;
+          this.editStockItem.editButton.nativeElement.click();
+          this.getAccountStockItem();
         },
         (err: any) => {
           console.log(err);
+          this.addStockItem.isItemSaving = false;
           this.connectionToast.openToast();
         }
       )
   }
 
   deleteStockItem(){
+    this.editStockItem.isItemDeleting = true;
+
     this.kitchenStockApi.deleteStockItem(this.deleteId)
       .then(
         (res: any) => {
           console.log(res);
-          this.itemsGridData.splice(this.deleteIndex, 1);
+          this.editStockItem.isItemDeleting = false;
+          this.editStockItem.editButton.nativeElement.click();
+          this.getAccountStockItem();
         },
         (err: any) => {
           console.log(err);
+          this.editStockItem.isItemDeleting = false;
           this.connectionToast.openToast();
         }
       )
   }
 
-  openEditItem(index: any){
-    console.log(index);
-    this.editStockItem.openModal(index, this.itemsGridData[index]);
+  openEditItem(data: any){
+    console.log(data);
+    this.editStockItem.openModal(data);
   }
 
-  confirmDelete(e: any){
-    this.deleteIndex = e.index;
-    this.deleteId = e.id;
-
+  confirmDelete(id: any){
+    this.deleteId = id;
     this.deleteModal.openModal();
   }
 

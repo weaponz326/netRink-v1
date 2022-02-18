@@ -11,7 +11,6 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { SettingsComponent } from './settings/settings.component';
 import { AllMenuItemsComponent } from './all-menu-items/all-menu-items.component';
 import { AddMenuItemComponent } from './add-menu-item/add-menu-item.component';
-import { ViewMenuItemComponent } from './view-menu-item/view-menu-item.component';
 import { MenuItemFormComponent } from './menu-item-form/menu-item-form.component';
 import { AllMenuGroupsComponent } from './all-menu-groups/all-menu-groups.component';
 import { NewMenuGroupComponent } from './new-menu-group/new-menu-group.component';
@@ -26,7 +25,6 @@ import { EditMenuItemComponent } from './edit-menu-item/edit-menu-item.component
     SettingsComponent,
     AllMenuItemsComponent,
     AddMenuItemComponent,
-    ViewMenuItemComponent,
     MenuItemFormComponent,
     AllMenuGroupsComponent,
     NewMenuGroupComponent,

@@ -42,7 +42,7 @@
                 <div class="row mb-1">
                     <div class="col-md-4"><label class="float-end mt-1">Order Type :</label></div>
                     <div class="col-md-8">
-                        <select formControlName="orderCode" class="form-control form-control-sm w-100">
+                        <select formControlName="orderType" class="form-control form-control-sm w-100">
                             <option>Sitting</option>
                             <option>Delivery</option>
                             <option>Take Away</option>
@@ -76,11 +76,20 @@
 
         <hr />
 
-        <div class="row">
+        <div *ngIf="!isOrderLoading" class="row">
             <div class="col-md-12">
                 <button type="button" class="btn btn-secondary btn-sm float-end ms-1 page-form-btn" routerLink="/home/orders/all-orders">Cancel</button>
-                <button type="button" class="btn btn-secondary btn-sm float-end ms-1 page-form-btn" (click)="confirmDelete()">Delete</button>
+                <button [disabled]="isOrderDeleting" type="button" class="btn btn-secondary btn-sm float-end ms-1 page-form-btn" (click)="confirmDelete()">Delete</button>
                 <button [disabled]="isOrderSaving" type="submit" class="btn btn-secondary btn-sm float-end ms-1 page-form-btn">Save</button>
+            </div>
+        </div>
+        <div *ngIf="isOrderLoading" class="row">
+            <div class="col-md-12">
+                <button type="button" class="btn btn-sm float-end ms-1 btn-light page-form-btn">
+                    <div class="spinner-grow spinner-grow-sm" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </button>
             </div>
         </div>
 

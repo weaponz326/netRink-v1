@@ -42,17 +42,15 @@ export class ViewOrderComponent implements OnInit {
   orderForm: FormGroup = new FormGroup({});
   orderFormData: any;
 
-  selectedCustomerId: any;
-  selectedTableId: any;
+  selectedCustomerId = "";
+  selectedTableId = "";
 
+  isOrderLoading: boolean = false;
   isOrderSaving: boolean = false;
   isOrderDeleting: boolean = false;
 
   ngOnInit(): void {
     this.initOrderForm();
-  }
-
-  ngAfterViewInit(): void {
     this.getOrder();
   }
 
@@ -62,17 +60,21 @@ export class ViewOrderComponent implements OnInit {
       orderDate: new FormControl(''),
       orderType: new FormControl(''),
       orderStatus: new FormControl(''),
-      customerName: new FormControl(),
-      tableNumber: new FormControl(''),
+      customerName: new FormControl(''),
+      tableNumber: new FormControl({value: '', disabled: true}),
     })
   }
 
   getOrder(){
+    this.isOrderLoading = true;
+
     this.ordersApi.getOrder()
       .then(
         (res: any) => {
           console.log(res);
+
           this.orderFormData = res;
+          this.isOrderLoading = false;
 
           this.orderForm.controls.orderCode.setValue(this.orderFormData.data().order_code);
           this.orderForm.controls.orderDate.setValue(this.orderFormData.data().order_date);
@@ -86,6 +88,7 @@ export class ViewOrderComponent implements OnInit {
         },
         (err: any) => {
           console.log(err);
+          this.isOrderLoading = false;
           this.connectionToast.openToast();
         }
       )

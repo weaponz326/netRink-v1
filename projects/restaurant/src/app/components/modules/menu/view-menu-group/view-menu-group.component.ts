@@ -37,14 +37,12 @@ export class ViewMenuGroupComponent implements OnInit {
   menuGroupForm: FormGroup = new FormGroup({});
   menuGroupFormData: any;
 
+  isMenuGroupLoading: boolean = false;
   isMenuGroupSaving: boolean = false;
   isMenuGroupDeleting: boolean = false;
 
   ngOnInit(): void {
     this.initBudgetForm();
-  }
-
-  ngAfterViewInit(): void {
     this.getMenuGroup();
   }
 
@@ -56,16 +54,24 @@ export class ViewMenuGroupComponent implements OnInit {
   }
 
   getMenuGroup(){
+    this.isMenuGroupLoading = true;
+
     this.menuApi.getMenuGroup()
       .then(
         (res: any) => {
           console.log(res);
+
           this.menuGroupFormData = res;
+          this.menuItems.addMenuItem.menuGroupData = res.data();
+
           this.menuGroupForm.controls.menuGroup.setValue(this.menuGroupFormData.data().menu_group);
           this.menuGroupForm.controls.category.setValue(this.menuGroupFormData.data().category);
+
+          this.isMenuGroupLoading = false;
         },
         (err: any) => {
           console.log(err);
+          this.isMenuGroupLoading = false;
           this.connectionToast.openToast();
         }
       )

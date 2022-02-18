@@ -8,6 +8,7 @@ export class Delivery {
   order!: {
     id: string;
     order_code: string;
+    order_date: string;
     customer: {
       id: string;
       customer_name: string;

@@ -35,22 +35,24 @@ export class ViewStaffComponent implements OnInit {
 
   staffFormData: any;
 
+  isStaffLoading = false;
   isStaffSaving = false;
   isStaffDeleting = false;
 
   ngOnInit(): void {
-  }
-
-  ngAfterViewInit(): void {
     this.getStaff();
   }
 
   getStaff(){
+    this.isStaffLoading = true;
+
     this.staffApi.getStaff()
       .then(
         (res: any) => {
           console.log(res);
+
           this.staffFormData = res;
+          this.isStaffLoading = false;
 
           this.staffForm.staffForm.controls.firstName.setValue(this.staffFormData.data().first_name);
           this.staffForm.staffForm.controls.lastName.setValue(this.staffFormData.data().last_name);
@@ -71,6 +73,7 @@ export class ViewStaffComponent implements OnInit {
         },
         (err: any) => {
           console.log(err);
+          this.isStaffLoading = false;
           this.connectionToast.openToast();
         }
       )
@@ -128,12 +131,13 @@ export class ViewStaffComponent implements OnInit {
       .then(
         (res: any) => {
           console.log(res);
-
+          this.isStaffDeleting = false;
           this.router.navigateByUrl('/home/staff/all-staff');
         },
         (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
+          this.isStaffDeleting = false;
         }
       )
   }

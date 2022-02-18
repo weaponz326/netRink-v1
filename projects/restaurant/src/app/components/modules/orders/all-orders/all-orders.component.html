@@ -26,13 +26,13 @@
                             <i *ngIf="sortParams.field == 'order_date' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('order_date', 'asc')"></i>
                             <i *ngIf="sortParams.field == 'order_date' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('order_date', 'desc')"></i>
                         </th>
-                        <th width="35%">
+                        <th width="30%">
                             Customer Name
                             <i *ngIf="sortParams.field != 'customer_name'" class="bi bi-filter float-end list-pointer" (click)="sortTable('customer_name', 'desc')"></i>
                             <i *ngIf="sortParams.field == 'customer_name' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('customer_name', 'asc')"></i>
                             <i *ngIf="sortParams.field == 'customer_name' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('customer_name', 'desc')"></i>
                         </th>
-                        <th width="10%">
+                        <th width="15%">
                             Table
                             <i *ngIf="sortParams.field != 'table_number'" class="bi bi-filter float-end list-pointer" (click)="sortTable('table_number', 'desc')"></i>
                             <i *ngIf="sortParams.field == 'table_number' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('table_number', 'asc')"></i>
@@ -72,7 +72,7 @@
                         <td colspan="5">
                             <nav class="nav-light float-end" aria-label="Page navigation">
                                 <ul class="pagination pagination-sm mb-0 justify-content-end">
-                                    <li class="page-item">
+                                    <li class="page-item" [ngClass]="disablePrev ? 'disabled' : ''">
                                         <a class="page-link" href="#" aria-label="First" (click)="previousPage($event)">
                                             <i class="bi bi-caret-left-fill"></i>
                                         </a>
@@ -82,7 +82,7 @@
                                             {{pageNumber}}
                                         </a>
                                     </li>
-                                    <li class="page-item">
+                                    <li class="page-item" [ngClass]="disableNext ? 'disabled' : ''">
                                         <a class="page-link" href="#" aria-label="Last" (click)="nextPage($event)">
                                             <i class="bi bi-caret-right-fill"></i>
                                         </a>

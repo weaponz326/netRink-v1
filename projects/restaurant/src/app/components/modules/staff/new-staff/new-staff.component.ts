@@ -74,7 +74,7 @@ export class NewStaffComponent implements OnInit {
           console.log(res);
           this.isStaffSaving = false;
 
-          sessionStorage.setItem('staff_id', res.id);
+          sessionStorage.setItem('restaurant_staff_id', res.id);
           this.router.navigateByUrl('/home/staff/view-staff');
         },
         (err: any) => {

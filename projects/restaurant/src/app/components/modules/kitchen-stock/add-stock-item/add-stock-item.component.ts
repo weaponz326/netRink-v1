@@ -23,9 +23,12 @@ export class AddStockItemComponent implements OnInit {
 
   @Output() saveItemEvent = new EventEmitter<any>();
 
-  @ViewChild('buttonElementReference', { read: ElementRef, static: false }) buttonElement!: ElementRef;
+  @ViewChild('addButtonElementReference', { read: ElementRef, static: false }) addButton!: ElementRef;
+  @ViewChild('dismissButtonElementReference', { read: ElementRef, static: false }) dismissButton!: ElementRef;
 
   @ViewChild('stockItemFormComponentReference', { read: StockItemFormComponent, static: false }) stockItemForm!: StockItemFormComponent;
+
+  isItemSaving = false;
 
   navHeading: any[] = [
     { text: "New Item", url: "/home/kitchen-stock/add-stock-item" },
@@ -35,7 +38,7 @@ export class AddStockItemComponent implements OnInit {
   }
 
   openModal(){
-    this.buttonElement.nativeElement.click();
+    this.addButton.nativeElement.click();
   }
 
   saveItem(){

@@ -35,22 +35,23 @@ export class ViewCustomerComponent implements OnInit {
 
   customerData: any;
 
+  isCustomerLoading = false;
   isCustomerSaving = false;
   isCustomerDeleting = false;
 
   ngOnInit(): void {
-  }
-
-  ngAfterViewInit(): void {
     this.getCustomer();
   }
 
   getCustomer(){
+    this.isCustomerLoading = true;
+
     this.customersApi.getCustomer()
       .then(
         (res: any) => {
           console.log(res);
           this.customerData = res;
+          this.isCustomerLoading = false;
 
           this.customerForm.customerForm.controls.customerCode.setValue(this.customerData.data().customer_code);
           this.customerForm.customerForm.controls.customerName.setValue(this.customerData.data().customer_name);
@@ -65,6 +66,7 @@ export class ViewCustomerComponent implements OnInit {
         },
         (err: any) => {
           console.log(err);
+          this.isCustomerLoading = false;
           this.connectionToast.openToast();
         }
       )

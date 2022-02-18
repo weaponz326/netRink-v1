@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ViewMenuItemComponent } from './view-menu-item.component';
+import { ViewDeliveryComponent } from './view-delivery.component';
 
-describe('ViewMenuItemComponent', () => {
-  let component: ViewMenuItemComponent;
-  let fixture: ComponentFixture<ViewMenuItemComponent>;
+describe('ViewDeliveryComponent', () => {
+  let component: ViewDeliveryComponent;
+  let fixture: ComponentFixture<ViewDeliveryComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ViewMenuItemComponent ]
+      declarations: [ ViewDeliveryComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ViewMenuItemComponent);
+    fixture = TestBed.createComponent(ViewDeliveryComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

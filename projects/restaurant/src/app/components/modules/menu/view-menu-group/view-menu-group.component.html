@@ -29,11 +29,20 @@
 
                 <hr />
 
-                <div class="row">
+                <div *ngIf="!isMenuGroupLoading" class="row">
                     <div class="col-md-12">
                         <button type="button" class="btn btn-secondary btn-sm float-end ms-1 page-form-btn" routerLink="/home/menu/all-menu-groups">Cancel</button>
                         <button type="button" class="btn btn-secondary btn-sm float-end ms-1 page-form-btn" (click)="confirmDelete()">Delete</button>
                         <button [disabled]="isMenuGroupSaving" type="submit" class="btn btn-secondary btn-sm float-end ms-1 page-form-btn">Save</button>
+                    </div>
+                </div>
+                <div *ngIf="isMenuGroupLoading" class="row">
+                    <div class="col-md-12">
+                        <button type="button" class="btn btn-sm float-end ms-1 btn-light page-form-btn">
+                            <div class="spinner-grow spinner-grow-sm" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </button>
                     </div>
                 </div>
 
@@ -51,7 +60,7 @@
 
             <!-- menu items table comopnent -->
 
-            <app-menu-items #menuItemsComponentReference [menuGroup]="menuGroupFormData?.data()"></app-menu-items>
+            <app-menu-items #menuItemsComponentReference></app-menu-items>
 
         </div>
     </div>

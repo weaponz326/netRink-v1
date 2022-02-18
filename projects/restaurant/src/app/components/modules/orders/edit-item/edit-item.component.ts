@@ -16,34 +16,31 @@ export class EditItemComponent implements OnInit {
 
   @Output() saveItemEvent = new EventEmitter<any>();
 
-  @ViewChild('buttonElementReference', { read: ElementRef, static: false }) buttonElement!: ElementRef;
+  @ViewChild('editButtonElementReference', { read: ElementRef, static: false }) editButton!: ElementRef;
+  @ViewChild('dismissButtonElementReference', { read: ElementRef, static: false }) dismissButton!: ElementRef;
 
   @ViewChild('itemFormComponentReference', { read: ItemFormComponent, static: false }) itemForm!: ItemFormComponent;
 
-  selectedIndex: any = 0;
-  selectedId: any = "";
-
   orderItemData: any;
+
+  isItemSaving = false;
 
   ngOnInit(): void {
   }
 
-  openModal(index: any, data: any){
+  openModal(data: any){
     this.orderItemData = data;
 
-    this.selectedIndex = index;
-    this.selectedId = data.id;
+    this.itemForm.itemForm.controls.menuItem.setValue(data.data().menu_item.item_name);
+    this.itemForm.itemForm.controls.price.setValue(data.data().menu_item.price);
+    this.itemForm.itemForm.controls.quantity.setValue(data.data().quantity);
+    this.itemForm.selectedMenuItemId = data.data().menu_item.id;
 
-    this.itemForm.itemForm.controls.menuItem.setValue(data.menu_item.item_name);
-    this.itemForm.itemForm.controls.price.setValue(data.menu_item.price);
-    this.itemForm.itemForm.controls.quantity.setValue(data.quantity);
-    this.itemForm.selectedMenuItemId = data.menu_item.id;
-
-    this.buttonElement.nativeElement.click();
+    this.editButton.nativeElement.click();
   }
 
   saveItem(){
-    let order_item: OrderItem = {
+    let data: OrderItem = {
       created_at: this.orderItemData.created_at,
       order: sessionStorage.getItem('restaurant_order_id') as string,
       quantity: this.itemForm.itemForm.controls.quantity.value,
@@ -54,13 +51,12 @@ export class EditItemComponent implements OnInit {
       }
     }
 
-    let data = {
-      index: this.selectedIndex,
-      id: this.selectedId,
-      order_item: order_item
+    let item = {
+      id: this.orderItemData.id,
+      data: data
     }
 
-    this.saveItemEvent.emit(data);
+    this.saveItemEvent.emit(item);
   }
 
 }

@@ -19,8 +19,6 @@ export class MenuItemsComponent implements OnInit {
 
   constructor(private menuApi: MenuApiService) { }
 
-  @Input() menuGroup!: MenuGroup;
-
   @ViewChild('addMenuItemComponentReference', { read: AddMenuItemComponent, static: false }) addMenuItem!: AddMenuItemComponent;
   @ViewChild('editMenuItemComponentReference', { read: EditMenuItemComponent, static: false }) editMenuItem!: EditMenuItemComponent;
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
@@ -29,30 +27,22 @@ export class MenuItemsComponent implements OnInit {
   menuItemsGridData: any[] = [];
 
   deleteId = "";
-  deleteIndex = 0;
 
   isFetchingGridData = false;
 
   ngOnInit(): void {
+    this.getMenuGroupMenuItem();
   }
 
-  ngAfterViewInit(): void {
-    this.getMenuItems();
-  }
-
-  getMenuItems(){
+  getMenuGroupMenuItem(){
     this.isFetchingGridData = true;
 
     this.menuApi.getMenuGroupMenuItem()
       .then(
         (res: any) => {
           console.log(res);
+          this.menuItemsGridData = res.docs;
           this.isFetchingGridData = false;
-
-          for (let item of res.docs) {
-            this.menuItemsGridData.push(item.data());
-          }
-          console.log(this.menuItemsGridData);
         },
         (err: any) => {
           console.log(err);
@@ -64,63 +54,86 @@ export class MenuItemsComponent implements OnInit {
 
   createMenuItem(data: any){
     console.log(data);
+    this.addMenuItem.isMenuItemSaving = true;
 
     this.menuApi.createMenuItem(data)
       .then(
         (res: any) => {
           console.log(res);
 
-          if(res.id){
-            this.menuItemsGridData.push(data);
-            this.addMenuItem.resetForm();
-          }
+          this.addMenuItem.isMenuItemSaving = false;
+          this.addMenuItem.dismissButton.nativeElement.click();
+          this.addMenuItem.resetForm();
+
+          this.getMenuGroupMenuItem();
         },
         (err: any) => {
           console.log(err);
+          
+          this.addMenuItem.dismissButton.nativeElement.click();
+          this.addMenuItem.isMenuItemSaving = false;
+
           this.connectionToast.openToast();
         }
       )
   }
 
-  updateMenuItem(data: any){
-    console.log(data);
+  updateMenuItem(menu_item: any){
+    this.addMenuItem.isMenuItemSaving = true;
+    console.log(menu_item);
 
-    this.menuApi.updateMenuItem(data.menu_item)
+    this.menuApi.updateMenuItem(menu_item.id, menu_item.data)
       .then(
         (res: any) => {
           console.log(res);
-          this.menuItemsGridData[data.index] = data.menu_item;
+
+          this.editMenuItem.isMenuItemSaving = false;
+          this.editMenuItem.dismissButton.nativeElement.click();
+
+          this.getMenuGroupMenuItem();
         },
         (err: any) => {
           console.log(err);
+          
+          this.editMenuItem.dismissButton.nativeElement.click();
+          this.editMenuItem.isMenuItemSaving = false;
+
           this.connectionToast.openToast();
         }
       )
   }
 
   deleteMenuItem(){
-    this.menuApi.deleteMenuItem()
+    this.editMenuItem.isMenuItemDeleting = true;
+
+    this.menuApi.deleteMenuItem(this.deleteId)
       .then(
         (res: any) => {
           console.log(res);
-          this.menuItemsGridData.splice(this.deleteIndex, 1);
+
+          this.editMenuItem.isMenuItemDeleting = false;
+          this.editMenuItem.dismissButton.nativeElement.click();
+
+          this.getMenuGroupMenuItem()
         },
         (err: any) => {
           console.log(err);
+
+          this.editMenuItem.isMenuItemDeleting = false;
+          this.editMenuItem.dismissButton.nativeElement.click();
+
           this.connectionToast.openToast();
         }
       )
   }
 
-  openEditMenuItem(index: any){
-    console.log(index);
-    this.editMenuItem.openModal(index, this.menuItemsGridData[index]);
+  openEditMenuItem(data: any){
+    console.log(data);
+    this.editMenuItem.openModal(data);
   }
 
-  confirmDelete(e: any){
-    this.deleteIndex = e.index;
-    this.deleteId = e.id;
-
+  confirmDelete(id: any){
+    this.deleteId = id;
     this.deleteModal.openModal();
   }
 

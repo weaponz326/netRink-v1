@@ -17,31 +17,31 @@ export class EditMenuItemComponent implements OnInit {
   @Output() saveMenuItemEvent = new EventEmitter<any>();
   @Output() deleteMenuItemEvent = new EventEmitter<any>();
 
-  @ViewChild('buttonElementReference', { read: ElementRef, static: false }) buttonElement!: ElementRef;
+  @ViewChild('editButtonElementReference', { read: ElementRef, static: false }) editButton!: ElementRef;
+  @ViewChild('dismissButtonElementReference', { read: ElementRef, static: false }) dismissButton!: ElementRef;
 
   @ViewChild('menuItemFormComponentReference', { read: MenuItemFormComponent, static: false }) menuItemForm!: MenuItemFormComponent;
 
   menuItemData: any;
-  selectedIndex: any = 0;
-  selectedId: any = "";
+
+  isMenuItemSaving = false;
+  isMenuItemDeleting = false;
 
   ngOnInit(): void {
   }
 
-  openModal(index: any, data: any){
+  openModal(data: any){
     this.menuItemData = data;
-    this.selectedIndex = index;
-    this.selectedId = data.id;
 
-    this.menuItemForm.menuItemForm.controls.itemCode.setValue(data.item_code);
-    this.menuItemForm.menuItemForm.controls.itemName.setValue(data.item_name);
-    this.menuItemForm.menuItemForm.controls.price.setValue(data.price);
+    this.menuItemForm.menuItemForm.controls.itemCode.setValue(data.data().item_code);
+    this.menuItemForm.menuItemForm.controls.itemName.setValue(data.data().item_name);
+    this.menuItemForm.menuItemForm.controls.price.setValue(data.data().price);
 
-    this.buttonElement.nativeElement.click();
+    this.editButton.nativeElement.click();
   }
 
   saveMenuItem(){
-    let menu_item: MenuItem = {
+    let data: MenuItem = {
       created_at: this.menuItemData.created_at,
       item_code: this.menuItemForm.menuItemForm.controls.itemCode.value,
       item_name: this.menuItemForm.menuItemForm.controls.itemName.value,
@@ -52,22 +52,16 @@ export class EditMenuItemComponent implements OnInit {
       }
     }
 
-    let data = {
-      index: this.selectedIndex,
-      id: this.selectedId,
-      menu_item: menu_item
+    let menu_item = {
+      id: this.menuItemData.id,
+      data: data
     }
 
-    this.saveMenuItemEvent.emit(data);
+    this.saveMenuItemEvent.emit(menu_item);
   }
 
   deleteMenuItem(){
-    let data = {
-      index: this.selectedIndex,
-      id: this.selectedId,
-    }
-
-    this.deleteMenuItemEvent.emit(data);
+    this.deleteMenuItemEvent.emit(this.menuItemData.id);
   }
 
 }

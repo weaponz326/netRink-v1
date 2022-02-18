@@ -29,27 +29,29 @@ export class ViewPaymentComponent implements OnInit {
   @ViewChild('deleteModalComponentReference', { read: DeleteModalComponent, static: false }) deleteModal!: DeleteModalComponent;
 
   navHeading: any[] = [
-    { text: "New Payment", url: "/home/payments/new-payment" },
+    { text: "View Payment", url: "/home/payments/view-payment" },
   ];
 
   paymentData: any;
 
+  isPaymentLoading = false;
   isPaymentSaving = false;
   isPaymentDeleting = false;
 
   ngOnInit(): void {
-  }
-
-  ngAfterViewInit(): void {
     this.getPayment();
   }
 
   getPayment(){
+    this.isPaymentLoading = true;
+
     this.paymentsApi.getPayment()
       .then(
         (res: any) => {
           console.log(res);
+
           this.paymentData = res;
+          this.isPaymentLoading = false;
 
           this.paymentForm.paymentForm.controls.paymentCode.setValue(res.data().payment_code);
           this.paymentForm.paymentForm.controls.paymentDate.setValue(res.data().payment_date);
@@ -65,6 +67,7 @@ export class ViewPaymentComponent implements OnInit {
         },
         (err: any) => {
           console.log(err);
+          this.isPaymentLoading = false;
           this.connectionToast.openToast();
         }
       )
@@ -91,17 +94,17 @@ export class ViewPaymentComponent implements OnInit {
     }
 
     console.log(data);
-    this.isPaymentSaving = false;
+    this.isPaymentSaving = true;
 
     this.paymentsApi.updatePayment(data)
       .then(
         (res: any) => {
           console.log(res);
-          this.isPaymentSaving = true;
+          this.isPaymentSaving = false;
         },
         (err: any) => {
           console.log(err);
-          this.isPaymentSaving = true;
+          this.isPaymentSaving = false;
           this.connectionToast.openToast();
         }
       )
@@ -111,7 +114,7 @@ export class ViewPaymentComponent implements OnInit {
     this.deleteModal.openModal();
   }
 
-  deleteMenuGroup(){
+  deletePayment(){
     this.isPaymentDeleting = true;
 
     this.paymentsApi.deletePayment()

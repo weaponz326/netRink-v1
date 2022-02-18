@@ -26,7 +26,7 @@ export class MenuItemDetailsComponent implements OnInit {
   }
 
   getMenuItem(){
-    this.menuApi.getMenuItem()
+    this.menuApi.getMenuItem(sessionStorage.getItem("restaurant_menu_item_id"))
       .then(
         (res: any) => {
           console.log(res);

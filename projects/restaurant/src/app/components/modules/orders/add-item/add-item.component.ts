@@ -18,15 +18,18 @@ export class AddItemComponent implements OnInit {
 
   @Output() saveItemEvent = new EventEmitter<any>();
 
-  @ViewChild('buttonElementReference', { read: ElementRef, static: false }) buttonElement!: ElementRef;
+  @ViewChild('addButtonElementReference', { read: ElementRef, static: false }) addButton!: ElementRef;
+  @ViewChild('dismissButtonElementReference', { read: ElementRef, static: false }) dismissButton!: ElementRef;
 
   @ViewChild('itemFormComponentReference', { read: ItemFormComponent, static: false }) itemForm!: ItemFormComponent;
+
+  isItemSaving = false;
 
   ngOnInit(): void {
   }
 
   openModal(){
-    this.buttonElement.nativeElement.click();
+    this.addButton.nativeElement.click();
   }
 
   saveItem(){

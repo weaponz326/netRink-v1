@@ -10,9 +10,8 @@ import { ModuleUtilitiesModule } from 'projects/personal/src/app/components/modu
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { SettingsComponent } from './settings/settings.component';
 import { AllDeliveriesComponent } from './all-deliveries/all-deliveries.component';
-import { NewDeliveryComponent } from './new-delivery/new-delivery.component';
-import { EditDeliveryComponent } from './edit-delivery/edit-delivery.component';
 import { DeliveryFormComponent } from './delivery-form/delivery-form.component';
+import { ViewDeliveryComponent } from './view-delivery/view-delivery.component';
 
 
 
@@ -21,9 +20,8 @@ import { DeliveryFormComponent } from './delivery-form/delivery-form.component';
     DashboardComponent,
     SettingsComponent,
     AllDeliveriesComponent,
-    NewDeliveryComponent,
-    EditDeliveryComponent,
-    DeliveryFormComponent
+    DeliveryFormComponent,
+    ViewDeliveryComponent
   ],
   imports: [
     CommonModule,

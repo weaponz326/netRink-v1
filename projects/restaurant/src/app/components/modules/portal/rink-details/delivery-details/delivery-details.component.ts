@@ -26,7 +26,7 @@ export class DeliveryDetailsComponent implements OnInit {
   }
 
   getDelivery(){
-    this.deliveriesApi.getDelivery(sessionStorage.getItem("restaurant_delivery_id"))
+    this.deliveriesApi.getDelivery()
       .then(
         (res: any) => {
           console.log(res);

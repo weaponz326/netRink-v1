@@ -27,14 +27,11 @@ export class OrderItemsComponent implements OnInit {
   totalAmount = 0;
 
   deleteId = "";
-  deleteIndex = 0;
+  isItemDeleting = false;
 
   isFetchingGridData = false;
 
   ngOnInit(): void {
-  }
-
-  ngAfterViewInit(): void {
     this.getOrderOrderItem();
   }
 
@@ -45,13 +42,10 @@ export class OrderItemsComponent implements OnInit {
       .then(
         (res: any) => {
           console.log(res);
-          this.isFetchingGridData = false;
-
-          for (let item of res.docs) {
-            this.itemsGridData.push(item.data());
-          }
-
+          this.itemsGridData = res.docs;
           this.calculateTotalPrice();
+
+          this.isFetchingGridData = false;
         },
         (err: any) => {
           console.log(err);
@@ -62,8 +56,9 @@ export class OrderItemsComponent implements OnInit {
   }
 
   calculateTotalPrice(){
+    this.totalAmount = 0;
     for (let item of this.itemsGridData){
-      this.totalAmount += item.menu_item.price * item.quantity;
+      this.totalAmount += item.data().menu_item.price * item.data().quantity;
     }
 
     this.updateTotalAmount();
@@ -72,6 +67,7 @@ export class OrderItemsComponent implements OnInit {
 
   createOrderItem(data: any){
     console.log(data);
+    this.addItem.isItemSaving = true;
 
     this.ordersApi.createOrderItem(data)
       .then(
@@ -79,48 +75,57 @@ export class OrderItemsComponent implements OnInit {
           console.log(res);
 
           if(res.id){
-            this.itemsGridData.push(data);
-            this.calculateTotalPrice();
+            this.getOrderOrderItem();
+
+            this.addItem.isItemSaving = false;
+            this.addItem.dismissButton.nativeElement.click();
             this.addItem.resetForm();
           }
         },
         (err: any) => {
           console.log(err);
+          this.addItem.isItemSaving = false;
+          this.addItem.dismissButton.nativeElement.click();
           this.connectionToast.openToast();
         }
       )
   }
 
-  updateOrderItem(data: any){
-    console.log(data);
+  updateOrderItem(order_item: any){
+    console.log(order_item);
+    this.editItem.isItemSaving = true;
 
-    this.ordersApi.updateOrderItem(data.id, data.order_item)
+    this.ordersApi.updateOrderItem(order_item.id, order_item.data)
       .then(
         (res: any) => {
-          console.log(res);
-
-          if(res.id){
-            this.itemsGridData[data.index] = data.order_item;
-            this.calculateTotalPrice();
-          }
+          console.log(res);        
+          
+          this.editItem.isItemSaving = false;
+          this.editItem.dismissButton.nativeElement.click();
+          this.getOrderOrderItem();
         },
         (err: any) => {
           console.log(err);
+          this.editItem.isItemSaving = false;
+          this.editItem.dismissButton.nativeElement.click();
           this.connectionToast.openToast();
         }
       )
   }
 
   deleteOrderItem(){
+    this.isItemDeleting = true;
+
     this.ordersApi.deleteOrderItem(this.deleteId)
       .then(
         (res: any) => {
           console.log(res);
-          this.itemsGridData.splice(this.deleteIndex, 1);
-          this.calculateTotalPrice();
+          this.isItemDeleting = false;
+          this.getOrderOrderItem();
         },
         (err: any) => {
           console.log(err);
+          this.isItemDeleting = false;
           this.connectionToast.openToast();
         }
       )
@@ -141,15 +146,13 @@ export class OrderItemsComponent implements OnInit {
       )
   }
 
-  openEditItem(index: any){
-    console.log(index);
-    this.editItem.openModal(index, this.itemsGridData[index]);
+  openEditItem(data: any){
+    console.log(data);
+    this.editItem.openModal(data);
   }
 
-  confirmDelete(index: any, id: any){
-    this.deleteIndex = index;
+  confirmDelete(id: any){
     this.deleteId = id;
-
     this.deleteModal.openModal();
   }
 

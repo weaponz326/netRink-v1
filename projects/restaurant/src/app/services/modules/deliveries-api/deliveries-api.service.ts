@@ -20,16 +20,16 @@ export class DeliveriesApiService {
     return this.deliveryRef.add(deliveryData);
   }
 
-  getDelivery(deliveryId: any){
-    return this.deliveryRef.doc(deliveryId).ref.get();
+  getDelivery(){
+    return this.deliveryRef.doc(String(sessionStorage.getItem("restaurant_delivery_id"))).ref.get();
   }
 
-  updateDelivery(deliveryId: any, deliveryData: any){
-    return this.deliveryRef.doc(deliveryId).update(deliveryData);
+  updateDelivery(deliveryData: any){
+    return this.deliveryRef.doc(String(sessionStorage.getItem("restaurant_delivery_id"))).update(deliveryData);
   }
 
-  deleteDelivery(deliveryId: any){
-    return this.deliveryRef.doc(deliveryId).delete();
+  deleteDelivery(){
+    return this.deliveryRef.doc(String(sessionStorage.getItem("restaurant_delivery_id"))).delete();
   }
 
   getAccountDelivery(sorting: any, pageSize: any){

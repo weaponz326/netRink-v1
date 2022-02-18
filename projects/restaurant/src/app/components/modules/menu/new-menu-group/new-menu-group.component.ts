@@ -22,17 +22,20 @@ export class NewMenuGroupComponent implements OnInit {
     private menuApi: MenuApiService
   ) { }
 
-  @ViewChild('buttonElementReference', { read: ElementRef, static: false }) buttonElement!: ElementRef;
+  @ViewChild('newButtonElementReference', { read: ElementRef, static: false }) newButton!: ElementRef;
+  @ViewChild('dismissButtonElementReference', { read: ElementRef, static: false }) dismissButton!: ElementRef;
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
 
   menuGroupForm: FormGroup = new FormGroup({});
+
+    isMenuGroupSaving = false;
 
   ngOnInit(): void {
     this.initMenuGroupForm();
   }
 
   openModal(){
-    this.buttonElement.nativeElement.click();
+    this.newButton.nativeElement.click();
   }
 
   initMenuGroupForm(){
@@ -51,6 +54,7 @@ export class NewMenuGroupComponent implements OnInit {
     }
 
     console.log(data);
+    this.isMenuGroupSaving = true;
 
     this.menuApi.createMenuGroup(data)
       .then(
@@ -59,11 +63,14 @@ export class NewMenuGroupComponent implements OnInit {
 
           if(res.id){
             sessionStorage.setItem('restaurant_menu_group_id', res.id);
+            this.dismissButton.nativeElement.click();
             this.router.navigateByUrl('/home/menu/view-menu-group');
           }
+          this.isMenuGroupSaving = false;
         },
         (err: any) => {
           console.log(err);
+          this.isMenuGroupSaving = false;
           this.connectionToast.openToast();
         }
       )

@@ -13,6 +13,7 @@ import { DeliveriesApiService } from 'projects/restaurant/src/app/services/modul
 
 import { Order } from 'projects/restaurant/src/app/models/modules/orders/orders.model';
 import { Delivery } from 'projects/restaurant/src/app/models/modules/deliveries/deliveries.model';
+import { Table } from 'projects/restaurant/src/app/models/modules/tables/tables.model';
 
 
 @Component({
@@ -28,7 +29,8 @@ export class AddOrderComponent implements OnInit {
     private deliveriesApi: DeliveriesApiService
   ) { }
 
-  @ViewChild('buttonElementReference', { read: ElementRef, static: false }) buttonElement!: ElementRef;
+  @ViewChild('newButtonElementReference', { read: ElementRef, static: false }) newButton!: ElementRef;
+  @ViewChild('dismissButtonElementReference', { read: ElementRef, static: false }) dismissButton!: ElementRef;
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
 
   @ViewChild('selectCustomerComponentReference', { read: SelectCustomerComponent, static: false }) selectCustomer!: SelectCustomerComponent;
@@ -39,12 +41,15 @@ export class AddOrderComponent implements OnInit {
   selectedCustomerId = "";
   selectedTableId = "";
 
+  isOrderSaving = false;
+
   ngOnInit(): void {
     this.initOrderForm();
   }
 
   openModal(){
-    this.buttonElement.nativeElement.click();
+    this.newButton.nativeElement.click();
+    this.orderForm.controls.orderDate.setValue(new Date().toISOString().slice(0, 16))
   }
 
   initOrderForm(){
@@ -53,7 +58,7 @@ export class AddOrderComponent implements OnInit {
       orderDate: new FormControl(''),
       customerName: new FormControl(''),
       orderType: new FormControl(''),
-      tableNumber: new FormControl(''),
+      tableNumber: new FormControl({value: '', disabled: true}),
     })
   }
 
@@ -76,6 +81,9 @@ export class AddOrderComponent implements OnInit {
       }
     }
 
+    console.log(data);
+    this.isOrderSaving = true;
+
     this.ordersApi.createOrder(data)
       .then(
         (res: any) => {
@@ -88,11 +96,14 @@ export class AddOrderComponent implements OnInit {
               this.createDelivery();
             }
 
+            this.dismissButton.nativeElement.click();
+            this.isOrderSaving = false;
             this.router.navigateByUrl('/home/orders/view-order');
           }
         },
         (err: any) => {
           console.log(err);
+          this.isOrderSaving = false;
           this.connectionToast.openToast();
         }
       )
@@ -120,8 +131,8 @@ export class AddOrderComponent implements OnInit {
   onTableSelected(tableData: any){
     console.log(tableData);
 
-    this.orderForm.controls.tableNumber.setValue(tableData.data().table_number);
     this.selectedTableId = tableData.id;
+    this.orderForm.controls.tableNumber.setValue(tableData.data().table_number);
   }
 
   createDelivery(){
@@ -135,6 +146,7 @@ export class AddOrderComponent implements OnInit {
       order: {
         id: sessionStorage.getItem('restaurant_order_id') as string,
         order_code: this.orderForm.controls.orderCode.value,
+        order_date: this.orderForm.controls.orderDate.value,
         customer: {
           id: this.selectedCustomerId,
           customer_name: this.orderForm.controls.customerName.value

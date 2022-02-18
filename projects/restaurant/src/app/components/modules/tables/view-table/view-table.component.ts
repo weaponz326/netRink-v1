@@ -35,22 +35,23 @@ export class ViewTableComponent implements OnInit {
 
   tableData: any;
 
+  isTableLoading = false;
   isTableSaving = false;
   isTableDeleting = false;
 
   ngOnInit(): void {
-  }
-
-  ngAfterViewInit(): void {
     this.getTable();
   }
 
   getTable(){
+    this.isTableLoading = true;
+
     this.tablesApi.getTable()
       .then(
         (res: any) => {
           console.log(res);
           this.tableData = res;
+          this.isTableLoading = false;
 
           this.tableForm.tableForm.controls.tableNumber.setValue(res.data().table_number);
           this.tableForm.tableForm.controls.tableType.setValue(res.data().table_type);
@@ -60,6 +61,7 @@ export class ViewTableComponent implements OnInit {
         },
         (err: any) => {
           console.log(err);
+          this.isTableLoading = false;
           this.connectionToast.openToast();
         }
       )

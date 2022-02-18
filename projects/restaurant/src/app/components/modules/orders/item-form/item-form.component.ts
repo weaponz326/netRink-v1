@@ -25,9 +25,9 @@ export class ItemFormComponent implements OnInit {
 
   initItemForm(){
     this.itemForm = new FormGroup({
-      menuItem: new FormControl(''),
-      price: new FormControl(''),
-      quantity: new FormControl('')
+      menuItem: new FormControl({value: "", disabled: true}),
+      price: new FormControl({value: 0, disabled: true}),
+      quantity: new FormControl(1)
     })
   }
 

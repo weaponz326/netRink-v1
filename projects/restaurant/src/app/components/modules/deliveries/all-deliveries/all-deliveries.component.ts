@@ -1,8 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { NewDeliveryComponent } from '../new-delivery/new-delivery.component'
-import { EditDeliveryComponent } from '../edit-delivery/edit-delivery.component'
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 import { DeleteModalComponent } from 'projects/personal/src/app/components/module-utilities/delete-modal/delete-modal.component'
 
@@ -23,7 +21,6 @@ export class AllDeliveriesComponent implements OnInit {
     private deliveriesPrint: DeliveriesPrintService,
   ) { }
 
-  @ViewChild('editDeliveryComponentReference', { read: EditDeliveryComponent, static: false }) editDelivery!: EditDeliveryComponent;
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
   @ViewChild('deleteModalComponentReference', { read: DeleteModalComponent, static: false }) deleteModal!: DeleteModalComponent;
 
@@ -33,9 +30,6 @@ export class AllDeliveriesComponent implements OnInit {
 
   deliveriesGridData: any[] = [];
 
-  deleteId = "";
-  deleteIndex = 0;
-
   isFetchingGridData: boolean =  false;
   isDataAvailable: boolean =  true;
 
@@ -44,7 +38,7 @@ export class AllDeliveriesComponent implements OnInit {
   nextStartAfter: any = [];
   prevStartAt: any = [];
   pageNumber = 0;
-  disableNext: boolean = false;
+  disableNext: boolean = true;
   disablePrev: boolean = true;
 
   sortParams = {
@@ -53,9 +47,6 @@ export class AllDeliveriesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-  }
-
-  ngAfterViewInit(): void {
     this.getAccountDelivery();
   }
 
@@ -66,18 +57,23 @@ export class AllDeliveriesComponent implements OnInit {
       .then(
         (res: any) => {
           console.log(res);
-
           this.deliveriesGridData = res.docs;
-          this.isFetchingGridData = false;
-          if (!res.docs.length) this.isDataAvailable = false;
 
+          this.isFetchingGridData = false;
           this.prevStartAt = this.firstInResponse;
           this.nextStartAfter = res.docs[res.docs.length - 1];
           this.firstInResponse = res.docs[0];
           this.pageNumber = 1;
+          if (!res.docs.length) this.isDataAvailable = false;
 
-          this.disableNext = false;
-          this.disablePrev = true;
+          if (!res.docs.length || res.docs.length < 20){
+            this.disableNext = true;
+            this.disablePrev = true;
+          }
+          else{
+            this.disableNext = false;
+            this.disablePrev = true;
+          }
         },
         (err: any) => {
           console.log(err);
@@ -95,11 +91,9 @@ export class AllDeliveriesComponent implements OnInit {
       .then(
         (res: any) => {
           console.log(res);
-
           this.deliveriesGridData = res.docs;
-          this.isFetchingGridData = false;
-          if (!res.docs.length) this.isDataAvailable = false;
 
+          this.isFetchingGridData = false;
           this.prevStartAt = this.firstInResponse;
           this.nextStartAfter = res.docs[res.docs.length - 1];
           this.firstInResponse = res.docs[0];
@@ -126,11 +120,12 @@ export class AllDeliveriesComponent implements OnInit {
       .then(
         (res: any) => {
           console.log(res);
-
           this.deliveriesGridData = res.docs;
+
           this.isFetchingGridData = false;
           if (!res.docs.length) this.isDataAvailable = false;
 
+          this.isFetchingGridData = false;
           this.prevStartAt = this.firstInResponse;
           this.nextStartAfter = res.docs[res.docs.length - 1];
           this.firstInResponse = res.docs[0];
@@ -156,49 +151,11 @@ export class AllDeliveriesComponent implements OnInit {
     this.getAccountDelivery();
   }
 
-  updateDelivery(data: any){
-    console.log(data);
+  viewDelivery(id: any){
+    console.log(id);
 
-    this.deliveriesApi.updateDelivery(data.id, data.delivery)
-      .then(
-        (res: any) => {
-          console.log(res);
-
-          if(res.id){
-            this.deliveriesGridData[data.index] = res;
-          }
-        },
-        (err: any) => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
-  }
-
-  deleteDelivery(){
-    this.deliveriesApi.deleteDelivery(this.deleteId)
-      .then(
-        (res: any) => {
-          console.log(res);
-          this.deliveriesGridData.splice(this.deleteIndex, 1);
-        },
-        (err: any) => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
-  }
-
-  openEditDelivery(index: any){
-    console.log(index);
-    this.editDelivery.openModal(index, this.deliveriesGridData[index]);
-  }
-
-  confirmDelete(index: any, id: any){
-    this.deleteIndex = index;
-    this.deleteId = id;
-
-    this.deleteModal.openModal();
+    sessionStorage.setItem("restaurant_delivery_id", id);
+    this.router.navigateByUrl("/home/deliveries/view-delivery");
   }
 
   onPrint(){

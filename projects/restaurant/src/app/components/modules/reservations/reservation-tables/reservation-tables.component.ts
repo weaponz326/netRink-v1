@@ -27,14 +27,11 @@ export class ReservationTablesComponent implements OnInit {
   reservationTablesGridData: any[] = [];
 
   deleteId = "";
-  deleteIndex = 0;
 
   isFetchingGridData = false;
+  isTableDeleting = false;
 
   ngOnInit(): void {
-  }
-
-  ngAfterViewInit(): void {
     this.getReservationReservationTable();
   }
 
@@ -46,10 +43,7 @@ export class ReservationTablesComponent implements OnInit {
         (res: any) => {
           console.log(res);
           this.isFetchingGridData = false;
-
-          for (let table of res.docs) {
-            this.reservationTablesGridData.push(table.data());
-          }
+          this.reservationTablesGridData = res.docs;
         },
         (err: any) => {
           console.log(err);
@@ -76,7 +70,7 @@ export class ReservationTablesComponent implements OnInit {
           console.log(res);
 
           if(res.id){
-            this.reservationTablesGridData.push(data);
+            this.getReservationReservationTable();
           }
         },
         (err: any) => {
@@ -87,23 +81,25 @@ export class ReservationTablesComponent implements OnInit {
   }
 
   deleteReservationTable(){
+    this.isTableDeleting = true;
+
     this.reservationsApi.deleteReservationTable(this.deleteId)
       .then(
         (res: any) => {
           console.log(res);
-          this.reservationTablesGridData.splice(this.deleteIndex, 1);
+          this.isTableDeleting = false;
+          this.getReservationReservationTable();
         },
         (err: any) => {
           console.log(err);
+          this.isTableDeleting = false;
           this.connectionToast.openToast();
         }
       )
   }
 
-  confirmDelete(index: any, id: any){
-    this.deleteIndex = index;
+  confirmDelete(id: any){
     this.deleteId = id;
-
     this.deleteModal.openModal();
   }
 
