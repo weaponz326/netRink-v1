@@ -2,8 +2,6 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component';
 
-import { AdminApiService } from 'projects/restaurant/src/app/services/modules/admin-api/admin-api.service';
-
 
 @Component({
   selector: 'app-view-invitation',
@@ -11,10 +9,6 @@ import { AdminApiService } from 'projects/restaurant/src/app/services/modules/ad
   styleUrls: ['./view-invitation.component.scss']
 })
 export class ViewInvitationComponent implements OnInit {
-
-  constructor(
-    private adminApi: AdminApiService,
-  ) { }
 
   @ViewChild('editButtonElementReference', { read: ElementRef, static: false }) editButton!: ElementRef;
   @ViewChild('dismissButtonElementReference', { read: ElementRef, static: false }) dismissButton!: ElementRef;
@@ -32,6 +26,5 @@ export class ViewInvitationComponent implements OnInit {
 
     this.editButton.nativeElement.click();
   }
-
 
 }

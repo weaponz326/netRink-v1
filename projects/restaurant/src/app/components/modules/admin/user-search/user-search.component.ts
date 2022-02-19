@@ -8,8 +8,10 @@ import { SearchResultsComponent } from '../search-results/search-results.compone
 import { SearchDetailComponent } from '../search-detail/search-detail.component';
 
 import { AdminApiService } from 'projects/restaurant/src/app/services/modules/admin-api/admin-api.service';
+import { SettingsApiService } from 'projects/personal/src/app/services/modules/settings-api/settings-api.service';
 
-import { Invitation } from 'projects/restaurant/src/app/models/modules/admin/admin.model';
+import { Invitation as RestaurantInvitation } from 'projects/restaurant/src/app/models/modules/admin/admin.model';
+import { Invitation as PersonalInvitation } from 'projects/personal/src/app/models/modules/settings/settings.model';
 
 
 @Component({
@@ -21,7 +23,8 @@ export class UserSearchComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private adminApi: AdminApiService
+    private adminApi: AdminApiService,
+    private settingsApi: SettingsApiService
   ) { }
 
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
@@ -96,7 +99,9 @@ export class UserSearchComponent implements OnInit {
   }
 
   createInvitation() {
-    let data: Invitation = {
+    // restaurant invitation
+
+    let restaurantData: RestaurantInvitation = {
       created_at: firebase.default.firestore.FieldValue.serverTimestamp(),
       account: localStorage.getItem('restaurant_id') as string,
       invitee_id: this.searchDetailData.id,
@@ -104,22 +109,44 @@ export class UserSearchComponent implements OnInit {
       invitation_status: 'Awaiting',
     }
 
-    console.log(data);
+    console.log(restaurantData);
     this.searchDetail.isSending = true;
 
-    this.adminApi.createInvitation(data)
+    this.adminApi.createInvitation(restaurantData)
       .then(
         (res: any) => {
           console.log(res);
 
           sessionStorage.setItem('restaurant_invitation_id', res.id);
-          this.router.navigateByUrl('/home/admin/invitation');
+          this.router.navigateByUrl('/home/admin/invitations');
 
           this.searchDetail.isSending = false;
         },
         (err: any) => {
           console.log(err);
           this.searchDetail.isSending = false;
+          this.connectionToast.openToast();
+        }
+      )
+
+    // personal invitation
+
+    let personalData: PersonalInvitation = {
+      created_at: firebase.default.firestore.FieldValue.serverTimestamp(),
+      account_id: localStorage.getItem('restaurant_id') as string,
+      account_name: localStorage.getItem('restaurant_name') as string,
+      account_type: "Restaurant",
+      invitee_id: this.searchDetailData.id,
+      invitation_status: 'Awaiting',
+    }
+
+    this.settingsApi.createInvitation(personalData)
+      .then(
+        (res: any) => {
+          console.log(res);
+        },
+        (err: any) => {
+          console.log(err);
           this.connectionToast.openToast();
         }
       )

@@ -2,50 +2,50 @@
 
 <div class="container">
 
-    <div class="row">
-        <div class="col-md-8">
+    <div class="row mb-3">
+        <div class="col-md-9">
+            <button class="btn btn-secondary float-end nr-standard-font" routerLink="/home/settings/invitations">
+                <i class="bi bi-arrow-left-right me-2"></i> Invitations
+            </button>
+        </div>
+    </div>
 
-            <div class="mb-4">
+    <div class="row">
+        <div class="col-md-9">
+
+            <div class="mb-5">
                 <h5 class="mb-1">Personal Account</h5>
 
                 <table class="table table-sm">
                     <thead>
                         <tr>
-                            <th scope="col">Name</th>
-                            <th scope="col">Email</th>
+                            <th width="50%" scope="col">Name</th>
+                            <th width="50%" scope="col">Email</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>{{userData?.first_name}} {{userData?.last_name}}</td>
-                            <td></td>
+                            <td>{{userData?.data().first_name}} {{userData?.data().last_name}}</td>
+                            <td>{{userEmail}}</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
-            <div *ngFor="let data of suiteData; index as i" class="mb-4">
+            <div *ngFor="let data of suiteData; index as i" class="mb-5">
                 <h5 class="mb-1">{{suiteNames[i]}} Accounts</h5>
 
-                <table *ngIf="data != []" class="table table-sm">
+                <table class="table table-sm">
                     <thead>
                         <tr>
-                            <th scope="col">Account Name</th>
-                            <th scope="col">Location</th>
+                            <th width="55%" scope="col">Account Name</th>
+                            <th width="45%" scope="col">Location</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let account of data">
-                            <td>{{account.account.name}}</td>
-                            <td>{{account.account.location}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <table *ngIf="data == []" class="table table-sm">
-                    <tbody>
-                        <tr>
-                            <td class="text-center text-muted">You do not have any {{suiteNames[i]}} accounts</td>
+                            <td>{{account.data().account.data.name}}</td>
+                            <td>{{account.data().account.data.location}}</td>
                         </tr>
                     </tbody>
                 </table>

@@ -43,6 +43,7 @@ export class UserLandingPageComponent implements OnInit {
   activateAccount(data: any){
     console.log(data);
     localStorage.setItem('restaurant_id', data.data().account.id);
+    localStorage.setItem('restaurant_name', data.data().account.data.name);
     sessionStorage.setItem('restaurant_account_user_id', data.id);
     this.router.navigateByUrl('/home');
 

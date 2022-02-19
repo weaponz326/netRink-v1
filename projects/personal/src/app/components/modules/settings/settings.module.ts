@@ -17,6 +17,8 @@ import { PhotoComponent } from './profile-content/photo/photo.component';
 import { ContactComponent } from './profile-content/contact/contact.component';
 import { LocationComponent } from './profile-content/location/location.component';
 import { AllAccountsComponent } from './all-accounts/all-accounts.component';
+import { InvitationsComponent } from './invitations/invitations.component';
+import { ViewInvitationComponent } from './view-invitation/view-invitation.component';
 
 
 
@@ -30,7 +32,9 @@ import { AllAccountsComponent } from './all-accounts/all-accounts.component';
     PhotoComponent,
     ContactComponent,
     LocationComponent,
-    AllAccountsComponent
+    AllAccountsComponent,
+    InvitationsComponent,
+    ViewInvitationComponent
   ],
   imports: [
     CommonModule,

@@ -19,14 +19,14 @@
                 </div>
 
                 <div class="row mb-3">
-                    <div class="col-md-3 text-muted"><label class="float-end"><em>Invitee :</em></label></div>
+                    <div class="col-md-3 text-muted"><label class="float-end"><em>Account :</em></label></div>
                     <div class="col-md-9">
                         <!-- <div class="col-md-2">
                             <img *ngIf="invitationData?.data().user.photo != null" [src]="personalUrl + invitation.user.photo" alt="" width="40" height="40" class="rounded-circle" />
                             <img *ngIf="invitationData?.data().user.photo == null" src="../../../../../assets/images/utilities/photo-avatar.jpg" alt="Company" width="40" height="40" class="rounded-circle" />
                         </div> -->
                         <div class="col-md-5">
-                            <strong>{{invitationData?.data().invitee_name}}</strong>
+                            <strong>{{invitationData?.data().account_name}}</strong>
                         </div>
                         <!-- <div class="col-md-5 text-muted">
                             {{invitationData?.data().user.location}}
@@ -41,7 +41,8 @@
 
                 <div *ngIf="invitationData?.data().invitation_status == 'Awaiting'" class="row">
                     <div class="offset-md-3 col">
-                        <button class="btn btn-secondary page-add-btn">Cancel Invitation</button>
+                        <button class="btn btn-secondary page-add-btn me-1">Accept Invitation</button>
+                        <button class="btn btn-secondary page-add-btn me-1">Decline Invitation</button>
                     </div>
                 </div>
 

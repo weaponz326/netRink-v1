@@ -1,12 +1,10 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
+import { ConnectionToastComponent } from '../../../module-utilities/connection-toast/connection-toast.component'
 import { ViewInvitationComponent } from '../view-invitation/view-invitation.component';
 
-import { AdminApiService } from 'projects/restaurant/src/app/services/modules/admin-api/admin-api.service';
-
-import { Invitation } from 'projects/restaurant/src/app/models/modules/admin/admin.model';
+import { SettingsApiService } from 'projects/personal/src/app/services/modules/settings-api/settings-api.service';
 
 
 @Component({
@@ -17,15 +15,15 @@ import { Invitation } from 'projects/restaurant/src/app/models/modules/admin/adm
 export class InvitationsComponent implements OnInit {
 
   constructor(
-    private router: Router,
-    private adminApi: AdminApiService,
+    private settingsApi: SettingsApiService,
   ) { }
 
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
   @ViewChild('viewInvitationComponentReference', { read: ViewInvitationComponent, static: false }) viewInvitation!: ViewInvitationComponent;
 
   navHeading: any[] = [
-    { text: "Invitations", url: "/home/admin/invitations" },
+    { text: "All Accounts", url: "/home/settings/all-accounts" },
+    { text: "Invitations", url: "/home/settings/invitations" },
   ];
 
   invitationsGridData: any[] = [];
@@ -53,7 +51,7 @@ export class InvitationsComponent implements OnInit {
   getAccountInvitation(){
     this.isFetchingGridData = true;
 
-    this.adminApi.getAccountInvitation(this.sortParams, 20)
+    this.settingsApi.getUserInvitation(this.sortParams, 20)
       .then(
         (res: any) => {
           console.log(res);
@@ -87,7 +85,7 @@ export class InvitationsComponent implements OnInit {
     e.preventDefault();
     this.isFetchingGridData = true;
 
-    this.adminApi.getAccountInvitationNext(this.sortParams, 20, this.nextStartAfter)
+    this.settingsApi.getUserInvitationNext(this.sortParams, 20, this.nextStartAfter)
       .then(
         (res: any) => {
           console.log(res);
@@ -116,7 +114,7 @@ export class InvitationsComponent implements OnInit {
     e.preventDefault();
     this.isFetchingGridData = true;
 
-    this.adminApi.getAccountInvitationPrev(this.sortParams, 20, this.prevStartAt)
+    this.settingsApi.getUserInvitationPrev(this.sortParams, 20, this.prevStartAt)
       .then(
         (res: any) => {
           console.log(res);

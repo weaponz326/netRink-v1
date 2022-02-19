@@ -29,7 +29,7 @@
         <div class="col-md-8">
 
             <div *ngIf="isSearchResultsReady">
-                <app-search-results
+                <app-search-results #searchResultsComponentReference
                     (viewDetailEvent)="gotoSearchDetail($event)"
                     [searchQuery]="searchQuery"
                     [searchResults]="searchResultsData"
@@ -37,7 +37,7 @@
             </div>
 
             <div *ngIf="isSearchDetailReady">
-                <app-search-detail
+                <app-search-detail #searchDetailComponentReference
                     (sendInvitationEvent)="createInvitation()"
                     [searchDetail]="searchDetailData"
                 ></app-search-detail>
