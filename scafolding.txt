@@ -180,19 +180,19 @@
 			- auth (G)
             + modules
                 + portal
-                    - view rink
-                    - send rink
+                    - view rink (G)
+                    - send rink (G)
                 + settings
                 + calendar
-                    - view calendar
+                    - view calendar (G)
                 + budget
-                    - view budget
+                    - view budget (G)
                 + notes
-                    - view note
+                    - view note (G)
                 + accounts
-                    - view account
+                    - view account (G)
                 + tasks
-                    - view task group
+                    - view task group (G)
 	+ restaurant
 		+ pages
 			- guest landing page (Mr)(C)
@@ -398,7 +398,31 @@
                 - kitchen stock model
 		+ guards
 			- account (G)
-			+ modules access
+            + modules
+                + admin
+                    - view user (G)
+				+ portal
+                    - view rink (G)
+                    - send rink (G)
+				+ settings
+				+ menu
+                    - view menu group (G)
+				+ staff
+                    - view staff (G)
+				+ customers
+                    - view customer (G)
+				+ deliveries
+                    - view delivery (G)
+				+ payments
+                    - view payment (G)
+				+ roster
+                    - view roster (G)
+				+ reservations
+                    - view reservation (G)
+				+ orders
+                    - view order (G)
+				+ kitchen stock
+			+ access
 				- admin (G)
 				- portal (G)
 				- settings (G)
