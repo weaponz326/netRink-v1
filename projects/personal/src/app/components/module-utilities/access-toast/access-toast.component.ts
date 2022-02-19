@@ -27,7 +27,7 @@ export class AccessToastComponent implements OnInit {
   openToast(){
     console.log("opening module access toast");
 
-    const testToast = document.querySelector('.toast:last-child');
+    const testToast = document.querySelector('.access-toast:last-child');
     new window.bootstrap.Toast(testToast).show();
   }
 

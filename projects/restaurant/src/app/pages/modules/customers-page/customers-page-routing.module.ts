@@ -7,6 +7,8 @@ import { AllCustomersComponent } from '../../../components/modules/customers/all
 import { NewCustomerComponent } from '../../../components/modules/customers/new-customer/new-customer.component';
 import { ViewCustomerComponent } from '../../../components/modules/customers/view-customer/view-customer.component';
 
+import { ViewCustomerGuard } from '../../../guards/modules/customers/view-customer.guard';
+
 
 const routes: Routes = [
   {
@@ -17,7 +19,7 @@ const routes: Routes = [
       { path: "dashboard", component: DashboardComponent },
       { path: "all-customers", component: AllCustomersComponent },
       { path: "new-customer", component: NewCustomerComponent },
-      { path: "view-customer", component: ViewCustomerComponent }
+      { path: "view-customer", component: ViewCustomerComponent, canActivate: [ViewCustomerGuard] }
     ]
   }
 ];

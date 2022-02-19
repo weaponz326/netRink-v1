@@ -6,6 +6,8 @@ import { DashboardComponent } from '../../../components/modules/reservations/das
 import { AllReservationsComponent } from '../../../components/modules/reservations/all-reservations/all-reservations.component';
 import { ViewReservationComponent } from '../../../components/modules/reservations/view-reservation/view-reservation.component';
 
+import { ViewReservationGuard } from '../../../guards/modules/reservations/view-reservation.guard';
+
 
 const routes: Routes = [
   {
@@ -15,7 +17,7 @@ const routes: Routes = [
       { path: "", component: DashboardComponent },
       { path: "dashboard", component: DashboardComponent },
       { path: "all-reservations", component: AllReservationsComponent },
-      { path: "view-reservation", component: ViewReservationComponent },
+      { path: "view-reservation", component: ViewReservationComponent, canActivate: [ViewReservationGuard] },
     ]
   }
 ];

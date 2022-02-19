@@ -7,6 +7,8 @@ import { AllPaymentsComponent } from '../../../components/modules/payments/all-p
 import { NewPaymentComponent } from '../../../components/modules/payments/new-payment/new-payment.component';
 import { ViewPaymentComponent } from '../../../components/modules/payments/view-payment/view-payment.component';
 
+import { ViewPaymentGuard } from '../../../guards/modules/payments/view-payment.guard';
+
 
 const routes: Routes = [
   {
@@ -17,7 +19,7 @@ const routes: Routes = [
       { path: "dashboard", component: DashboardComponent },
       { path: "all-payments", component: AllPaymentsComponent },
       { path: "new-payment", component: NewPaymentComponent },
-      { path: "view-payment", component: ViewPaymentComponent }
+      { path: "view-payment", component: ViewPaymentComponent, canActivate: [ViewPaymentGuard] }
     ]
   }
 ];

@@ -6,14 +6,14 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class DeliveriesGuard implements CanActivate, CanActivateChild {
+export class TablesGuard implements CanActivate {
 
   constructor(private router: Router) { }
 
   canActivate(route: ActivatedRouteSnapshot): boolean {
-    let deliveriesAccess = JSON.parse(sessionStorage.getItem('restaurantUserAccess') as string).deliveries_access;
+    let tablesAccess = JSON.parse(sessionStorage.getItem('restaurantUserAccess') as string).tables_access;
 
-    if (deliveriesAccess){
+    if (tablesAccess){
       return true;
     }
     else{
@@ -22,9 +22,9 @@ export class DeliveriesGuard implements CanActivate, CanActivateChild {
   }
 
   canActivateChild(childRoute: ActivatedRouteSnapshot): boolean {
-    let deliveriesAccess = JSON.parse(sessionStorage.getItem('restaurantUserAccess') as string).deliveries_access;
+    let tablesAccess = JSON.parse(sessionStorage.getItem('restaurantUserAccess') as string).tables_access;
 
-    if (deliveriesAccess){
+    if (tablesAccess){
       return true;
     }
     else{

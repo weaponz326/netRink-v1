@@ -19,7 +19,7 @@
                     </thead>
 
                     <tbody *ngIf="accountsData?.length != 0">
-                        <tr *ngFor="let account of accountsData" (click)="accountSelected(account?.data().account.id)">
+                        <tr *ngFor="let account of accountsData" (click)="accountSelected(account)">
                             <td>{{ account?.data().account.data.name }}</td>
                             <td>{{ account?.data().account.data.location }}</td>
                         </tr>

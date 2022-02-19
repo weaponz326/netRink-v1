@@ -6,16 +6,16 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class ViewReservationGuard implements CanActivate {
+export class ViewPaymentGuard implements CanActivate {
 
   constructor(private router: Router) { }
 
   canActivate(route: ActivatedRouteSnapshot): boolean {
-    if (!!sessionStorage.getItem('restaurant_reservation_id')){
+    if (!!sessionStorage.getItem('restaurant_payment_id')){
       return true;
     }
     else{
-      this.router.navigateByUrl('/home/reservations');
+      this.router.navigateByUrl('/home/payments');
       return false;
     }
   }

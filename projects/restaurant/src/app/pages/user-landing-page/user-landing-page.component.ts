@@ -40,9 +40,10 @@ export class UserLandingPageComponent implements OnInit {
       )
   }
 
-  activateAccount(accountId: any){
-    console.log(accountId);
-    localStorage.setItem('restaurant_id', accountId);
+  activateAccount(data: any){
+    console.log(data);
+    localStorage.setItem('restaurant_id', data.data().account.id);
+    sessionStorage.setItem('restaurant_account_user_id', data.id);
     this.router.navigateByUrl('/home');
 
     // TODO: store selected account in server session

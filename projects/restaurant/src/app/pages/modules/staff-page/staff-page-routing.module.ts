@@ -7,6 +7,8 @@ import { NewStaffComponent } from '../../../components/modules/staff/new-staff/n
 import { ViewStaffComponent } from '../../../components/modules/staff/view-staff/view-staff.component';
 import { DashboardComponent } from '../../../components/modules/staff/dashboard/dashboard.component';
 
+import { ViewStaffGuard } from '../../../guards/modules/staff/view-staff.guard';
+
 
 const routes: Routes = [
   {
@@ -17,7 +19,7 @@ const routes: Routes = [
       { path: "dashboard", component: DashboardComponent },
       { path: "all-staff", component: AllStaffComponent },
       { path: "new-staff", component: NewStaffComponent },
-      { path: "view-staff", component: ViewStaffComponent }
+      { path: "view-staff", component: ViewStaffComponent, canActivate: [ViewStaffGuard] }
     ]
   }
 ];

@@ -9,6 +9,8 @@ import { ViewUserComponent } from '../../../components/modules/admin/view-user/v
 import { InvitationsComponent } from '../../../components/modules/admin/invitations/invitations.component';
 import { UserSearchComponent } from '../../../components/modules/admin/user-search/user-search.component';
 
+import { ViewUserGuard } from '../../../guards/modules/admin/view-user.guard';
+
 
 const routes: Routes = [
   {
@@ -19,7 +21,7 @@ const routes: Routes = [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'settings', component: SettingsComponent },
       { path: 'all-users', component: AllUsersComponent },
-      { path: 'view-user', component: ViewUserComponent },
+      { path: 'view-user', component: ViewUserComponent, canActivate: [ViewUserGuard] },
       { path: 'invitations', component: InvitationsComponent },
       { path: 'search', component: UserSearchComponent },
     ]

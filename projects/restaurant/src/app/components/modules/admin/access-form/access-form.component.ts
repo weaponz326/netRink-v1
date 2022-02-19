@@ -24,10 +24,12 @@ export class AccessFormComponent implements OnInit {
     admin_access: false,
     customers_access: false,
     deliveries_access: false,
+    kitchen_stock_access: false,
     menu_access: false,
     orders_access: false,
     payments_access: false,
     portal_access:  false,
+    roster_access:  false,
     settings_access: false,
     staff_access: false,
     reservations_access: false,
@@ -67,14 +69,16 @@ export class AccessFormComponent implements OnInit {
   }
 
   updateUserAccess(){
-    let access = {
+    let access: UserAccess = {
       admin_access: this.accessForm.admin_access,
       customers_access: this.accessForm.customers_access,
       deliveries_access: this.accessForm.deliveries_access,
+      kitchen_stock_access: this.accessForm.kitchen_stock_access,
       menu_access: this.accessForm.menu_access,
       orders_access: this.accessForm.orders_access,
       payments_access: this.accessForm.payments_access,
       portal_access: this.accessForm.portal_access,
+      roster_access: this.accessForm.roster_access,
       settings_access: this.accessForm.settings_access,
       staff_access: this.accessForm.staff_access,
       reservations_access: this.accessForm.reservations_access,
@@ -100,6 +104,7 @@ export class AccessFormComponent implements OnInit {
       this.accessForm.admin_access = true;
       this.accessForm.customers_access = true;
       this.accessForm.deliveries_access = true;
+      this.accessForm.kitchen_stock_access = true;
       this.accessForm.menu_access = true;
       this.accessForm.orders_access = true;
       this.accessForm.payments_access = true;
@@ -113,10 +118,12 @@ export class AccessFormComponent implements OnInit {
       this.accessForm.admin_access =  false;
       this.accessForm.customers_access = true;
       this.accessForm.deliveries_access = true;
+      this.accessForm.kitchen_stock_access = true;
       this.accessForm.menu_access = true;
       this.accessForm.orders_access = true;
       this.accessForm.payments_access = true;
       this.accessForm.portal_access = true;
+      this.accessForm.roster_access = false;
       this.accessForm.settings_access = false;
       this.accessForm.staff_access = true;
       this.accessForm.reservations_access = true;
@@ -126,10 +133,12 @@ export class AccessFormComponent implements OnInit {
       this.accessForm.admin_access = false;
       this.accessForm.customers_access = false;
       this.accessForm.deliveries_access = false;
+      this.accessForm.kitchen_stock_access = true;
       this.accessForm.menu_access = false;
       this.accessForm.orders_access = false;
       this.accessForm.payments_access = false;
       this.accessForm.portal_access = false;
+      this.accessForm.roster_access = false;
       this.accessForm.settings_access = false;
       this.accessForm.staff_access = false;
       this.accessForm.reservations_access = false;

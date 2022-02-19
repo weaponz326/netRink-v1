@@ -27,7 +27,7 @@ export class ConnectionToastComponent implements OnInit {
   openToast(){
     console.log("opening connection toast");
 
-    const testToast = document.querySelector('.toast:last-child');
+    const testToast = document.querySelector('.connection-toast:last-child');
     new window.bootstrap.Toast(testToast).show();
   }
 
