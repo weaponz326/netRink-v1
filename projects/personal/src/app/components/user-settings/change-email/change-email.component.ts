@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+
 
 @Component({
   selector: 'app-change-email',
@@ -7,9 +9,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ChangeEmailComponent implements OnInit {
 
-  constructor() { }
+  emailForm: FormGroup = new FormGroup({});
+
+  isEmailSending = false;
 
   ngOnInit(): void {
+    this.initEmailForm();
+  }
+
+  initEmailForm(){
+    this.emailForm = new FormGroup({
+      email: new FormControl(''),
+      password: new FormControl(''),
+    })
   }
 
 }

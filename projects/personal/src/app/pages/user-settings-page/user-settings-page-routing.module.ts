@@ -1,7 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-const routes: Routes = [];
+import { UserSettingsPageComponent } from './user-settings-page.component';
+
+const routes: Routes = [
+  { path: "", component: UserSettingsPageComponent },
+];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

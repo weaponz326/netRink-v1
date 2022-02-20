@@ -160,6 +160,7 @@
 				- notes api (S)
 				- accounts api (S)
 				- tasks api (S)
+			- user setings (S)
             + printing
 				- calendar print (S)
 				- budget print (S)

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+
 
 @Component({
   selector: 'app-reset-password',
@@ -7,9 +9,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ResetPasswordComponent implements OnInit {
 
-  constructor() { }
+  resetForm: FormGroup = new FormGroup({});
+
+  isResetSending = false;
 
   ngOnInit(): void {
+    this.initResetForm();
+  }
+
+  initResetForm(){
+    this.resetForm = new FormGroup({
+      oldPassword: new FormControl(''),
+      password1: new FormControl(''),
+      password2: new FormControl(''),
+    })
   }
 
 }
