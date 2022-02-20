@@ -45,9 +45,6 @@ export class ViewBudgetComponent implements OnInit {
 
   ngOnInit(): void {
     this.initBudgetForm();
-  }
-
-  ngAfterViewInit(): void {
     this.getBudget();
   }
 

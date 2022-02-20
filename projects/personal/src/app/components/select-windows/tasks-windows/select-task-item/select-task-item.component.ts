@@ -127,7 +127,7 @@ export class SelectTaskItemComponent implements OnInit {
           this.prevStartAt = this.firstInResponse;
           this.nextStartAfter = res.docs[res.docs.length - 1];
           this.firstInResponse = res.docs[0];
-          this.pageNumber++;
+          this.pageNumber--;
 
           if (this.pageNumber == 1){
             this.disableNext = false;

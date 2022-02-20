@@ -36,8 +36,6 @@ export class BudgetTablesComponent implements OnInit {
   isFetchingIncomeGridData: boolean =  false;
   isFetchingExpenditureGridData: boolean =  false;
 
-  isIncomeSaving = false;
-  isExpenditureSaving = false;
   isIncomeDeleting = false;
   isExpenditureDeleting = false;
 
@@ -53,9 +51,6 @@ export class BudgetTablesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-  }
-
-  ngAfterViewInit(): void {
     this.getBudgetIncome();
     this.getBudgetExpenditure();
   }
@@ -100,22 +95,23 @@ export class BudgetTablesComponent implements OnInit {
 
   createIncome(data: any){
     console.log(data);
-    this.isIncomeSaving = true;
+    this.addIncome.isSaving = true;
 
     this.budgetApi.createIncome(data)
       .then(
         (res: any) => {
           console.log(res);
-          this.isIncomeSaving = false;
+          this.addIncome.isSaving = false;
 
           if(res.id){
+            this.addIncome.dismissButton.nativeElement.click();
             this.getBudgetIncome();
             this.addIncome.resetForm();
           }
         },
         (err: any) => {
           console.log(err);
-          this.isIncomeSaving = false;
+          this.addIncome.isSaving = false;
           this.connectionToast.openToast();
         }
       )
@@ -123,18 +119,19 @@ export class BudgetTablesComponent implements OnInit {
 
   updateIncome(income: any){
     console.log(income);
-    this.isIncomeSaving = true;
+    this.editIncome.isSaving = true;
 
     this.budgetApi.updateIncome(income.id, income.data)
       .then(
         (res: any) => {
           console.log(res);
-          this.isIncomeSaving = false;
+          this.editIncome.dismissButton.nativeElement.click();
+          this.editIncome.isSaving = false;
           this.getBudgetIncome();
         },
         (err: any) => {
           console.log(err);
-          this.isIncomeSaving = false;
+          this.editIncome.isSaving = false;
           this.connectionToast.openToast();
         }
       )
@@ -198,22 +195,23 @@ export class BudgetTablesComponent implements OnInit {
 
   createExpenditure(data: any){
     console.log(data);
-    this.isExpenditureSaving = true;
+    this.addExpenditure.isSaving = true;
 
     this.budgetApi.createExpenditure(data)
       .then(
         (res: any) => {
           console.log(res);
-          this.isExpenditureSaving = false;
+          this.addExpenditure.isSaving = false;
 
           if(res.id){
+            this.addExpenditure.dismissButton.nativeElement.click();
             this.getBudgetExpenditure();
             this.addExpenditure.resetForm();
           }
         },
         (err: any) => {
           console.log(err);
-          this.isExpenditureSaving = false;
+          this.addExpenditure.isSaving = false;
           this.connectionToast.openToast();
         }
       )
@@ -221,18 +219,19 @@ export class BudgetTablesComponent implements OnInit {
 
   updateExpenditure(expenditure: any){
     console.log(expenditure);
-    this.isExpenditureSaving = true;
+    this.editExpenditure.isSaving = true;
 
     this.budgetApi.updateExpenditure(expenditure.id, expenditure.data)
       .then(
         (res: any) => {
           console.log(res);
-          this.isExpenditureSaving = false;
+          this.editExpenditure.dismissButton.nativeElement.click();
+          this.editExpenditure.isSaving = false;
           this.getBudgetExpenditure()
         },
         (err: any) => {
           console.log(err);
-          this.isExpenditureSaving = false;
+          this.editExpenditure.isSaving = false;
           this.connectionToast.openToast();
         }
       )

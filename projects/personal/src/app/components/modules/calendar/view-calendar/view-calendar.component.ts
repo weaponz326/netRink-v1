@@ -32,9 +32,7 @@ export class ViewCalendarComponent implements OnInit {
 
   ngOnInit(): void {
     this.initClendarForm();
-  }
 
-  ngAfterViewInit(): void {
     this.getCalendar();
     this.getCalendarSchedule();
   }

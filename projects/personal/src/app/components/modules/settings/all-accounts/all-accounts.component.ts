@@ -35,14 +35,14 @@ export class AllAccountsComponent implements OnInit {
   userEmail = "";
   userData: any;
 
-  restaurantData: any = [];
-  schoolData: any = [];
-  enterpriseData: any = [];
-  associationData: any = [];
-  hospitalData: any = [];
-  hotelData: any = [];
-  shopData: any = [];
-  productionData: any = [];
+  restaurantData: any[] = [];
+  schoolData: any[] = [];
+  enterpriseData: any[] = [];
+  associationData: any[] = [];
+  hospitalData: any[] = [];
+  hotelData: any[] = [];
+  shopData: any[] = [];
+  productionData: any[] = [];
 
   suiteData = [
     this.restaurantData,

@@ -17,9 +17,12 @@ export class AddExpenditureComponent implements OnInit {
 
   @Output() saveExpenditureEvent = new EventEmitter<any>();
 
-  @ViewChild('buttonElementReference', { read: ElementRef, static: false }) buttonElement!: ElementRef;
+  @ViewChild('addButtonElementReference', { read: ElementRef, static: false }) addButton!: ElementRef;
+  @ViewChild('dismissButtonElementReference', { read: ElementRef, static: false }) dismissButton!: ElementRef;
 
   addExpenditureForm: FormGroup = new FormGroup({});
+
+  isSaving = false;
 
   ngOnInit(): void {
     this.initAddExpenditureForm();
@@ -27,8 +30,7 @@ export class AddExpenditureComponent implements OnInit {
 
   openModal(){
     this.addExpenditureForm.controls.amount.setValue(0);
-
-    this.buttonElement.nativeElement.click();
+    this.addButton.nativeElement.click();
   }
 
   initAddExpenditureForm(){

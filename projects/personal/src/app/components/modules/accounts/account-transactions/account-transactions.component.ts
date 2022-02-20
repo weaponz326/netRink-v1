@@ -32,18 +32,14 @@ export class AccountTransactionsComponent implements OnInit {
   balance = 0;
 
   isFetchingGridData = false;
-
-  isTransactionSaving = false;
   isTransactionDeleting = false;
 
   ngOnInit(): void {
-  }
-
-  ngAfterViewInit(): void {
     this.getAccountTransaction();
   }
 
   calculateBalance(){
+    this.balance = 0;
     for (let transaction of this.transactionsGridData){
       if (transaction.data().transaction_type == "Credit")
         this.balance += transaction.data().amount;
@@ -77,20 +73,21 @@ export class AccountTransactionsComponent implements OnInit {
 
   createTransaction(data: any){
     console.log(data);
-    this.isTransactionSaving = true;
+    this.addTransaction.isSaving = true;
 
     this.accountsApi.createTransaction(data)
       .then(
         (res: any) => {
           console.log(res);
 
-          this.isTransactionSaving = false;
+          this.addTransaction.isSaving = false;
+          this.addTransaction.dismissButton.nativeElement.click();
           this.getAccountTransaction();
           this.addTransaction.resetForm();
         },
         (err: any) => {
           console.log(err);
-          this.isTransactionSaving = false;
+          this.addTransaction.isSaving = false;
           this.connectionToast.openToast();
         }
       )
@@ -98,18 +95,19 @@ export class AccountTransactionsComponent implements OnInit {
 
   updateTransaction(transaction: any){
     console.log(transaction);
-    this.isTransactionSaving = true;
+    this.editTransaction.isSaving = true;
 
     this.accountsApi.updateTransaction(transaction.id, transaction.data)
       .then(
         (res: any) => {
           console.log(res);
-          this.isTransactionSaving = false;
+          this.editTransaction.dismissButton.nativeElement.click();
+          this.editTransaction.isSaving = false;
           this.getAccountTransaction();
         },
         (err: any) => {
           console.log(err);
-          this.isTransactionSaving = false;
+          this.editTransaction.isSaving = false;
           this.connectionToast.openToast();
         }
       )

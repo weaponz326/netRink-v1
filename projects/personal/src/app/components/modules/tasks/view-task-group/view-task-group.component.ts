@@ -31,9 +31,6 @@ export class ViewTaskGroupComponent implements OnInit {
 
   ngOnInit(): void {
     this.initTaskGroupForm();
-  }
-
-  ngAfterViewInit(): void {
     this.getTaskGroup();
   }
 

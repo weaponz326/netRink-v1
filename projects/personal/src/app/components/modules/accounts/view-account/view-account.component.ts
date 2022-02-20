@@ -45,9 +45,6 @@ export class ViewAccountComponent implements OnInit {
 
   ngOnInit(): void {
     this.initAccountForm();
-  }
-
-  ngAfterViewInit(): void {
     this.getAccount();
   }
 

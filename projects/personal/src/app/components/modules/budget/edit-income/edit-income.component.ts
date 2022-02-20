@@ -15,10 +15,13 @@ export class EditIncomeComponent implements OnInit {
 
   @Output() saveIncomeEvent = new EventEmitter<any>();
 
-  @ViewChild('buttonElementReference', { read: ElementRef, static: false }) buttonElement!: ElementRef;
+  @ViewChild('editButtonElementReference', { read: ElementRef, static: false }) editButton!: ElementRef;
+  @ViewChild('dismissButtonElementReference', { read: ElementRef, static: false }) dismissButton!: ElementRef;
 
   editIncomeForm: FormGroup = new FormGroup({});
   incomeFormData: any;
+
+  isSaving = false;
 
   ngOnInit(): void {
     this.initeditIncomeForm();
@@ -31,7 +34,7 @@ export class EditIncomeComponent implements OnInit {
     this.editIncomeForm.controls.itemDescription.setValue(this.incomeFormData.data().item_description);
     this.editIncomeForm.controls.amount.setValue(this.incomeFormData.data().amount);
 
-    this.buttonElement.nativeElement.click();
+    this.editButton.nativeElement.click();
   }
 
   initeditIncomeForm(){

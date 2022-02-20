@@ -31,7 +31,7 @@
                 <tbody>
                     <tr *ngFor="let data of taskGroupsGridData" (dblclick)="viewTaskGroup(data.uid)" class="table-pointer">
                         <td>{{data?.data().task_group}}</td>
-                        <td>{{data?.data().created_at.toString() | date}}</td>
+                        <td>{{data?.data().created_at.toDate() | date}}</td>
                     </tr>
                     <tr *ngIf="isFetchingGridData" class="text-center">
                         <td colspan="2">

@@ -15,10 +15,13 @@ export class EditExpenditureComponent implements OnInit {
 
   @Output() saveExpenditureEvent = new EventEmitter<any>();
 
-  @ViewChild('buttonElementReference', { read: ElementRef, static: false }) buttonElement!: ElementRef;
+  @ViewChild('editButtonElementReference', { read: ElementRef, static: false }) editButton!: ElementRef;
+  @ViewChild('dismissButtonElementReference', { read: ElementRef, static: false }) dismissButton!: ElementRef;
 
   editExpenditureForm: FormGroup = new FormGroup({});
   expenditureFormData: any;
+
+  isSaving = false;
 
   ngOnInit(): void {
     this.initeditExpenditureForm();
@@ -31,7 +34,7 @@ export class EditExpenditureComponent implements OnInit {
     this.editExpenditureForm.controls.itemDescription.setValue(this.expenditureFormData.data().item_description);
     this.editExpenditureForm.controls.amount.setValue(this.expenditureFormData.data().amount);
 
-    this.buttonElement.nativeElement.click();
+    this.editButton.nativeElement.click();
   }
 
   initeditExpenditureForm(){

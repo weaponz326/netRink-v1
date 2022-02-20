@@ -33,7 +33,7 @@
                                 <button [disabled]="isIncomeDeleting" class="btn btn-sm border w-50" (click)="confirmDelete('Income', data.id)"><i class="bi bi-trash"></i></button>
                             </td>
                         </tr>
-                        <tr *ngIf="isFetchingIncomeGridData || isIncomeSaving" class="text-center">
+                        <tr *ngIf="isFetchingIncomeGridData" class="text-center">
                             <td colspan="4">
                                 <div class="spinner-grow spinner-grow-sm m-2" role="status">
                                     <span class="visually-hidden">Loading...</span>
@@ -77,7 +77,7 @@
                                 <button [disabled]="isExpenditureDeleting" class="btn btn-sm border w-50" (click)="confirmDelete('Expenditure', data.id)"><i class="bi bi-trash"></i></button>
                             </td>
                         </tr>
-                        <tr *ngIf="isFetchingExpenditureGridData || isExpenditureSaving" class="text-center">
+                        <tr *ngIf="isFetchingExpenditureGridData" class="text-center">
                             <td colspan="4">
                                 <div class="spinner-grow spinner-grow-sm m-2" role="status">
                                     <span class="visually-hidden">Loading...</span>

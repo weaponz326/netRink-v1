@@ -16,12 +16,15 @@ export class EditTransactionComponent implements OnInit {
 
   @Output() saveTransactionEvent = new EventEmitter<any>();
 
-  @ViewChild('buttonElementReference', { read: ElementRef, static: false }) buttonElement!: ElementRef;
+  @ViewChild('editButtonElementReference', { read: ElementRef, static: false }) editButton!: ElementRef;
+  @ViewChild('dismissButtonElementReference', { read: ElementRef, static: false }) dismissButton!: ElementRef;
 
   @ViewChild('transactionFormComponentReference', { read: TransactionFormComponent, static: false }) transactionForm!: TransactionFormComponent;
 
   transactionFormData: any;
   transactionAccount!: Account;
+
+  isSaving = false;
 
   ngOnInit(): void {
   }
@@ -34,7 +37,7 @@ export class EditTransactionComponent implements OnInit {
     this.transactionForm.transactionForm.controls.transactionType.setValue(this.transactionFormData.data().transaction_type);
     this.transactionForm.transactionForm.controls.amount.setValue(this.transactionFormData.data().amount);
 
-    this.buttonElement.nativeElement.click();
+    this.editButton.nativeElement.click();
   }
 
   saveTransaction(){
