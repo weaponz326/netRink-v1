@@ -10,10 +10,12 @@ export class ExtendedProfile {
 
 export class Invitation {
   created_at!: any;
-  account_id!: string;
-  account_name!: string;
-  account_type!: string;
-  invitee_id!: string;
+  user!: string;
   invitation_status!: string;
+  account_type!: string;
+  account!: {
+    id: string;
+    data: object;
+  }
 }
 

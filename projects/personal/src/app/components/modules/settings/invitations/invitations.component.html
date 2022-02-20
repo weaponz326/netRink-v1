@@ -46,7 +46,7 @@
                     <tr *ngFor="let data of invitationsGridData" (dblclick)="openInvitation(data)"
                      class="table-pointer">
                         <td>{{data?.data().created_at.toDate() | date}}</td>
-                        <td>{{data?.data().invitee_name}}</td>
+                        <td>{{data?.data().account.data.name}}</td>
                         <td>{{data?.data().account_type}}</td>
                         <td>{{data?.data().invitation_status}}</td>
                     </tr>

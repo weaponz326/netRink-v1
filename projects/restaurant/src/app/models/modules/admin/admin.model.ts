@@ -1,4 +1,5 @@
 import { Account } from '../../account/account.model';
+import { User } from 'projects/personal/src/app/models/user/user.model';
 
 export class AccountUser {
   personal_id!: string;
@@ -13,9 +14,11 @@ export class AccountUser {
 export class Invitation {
   created_at!: any;
   account!: string;
-  invitee_id!: string;
-  invitee_name!: string;
   invitation_status!: string;
+  user!: {
+    id: string;
+    data: User;
+  }
 }
 
 export class UserAccess {

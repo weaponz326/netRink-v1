@@ -38,6 +38,7 @@
               "projects/application/src/styles.scss"
             ],
             "scripts": [
+              "node_modules/@popperjs/core/dist/umd/popper.min.js",
               "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
             ]
           },
@@ -112,6 +113,7 @@
               "projects/application/src/styles.scss"
             ],
             "scripts": [
+              "node_modules/@popperjs/core/dist/umd/popper.min.js",
               "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
             ]
           }
@@ -158,6 +160,7 @@
               "projects/personal/src/styles.scss"
             ],
             "scripts": [
+              "node_modules/@popperjs/core/dist/umd/popper.min.js",
               "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
               "node_modules/quill/dist/quill.min.js",
               "projects/personal/src/assets/scripts/sb-admin-2.min.js"
@@ -235,6 +238,7 @@
               "projects/personal/src/styles.scss"
             ],
             "scripts": [
+              "node_modules/@popperjs/core/dist/umd/popper.min.js",
               "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
               "projects/personal/src/assets/scripts/sb-admin-2.min.js"
             ]
@@ -278,6 +282,7 @@
               "projects/restaurant/src/styles.scss"
             ],
             "scripts": [
+              "node_modules/@popperjs/core/dist/umd/popper.min.js",
               "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
               "projects/personal/src/assets/scripts/sb-admin-2.min.js"
             ]
@@ -354,6 +359,7 @@
               "projects/restaurant/src/styles.scss"
             ],
             "scripts": [
+              "node_modules/@popperjs/core/dist/umd/popper.min.js",
               "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
               "projects/personal/src/assets/scripts/sb-admin-2.min.js"
             ]
@@ -397,6 +403,7 @@
               "projects/school/src/styles.scss"
             ],
             "scripts": [
+              "node_modules/@popperjs/core/dist/umd/popper.min.js",
               "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
               "projects/personal/src/assets/scripts/sb-admin-2.min.js"
             ]
@@ -473,6 +480,7 @@
               "projects/school/src/styles.scss"
             ],
             "scripts": [
+              "node_modules/@popperjs/core/dist/umd/popper.min.js",
               "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
               "projects/personal/src/assets/scripts/sb-admin-2.min.js"
             ]
@@ -516,6 +524,7 @@
               "projects/enterprise/src/styles.scss"
             ],
             "scripts": [
+              "node_modules/@popperjs/core/dist/umd/popper.min.js",
               "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
               "projects/personal/src/assets/scripts/sb-admin-2.min.js"
             ]
@@ -592,6 +601,7 @@
               "projects/enterprise/src/styles.scss"
             ],
             "scripts": [
+              "node_modules/@popperjs/core/dist/umd/popper.min.js",
               "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
               "projects/personal/src/assets/scripts/sb-admin-2.min.js"
             ]
@@ -635,6 +645,7 @@
               "projects/association/src/styles.scss"
             ],
             "scripts": [
+              "node_modules/@popperjs/core/dist/umd/popper.min.js",
               "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
               "projects/personal/src/assets/scripts/sb-admin-2.min.js"
             ]
@@ -711,6 +722,7 @@
               "projects/association/src/styles.scss"
             ],
             "scripts": [
+              "node_modules/@popperjs/core/dist/umd/popper.min.js",
               "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
               "projects/personal/src/assets/scripts/sb-admin-2.min.js"
             ]
@@ -754,6 +766,7 @@
               "projects/hospital/src/styles.scss"
             ],
             "scripts": [
+              "node_modules/@popperjs/core/dist/umd/popper.min.js",
               "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
               "projects/personal/src/assets/scripts/sb-admin-2.min.js"
             ]
@@ -830,6 +843,7 @@
               "projects/hospital/src/styles.scss"
             ],
             "scripts": [
+              "node_modules/@popperjs/core/dist/umd/popper.min.js",
               "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
               "projects/personal/src/assets/scripts/sb-admin-2.min.js"
             ]
@@ -873,6 +887,7 @@
               "projects/hotel/src/styles.scss"
             ],
             "scripts": [
+              "node_modules/@popperjs/core/dist/umd/popper.min.js",
               "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
               "projects/personal/src/assets/scripts/sb-admin-2.min.js"
             ]
@@ -949,6 +964,7 @@
               "projects/hotel/src/styles.scss"
             ],
             "scripts": [
+              "node_modules/@popperjs/core/dist/umd/popper.min.js",
               "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
               "projects/personal/src/assets/scripts/sb-admin-2.min.js"
             ]
@@ -992,6 +1008,7 @@
               "projects/shop/src/styles.scss"
             ],
             "scripts": [
+              "node_modules/@popperjs/core/dist/umd/popper.min.js",
               "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
               "projects/personal/src/assets/scripts/sb-admin-2.min.js"
             ]
@@ -1068,6 +1085,7 @@
               "projects/shop/src/styles.scss"
             ],
             "scripts": [
+              "node_modules/@popperjs/core/dist/umd/popper.min.js",
               "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
               "projects/personal/src/assets/scripts/sb-admin-2.min.js"
             ]
@@ -1111,6 +1129,7 @@
               "projects/production/src/styles.scss"
             ],
             "scripts": [
+              "node_modules/@popperjs/core/dist/umd/popper.min.js",
               "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
               "projects/personal/src/assets/scripts/sb-admin-2.min.js"
             ]
@@ -1187,6 +1206,7 @@
               "projects/production/src/styles.scss"
             ],
             "scripts": [
+              "node_modules/@popperjs/core/dist/umd/popper.min.js",
               "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
               "projects/personal/src/assets/scripts/sb-admin-2.min.js"
             ]

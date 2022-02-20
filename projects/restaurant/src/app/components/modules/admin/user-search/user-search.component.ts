@@ -7,6 +7,7 @@ import { ConnectionToastComponent } from 'projects/personal/src/app/components/m
 import { SearchResultsComponent } from '../search-results/search-results.component';
 import { SearchDetailComponent } from '../search-detail/search-detail.component';
 
+import { AccountApiService } from 'projects/restaurant/src/app/services/account-api/account-api.service';
 import { AdminApiService } from 'projects/restaurant/src/app/services/modules/admin-api/admin-api.service';
 import { SettingsApiService } from 'projects/personal/src/app/services/modules/settings-api/settings-api.service';
 
@@ -23,6 +24,7 @@ export class UserSearchComponent implements OnInit {
 
   constructor(
     private router: Router,
+    private accountApi: AccountApiService,
     private adminApi: AdminApiService,
     private settingsApi: SettingsApiService
   ) { }
@@ -37,6 +39,8 @@ export class UserSearchComponent implements OnInit {
 
   searchInput = '';
 
+  accountData: any;
+
   isSearchResultsReady = false;
   isSearchDetailReady = false;
   searchResultsData: any;
@@ -44,6 +48,8 @@ export class UserSearchComponent implements OnInit {
   searchQuery: any;
 
   ngOnInit(): void {
+    this.getAccount();
+
     console.log(sessionStorage.getItem('restaurantAdminSearchInput'));
 
     if(sessionStorage.getItem('restaurantAdminSearchInput')){
@@ -62,6 +68,20 @@ export class UserSearchComponent implements OnInit {
 
       this.getSearchResult();
     }
+  }
+
+  getAccount(){
+    this.accountApi.getAccount()
+      .then(
+        (res: any) => {
+          console.log(res);
+          this.accountData = res;
+        },
+        (err: any) => {
+          console.log(err);
+          this.connectionToast.openToast();
+        }
+      )
   }
 
   getSearchResult(){
@@ -104,9 +124,11 @@ export class UserSearchComponent implements OnInit {
     let restaurantData: RestaurantInvitation = {
       created_at: firebase.default.firestore.FieldValue.serverTimestamp(),
       account: localStorage.getItem('restaurant_id') as string,
-      invitee_id: this.searchDetailData.id,
-      invitee_name: this.searchDetailData.data().first_name + " " + this.searchDetailData.data().last_name,
       invitation_status: 'Awaiting',
+      user: {
+        id: this.searchDetailData.id,
+        data: this.searchDetailData.data()
+      }
     }
 
     console.log(restaurantData);
@@ -133,11 +155,13 @@ export class UserSearchComponent implements OnInit {
 
     let personalData: PersonalInvitation = {
       created_at: firebase.default.firestore.FieldValue.serverTimestamp(),
-      account_id: localStorage.getItem('restaurant_id') as string,
-      account_name: localStorage.getItem('restaurant_name') as string,
-      account_type: "Restaurant",
-      invitee_id: this.searchDetailData.id,
+      user: this.searchDetailData.id,
       invitation_status: 'Awaiting',
+      account_type: "Restaurant",
+      account: {
+        id: sessionStorage.getItem('restaurant_id') as string,
+        data: this.accountData.data(),
+      }
     }
 
     this.settingsApi.createInvitation(personalData)
