@@ -1,9 +1,8 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { TableFormComponent } from '../table-form/table-form.component';
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
-import { DeleteModalComponent } from 'projects/personal/src/app/components/module-utilities/delete-modal/delete-modal.component'
 
 import { TablesApiService } from 'projects/restaurant/src/app/services/modules/tables-api/tables-api.service';
 import { TablesPrintService } from 'projects/restaurant/src/app/services/printing/tables-print/tables-print.service';
@@ -24,55 +23,38 @@ export class ViewTableComponent implements OnInit {
     private tablesPrint: TablesPrintService
   ) { }
 
+  @Output() saveTableEvent = new EventEmitter<any>();
+  @Output() deleteTableEvent = new EventEmitter<any>();
+
+  @ViewChild('editButtonElementReference', { read: ElementRef, static: false }) editButton!: ElementRef;
+  @ViewChild('dismissButtonElementReference', { read: ElementRef, static: false }) dismissButton!: ElementRef;
   @ViewChild('tableFormComponentReference', { read: TableFormComponent, static: false }) tableForm!: TableFormComponent;
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
-  @ViewChild('deleteModalComponentReference', { read: DeleteModalComponent, static: false }) deleteModal!: DeleteModalComponent;
-
-  navHeading: any[] = [
-    { text: "All Tables", url: "/home/tables/all-tables" },
-    { text: "View Table", url: "/home/tables/view-table" },
-  ];
 
   tableData: any;
 
-  isTableLoading = false;
   isTableSaving = false;
   isTableDeleting = false;
 
   ngOnInit(): void {
-    this.getTable();
   }
 
-  getTable(){
-    this.isTableLoading = true;
+  openModal(data: any){
+    this.tableData = data;
 
-    this.tablesApi.getTable()
-      .then(
-        (res: any) => {
-          console.log(res);
-          this.tableData = res;
-          this.isTableLoading = false;
+    this.tableForm.tableForm.controls.tableNumber.setValue(data.data().table_number);
+    this.tableForm.tableForm.controls.tableType.setValue(data.data().table_type);
+    this.tableForm.tableForm.controls.capacity.setValue(data.data().capacity);
+    this.tableForm.tableForm.controls.location.setValue(data.data().location);
+    this.tableForm.tableForm.controls.tableStatus.setValue(data.data().table_status);
 
-          this.tableForm.tableForm.controls.tableNumber.setValue(res.data().table_number);
-          this.tableForm.tableForm.controls.tableType.setValue(res.data().table_type);
-          this.tableForm.tableForm.controls.capacity.setValue(res.data().capacity);
-          this.tableForm.tableForm.controls.location.setValue(res.data().location);
-          this.tableForm.tableForm.controls.tableStatus.setValue(res.data().table_status);
-        },
-        (err: any) => {
-          console.log(err);
-          this.isTableLoading = false;
-          this.connectionToast.openToast();
-        }
-      )
+    this.editButton.nativeElement.click();
   }
 
-  updateTable(){
-    console.log('u are saving a new table');
-
-    var data = {
+  saveTable(){
+    let data: Table = {
       created_at: this.tableData.data().created_at,
-      account: localStorage.getItem('restaurant_id'),
+      account: localStorage.getItem('restaurant_id') as string,
       table_number: this.tableForm.tableForm.controls.tableNumber.value,
       table_type: this.tableForm.tableForm.controls.tableType.value,
       capacity: this.tableForm.tableForm.controls.capacity.value,
@@ -80,46 +62,16 @@ export class ViewTableComponent implements OnInit {
       table_status: this.tableForm.tableForm.controls.tableStatus.value,
     }
 
-    console.log(data);
-    this.isTableSaving = true;
+    let table = {
+      id: this.tableData.id,
+      data: data
+    }
 
-    this.tablesApi.updateTable(data)
-      .then(
-        (res: any) => {
-          console.log(res);
-          this.isTableSaving = false;
-        },
-        (err: any) => {
-          console.log(err);
-          this.isTableSaving = false;
-          this.connectionToast.openToast();
-        }
-      )
-  }
-
-  confirmDelete(){
-    this.deleteModal.openModal();
+    this.saveTableEvent.emit(table);
   }
 
   deleteTable(){
-    this.isTableDeleting = true;
-
-    this.tablesApi.deleteTable()
-      .then(
-        (res: any) => {
-          console.log(res);
-          this.router.navigateByUrl('/home/tables/all-tables');
-        },
-        (err: any) => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
-  }
-
-  onPrint(){
-    console.log("lets start printing...");
-    this.tablesPrint.printViewTable();
+    this.deleteTableEvent.emit(this.tableData.id);
   }
 
 }

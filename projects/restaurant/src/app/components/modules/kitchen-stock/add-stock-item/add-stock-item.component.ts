@@ -30,10 +30,6 @@ export class AddStockItemComponent implements OnInit {
 
   isItemSaving = false;
 
-  navHeading: any[] = [
-    { text: "New Item", url: "/home/kitchen-stock/add-stock-item" },
-  ];
-
   ngOnInit(): void {
   }
 

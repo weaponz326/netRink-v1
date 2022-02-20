@@ -16,19 +16,19 @@ export class TablesApiService {
 
   // tables
 
-  createTable(table: any){
-    return this.tableRef.add(table);
+  createTable(tableData: any){
+    return this.tableRef.add(tableData);
   }
 
   getTable(){
     return this.tableRef.doc(String(sessionStorage.getItem('restaurant_table_id'))).ref.get();
   }
 
-  updateTable(table: any){
-    return this.tableRef.doc(String(sessionStorage.getItem('restaurant_table_id'))).update(table);
+  updateTable(tableId: any, tableData: any){
+    return this.tableRef.doc(String(sessionStorage.getItem('restaurant_table_id'))).update(tableData);
   }
 
-  deleteTable(){
+  deleteTable(tableId: any){
     return this.tableRef.doc(String(sessionStorage.getItem('restaurant_table_id'))).delete();
   }
 

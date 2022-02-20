@@ -41,7 +41,7 @@
 
                 <div *ngIf="invitationData?.data().invitation_status == 'Awaiting'" class="row">
                     <div class="offset-md-3 col">
-                        <button class="btn btn-secondary page-add-btn me-1">Accept Invitation</button>
+                        <button class="btn btn-secondary page-add-btn me-1" (click)="acceptInvite()">Accept Invitation</button>
                         <button class="btn btn-secondary page-add-btn me-1">Decline Invitation</button>
                     </div>
                 </div>

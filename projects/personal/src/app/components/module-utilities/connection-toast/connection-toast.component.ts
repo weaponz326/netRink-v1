@@ -1,13 +1,13 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 
-import '@popperjs/core';
+// import '@popperjs/core';
 
-declare global {
-  interface Window {
-      bootstrap: any;
-  }
-}
-window.bootstrap = require('bootstrap');
+// declare global {
+//   interface Window {
+//       bootstrap: any;
+//   }
+// }
+// window.bootstrap = require('bootstrap');
 
 
 @Component({
@@ -28,7 +28,7 @@ export class ConnectionToastComponent implements OnInit {
     console.log("opening connection toast");
 
     const testToast = document.querySelector('.connection-toast:last-child');
-    new window.bootstrap.Toast(testToast).show();
+    // new window.bootstrap.Toast(testToast).show();
   }
 
 }

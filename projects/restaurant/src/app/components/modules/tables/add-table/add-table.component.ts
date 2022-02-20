@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
 import * as firebase from 'firebase/compat/app';
@@ -23,22 +23,25 @@ export class AddTableComponent implements OnInit {
     private tablesApi: TablesApiService
   ) { }
 
-  @ViewChild('tableFormComponentReference', { read: TableFormComponent, static: false }) tableForm!: TableFormComponent;
-  @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
+  @Output() saveItemEvent = new EventEmitter<any>();
 
-  navHeading: any[] = [
-    { text: "Add Table", url: "/home/tables/add-table" },
-  ];
+  @ViewChild('tableFormComponentReference', { read: TableFormComponent, static: false }) tableForm!: TableFormComponent;
+  @ViewChild('addButtonElementReference', { read: ElementRef, static: false }) addButton!: ElementRef;
+  @ViewChild('dismissButtonElementReference', { read: ElementRef, static: false }) dismissButton!: ElementRef;
+
+  @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
 
   isTableSaving = false;
 
   ngOnInit(): void {
   }
 
-  createTable(){
-    console.log('u are saving a new table');
+  openModal(){
+    this.addButton.nativeElement.click();
+  }
 
-    var data: Table = {
+  saveTable(){
+    let data: Table = {
       created_at: firebase.default.firestore.FieldValue.serverTimestamp(),
       account: localStorage.getItem('restaurant_id') as string,
       table_number: this.tableForm.tableForm.controls.tableNumber.value,
@@ -48,24 +51,15 @@ export class AddTableComponent implements OnInit {
       table_status: this.tableForm.tableForm.controls.tableStatus.value,
     }
 
-    console.log(data);
-    this.isTableSaving = true;
+    this.saveItemEvent.emit(data);
+  }
 
-    this.tablesApi.createTable(data)
-      .then(
-        (res: any) => {
-          console.log(res);
-          this.isTableSaving = false;
-
-          sessionStorage.setItem('restaurant_table_id', res.id);
-          this.router.navigateByUrl('/home/tables/view-table');
-        },
-        (err: any) => {
-          console.log(err);
-          this.isTableSaving = false;
-          this.connectionToast.openToast();
-        }
-      )
+  resetForm(){
+    this.tableForm.tableForm.controls.tableNumber.setValue("");
+    this.tableForm.tableForm.controls.tableType.setValue("");
+    this.tableForm.tableForm.controls.capacity.setValue("");
+    this.tableForm.tableForm.controls.location.setValue("");
+    this.tableForm.tableForm.controls.tableStatus.setValue("");
   }
 
 }

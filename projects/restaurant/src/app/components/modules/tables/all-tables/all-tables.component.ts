@@ -1,7 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { AddTableComponent } from '../add-table/add-table.component';
+import { ViewTableComponent } from '../view-table/view-table.component';
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
+import { DeleteModalComponent } from 'projects/personal/src/app/components/module-utilities/delete-modal/delete-modal.component'
 
 import { TablesApiService } from 'projects/restaurant/src/app/services/modules/tables-api/tables-api.service';
 import { TablesPrintService } from 'projects/restaurant/src/app/services/printing/tables-print/tables-print.service';
@@ -20,7 +23,10 @@ export class AllTablesComponent implements OnInit {
     private tablesPrint: TablesPrintService
   ) { }
 
+  @ViewChild('addTableComponentReference', { read: AddTableComponent, static: false }) addTable!: AddTableComponent;
+  @ViewChild('viewTableComponentReference', { read: ViewTableComponent, static: false }) viewTable!: ViewTableComponent;
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
+  @ViewChild('deleteModalComponentReference', { read: DeleteModalComponent, static: false }) deleteModal!: DeleteModalComponent;
 
   navHeading: any[] = [
     { text: "All Tables", url: "/home/tables/all-tables" },
@@ -43,6 +49,8 @@ export class AllTablesComponent implements OnInit {
     field: "created_at",
     direction: "desc"
   }
+
+  deleteId: any;
 
   ngOnInit(): void {
     this.getAccountTable();
@@ -148,11 +156,69 @@ export class AllTablesComponent implements OnInit {
     this.getAccountTable();
   }
 
-  viewTable(tableId: any){
-    console.log(tableId);
-    sessionStorage.setItem('restaurant_table_id', tableId);
+  createTable(data: any){
+    console.log('u are saving a new table');
 
-    this.router.navigateByUrl('/home/tables/view-table');
+    console.log(data);
+    this.addTable.isTableSaving = true;
+
+    this.tablesApi.createTable(data)
+      .then(
+        (res: any) => {
+          console.log(res);
+          this.addTable.isTableSaving = false;
+          this.addTable.dismissButton.nativeElement.click();
+
+          this.getAccountTable();
+        },
+        (err: any) => {
+          console.log(err);
+          this.addTable.isTableSaving = false;
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  updateTable(table: any){
+    console.log('u are saving a new table');
+
+    console.log(table);
+    this.viewTable.isTableSaving = true;
+
+    this.tablesApi.updateTable(table.id, table.data)
+      .then(
+        (res: any) => {
+          console.log(res);
+          this.viewTable.isTableSaving = false;
+        },
+        (err: any) => {
+          console.log(err);
+          this.viewTable.isTableSaving = false;
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  confirmDelete(id: any){
+    this.deleteId = id;
+    this.deleteModal.openModal();
+  }
+
+  deleteTable(){
+    this.viewTable.isTableDeleting = true;
+
+    this.tablesApi.deleteTable(this.deleteId)
+      .then(
+        (res: any) => {
+          console.log(res);
+          this.viewTable.isTableDeleting = false;
+        },
+        (err: any) => {
+          console.log(err);
+          this.viewTable.isTableDeleting = false;
+          this.connectionToast.openToast();
+        }
+      )
   }
 
   onPrint(){
