@@ -118,10 +118,8 @@ export class UserSearchComponent implements OnInit {
       )
   }
 
-  createInvitation() {
-    // restaurant invitation
-
-    let restaurantData: RestaurantInvitation = {
+  createAccountInvitation() {
+    let data: RestaurantInvitation = {
       created_at: firebase.default.firestore.FieldValue.serverTimestamp(),
       account: localStorage.getItem('restaurant_id') as string,
       invitation_status: 'Awaiting',
@@ -131,18 +129,19 @@ export class UserSearchComponent implements OnInit {
       }
     }
 
-    console.log(restaurantData);
+    console.log(data);
     this.searchDetail.isSending = true;
 
-    this.adminApi.createInvitation(restaurantData)
+    this.adminApi.createInvitation(data)
       .then(
         (res: any) => {
           console.log(res);
 
           sessionStorage.setItem('restaurant_invitation_id', res.id);
-          this.router.navigateByUrl('/home/admin/invitations');
-
+          this.createUserInvitation();
           this.searchDetail.isSending = false;
+
+          this.router.navigateByUrl('/home/admin/invitations');
         },
         (err: any) => {
           console.log(err);
@@ -150,21 +149,24 @@ export class UserSearchComponent implements OnInit {
           this.connectionToast.openToast();
         }
       )
+  }
 
-    // personal invitation
-
-    let personalData: PersonalInvitation = {
+  createUserInvitation(){
+    let data: PersonalInvitation = {
       created_at: firebase.default.firestore.FieldValue.serverTimestamp(),
       user: this.searchDetailData.id,
       invitation_status: 'Awaiting',
       account_type: "Restaurant",
+      account_invitaion: localStorage.getItem('restaurant_invitation_id') as string,
       account: {
         id: sessionStorage.getItem('restaurant_id') as string,
         data: this.accountData.data(),
       }
     }
 
-    this.settingsApi.createInvitation(personalData)
+    console.log(data);
+
+    this.settingsApi.createInvitation(data)
       .then(
         (res: any) => {
           console.log(res);

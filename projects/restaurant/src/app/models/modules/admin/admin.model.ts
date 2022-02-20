@@ -2,9 +2,11 @@ import { Account } from '../../account/account.model';
 import { User } from 'projects/personal/src/app/models/user/user.model';
 
 export class AccountUser {
-  personal_id!: string;
-  personal_name!:  string;
   access_level!: string;
+  user!: {
+    id: string;
+    name: string;
+  };
   account!: {
     id: string;
     data: Account;

@@ -57,7 +57,7 @@ export class AdminApiService {
 
   getUserAccountUser(){
     return this.accountUserRef.ref
-      .where("personal_id", "==", String(localStorage.getItem('personal_id')))
+      .where("user.id", "==", String(localStorage.getItem('personal_id')))
       .get();
   }
 
@@ -81,12 +81,20 @@ export class AdminApiService {
 
   // invitations
 
-  createInvitation(invitation: any){
-    return this.invitationRef.add(invitation);
+  createInvitation(invitationData: any){
+    return this.invitationRef.add(invitationData);
   }
 
-  getInvitation(){
-    return this.invitationRef.doc(String(sessionStorage.getItem('restaurant_invitation_id'))).ref.get();
+  getInvitation(invitationId: any){
+    return this.invitationRef.doc(invitationId).ref.get();
+  }
+
+  updateInvitation(invitationId: any, invitationData: any){
+    return this.invitationRef.doc(invitationId).update(invitationData);
+  }
+
+  deleteInvitation(invitationId: any){
+    return this.invitationRef.doc(invitationId).delete();
   }
 
   getAccountInvitation(sorting: any, pageSize: any){

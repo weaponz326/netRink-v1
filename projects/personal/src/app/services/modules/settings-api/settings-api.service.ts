@@ -31,20 +31,20 @@ export class SettingsApiService {
 
   // invitations
 
-  createInvitation(invitation: any){
-    return this.invitationsRef.add(invitation);
+  createInvitation(invitationData: any){
+    return this.invitationsRef.add(invitationData);
   }
 
-  getInvitation(){
-    return this.invitationsRef.doc(String(sessionStorage.getItem('personal_invitation_id'))).ref.get();
+  getInvitation(invitationId: any){
+    return this.invitationsRef.doc(invitationId).ref.get();
   }
 
-  updateInvitation(invitation: any){
-    return this.invitationsRef.doc(String(sessionStorage.getItem('personal_invitation_id'))).update(invitation);
+  updateInvitation(invitationId: any, invitationData: any){
+    return this.invitationsRef.doc(invitationId).update(invitationData);
   }
 
-  deleteInvitation(){
-    return this.invitationsRef.doc(String(sessionStorage.getItem('personal_invitation_id'))).delete();
+  deleteInvitation(invitationId: any){
+    return this.invitationsRef.doc(invitationId).delete();
   }
 
   getUserInvitation(sorting: any, pageSize: any){

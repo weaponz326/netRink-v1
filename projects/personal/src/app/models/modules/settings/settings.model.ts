@@ -13,6 +13,7 @@ export class Invitation {
   user!: string;
   invitation_status!: string;
   account_type!: string;
+  account_invitaion!: string;
   account!: {
     id: string;
     data: object;

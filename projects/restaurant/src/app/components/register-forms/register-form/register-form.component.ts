@@ -78,8 +78,10 @@ export class RegisterFormComponent implements OnInit {
 
   createAccountUser(account: any){
     let userData: AccountUser = {
-      personal_id: localStorage.getItem('personal_id') as string,
-      personal_name: sessionStorage.getItem('personal_name') as string,
+      user: {
+        id: localStorage.getItem('personal_id') as string,
+        name: sessionStorage.getItem('personal_name') as string,
+      },
       access_level: "Admin",
       account: {
         id: localStorage.getItem('restaurant_id') as string,
