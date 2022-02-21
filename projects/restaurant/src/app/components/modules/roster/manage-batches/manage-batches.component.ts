@@ -38,23 +38,21 @@ export class ManageBatchesComponent implements OnInit {
   rosterForm: FormGroup = new FormGroup({});
 
   batchesGridData: any[] = [];
+  isFetchingGridData: boolean = false;
 
-  deleteId = "";
-  deleteIndex = 0;
+  deleteId: any;
 
   ngOnInit(): void {
     this.initRosterForm();
-  }
 
-  ngAfterViewInit(): void {
     this.getRoster();
     this.getRosterBatch();
   }
 
   initRosterForm(){
     this.rosterForm = new FormGroup({
-      rosterCode: new FormControl(''),
-      rosterName: new FormControl(''),
+      rosterCode: new FormControl({value: "", disabled: true}),
+      rosterName: new FormControl({value: "", disabled: true}),
     })
   }
 
@@ -78,14 +76,18 @@ export class ManageBatchesComponent implements OnInit {
   // grid
 
   getRosterBatch(){
+    this.isFetchingGridData = true;
+
     this.rosterApi.getRosterBatch()
       .then(
         (res: any) => {
           console.log(res);
-          this.batchesGridData = res.docs;
+          this.batchesGridData = res.docs
+          this.isFetchingGridData = false;
         },
         (err: any) => {
           console.log(err);
+          this.isFetchingGridData = false;
           this.connectionToast.openToast();
         }
       )
@@ -93,6 +95,7 @@ export class ManageBatchesComponent implements OnInit {
 
   createBatch(data: any){
     console.log(data);
+    this.addBatch.isSaving = true;
 
     this.rosterApi.createBatch(data)
       .then(
@@ -100,12 +103,15 @@ export class ManageBatchesComponent implements OnInit {
           console.log(res);
 
           if(res.id){
-            this.batchesGridData.push(res);
+            this.getRosterBatch();
+            this.addBatch.isSaving = false;
+            this.addBatch.dismissButton.nativeElement.click();
             this.addBatch.resetForm();
           }
         },
         err => {
           console.log(err);
+          this.addBatch.isSaving = false;
           this.connectionToast.openToast();
         }
       )
@@ -113,18 +119,20 @@ export class ManageBatchesComponent implements OnInit {
 
   updateBatch(data: any){
     console.log(data);
+    this.editBatch.isSaving = true;
 
     this.rosterApi.updateBatch(data.id, data.batch)
       .then(
         (res: any) => {
           console.log(res);
 
-          if(res.id){
-            this.batchesGridData[data.index] = data.batch;
-          }
+          this.getRosterBatch();
+          this.editBatch.isSaving = false;
+          this.editBatch.dismissButton.nativeElement.click();
         },
         (err: any) => {
           console.log(err);
+          this.editBatch.isSaving = false;
           this.connectionToast.openToast();
         }
       )
@@ -135,7 +143,7 @@ export class ManageBatchesComponent implements OnInit {
       .then(
         (res: any) => {
           console.log(res);
-          this.batchesGridData.splice(this.deleteIndex, 1);
+          this.getRosterBatch();
         },
         (err: any) => {
           console.log(err);
@@ -144,15 +152,13 @@ export class ManageBatchesComponent implements OnInit {
       )
   }
 
-  openEditBatch(index: any){
-    console.log(index);
-    this.editBatch.openModal(index, this.batchesGridData[index]);
+  openEditBatch(data: any){
+    console.log(data);
+    this.editBatch.openModal(data);
   }
 
-  confirmDelete(e: any){
-    this.deleteIndex = e.index;
-    this.deleteId = e.id;
-
+  confirmDelete(id: any){
+    this.deleteId = id;
     this.deleteModal.openModal();
   }
 

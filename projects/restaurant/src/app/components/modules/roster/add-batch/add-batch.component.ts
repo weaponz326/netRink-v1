@@ -17,9 +17,12 @@ export class AddBatchComponent implements OnInit {
 
   @Output() saveBatchEvent = new EventEmitter<any>();
 
-  @ViewChild('buttonElementReference', { read: ElementRef, static: false }) buttonElement!: ElementRef;
+  @ViewChild('addButtonElementReference', { read: ElementRef, static: false }) addButton!: ElementRef;
+  @ViewChild('dismissButtonElementReference', { read: ElementRef, static: false }) dismissButton!: ElementRef;
 
   batchForm: FormGroup = new FormGroup({});
+
+  isSaving = false;
 
   ngOnInit(): void {
     this.initBatchForm();
@@ -34,7 +37,7 @@ export class AddBatchComponent implements OnInit {
 
 
   openModal(){
-    this.buttonElement.nativeElement.click();
+    this.addButton.nativeElement.click();
   }
 
   saveBatch(){

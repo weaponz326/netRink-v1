@@ -23,19 +23,20 @@ export class NewRosterComponent implements OnInit {
     private rosterApi: RosterApiService
   ) { }
 
-  @ViewChild('buttonElementReference', { read: ElementRef, static: false }) buttonElement!: ElementRef;
+  @ViewChild('newButtonElementReference', { read: ElementRef, static: false }) newButton!: ElementRef;
+  @ViewChild('dismissButtonElementReference', { read: ElementRef, static: false }) dismissButton!: ElementRef;
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
 
   rosterForm: FormGroup = new FormGroup({});
 
-  selectedCustomerId: any;
+  isRosterSaving = false;
 
   ngOnInit(): void {
     this.initRosterForm();
   }
 
   openModal(){
-    this.buttonElement.nativeElement.click();
+    this.newButton.nativeElement.click();
   }
 
   initRosterForm(){
@@ -57,6 +58,8 @@ export class NewRosterComponent implements OnInit {
       to_date: this.rosterForm.controls.toDate.value,
     }
 
+    this.isRosterSaving = true;
+
     this.rosterApi.createRoster(data)
       .then(
         (res: any) => {
@@ -64,12 +67,15 @@ export class NewRosterComponent implements OnInit {
 
           if(res.id){
             sessionStorage.setItem('restaurant_roster_id', res.id);
+            this.dismissButton.nativeElement.click();
             this.router.navigateByUrl('/home/roster/view-roster');
+            this.isRosterSaving = false;
           }
         },
         (err: any) => {
           console.log(err);
-          this.connectionToast.openToast();
+            this.isRosterSaving = false;
+            this.connectionToast.openToast();
         }
       )
 

@@ -1,4 +1,4 @@
-<button [hidden]="true" #buttonElementReference data-bs-toggle="modal" data-bs-target="#editBatchModal">
+<button [hidden]="true" #editButtonElementReference data-bs-toggle="modal" data-bs-target="#editBatchModal">
     Launch demo modal
 </button>
 
@@ -8,7 +8,7 @@
 
             <div class="modal-header bg-light">
                 <span class="modal-title" id="editBatchModalLabel">Edit Batch</span>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button #dismissButtonElementReference type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
             <form class="page-form" [formGroup]="batchForm" (ngSubmit)="saveBatch()">
@@ -30,8 +30,7 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-sm btn-secondary modal-form-btn" data-bs-dismiss="modal">Save</button>
-                    <button type="button" class="btn btn-sm btn-secondary modal-form-btn" data-bs-dismiss="modal" (click)="deleteBatch()">Delete</button>
+                    <button [disabled]="isSaving" type="submit" class="btn btn-sm btn-secondary modal-form-btn">Save</button>
                     <button type="button" class="btn btn-sm btn-secondary modal-form-btn" data-bs-dismiss="modal">Cancel</button>
                 </div>
 

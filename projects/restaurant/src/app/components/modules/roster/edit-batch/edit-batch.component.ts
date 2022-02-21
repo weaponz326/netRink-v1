@@ -14,13 +14,13 @@ export class EditBatchComponent implements OnInit {
   @Output() saveBatchEvent = new EventEmitter<any>();
   @Output() deleteBatchEvent = new EventEmitter<any>();
 
-  @ViewChild('buttonElementReference', { read: ElementRef, static: false }) buttonElement!: ElementRef;
+  @ViewChild('editButtonElementReference', { read: ElementRef, static: false }) editButton!: ElementRef;
+  @ViewChild('dismissButtonElementReference', { read: ElementRef, static: false }) dismissButton!: ElementRef;
 
   batchForm: FormGroup = new FormGroup({});
-  batchFormData: any;
+  batchData: any;
 
-  selectedIndex: any = 0;
-  selectedId: any = "";
+  isSaving = false;
 
   ngOnInit(): void {
     this.initBatchForm();
@@ -33,42 +33,30 @@ export class EditBatchComponent implements OnInit {
     })
   }
 
-  openModal(index: any, data: any){
-    this.batchFormData = data;
+  openModal(data: any){
+    console.log(data);
+    this.batchData = data;
 
-    this.selectedIndex = index;
-    this.selectedId = data.id;
+    this.batchForm.controls.batchName.setValue(data.data().batch_name);
+    this.batchForm.controls.batchSymbol.setValue(data.data().batch_symbol);
 
-    this.batchForm.controls.batchName.setValue(data.batch_name);
-    this.batchForm.controls.batchSymbol.setValue(data.batch_symbol);
-
-    this.buttonElement.nativeElement.click();
+    this.editButton.nativeElement.click();
   }
 
   saveBatch(){
-    let batch: Batch = {
-      created_at: this.batchFormData.created_at,
+    let data: Batch = {
+      created_at: this.batchData.data().created_at,
       roster: sessionStorage.getItem('restaurant_roster_id') as string,
       batch_name: this.batchForm.controls.batchName.value,
       batch_symbol: this.batchForm.controls.batchSymbol.value,
     }
 
-    let data = {
-      index: this.selectedIndex,
-      id: this.selectedId,
-      batch: batch
+    let batch = {
+      id: this.batchData.id,
+      data: data,
     }
 
-    this.saveBatchEvent.emit(data);
-  }
-
-  deleteBatch(){
-    let data = {
-      index: this.selectedIndex,
-      id: this.selectedId,
-    }
-
-    this.deleteBatchEvent.emit(data);
+    this.saveBatchEvent.emit(batch);
   }
 
 }

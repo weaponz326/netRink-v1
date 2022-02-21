@@ -29,24 +29,21 @@ export class PersonnelFormComponent implements OnInit {
     this.initPersonnelForm();
   }
 
-  ngAfterViewInit(): void {
-    this.getBatches();
-  }
-
   initPersonnelForm(){
     this.personnelForm = new FormGroup({
-      personnelCode: new FormControl(''),
-      personnelName: new FormControl(''),
+      personnelCode: new FormControl({value: "", disabled: true}),
+      personnelName: new FormControl({value: "", disabled: true}),
       batchSymbol: new FormControl(''),
     })
   }
 
-  getBatches(){
+  getBatches(batch: any){
     this.rosterApi.getRosterBatch()
       .then(
         (res: any) => {
           console.log(res);        
           this.batchSource = res.docs;
+          this.personnelForm.controls.batchSymbol.setValue(batch);
         },
         (err: any) => {
           console.log(err);

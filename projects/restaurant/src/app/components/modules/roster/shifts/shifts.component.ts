@@ -26,25 +26,27 @@ export class ShiftsComponent implements OnInit {
 
   shiftsGridData: any[] = [];
 
-  deleteId = "";
-  deleteIndex = 0;
+  isFetchingGridData = false;
+
+  deleteId: any;
 
   ngOnInit(): void {
-  }
-
-  ngAfterViewInit(): void {
     this.getRosterShift();
   }
 
   getRosterShift(){
+    this.isFetchingGridData = true;
+
     this.rosterApi.getRosterShift()
       .then(
         (res: any) => {
           console.log(res);
           this.shiftsGridData = res.docs;
+          this.isFetchingGridData = false;
         },
         (err: any) => {
           console.log(err);
+          this.isFetchingGridData = false;
           this.connectionToast.openToast();
         }
       )
@@ -52,6 +54,7 @@ export class ShiftsComponent implements OnInit {
 
   createShift(data: any){
     console.log(data);
+    this.addShift.isSaving = true;
 
     this.rosterApi.createShift(data)
       .then(
@@ -59,12 +62,15 @@ export class ShiftsComponent implements OnInit {
           console.log(res);
 
           if(res.id){
-            this.shiftsGridData.push(data);
+            this.getRosterShift();
+            this.addShift.isSaving = false;
+            this.addShift.dismissButton.nativeElement.click();
             this.addShift.resetForm();
           }
         },
         (err: any) => {
           console.log(err);
+          this.addShift.isSaving = false;
           this.connectionToast.openToast();
         }
       )
@@ -72,18 +78,20 @@ export class ShiftsComponent implements OnInit {
 
   updateShift(data: any){
     console.log(data);
+    this.editShift.isSaving = true;
 
     this.rosterApi.updateShift(data.id, data.shift)
       .then(
         (res: any) => {
           console.log(res);
 
-          if(res.id){
-            this.shiftsGridData[data.index] = data.shift;
-          }
+          this.getRosterShift();
+          this.editShift.isSaving = false;
+          this.editShift.dismissButton.nativeElement.click();
         },
         (err: any) => {
           console.log(err);
+          this.editShift.isSaving = false;
           this.connectionToast.openToast();
         }
       )
@@ -96,7 +104,7 @@ export class ShiftsComponent implements OnInit {
       .then(
         (res: any) => {
           console.log(res);
-          this.shiftsGridData.splice(this.deleteIndex, 1);
+          this.getRosterShift();
         },
         (err: any) => {
           console.log(err);
@@ -105,15 +113,13 @@ export class ShiftsComponent implements OnInit {
       )
   }
 
-  openEditShift(index: any){
-    console.log(index);
-    this.editShift.openModal(index, this.shiftsGridData[index]);
+  openEditShift(data: any){
+    console.log(data);
+    this.editShift.openModal(data);
   }
 
-  confirmDelete(index: any, id: any){
-    this.deleteIndex = index;
+  confirmDelete(id: any){
     this.deleteId = id;
-
     this.deleteModal.openModal();
   }
 

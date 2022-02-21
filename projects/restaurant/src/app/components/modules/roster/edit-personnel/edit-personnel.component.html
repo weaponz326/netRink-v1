@@ -20,8 +20,7 @@
             </div>
 
             <div class="modal-footer">
-                <button type="submit" class="btn btn-sm btn-secondary modal-form-btn" data-bs-dismiss="modal" (click)="savePersonnel()">Save</button>
-                <button type="button" class="btn btn-sm btn-secondary modal-form-btn" data-bs-dismiss="modal" (click)="deletePersonnel()">Save</button>
+                <button [disabled]="isSaving" type="submit" class="btn btn-sm btn-secondary modal-form-btn" (click)="savePersonnel()">Save</button>
                 <button type="button" class="btn btn-sm btn-secondary modal-form-btn" data-bs-dismiss="modal">Cancel</button>
             </div>
 

@@ -1,8 +1,4 @@
-<div class="row mb-2">
-    <div class="col-md-12">
-        <button class="btn btn-secondary page-add-btn" (click)="addPersonnel.openModal()">Add Personnel</button>
-    </div>
-</div>
+<h4>Roster Personnel</h4>
 
 <div class="row">
     <div class="col-md-12">
@@ -10,16 +6,32 @@
         <table class="table table-bordered table-sm w-100 page-table">
             <thead>
                 <tr class="bg-light">
-                    <th width="25%">Personnel ID</th>
-                    <th width="50%">Personnel Name</th>
-                    <th width="25%">Batch</th>
+                    <th width="20%">Personnel ID</th>
+                    <th width="45%">Personnel Name</th>
+                    <th width="20%">Batch</th>
+                    <th width="15%" class="p-0">
+                        <button class="btn btn-secondary btn-sm w-100" (click)="addPersonnel.openModal()">
+                            <i class="bi bi-plus"></i>
+                        </button>
+                    </th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let data of personnelGridData; index as i" (dblClick)="openEditPersonnel(i)">
+                <tr *ngFor="let data of personnelGridData">
                     <td>{{data?.personnel_code}}</td>
                     <td>{{data?.personnel_name}}</td>
                     <td>{{data?.batch_sybol}}</td>
+                    <td class="p-0">
+                        <button class="btn btn-sm border w-50" (click)="openEditPersonnel(data)"><i class="bi bi-pen"></i></button>
+                        <button class="btn btn-sm border w-50" (click)="confirmDelete(data.id)"><i class="bi bi-trash"></i></button>
+                    </td>
+                </tr>
+                <tr *ngIf="isFetchingGridData" class="text-center">
+                    <td colspan="4">
+                        <div class="spinner-grow spinner-grow-sm m-2" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </td>
                 </tr>
             </tbody>
         </table>

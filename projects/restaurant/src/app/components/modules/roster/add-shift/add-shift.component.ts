@@ -17,9 +17,12 @@ export class AddShiftComponent implements OnInit {
 
   @Output() saveShiftEvent = new EventEmitter<any>();
 
-  @ViewChild('buttonElementReference', { read: ElementRef, static: false }) buttonElement!: ElementRef;
+  @ViewChild('addButtonElementReference', { read: ElementRef, static: false }) addButton!: ElementRef;
+  @ViewChild('dismissButtonElementReference', { read: ElementRef, static: false }) dismissButton!: ElementRef;
 
   shiftForm: FormGroup = new FormGroup({});
+
+  isSaving = false;
 
   ngOnInit(): void {
     this.initShiftForm();
@@ -34,7 +37,7 @@ export class AddShiftComponent implements OnInit {
   }
 
   openModal(){
-    this.buttonElement.nativeElement.click();
+    this.addButton.nativeElement.click();
   }
 
   saveShift(){

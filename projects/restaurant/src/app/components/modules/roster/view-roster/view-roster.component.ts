@@ -37,14 +37,12 @@ export class ViewRosterComponent implements OnInit {
   rosterForm: FormGroup = new FormGroup({});
   rosterFormData: any;
 
+  isRosterLoading: boolean = false;
   isRosterSaving: boolean = false;
   isRosterDeleting: boolean = false;
 
   ngOnInit(): void {
     this.initRosterForm();
-  }
-
-  ngAfterViewInit(): void {
     this.getRoster();
   }
 
@@ -58,6 +56,8 @@ export class ViewRosterComponent implements OnInit {
   }
 
   getRoster(){
+    this.isRosterLoading = true;
+
     this.rosterApi.getRoster()
       .then(
         (res: any) => {
@@ -68,9 +68,12 @@ export class ViewRosterComponent implements OnInit {
           this.rosterForm.controls.rosterName.setValue(this.rosterFormData.data().roster_name);
           this.rosterForm.controls.fromDate.setValue(this.rosterFormData.data().from_date);
           this.rosterForm.controls.toDate.setValue(this.rosterFormData.data().to_date);
+
+          this.isRosterLoading = false;
         },
         (err: any) => {
           console.log(err);
+          this.isRosterLoading = false;
           this.connectionToast.openToast();
         }
       )
@@ -86,13 +89,17 @@ export class ViewRosterComponent implements OnInit {
       to_date: this.rosterForm.controls.toDate.value,
     }
 
+    this.isRosterSaving = true;
+
     this.rosterApi.updateRoster(data)
       .then(
         (res: any) => {
           console.log(res);
+          this.isRosterSaving = false;
         },
         (err: any) => {
           console.log(err);
+          this.isRosterSaving = false;
           this.connectionToast.openToast();
         }
       )
@@ -114,10 +121,12 @@ export class ViewRosterComponent implements OnInit {
       .then(
         (res: any) => {
           console.log(res);
+          this.isRosterDeleting = false;
           this.router.navigateByUrl('/home/roster/all-roster');
         },
         (err: any) => {
           console.log(err);
+          this.isRosterDeleting = false;
           this.connectionToast.openToast();
         }
       )

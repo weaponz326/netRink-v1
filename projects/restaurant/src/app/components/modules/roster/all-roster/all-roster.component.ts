@@ -36,7 +36,7 @@ export class AllRosterComponent implements OnInit {
   nextStartAfter: any = [];
   prevStartAt: any = [];
   pageNumber = 0;
-  disableNext: boolean = false;
+  disableNext: boolean = true;
   disablePrev: boolean = true;
 
   sortParams = {
@@ -45,9 +45,6 @@ export class AllRosterComponent implements OnInit {
   }
 
   ngOnInit(): void {
-  }
-
-  ngAfterViewInit(): void {
     this.getAccountRoster();
   }
 
@@ -58,18 +55,23 @@ export class AllRosterComponent implements OnInit {
       .then(
         (res: any) => {
           console.log(res);
-
           this.rosterGridData = res.docs;
-          this.isFetchingGridData = false;
-          if (!res.docs.length) this.isDataAvailable = false;
 
+          this.isFetchingGridData = false;
           this.prevStartAt = this.firstInResponse;
           this.nextStartAfter = res.docs[res.docs.length - 1];
           this.firstInResponse = res.docs[0];
           this.pageNumber = 1;
+          if (!res.docs.length) this.isDataAvailable = false;
 
-          this.disableNext = false;
-          this.disablePrev = true;
+          if (!res.docs.length || res.docs.length < 20){
+            this.disableNext = true;
+            this.disablePrev = true;
+          }
+          else{
+            this.disableNext = false;
+            this.disablePrev = true;
+          }
         },
         (err: any) => {
           console.log(err);
@@ -87,11 +89,9 @@ export class AllRosterComponent implements OnInit {
       .then(
         (res: any) => {
           console.log(res);
-
           this.rosterGridData = res.docs;
-          this.isFetchingGridData = false;
-          if (!res.docs.length) this.isDataAvailable = false;
 
+          this.isFetchingGridData = false;
           this.prevStartAt = this.firstInResponse;
           this.nextStartAfter = res.docs[res.docs.length - 1];
           this.firstInResponse = res.docs[0];
@@ -118,15 +118,15 @@ export class AllRosterComponent implements OnInit {
       .then(
         (res: any) => {
           console.log(res);
-
           this.rosterGridData = res.docs;
+
           this.isFetchingGridData = false;
           if (!res.docs.length) this.isDataAvailable = false;
 
           this.prevStartAt = this.firstInResponse;
           this.nextStartAfter = res.docs[res.docs.length - 1];
           this.firstInResponse = res.docs[0];
-          this.pageNumber++;
+          this.pageNumber--;
 
           if (this.pageNumber == 1){
             this.disableNext = false;

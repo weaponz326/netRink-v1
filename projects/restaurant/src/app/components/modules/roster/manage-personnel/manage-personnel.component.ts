@@ -28,26 +28,27 @@ export class ManagePersonnelComponent implements OnInit {
   @ViewChild('deleteModalComponentReference', { read: DeleteModalComponent, static: false }) deleteModal!: DeleteModalComponent;
 
   personnelGridData: any[] = [];
+  isFetchingGridData = false;
 
   deleteId = "";
-  deleteIndex = 0;
 
   ngOnInit(): void {
-  }
-
-  ngAfterViewInit(): void {
     this.getRosterPersonnel();
   }
 
   getRosterPersonnel(){
+    this.isFetchingGridData = true;
+
     this.rosterApi.getRosterPersonnel()
       .then(
         (res: any) => {
           console.log(res);
           this.personnelGridData = res.docs;
+          this.isFetchingGridData = false;
         },
         (err: any) => {
           console.log(err);
+          this.isFetchingGridData = false;
           this.connectionToast.openToast();
         }
       )
@@ -55,6 +56,7 @@ export class ManagePersonnelComponent implements OnInit {
 
   createPersonnel(data: any){
     console.log(data);
+    this.addPersonnel.isSaving = true;
 
     this.rosterApi.createPersonnel(data)
       .then(
@@ -62,28 +64,36 @@ export class ManagePersonnelComponent implements OnInit {
           console.log(res);
 
           if(res.id){
-            this.personnelGridData.push(res);
+            this.getRosterPersonnel();
+            this.addPersonnel.isSaving = false;
+            this.addPersonnel.dismissButton.nativeElement.ckick();
             this.addPersonnel.resetForm();
           }
         },
         (err: any) => {
           console.log(err);
-          this.connectionToast.openToast();
+            this.addPersonnel.isSaving = false;
+            this.connectionToast.openToast();
         }
       )
   }
 
   updatePersonnel(data: any){
     console.log(data);
+    this.editPersonnel.isSaving = true;
 
     this.rosterApi.updatePersonnel(data.id, data.personnel)
       .then(
         (res: any) => {
           console.log(res);
-          this.personnelGridData[data.index] = data.personnel;
+          
+          this.getRosterPersonnel();
+          this.editPersonnel.isSaving = false;
+          this.editPersonnel.dismissButton.nativeElement.ckick();
         },
         (err: any) => {
           console.log(err);
+          this.editPersonnel.isSaving = false;
           this.connectionToast.openToast();
         }
       )
@@ -93,8 +103,8 @@ export class ManagePersonnelComponent implements OnInit {
     this.rosterApi.deletePersonnel(this.deleteId)
       .then(
         (res: any) => {
-          console.log(res);
-          this.personnelGridData.splice(this.deleteIndex, 1);
+          console.log(res);        
+          this.getRosterPersonnel();
         },
         (err: any) => {
           console.log(err);
@@ -103,15 +113,13 @@ export class ManagePersonnelComponent implements OnInit {
       )
   }
 
-  openEditPersonnel(index: any){
-    console.log(index);
-    this.editPersonnel.openModal(index, this.personnelGridData[index]);
+  openEditPersonnel(data: any){
+    console.log(data);
+    this.editPersonnel.openModal(data);
   }
 
-  confirmDelete(e: any){
-    this.deleteIndex = e.index;
-    this.deleteId = e.id;
-
+  confirmDelete(id: any){
+    this.deleteId = id;
     this.deleteModal.openModal();
   }
 

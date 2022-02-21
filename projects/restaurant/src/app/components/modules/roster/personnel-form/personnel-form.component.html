@@ -4,7 +4,7 @@
         <div class="col-md-4"><label class="float-end mt-1">Personnel Code :</label></div>
         <div class="col-md-8">
             <div class="input-group input-group-sm w-100">
-                <input formControlName="pesonnelCode" [disabled]="true" class="form-control">
+                <input formControlName="personnelCode" class="form-control">
                 <button type="button" class="btn btn-secondary" (click)="openStaffWindow()">
                     <i class="bi bi-three-dots"></i>
                 </button>
@@ -16,7 +16,7 @@
         <div class="col-md-4"><label class="float-end mt-1">Personnel Name :</label></div>
         <div class="col-md-8">
             <div class="input-group input-group-sm w-100">
-                <input formControlName="pesonnelName" [disabled]="true" class="form-control">
+                <input formControlName="personnelName" class="form-control">
                 <button type="button" class="btn btn-secondary" (click)="openStaffWindow()">
                     <i class="bi bi-three-dots"></i>
                 </button>
@@ -27,7 +27,7 @@
     <div class="row mb-1">
         <div class="col-md-4"><label class="float-end mt-1">Batch :</label></div>
         <div class="col-md-8">
-            <select formControlName="batch" class="form-control form-control-sm w-100">
+            <select formControlName="batchSymbol" class="form-control form-control-sm w-100">
                 <option *ngFor="let batch of batchSource">{{batch.data().batch_symbol}}</option>
             </select>
         </div>
