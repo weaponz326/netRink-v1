@@ -54,10 +54,10 @@ export class DashboardComponent implements OnInit {
       responsive: true,
       scales: {
         yAxes: [{
-          beginAtZero: true,
           min: 0,
           ticks: {
-            stepSize: 1
+            stepSize: 1,
+            beginAtZero: true,
           }
         }]
       }
