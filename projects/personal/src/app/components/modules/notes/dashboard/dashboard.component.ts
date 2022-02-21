@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 
 import { ChartDataSets, ChartOptions } from 'chart.js';
 import { Color, Label, SingleDataSet } from 'ng2-charts';
+import moment from 'moment/moment';
 
 import { NotesApiService } from 'projects/personal/src/app/services/modules/notes-api/notes-api.service';
 import { ConnectionToastComponent } from '../../../module-utilities/connection-toast/connection-toast.component'
@@ -22,73 +23,77 @@ export class DashboardComponent implements OnInit {
     { text: "Dashboard", url: "/home/notes/dashboard" },
   ];
 
-  allNotesCount: number = 0;
+  weekNotesData: any;
+  weekNotesCount: number = 0;
 
   notesLineChartData: ChartDataSets[] = [{ data: [0], label: 'Notes' }];
   notesLineChartLabels: Label[] = [""]
 
+  chartOptions = {};
+
+  today = moment();
+
   ngOnInit(): void {
+    this.initChart();
+    this.getWeekNote();
   }
 
-  ngAfterViewInit(): void {
-    this.getNotesCount();
-    this.getNoteAnnotation();
+  initChart(){
+    this.chartOptions = {
+      responsive: true,
+      scales: {
+        yAxes: [{
+          beginAtZero: true,
+          min: 0,
+          ticks: {
+            stepSize: 1
+          }
+        }]
+      }
+    };
   }
 
-  getNotesCount(){
-    // this.notesApi.getCounts("Note")
-    //   .subscribe(
-    //     res => {
-    //       console.log(res);
-    //       this.allNotesCount = res;
-    //     },
-    //     err => {
-    //       console.log(err);
-    //       this.connectionToast.openToast();
-    //     }
-    //   )
+  getWeekNote(){
+    this.notesApi.getWeekNote(moment(this.today).add(-6, 'days'), this.today)
+      .then(
+        res => {
+          console.log(res);
+          this.weekNotesData = res.docs;
+          this.weekNotesCount = res.docs.length;
+
+          this.setNoteChartData();
+        },
+        err => {
+          console.log(err);
+          this.connectionToast.openToast();
+        }
+      )
   }
 
-  getNoteAnnotation(){
-    // this.notesApi.getAnnotation("Note")
-    //   .subscribe(
-    //     res => {
-    //       console.log(res);
-    //       this.setNoteChartData(res);
-    //     },
-    //     err => {
-    //       console.log(err);
-    //       this.connectionToast.openToast();
-    //     }
-    //   )
-  }
-
-  setNoteChartData(data: any){
+  setNoteChartData(){
     this.notesLineChartLabels = [];
-    for(let x = 0; x < data.length; x++){
-      this.notesLineChartLabels.push(data[x].date);
+    for (let i = 7; i > 0; i--) {
+      var d = moment(this.today).add(-i, 'days');
+      this.notesLineChartLabels.push(d.toDate().toISOString().slice(0, 10));
     }
     console.log(this.notesLineChartLabels);
 
-    let rawData = [];
-    for(let x = 0; x < data.length; x++){
-      rawData.push(data[x].count);
+    let dataCount: any[] = [];
+    for (let i = 7; i > 0; i--) {
+      dataCount.push(0);
     }
-    console.log(rawData);
-    this.notesLineChartData = [{ data: rawData, label: 'Notes' }];
-  }
+    console.log(dataCount);
 
-  chartOptions = {
-    responsive: true,
-    scales: {
-      yAxes: [{
-        beginAtZero: true,
-        min: 0,
-        ticks: {
-          stepSize: 1
+    this.weekNotesData.forEach((note: any) => {
+      var noteDate = note.data().created_at.toDate().toISOString().slice(0, 10);
+      for (let i = 7; i > 0; i--){
+        if (this.notesLineChartLabels[i] == noteDate){
+          dataCount[i]++;
         }
-      }]
-    }
-  };
+      }
+    })
+    console.log(dataCount);
+    this.notesLineChartData = [{ data: dataCount, label: 'Notes' }];
+  }
 
 }

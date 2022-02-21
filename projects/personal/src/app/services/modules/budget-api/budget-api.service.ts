@@ -83,7 +83,7 @@ export class BudgetApiService {
 
   getBudgetIncome(){
     return this.incomeRef.ref
-      .where("budget", "==", String(sessionStorage.getItem('personal_budget_id')))
+      .where("budget.id", "==", String(sessionStorage.getItem('personal_budget_id')))
       // .orderBy("created_at", "desc")
       .get();
   }
@@ -104,8 +104,31 @@ export class BudgetApiService {
 
   getBudgetExpenditure(){
     return this.expenditureRef.ref
-      .where("budget", "==", String(sessionStorage.getItem('personal_budget_id')))
+      .where("budget.id", "==", String(sessionStorage.getItem('personal_budget_id')))
       // .orderBy("created_at", "desc")
+      .get();
+  }
+
+  // dashboard
+
+  getMonthBudget(startDate: any, endDate: any){
+    return this.budgetRef.ref
+      .where("user", "==", localStorage.getItem('personal_id'))
+      // .where("created_at", "<", startDate).where("created_at", ">", endDate)
+      .get();
+  }
+
+  getWeekIncome(startDate: any, endDate: any){
+    return this.incomeRef.ref
+      .where("budget.data.user", "==", localStorage.getItem('personal_id'))
+      // .where("created_at", "<", startDate).where("created_at", ">", endDate)
+      .get();
+  }
+
+  getWeekExpenditure(startDate: any, endDate: any){
+    return this.expenditureRef.ref
+      .where("budget.data.user", "==", localStorage.getItem('personal_id'))
+      // .where("created_at", "<", startDate).where("created_at", ">", endDate)
       .get();
   }
 

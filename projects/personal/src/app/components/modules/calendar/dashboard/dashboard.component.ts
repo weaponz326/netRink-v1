@@ -1,9 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
-import { ConnectionToastComponent } from '../../../module-utilities/connection-toast/connection-toast.component'
-
 import { ChartDataSets, ChartOptions } from 'chart.js';
 import { Color, Label, SingleDataSet } from 'ng2-charts';
+import moment from 'moment/moment';
+
+import { ConnectionToastComponent } from '../../../module-utilities/connection-toast/connection-toast.component'
 
 import { CalendarApiService } from 'projects/personal/src/app/services/modules/calendar-api/calendar-api.service';
 
@@ -23,79 +24,24 @@ export class DashboardComponent implements OnInit {
     { text: "Dashboard", url: "/home/calendar/dashboard" },
   ];
 
-  allCalendarsCount: number = 0;
-  allSchedulesCount: number = 0;
+  monthCalendarsData: any;
+  weekSchedulesData: any;
 
-  chartOptions = {};
+  monthCalendarsCount: number = 0;
+  weekSchedulesCount: number = 0;
+
   schedulesLineChartData: ChartDataSets[] = [{ data: [0], label: 'Schedules' }];
   schedulesLineChartLabels: Label[] = [""]
 
+  chartOptions = {};
+
+  today = moment();
+
   ngOnInit(): void {
-  }
-
-  ngAfterViewInit(): void {
-    // this.getCalendarsCount();
-    // this.getSchedulesCount();
-    // this.getScheduleAnnotation();
-
     this.initChart();
-  }
 
-  // getCalendarsCount(){
-  //   this.calendarApi.getCounts("Calendar")
-  //     .subscribe(
-  //       res => {
-  //         console.log(res);
-  //         this.allCalendarsCount = res;
-  //       },
-  //       err => {
-  //         console.log(err);
-  //         this.connectionToast.openToast();
-  //       }
-  //     )
-  // }
-
-  // getSchedulesCount(){
-  //   this.calendarApi.getCounts("Schedule")
-  //     .subscribe(
-  //       res => {
-  //         console.log(res);
-  //         this.allSchedulesCount = res;
-  //       },
-  //       err => {
-  //         console.log(err);
-  //         this.connectionToast.openToast();
-  //       }
-  //     )
-  // }
-
-  // getScheduleAnnotation(){
-  //   this.calendarApi.getAnnotation("Schedule")
-  //     .subscribe(
-  //       res => {
-  //         console.log(res);
-  //         this.setScheduleChartData(res);
-  //       },
-  //       err => {
-  //         console.log(err);
-  //         this.connectionToast.openToast();
-  //       }
-  //     )
-  // }
-
-  setScheduleChartData(data: any){
-    this.schedulesLineChartLabels = [];
-    for(let x = 0; x < data.length; x++){
-      this.schedulesLineChartLabels.push(data[x].date);
-    }
-    console.log(this.schedulesLineChartLabels);
-
-    let rawData = [];
-    for(let x = 0; x < data.length; x++){
-      rawData.push(data[x].count);
-    }
-    console.log(rawData);
-    this.schedulesLineChartData = [{ data: rawData, label: 'Schedules' }];
+    this.getMonthCalendar();
+    this.getWeekSchedule();
   }
 
   initChart(){
@@ -111,6 +57,64 @@ export class DashboardComponent implements OnInit {
         }]
       }
     };
+  }
+
+  getMonthCalendar(){
+    this.calendarApi.getMonthCalendar(moment(this.today).add(-1, 'months'), this.today)
+      .then(
+        res => {
+          console.log(res);
+          this.monthCalendarsData = res.docs;
+          this.monthCalendarsCount = res.docs.length;
+        },
+        err => {
+          console.log(err);
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  getWeekSchedule(){
+    this.calendarApi.getWeekSchedule(moment(this.today).add(-6, 'days'), this.today)
+      .then(
+        res => {
+          console.log(res);
+          this.weekSchedulesData = res.docs;
+          this.weekSchedulesCount = res.docs.length;
+
+          this.setScheduleChartData();
+        },
+        err => {
+          console.log(err);
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  setScheduleChartData(){
+    this.schedulesLineChartLabels = [];
+    for (let i = 7; i > 0; i--) {
+      var d = moment(this.today).add(-i, 'days');
+      this.schedulesLineChartLabels.push(d.toDate().toISOString().slice(0, 10));
+    }
+    console.log(this.schedulesLineChartLabels);
+
+    let dataCount: any[] = [];
+    for (let i = 7; i > 0; i--) {
+      dataCount.push(0);
+    }
+    console.log(dataCount);
+
+    this.weekSchedulesData.forEach((schedule: any) => {
+      var scheduleDate = schedule.data().created_at.toDate().toISOString().slice(0, 10);
+      for (let i = 7; i > 0; i--){
+        if (this.schedulesLineChartLabels[i] == scheduleDate){
+          dataCount[i]++;
+        }
+      }
+    })
+    console.log(dataCount);
+    this.schedulesLineChartData = [{ data: dataCount, label: 'Schedules' }];
   }
 
 }

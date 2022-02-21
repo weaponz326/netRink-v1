@@ -9,8 +9,8 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-uppercase mb-1">All Notes</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{allNotesCount}}</div>
+                            <div class="text-xs font-weight-bold text-uppercase mb-1">Notes this Week</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{weekNotesCount}}</div>
                         </div>
                     </div>
                 </div>
@@ -33,7 +33,7 @@
                             [labels]="notesLineChartLabels"
                             [options]="chartOptions"
                             [legend]="true"
-                            [chartType]="'line'"
+                            [chartType]="'bar'"
                         ></canvas>
                     </div>
                 </div>

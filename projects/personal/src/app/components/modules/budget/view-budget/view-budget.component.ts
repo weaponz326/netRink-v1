@@ -66,6 +66,11 @@ export class ViewBudgetComponent implements OnInit {
           this.budgetForm.controls.budgetName.setValue(this.budgetFormData.data().budget_name);
           this.budgetForm.controls.budgetType.setValue(this.budgetFormData.data().budget_type);
 
+          this.budgetTables.addIncome.budgetData = this.budgetFormData.data();
+          this.budgetTables.editIncome.budgetData = this.budgetFormData.data();
+          this.budgetTables.addExpenditure.budgetData = this.budgetFormData.data();
+          this.budgetTables.editExpenditure.budgetData = this.budgetFormData.data();
+
           this.isBudgetLoading = false;
         },
         (err: any) => {

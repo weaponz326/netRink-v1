@@ -123,4 +123,20 @@ export class TasksApiService {
       .get();
   }
 
+  // dashboard
+
+  getWeekTaskGroup(startDate: any, endDate: any){
+    return this.taskItemRef.ref
+      .where("user", "==", localStorage.getItem('personal_id'))
+      // .where("created_at", "<", startDate).where("created_at", ">", endDate)
+      .get();
+  }
+
+  getWeekTaskItem(startDate: any, endDate: any){
+    return this.taskItemRef.ref
+      .where("task_group.data.user", "==", localStorage.getItem('personal_id'))
+      // .where("created_at", "<", startDate).where("created_at", ">", endDate)
+      .get();
+  }
+
 }

@@ -2,9 +2,11 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 
 import { ChartDataSets, ChartOptions } from 'chart.js';
 import { Color, Label, SingleDataSet } from 'ng2-charts';
+import moment from 'moment/moment';
+
+import { ConnectionToastComponent } from '../../../module-utilities/connection-toast/connection-toast.component'
 
 import { AccountsApiService } from 'projects/personal/src/app/services/modules/accounts-api/accounts-api.service';
-import { ConnectionToastComponent } from '../../../module-utilities/connection-toast/connection-toast.component'
 
 
 @Component({
@@ -22,89 +24,97 @@ export class DashboardComponent implements OnInit {
     { text: "Dashboard", url: "/home/accounts/dashboard" },
   ];
 
+  allAccountsData: any;
+  weekTransactionsData: any;
+
   allAccountsCount: number = 0;
-  allTransactionsCount: number = 0;
+  weekTransactionsCount: number = 0;
 
   transactionsLineChartData: ChartDataSets[] = [{ data: [0], label: 'Transactions' }];
   transactionsLineChartLabels: Label[] = [""]
 
+  chartOptions = {};
+
+  today = moment();
+
   ngOnInit(): void {
+    this.initChart();
+
+    this.getAllUserAccount();
+    this.getWeekTransaction();
   }
 
-  ngAfterViewInit(): void {
-    this.getAccountsCount();
-    this.getTransactionsCount();
-    this.getTransactionAnnotation();
+  initChart(){
+    this.chartOptions = {
+      responsive: true,
+      scales: {
+        yAxes: [{
+          beginAtZero: true,
+          min: 0,
+          ticks: {
+            stepSize: 1
+          }
+        }]
+      }
+    };
   }
 
-  getAccountsCount(){
-    // this.accountsApi.getCounts("Account")
-    //   .subscribe(
-    //     res => {
-    //       console.log(res);
-    //       this.allAccountsCount = res;
-    //     },
-    //     err => {
-    //       console.log(err);
-    //       this.connectionToast.openToast();
-    //     }
-    //   )
+  getAllUserAccount(){
+    this.accountsApi.getAllUserAccount()
+      .then(
+        res => {
+          console.log(res);
+          this.allAccountsData = res.docs;
+          this.allAccountsCount = res.docs.length;
+        },
+        err => {
+          console.log(err);
+          this.connectionToast.openToast();
+        }
+      )
   }
 
-  getTransactionsCount(){
-    // this.accountsApi.getCounts("Transaction")
-    //   .subscribe(
-    //     res => {
-    //       console.log(res);
-    //       this.allTransactionsCount = res;
-    //     },
-    //     err => {
-    //       console.log(err);
-    //       this.connectionToast.openToast();
-    //     }
-    //   )
+  getWeekTransaction(){
+    this.accountsApi.getWeekTransaction(moment(this.today).add(-6, 'days'), this.today)
+      .then(
+        res => {
+          console.log(res);
+          this.weekTransactionsData = res.docs;
+          this.weekTransactionsCount = res.docs.length;
+
+          this.setTransactionChartData();
+        },
+        err => {
+          console.log(err);
+          this.connectionToast.openToast();
+        }
+      )
   }
 
-  getTransactionAnnotation(){
-    // this.accountsApi.getAnnotation("Transaction")
-    //   .subscribe(
-    //     res => {
-    //       console.log(res);
-    //       this.setTransactionChartData(res);
-    //     },
-    //     err => {
-    //       console.log(err);
-    //       this.connectionToast.openToast();
-    //     }
-    //   )
-  }
-
-  setTransactionChartData(data: any){
+  setTransactionChartData(){
     this.transactionsLineChartLabels = [];
-    for(let x = 0; x < data.length; x++){
-      this.transactionsLineChartLabels.push(data[x].date);
+    for (let i = 7; i > 0; i--) {
+      var d = moment(this.today).add(-i, 'days');
+      this.transactionsLineChartLabels.push(d.toDate().toISOString().slice(0, 10));
     }
     console.log(this.transactionsLineChartLabels);
 
-    let rawData = [];
-    for(let x = 0; x < data.length; x++){
-      rawData.push(data[x].count);
+    let dataCount: any[] = [];
+    for (let i = 7; i > 0; i--) {
+      dataCount.push(0);
     }
-    console.log(rawData);
-    this.transactionsLineChartData = [{ data: rawData, label: 'Transactions' }];
-  }
+    console.log(dataCount);
 
-  chartOptions = {
-    responsive: true,
-    scales: {
-      yAxes: [{
-        beginAtZero: true,
-        min: 0,
-        ticks: {
-          stepSize: 1
+    this.weekTransactionsData.forEach((transaction: any) => {
+      var transactionDate = transaction.data().created_at.toDate().toISOString().slice(0, 10);
+      for (let i = 7; i > 0; i--){
+        if (this.transactionsLineChartLabels[i] == transactionDate){
+          dataCount[i]++;
         }
-      }]
-    }
-  };
+      }
+    })
+    console.log(dataCount);
+    this.transactionsLineChartData = [{ data: dataCount, label: 'Transactions' }];
+  }
 
 }

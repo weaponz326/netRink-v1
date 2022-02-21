@@ -2,10 +2,11 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 
 import { ChartDataSets, ChartOptions } from 'chart.js';
 import { Color, Label, SingleDataSet } from 'ng2-charts';
-
-import { TasksApiService } from 'projects/personal/src/app/services/modules/tasks-api/tasks-api.service';
+import moment from 'moment/moment';
 
 import { ConnectionToastComponent } from '../../../module-utilities/connection-toast/connection-toast.component'
+
+import { TasksApiService } from 'projects/personal/src/app/services/modules/tasks-api/tasks-api.service';
 
 
 @Component({
@@ -23,121 +24,127 @@ export class DashboardComponent implements OnInit {
     { text: "Dashboard", url: "/home/tasks/dashboard" },
   ];
 
-  allTaskGroupsCount: number = 0;
-  allTaskItemsCount: number = 0;
+  weekTaskGroupsData: any;
+  weekTaskItemsData: any;
+
+  weekTaskGroupsCount: number = 0;
+  weekTaskItemsCount: number = 0;
 
   taskGroupsLineChartData: ChartDataSets[] = [{ data: [0], label: 'Task Groups' }];
   taskGroupsLineChartLabels: Label[] = [""]
   taskItemsLineChartData: ChartDataSets[] = [{ data: [0], label: 'Task Items' }];
   taskItemsLineChartLabels: Label[] = [""]
 
+  chartOptions = {};
+
+  today = moment();
+
   ngOnInit(): void {
+    this.initChart();
+
+    this.getWeekTaskGroup();
+    this.getWeekTaskItem();
   }
 
-  ngAfterViewInit(): void {
-    this.getTaskGroupsCount();
-    this.getTaskItemsCount();
-    this.getTaskGroupAnnotation();
-    this.getTaskItemAnnotation();
+  initChart(){
+    this.chartOptions = {
+      responsive: true,
+      scales: {
+        yAxes: [{
+          beginAtZero: true,
+          min: 0,
+          ticks: {
+            stepSize: 1
+          }
+        }]
+      }
+    };
   }
 
-  getTaskGroupsCount(){
-    // this.tasksApi.getCounts("Task Group")
-    //   .subscribe(
-    //     res => {
-    //       console.log(res);
-    //       this.allTaskGroupsCount = res;
-    //     },
-    //     err => {
-    //       console.log(err);
-    //       this.connectionToast.openToast();
-    //     }
-    //   )
+  getWeekTaskGroup(){
+    this.tasksApi.getWeekTaskGroup(moment(this.today).add(-1, 'months'), this.today)
+      .then(
+        res => {
+          console.log(res);
+          this.weekTaskGroupsData = res.docs;
+          this.weekTaskGroupsCount = res.docs.length;
+
+          this.setTaskGroupChartData();
+        },
+        err => {
+          console.log(err);
+          this.connectionToast.openToast();
+        }
+      )
   }
 
-  getTaskItemsCount(){
-    // this.tasksApi.getCounts("Task Item")
-    //   .subscribe(
-    //     res => {
-    //       console.log(res);
-    //       this.allTaskItemsCount = res;
-    //     },
-    //     err => {
-    //       console.log(err);
-    //       this.connectionToast.openToast();
-    //     }
-    //   )
+  getWeekTaskItem(){
+    this.tasksApi.getWeekTaskItem(moment(this.today).add(-6, 'days'), this.today)
+      .then(
+        res => {
+          console.log(res);
+          this.weekTaskItemsData = res.docs;
+          this.weekTaskItemsCount = res.docs.length;
+
+          this.setTaskItemChartData();
+        },
+        err => {
+          console.log(err);
+          this.connectionToast.openToast();
+        }
+      )
   }
 
-  getTaskGroupAnnotation(){
-    // this.tasksApi.getAnnotation("Task Group")
-    //   .subscribe(
-    //     res => {
-    //       console.log(res);
-    //       this.setTaskGroupChartData(res);
-    //     },
-    //     err => {
-    //       console.log(err);
-    //       this.connectionToast.openToast();
-    //     }
-    //   )
-  }
-
-  getTaskItemAnnotation(){
-    // this.tasksApi.getAnnotation("Task Item")
-    //   .subscribe(
-    //     res => {
-    //       console.log(res);
-    //       this.setTaskItemChartData(res);
-    //     },
-    //     err => {
-    //       console.log(err);
-    //       this.connectionToast.openToast();
-    //     }
-    //   )
-  }
-
-  setTaskGroupChartData(data: any){
+  setTaskGroupChartData(){
     this.taskGroupsLineChartLabels = [];
-    for(let x = 0; x < data.length; x++){
-      this.taskGroupsLineChartLabels.push(data[x].date);
+    for (let i = 7; i > 0; i--) {
+      var d = moment(this.today).add(-i, 'days');
+      this.taskGroupsLineChartLabels.push(d.toDate().toISOString().slice(0, 10));
     }
     console.log(this.taskGroupsLineChartLabels);
 
-    let rawTaskGroupData = [];
-    for(let x = 0; x < data.length; x++){
-      rawTaskGroupData.push(data[x].count);
+    let dataCount: any[] = [];
+    for (let i = 7; i > 0; i--) {
+      dataCount.push(0);
     }
-    console.log(rawTaskGroupData);
-    this.taskGroupsLineChartData = [{ data: rawTaskGroupData, label: 'Task Groups' }];
+    console.log(dataCount);
+
+    this.weekTaskGroupsData.forEach((taskGroup: any) => {
+      var taskGroupDate = taskGroup.data().created_at.toDate().toISOString().slice(0, 10);
+      for (let i = 7; i > 0; i--){
+        if (this.taskGroupsLineChartLabels[i] == taskGroupDate){
+          dataCount[i]++;
+        }
+      }
+    })
+    console.log(dataCount);
+    this.taskGroupsLineChartData = [{ data: dataCount, label: 'TaskGroups' }];
   }
 
-  setTaskItemChartData(data: any){
+  setTaskItemChartData(){
     this.taskItemsLineChartLabels = [];
-    for(let x = 0; x < data.length; x++){
-      this.taskItemsLineChartLabels.push(data[x].date);
+    for (let i = 7; i > 0; i--) {
+      var d = moment(this.today).add(-i, 'days');
+      this.taskItemsLineChartLabels.push(d.toDate().toISOString().slice(0, 10));
     }
     console.log(this.taskItemsLineChartLabels);
 
-    let rawTaskItemData = [];
-    for(let x = 0; x < data.length; x++){
-      rawTaskItemData.push(data[x].count);
+    let dataCount: any[] = [];
+    for (let i = 7; i > 0; i--) {
+      dataCount.push(0);
     }
-    console.log(rawTaskItemData);
-    this.taskItemsLineChartData = [{ data: rawTaskItemData, label: 'Task Items' }];
-  }
+    console.log(dataCount);
 
-  chartOptions = {
-    responsive: true,
-    scales: {
-      yAxes: [{
-        beginAtZero: true,
-        min: 0,
-        ticks: {
-          stepSize: 1
+    this.weekTaskItemsData.forEach((taskItem: any) => {
+      var taskItemDate = taskItem.data().created_at.toDate().toISOString().slice(0, 10);
+      for (let i = 7; i > 0; i--){
+        if (this.taskItemsLineChartLabels[i] == taskItemDate){
+          dataCount[i]++;
         }
-      }]
-    }
-  };
+      }
+    })
+    console.log(dataCount);
+    this.taskItemsLineChartData = [{ data: dataCount, label: 'TaskItems' }];
+  }
 
 }

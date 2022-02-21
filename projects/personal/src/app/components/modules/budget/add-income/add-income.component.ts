@@ -21,6 +21,7 @@ export class AddIncomeComponent implements OnInit {
   @ViewChild('dismissButtonElementReference', { read: ElementRef, static: false }) dismissButton!: ElementRef;
 
   addIncomeForm: FormGroup = new FormGroup({});
+  budgetData: any;
 
   isSaving = false;
 
@@ -30,7 +31,6 @@ export class AddIncomeComponent implements OnInit {
 
   openModal(){
     this.addIncomeForm.controls.amount.setValue(0);
-
     this.addButton.nativeElement.click();
   }
 
@@ -45,10 +45,13 @@ export class AddIncomeComponent implements OnInit {
   saveIncome(){
     let data: Income = {
       created_at: firebase.default.firestore.FieldValue.serverTimestamp(),
-      budget: sessionStorage.getItem('personal_budget_id') as string,
       item_number: this.addIncomeForm.controls.itemNumber.value,
       item_description: this.addIncomeForm.controls.itemDescription.value,
-      amount: this.addIncomeForm.controls.amount.value
+      amount: this.addIncomeForm.controls.amount.value,
+      budget: {
+        id: sessionStorage.getItem('personal_budget_id') as string,
+        data: this.budgetData
+      }
     }
 
     this.saveIncomeEvent.emit(data);

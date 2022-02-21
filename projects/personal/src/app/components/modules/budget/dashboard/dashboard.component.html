@@ -9,8 +9,8 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-uppercase mb-1">All Budgets</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{allBudgetCount}}</div>
+                            <div class="text-xs font-weight-bold text-uppercase mb-1">Budgets this Month</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{monthBudgetCount}}</div>
                         </div>
                     </div>
                 </div>
@@ -22,8 +22,8 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-uppercase mb-1">All Income Items</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{allIncomeCount}}</div>
+                            <div class="text-xs font-weight-bold text-uppercase mb-1">Income Items this Week</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{weekIncomeCount}}</div>
                         </div>
                     </div>
                 </div>
@@ -35,8 +35,8 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-uppercase mb-1">All Expenditure Items</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{allExpenditureCount}}</div>
+                            <div class="text-xs font-weight-bold text-uppercase mb-1">Expenditure Items this Week</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{weekExpenditureCount}}</div>
                         </div>
                     </div>
                 </div>
@@ -59,7 +59,7 @@
                             [labels]="ieBarChartLabels"
                             [options]="chartOptions"
                             [legend]="true"
-                            [chartType]="'bar'"
+                            [chartType]="'line'"
                         ></canvas>
                     </div>
                 </div>

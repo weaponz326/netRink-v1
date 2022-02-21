@@ -117,8 +117,24 @@ export class CalendarApiService {
 
   getAllUserSchedule(){
     return this.scheduleRef.ref
-      .where("user", "==", localStorage.getItem('personal_id'))
+      .where("calendar.data.user", "==", localStorage.getItem('personal_id'))
       // .orderBy("created_at", "desc")
+      .get();
+  }
+
+  // dashboard
+
+  getMonthCalendar(startDate: any, endDate: any){
+    return this.calendarRef.ref
+      .where("user", "==", localStorage.getItem('personal_id'))
+      // .where("created_at", "<", startDate).where("created_at", ">", endDate)
+      .get();
+  }
+
+  getWeekSchedule(startDate: any, endDate: any){
+    return this.calendarRef.ref
+      .where("calendar.data.user", "==", localStorage.getItem('personal_id'))
+      // .where("created_at", "<", startDate).where("created_at", ">", endDate)
       .get();
   }
 

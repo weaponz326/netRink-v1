@@ -21,6 +21,7 @@ export class AddExpenditureComponent implements OnInit {
   @ViewChild('dismissButtonElementReference', { read: ElementRef, static: false }) dismissButton!: ElementRef;
 
   addExpenditureForm: FormGroup = new FormGroup({});
+  budgetData: any;
 
   isSaving = false;
 
@@ -44,10 +45,13 @@ export class AddExpenditureComponent implements OnInit {
   saveExpenditure(){
     let data: Expenditure = {
       created_at: firebase.default.firestore.FieldValue.serverTimestamp(),
-      budget: sessionStorage.getItem('personal_budget_id') as string,
       item_number: this.addExpenditureForm.controls.itemNumber.value,
       item_description: this.addExpenditureForm.controls.itemDescription.value,
-      amount: this.addExpenditureForm.controls.amount.value
+      amount: this.addExpenditureForm.controls.amount.value,
+      budget: {
+        id: sessionStorage.getItem('personal_budget_id') as string,
+        data: this.budgetData
+      }
     }
 
     this.saveExpenditureEvent.emit(data);

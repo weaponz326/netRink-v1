@@ -22,6 +22,7 @@ export class EditIncomeComponent implements OnInit {
   incomeFormData: any;
 
   isSaving = false;
+  budgetData: any;
 
   ngOnInit(): void {
     this.initeditIncomeForm();
@@ -48,10 +49,13 @@ export class EditIncomeComponent implements OnInit {
   saveIncome(){
     let data: Income = {
       created_at: this.incomeFormData.data().created_at,
-      budget: sessionStorage.getItem('personal_budget_id') as string,
       item_number: this.editIncomeForm.controls.itemNumber.value,
       item_description: this.editIncomeForm.controls.itemDescription.value,
-      amount: this.editIncomeForm.controls.amount.value
+      amount: this.editIncomeForm.controls.amount.value,
+      budget: {
+        id: sessionStorage.getItem('personal_budget_id') as string,
+        data: this.budgetData
+      }
     }
 
     let income = {

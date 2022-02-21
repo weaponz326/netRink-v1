@@ -22,6 +22,7 @@ export class EditExpenditureComponent implements OnInit {
   expenditureFormData: any;
 
   isSaving = false;
+  budgetData: any;
 
   ngOnInit(): void {
     this.initeditExpenditureForm();
@@ -48,10 +49,13 @@ export class EditExpenditureComponent implements OnInit {
   saveExpenditure(){
     let data: Expenditure = {
       created_at: this.expenditureFormData.data().created_at,
-      budget: sessionStorage.getItem('personal_budget_id') as string,
       item_number: this.editExpenditureForm.controls.itemNumber.value,
       item_description: this.editExpenditureForm.controls.itemDescription.value,
-      amount: this.editExpenditureForm.controls.amount.value
+      amount: this.editExpenditureForm.controls.amount.value,
+      budget: {
+        id: sessionStorage.getItem('personal_budget_id') as string,
+        data: this.budgetData
+      }
     }
 
     let expenditure = {
