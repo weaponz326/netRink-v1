@@ -120,9 +120,9 @@ export class ViewNoteComponent implements OnInit {
 
   initModules(){
     this.modules = {
-      'emoji-shortname': true,
-      'emoji-textarea': true,
-      'emoji-tooolbar': true,
+      // 'emoji-shortname': true,
+      // 'emoji-textarea': true,
+      // 'emoji-tooolbar': true,
     }
   }
 
