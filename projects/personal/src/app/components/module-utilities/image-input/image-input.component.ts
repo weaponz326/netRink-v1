@@ -17,6 +17,9 @@ export class ImageInputComponent implements OnInit {
   image: any;
   imgSrc = '';
 
+  isImageSet = false;
+  isImageChanged = false;
+
   ngOnInit(): void {
     if(this.imgType == 'photo'){
       this.imgSrc = 'assets/images/utilities/photo-avatar.jpg';
@@ -35,6 +38,8 @@ export class ImageInputComponent implements OnInit {
       reader.onload = (e: any) => {
         this.imgSrc = e.target.result;
         this.image = reader.result;
+        this.isImageSet = true;
+        this.isImageSet = true;
       }
     }
   }

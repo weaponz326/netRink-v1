@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { map, finalize } from 'rxjs/operators';
+import { finalize } from 'rxjs/operators';
 
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { serverTimestamp } from 'firebase/firestore';
@@ -33,15 +33,14 @@ export class NewStaffComponent implements OnInit {
     { text: "New Staff", url: "/home/staff/new-staff" },
   ];
 
-  storagePath = "/restaurant/" + localStorage.getItem('restaurant_id');
-  storageRef = this.storage.ref(this.storagePath);
+  storageBasePath = "/restaurant/" + localStorage.getItem('restaurant_id') + "/module_staff/";
 
   isStaffSaving = false;
 
   ngOnInit(): void {
   }
 
-  async createStaff(){
+  createStaff(){
     console.log('u are saving a new staff');
 
     var data: Staff = {
@@ -70,12 +69,46 @@ export class NewStaffComponent implements OnInit {
 
     this.staffApi.createStaff(data)
       .then(
+        async (res: any) => {
+          console.log(res);
+          sessionStorage.setItem('restaurant_staff_id', res.id);
+
+          if (!this.staffForm.photo.isImageSet){
+            this.isStaffSaving = false;
+            this.router.navigateByUrl('/home/staff/view-staff');
+          }
+          else{
+            const storagePath = this.storageBasePath + res.id;
+            const storageRef = this.storage.ref(storagePath);
+            const task = this.storage.upload(storagePath, this.staffForm.photo.image);
+
+            task.snapshotChanges().pipe(
+                finalize(() => {
+                  storageRef.getDownloadURL().subscribe(downloadUrl => {
+                    this.updateImage({photo: downloadUrl});
+                  });
+                })
+              ).subscribe();
+          }
+        },
+        (err: any) => {
+          console.log(err);
+          this.isStaffSaving = false;
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  updateImage(data: any){
+    console.log('u are updating staff photo url');
+    console.log(data);
+
+    this.staffApi.updateStaff(data)
+      .then(
         (res: any) => {
           console.log(res);
-          this.isStaffSaving = false;
-
-          sessionStorage.setItem('restaurant_staff_id', res.id);
           this.router.navigateByUrl('/home/staff/view-staff');
+          this.isStaffSaving = false;
         },
         (err: any) => {
           console.log(err);

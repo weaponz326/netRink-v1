@@ -1,5 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import { finalize } from 'rxjs/operators';
+
+import { AngularFireStorage } from '@angular/fire/compat/storage';
 
 import { StaffFormComponent } from '../staff-form/staff-form.component';
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
@@ -20,6 +23,7 @@ export class ViewStaffComponent implements OnInit {
 
   constructor(
     private router: Router,
+    private storage: AngularFireStorage,
     private staffApi: StaffApiService,
     private staffPrint: StaffPrintService
   ) { }
@@ -32,6 +36,8 @@ export class ViewStaffComponent implements OnInit {
     { text: "All Staff", url: "/home/staff/all-staff" },
     { text: "View Staff", url: "/home/staff/view-staff" },
   ];
+
+  storageBasePath = "/restaurant/" + localStorage.getItem('restaurant_id') + "/module_staff/";
 
   staffFormData: any;
 
@@ -49,7 +55,7 @@ export class ViewStaffComponent implements OnInit {
     this.staffApi.getStaff()
       .then(
         (res: any) => {
-          console.log(res);
+          console.log(res.data());
 
           this.staffFormData = res;
           this.isStaffLoading = false;
@@ -70,6 +76,8 @@ export class ViewStaffComponent implements OnInit {
           this.staffForm.staffForm.controls.staffCode.setValue(this.staffFormData.data().staff_code);
           this.staffForm.staffForm.controls.department.setValue(this.staffFormData.data().department);
           this.staffForm.staffForm.controls.job.setValue(this.staffFormData.data().job);
+
+          this.staffForm.photo.isImageSet = true;
         },
         (err: any) => {
           console.log(err);
@@ -108,7 +116,23 @@ export class ViewStaffComponent implements OnInit {
       .then(
         (res: any) => {
           console.log(res);
-          this.isStaffSaving = false;
+
+          if (!this.staffForm.photo.isImageSet && !this.staffForm.photo.isImageChanged){
+            this.isStaffSaving = false;
+          }
+          else{
+            const storagePath = this.storageBasePath + res.id;
+            const storageRef = this.storage.ref(storagePath);
+            const task = this.storage.upload(storagePath, this.staffForm.photo.image);
+
+            task.snapshotChanges().pipe(
+                finalize(() => {
+                  storageRef.getDownloadURL().subscribe(downloadUrl => {
+                    this.updateImage({photo: downloadUrl});
+                  });
+                })
+              ).subscribe();
+          }
         },
         (err: any) => {
           console.log(err);
@@ -136,6 +160,25 @@ export class ViewStaffComponent implements OnInit {
           console.log(err);
           this.connectionToast.openToast();
           this.isStaffDeleting = false;
+        }
+      )
+  }
+
+  updateImage(data: any){
+    console.log('u are updating staff photo url');
+    console.log(data);
+
+    this.staffApi.updateStaff(data)
+      .then(
+        (res: any) => {
+          console.log(res);
+          this.router.navigateByUrl('/home/staff/view-staff');
+          this.isStaffSaving = false;
+        },
+        (err: any) => {
+          console.log(err);
+          this.isStaffSaving = false;
+          this.connectionToast.openToast();
         }
       )
   }
