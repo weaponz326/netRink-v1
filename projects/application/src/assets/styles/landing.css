@@ -18,3 +18,16 @@
 .suite-details p.h4{
   color: #212529;
 }
+
+.py-landing{
+  padding-top: 8rem!important;
+  padding-bottom: 8rem!important;
+}
+
+.pt-landing{
+  padding-top: 8rem!important;
+}
+
+.pb-landing{
+  padding-bottom: 8rem!important;
+}

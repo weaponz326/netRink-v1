@@ -21,14 +21,25 @@ export class AccessToastComponent implements OnInit {
 
   @ViewChild('buttonElementReference', { read: ElementRef, static: false }) buttonElement!: ElementRef;
 
+  isShowToast = false;
+  timer: any;
+
   ngOnInit(): void {
   }
 
   openToast(){
     console.log("opening module access toast");
-
-    const testToast = document.querySelector('.access-toast:last-child');
-    // new window.bootstrap.Toast(testToast).show();
+    this.isShowToast = true;
+    
+    this.timer = setInterval(() => {
+      this.hideToast();
+    }, 2000);
   }
+
+  hideToast(): void{ 
+    this.isShowToast = false;
+    clearInterval(this.timer);
+    console.log("closing toast...");
+  };
 
 }

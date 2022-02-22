@@ -11,7 +11,7 @@ export class RosterGuard implements CanActivate, CanActivateChild {
   constructor(private router: Router) { }
 
   canActivate(route: ActivatedRouteSnapshot): boolean {
-    let rosterAccess = JSON.parse(sessionStorage.getItem('restaurantUserAccess') as string).roster_access;
+    let rosterAccess = JSON.parse(localStorage.getItem('restaurantUserAccess') as string).roster_access;
 
     if (rosterAccess){
       return true;
@@ -22,7 +22,7 @@ export class RosterGuard implements CanActivate, CanActivateChild {
   }
 
   canActivateChild(childRoute: ActivatedRouteSnapshot): boolean {
-    let rosterAccess = JSON.parse(sessionStorage.getItem('restaurantUserAccess') as string).roster_access;
+    let rosterAccess = JSON.parse(localStorage.getItem('restaurantUserAccess') as string).roster_access;
 
     if (rosterAccess){
       return true;

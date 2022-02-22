@@ -11,7 +11,7 @@ export class KitchenStockGuard implements CanActivate, CanActivateChild {
   constructor(private router: Router) { }
 
   canActivate(route: ActivatedRouteSnapshot): boolean {
-    let kitchenStockAccess = JSON.parse(sessionStorage.getItem('restaurantUserAccess') as string).kitchen_stock_access;
+    let kitchenStockAccess = JSON.parse(localStorage.getItem('restaurantUserAccess') as string).kitchen_stock_access;
 
     if (kitchenStockAccess){
       return true;
@@ -22,7 +22,7 @@ export class KitchenStockGuard implements CanActivate, CanActivateChild {
   }
 
   canActivateChild(childRoute: ActivatedRouteSnapshot): boolean {
-    let kitchenStockAccess = JSON.parse(sessionStorage.getItem('restaurantUserAccess') as string).kitchen_stock_access;
+    let kitchenStockAccess = JSON.parse(localStorage.getItem('restaurantUserAccess') as string).kitchen_stock_access;
 
     if (kitchenStockAccess){
       return true;

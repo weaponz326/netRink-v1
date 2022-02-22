@@ -36,7 +36,7 @@ export class ModuleHomeComponent implements OnInit {
 
           this.access = res.data();
           const data = JSON.stringify(res.data());
-          sessionStorage.setItem("restaurantUserAccess", data);
+          localStorage.setItem("restaurantUserAccess", data);
 
           this.isAccessLoading = false;
         },
@@ -76,7 +76,7 @@ export class ModuleHomeComponent implements OnInit {
     else if (module == "orders" && !this.access.orders_access)
       this.accessToast.openToast();
     else
-      console.log("sonething is wrong");
+      console.log("Access granted :)");
   }
 
 }

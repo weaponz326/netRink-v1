@@ -11,7 +11,7 @@ export class StaffGuard implements CanActivate, CanActivateChild {
   constructor(private router: Router) { }
 
   canActivate(route: ActivatedRouteSnapshot): boolean {
-    let staffAccess = JSON.parse(sessionStorage.getItem('restaurantUserAccess') as string).staff_access;
+    let staffAccess = JSON.parse(localStorage.getItem('restaurantUserAccess') as string).staff_access;
 
     if (staffAccess){
       return true;
@@ -22,7 +22,7 @@ export class StaffGuard implements CanActivate, CanActivateChild {
   }
 
   canActivateChild(childRoute: ActivatedRouteSnapshot): boolean {
-    let staffAccess = JSON.parse(sessionStorage.getItem('restaurantUserAccess') as string).staff_access;
+    let staffAccess = JSON.parse(localStorage.getItem('restaurantUserAccess') as string).staff_access;
 
     if (staffAccess){
       return true;

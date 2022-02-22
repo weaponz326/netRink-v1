@@ -11,7 +11,7 @@ export class PaymentsGuard implements CanActivate, CanActivateChild {
   constructor(private router: Router) { }
 
   canActivate(route: ActivatedRouteSnapshot): boolean {
-    let paymentsAccess = JSON.parse(sessionStorage.getItem('restaurantUserAccess') as string).payments_access;
+    let paymentsAccess = JSON.parse(localStorage.getItem('restaurantUserAccess') as string).payments_access;
 
     if (paymentsAccess){
       return true;
@@ -22,7 +22,7 @@ export class PaymentsGuard implements CanActivate, CanActivateChild {
   }
 
   canActivateChild(childRoute: ActivatedRouteSnapshot): boolean {
-    let paymentsAccess = JSON.parse(sessionStorage.getItem('restaurantUserAccess') as string).payments_access;
+    let paymentsAccess = JSON.parse(localStorage.getItem('restaurantUserAccess') as string).payments_access;
 
     if (paymentsAccess){
       return true;

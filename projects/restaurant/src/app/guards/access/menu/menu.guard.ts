@@ -11,7 +11,7 @@ export class MenuGuard implements CanActivate, CanActivateChild {
   constructor(private router: Router) { }
 
   canActivate(route: ActivatedRouteSnapshot): boolean {
-    let menuAccess = JSON.parse(sessionStorage.getItem('restaurantUserAccess') as string).menu_access;
+    let menuAccess = JSON.parse(localStorage.getItem('restaurantUserAccess') as string).menu_access;
 
     if (menuAccess){
       return true;
@@ -22,7 +22,7 @@ export class MenuGuard implements CanActivate, CanActivateChild {
   }
 
   canActivateChild(childRoute: ActivatedRouteSnapshot): boolean {
-    let menuAccess = JSON.parse(sessionStorage.getItem('restaurantUserAccess') as string).menu_access;
+    let menuAccess = JSON.parse(localStorage.getItem('restaurantUserAccess') as string).menu_access;
 
     if (menuAccess){
       return true;

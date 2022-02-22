@@ -1,14 +1,5 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 
-// import '@popperjs/core';
-
-// declare global {
-//   interface Window {
-//       bootstrap: any;
-//   }
-// }
-// window.bootstrap = require('bootstrap');
-
 
 @Component({
   selector: 'app-connection-toast',
@@ -21,14 +12,25 @@ export class ConnectionToastComponent implements OnInit {
 
   @ViewChild('buttonElementReference', { read: ElementRef, static: false }) buttonElement!: ElementRef;
 
+  isShowToast = false;
+  timer: any;
+
   ngOnInit(): void {
   }
 
   openToast(){
     console.log("opening connection toast");
-
-    const testToast = document.querySelector('.connection-toast:last-child');
-    // new window.bootstrap.Toast(testToast).show();
+    this.isShowToast = true;
+    
+    this.timer = setInterval(() => {
+      this.hideToast();
+    }, 2000);
   }
+
+  hideToast(): void{ 
+    this.isShowToast = false;
+    clearInterval(this.timer);
+    console.log("closing toast...");
+  };
 
 }

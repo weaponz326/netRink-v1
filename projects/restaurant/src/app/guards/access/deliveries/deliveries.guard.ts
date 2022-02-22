@@ -11,7 +11,7 @@ export class DeliveriesGuard implements CanActivate, CanActivateChild {
   constructor(private router: Router) { }
 
   canActivate(route: ActivatedRouteSnapshot): boolean {
-    let deliveriesAccess = JSON.parse(sessionStorage.getItem('restaurantUserAccess') as string).deliveries_access;
+    let deliveriesAccess = JSON.parse(localStorage.getItem('restaurantUserAccess') as string).deliveries_access;
 
     if (deliveriesAccess){
       return true;
@@ -22,7 +22,7 @@ export class DeliveriesGuard implements CanActivate, CanActivateChild {
   }
 
   canActivateChild(childRoute: ActivatedRouteSnapshot): boolean {
-    let deliveriesAccess = JSON.parse(sessionStorage.getItem('restaurantUserAccess') as string).deliveries_access;
+    let deliveriesAccess = JSON.parse(localStorage.getItem('restaurantUserAccess') as string).deliveries_access;
 
     if (deliveriesAccess){
       return true;

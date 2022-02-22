@@ -11,7 +11,7 @@ export class CustomersGuard implements CanActivate, CanActivateChild {
   constructor(private router: Router) { }
 
   canActivate(route: ActivatedRouteSnapshot): boolean {
-    let customersAccess = JSON.parse(sessionStorage.getItem('restaurantUserAccess') as string).customers_access;
+    let customersAccess = JSON.parse(localStorage.getItem('restaurantUserAccess') as string).customers_access;
 
     if (customersAccess){
       return true;
@@ -22,7 +22,7 @@ export class CustomersGuard implements CanActivate, CanActivateChild {
   }
 
   canActivateChild(childRoute: ActivatedRouteSnapshot): boolean {
-    let customersAccess = JSON.parse(sessionStorage.getItem('restaurantUserAccess') as string).customers_access;
+    let customersAccess = JSON.parse(localStorage.getItem('restaurantUserAccess') as string).customers_access;
 
     if (customersAccess){
       return true;

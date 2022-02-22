@@ -94,16 +94,6 @@
         </div>
 
         <div class="col-md-2 col-sm-6 text-center">
-            <a id="tables" routerLink="/home/tables/dashboard" (click)="checkAccess('tables')"
-            data-bs-toggle="tooltip" title="Organize tables and manage other table activities">
-                <figure>
-                    <img src="assets/images/modules/tables.png" class="home-icons" />
-                    <figcaption>Tables</figcaption>
-                </figure>
-            </a>
-        </div>
-        
-        <div class="col-md-2 col-sm-6 text-center">
             <a id="deliveries" routerLink="/home/deliveries/dashboard" (click)="checkAccess('deliveries')"
             data-bs-toggle="tooltip" title="Manage delivery operations">
                 <figure>
@@ -131,7 +121,17 @@
                     <figcaption>Reservations</figcaption>
                 </figure>
             </a>
-        </div>        
+        </div>
+
+        <div class="col-md-2 col-sm-6 text-center">
+            <a id="tables" routerLink="/home/tables/dashboard" (click)="checkAccess('tables')"
+            data-bs-toggle="tooltip" title="Organize tables and manage other table activities">
+                <figure>
+                    <img src="assets/images/modules/tables.png" class="home-icons" />
+                    <figcaption>Tables</figcaption>
+                </figure>
+            </a>
+        </div>
 
         <div class="col-md-2 col-sm-6 text-center">
             <a id="roster" routerLink="/home/roster/dashboard" (click)="checkAccess('roster')"

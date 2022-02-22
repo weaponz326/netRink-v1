@@ -11,7 +11,7 @@ export class TablesGuard implements CanActivate {
   constructor(private router: Router) { }
 
   canActivate(route: ActivatedRouteSnapshot): boolean {
-    let tablesAccess = JSON.parse(sessionStorage.getItem('restaurantUserAccess') as string).tables_access;
+    let tablesAccess = JSON.parse(localStorage.getItem('restaurantUserAccess') as string).tables_access;
 
     if (tablesAccess){
       return true;
@@ -22,7 +22,7 @@ export class TablesGuard implements CanActivate {
   }
 
   canActivateChild(childRoute: ActivatedRouteSnapshot): boolean {
-    let tablesAccess = JSON.parse(sessionStorage.getItem('restaurantUserAccess') as string).tables_access;
+    let tablesAccess = JSON.parse(localStorage.getItem('restaurantUserAccess') as string).tables_access;
 
     if (tablesAccess){
       return true;
