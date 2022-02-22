@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormControl, FormGroup } from '@angular/forms';
 
-import * as firebase from 'firebase/compat/app';
+import { serverTimestamp } from 'firebase/firestore';
 
 import { ConnectionToastComponent } from '../../../module-utilities/connection-toast/connection-toast.component'
 
@@ -51,7 +51,7 @@ export class NewBudgetComponent implements OnInit {
     this.isSavingBudget = true;
 
     let data: Budget = {
-      created_at: firebase.default.firestore.FieldValue.serverTimestamp(),
+      created_at: serverTimestamp(),
       user: localStorage.getItem('personal_id') as string,
       budget_name: this.budgetForm.controls.budgetName.value,
       budget_type: this.budgetForm.controls.budgetType.value

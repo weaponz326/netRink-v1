@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, Output, EventEmitter, ElementRef, Input } from '@angular/core';
 
-import * as firebase from 'firebase/compat/app';
+import { serverTimestamp } from 'firebase/firestore';
 
 import { TransactionFormComponent } from '../transaction-form/transaction-form.component'
 
@@ -40,7 +40,7 @@ export class AddTransactionComponent implements OnInit {
 
   saveTransaction(){
     let data: Transaction = {
-      created_at: firebase.default.firestore.FieldValue.serverTimestamp(),
+      created_at: serverTimestamp(),
       transaction_date: this.transactionForm.transactionForm.controls.transactionDate.value,
       description: this.transactionForm.transactionForm.controls.description.value,
       transaction_type: this.transactionForm.transactionForm.controls.transactionType.value,

@@ -46,9 +46,7 @@ export class EditShiftComponent implements OnInit {
   }
 
   saveShift(){
-    let data: Shift = {
-      created_at: this.shiftData.data().created_at,
-      roster: sessionStorage.getItem('restaurant_roster_id') as string,
+    let data = {
       shift_name: this.shiftForm.controls.shiftName.value,
       start_time: this.shiftForm.controls.startTime.value,
       end_time: this.shiftForm.controls.endTime.value,

@@ -2,7 +2,7 @@ import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angula
 import { Router } from '@angular/router';
 import { FormControl, FormGroup } from '@angular/forms';
 
-import * as firebase from 'firebase/compat/app';
+import { serverTimestamp } from 'firebase/firestore';
 
 import { ConnectionToastComponent } from '../../../module-utilities/connection-toast/connection-toast.component'
 
@@ -48,7 +48,7 @@ export class NewTaskGroupComponent implements OnInit {
 
   createTaskGroup(){
     let data: TaskGroup = {
-      created_at: firebase.default.firestore.FieldValue.serverTimestamp(),
+      created_at: serverTimestamp(),
       user: localStorage.getItem('personal_id') as string,
       task_group: this.taskGroupForm.controls.taskGroupName.value,
     }

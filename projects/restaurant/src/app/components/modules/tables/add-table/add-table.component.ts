@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
-import * as firebase from 'firebase/compat/app';
+import { serverTimestamp } from 'firebase/firestore';
 
 import { TableFormComponent } from '../table-form/table-form.component';
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
@@ -42,7 +42,7 @@ export class AddTableComponent implements OnInit {
 
   saveTable(){
     let data: Table = {
-      created_at: firebase.default.firestore.FieldValue.serverTimestamp(),
+      created_at: serverTimestamp(),
       account: localStorage.getItem('restaurant_id') as string,
       table_number: this.tableForm.tableForm.controls.tableNumber.value,
       table_type: this.tableForm.tableForm.controls.tableType.value,

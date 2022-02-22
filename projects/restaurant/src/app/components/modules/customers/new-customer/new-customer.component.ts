@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
-import * as firebase from 'firebase/compat/app';
+import { serverTimestamp } from 'firebase/firestore';
 
 import { CustomerFormComponent } from '../customer-form/customer-form.component';
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
@@ -39,7 +39,7 @@ export class NewCustomerComponent implements OnInit {
     console.log('u are saving a new customer');
 
     var data: Customer = {
-      created_at: firebase.default.firestore.FieldValue.serverTimestamp(),
+      created_at: serverTimestamp(),
       account: localStorage.getItem('restaurant_id') as string,
       customer_code: this.customerForm.customerForm.controls.customerCode.value,
       customer_name: this.customerForm.customerForm.controls.customerName.value,

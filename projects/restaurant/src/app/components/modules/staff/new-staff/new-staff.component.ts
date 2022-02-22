@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { map, finalize } from 'rxjs/operators';
 
 import { AngularFireStorage } from '@angular/fire/compat/storage';
-import * as firebase from 'firebase/compat/app';
+import { serverTimestamp } from 'firebase/firestore';
 
 import { StaffFormComponent } from '../staff-form/staff-form.component';
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
@@ -45,7 +45,7 @@ export class NewStaffComponent implements OnInit {
     console.log('u are saving a new staff');
 
     var data: Staff = {
-      created_at: firebase.default.firestore.FieldValue.serverTimestamp(),
+      created_at: serverTimestamp(),
       account: localStorage.getItem('restaurant_id') as string,
       first_name: this.staffForm.staffForm.controls.firstName.value,
       last_name: this.staffForm.staffForm.controls.lastName.value,

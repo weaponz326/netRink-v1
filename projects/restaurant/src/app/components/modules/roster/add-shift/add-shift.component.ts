@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, Output, EventEmitter, ElementRef } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 
-import * as firebase from 'firebase/compat/app';
+import { serverTimestamp } from 'firebase/firestore';
 
 import { Shift } from 'projects/restaurant/src/app/models/modules/roster/roster.model';
 
@@ -42,7 +42,7 @@ export class AddShiftComponent implements OnInit {
 
   saveShift(){
     let data: Shift = {
-      created_at: firebase.default.firestore.FieldValue.serverTimestamp(),
+      created_at: serverTimestamp(),
       roster: sessionStorage.getItem('restaurant_roster_id') as string,
       shift_name: this.shiftForm.controls.shiftName.value,
       start_time: this.shiftForm.controls.startTime.value,

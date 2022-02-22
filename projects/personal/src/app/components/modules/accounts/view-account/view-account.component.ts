@@ -85,9 +85,7 @@ export class ViewAccountComponent implements OnInit {
   }
 
   updateAccount(){
-    let data: Account = {
-      created_at: this.accountFormData.data().created_at,
-      user: localStorage.getItem('personal_id') as string,
+    let data = {
       account_name: this.accountForm.controls.accountName.value,
       account_number: this.accountForm.controls.accountNumber.value,
       bank_name: this.accountForm.controls.bankName.value,

@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormControl, FormGroup } from '@angular/forms';
 
-import * as firebase from 'firebase/compat/app';
+import { serverTimestamp } from 'firebase/firestore';
 
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 import { SelectCustomerComponent } from '../../../select-windows/customers-windows/select-customer/select-customer.component';
@@ -57,7 +57,7 @@ export class NewReservationComponent implements OnInit {
 
   createReservation(){
     let data: Reservation = {
-      created_at: firebase.default.firestore.FieldValue.serverTimestamp(),
+      created_at: serverTimestamp(),
       account: localStorage.getItem('restaurant_id') as string,
       reservation_code: this.reservationForm.controls.reservationCode.value,
       reservation_date: this.reservationForm.controls.reservationDate.value,

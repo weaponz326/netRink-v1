@@ -82,9 +82,7 @@ export class ViewBudgetComponent implements OnInit {
   }
 
   updateBudget(){
-    let data: Budget = {
-      created_at: this.budgetFormData.data().created_at,
-      user: localStorage.getItem('personal_id') as string,
+    let data = {
       budget_name: this.budgetForm.controls.budgetName.value,
       budget_type: this.budgetForm.controls.budgetType.value
     }

@@ -41,8 +41,7 @@ export class EditMenuItemComponent implements OnInit {
   }
 
   saveMenuItem(){
-    let data: MenuItem = {
-      created_at: this.menuItemData.created_at,
+    let data = {
       item_code: this.menuItemForm.menuItemForm.controls.itemCode.value,
       item_name: this.menuItemForm.menuItemForm.controls.itemName.value,
       price: this.menuItemForm.menuItemForm.controls.price.value,

@@ -80,9 +80,7 @@ export class ViewMenuGroupComponent implements OnInit {
   updateMenuGroup(){
     console.log("u are updating a menu group");
 
-    let data: MenuGroup = {
-      created_at: this.menuGroupFormData.data().created_at,
-      account: localStorage.getItem('restaurant_id') as string,
+    let data = {
       menu_group: this.menuGroupForm.controls.menuGroup.value,
       category: this.menuGroupForm.controls.category.value
     }

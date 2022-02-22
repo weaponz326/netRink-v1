@@ -47,8 +47,7 @@ export class EditExpenditureComponent implements OnInit {
   }
 
   saveExpenditure(){
-    let data: Expenditure = {
-      created_at: this.expenditureFormData.data().created_at,
+    let data = {
       item_number: this.editExpenditureForm.controls.itemNumber.value,
       item_description: this.editExpenditureForm.controls.itemDescription.value,
       amount: this.editExpenditureForm.controls.amount.value,

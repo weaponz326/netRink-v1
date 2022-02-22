@@ -60,9 +60,7 @@ export class ViewTaskGroupComponent implements OnInit {
   }
 
   updateTaskGroup(){
-    let data: TaskGroup = {
-      created_at: this.taskGroupFormData.data().created_at,
-      user: localStorage.getItem('personal_id') as string,
+    let data = {
       task_group: this.taskGroupForm.controls.taskGroupName.value,
     }
 

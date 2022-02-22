@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, Output, EventEmitter, ElementRef } from '@angular/core';
 
-import * as firebase from 'firebase/compat/app';
+import { serverTimestamp } from 'firebase/firestore';
 
 import { StockItemFormComponent } from '../stock-item-form/stock-item-form.component';
 
@@ -39,7 +39,7 @@ export class AddStockItemComponent implements OnInit {
 
   saveItem(){
     let data: StockItem = {
-      created_at: firebase.default.firestore.FieldValue.serverTimestamp(),
+      created_at: serverTimestamp(),
       account: localStorage.getItem('restaurant_id') as string,
       item_code: this.stockItemForm.stockItemForm.controls.itemCode.value,
       item_name: this.stockItemForm.stockItemForm.controls.itemName.value,

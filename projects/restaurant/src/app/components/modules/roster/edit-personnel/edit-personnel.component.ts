@@ -39,8 +39,7 @@ export class EditPersonnelComponent implements OnInit {
   }
 
   savePersonnel(){
-    let data: Personnel = {
-      roster: sessionStorage.getItem('restaurant_roster_id') as string,      
+    let data = {
       batch_symbol: this.personnelForm.personnelForm.controls.symbol.value,
       staff: {
         id: this.personnelForm.selectedStaffId,

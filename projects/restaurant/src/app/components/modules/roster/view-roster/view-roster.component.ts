@@ -80,9 +80,7 @@ export class ViewRosterComponent implements OnInit {
   }
 
   updateRoster(){
-    let data: Roster = {
-      created_at: this.rosterFormData.data().created_at,
-      account: localStorage.getItem('restaurant_id') as string,
+    let data = {
       roster_name: this.rosterForm.controls.rosterName.value,
       roster_code: this.rosterForm.controls.rosterCode.value,
       from_date: this.rosterForm.controls.fromDate.value,

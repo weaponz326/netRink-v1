@@ -53,9 +53,7 @@ export class EditStockItemComponent implements OnInit {
   }
 
   saveItem(){
-    let data: StockItem = {
-      created_at: this.stockItemData.data().created_at,
-      account: localStorage.getItem('restaurant_id') as string,
+    let data = {
       item_code: this.stockItemForm.stockItemForm.controls.itemCode.value,
       item_name: this.stockItemForm.stockItemForm.controls.itemName.value,
       category: this.stockItemForm.stockItemForm.controls.category.value,

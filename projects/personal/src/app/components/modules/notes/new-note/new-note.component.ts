@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
-import * as firebase from 'firebase/compat/app';
+import { serverTimestamp } from 'firebase/firestore';
 
 import { ConnectionToastComponent } from '../../../module-utilities/connection-toast/connection-toast.component'
 
@@ -41,11 +41,11 @@ export class NewNoteComponent implements OnInit {
 
   createNote(){
     let noteData: Note = {
-      created_at: firebase.default.firestore.FieldValue.serverTimestamp(),
+      created_at: serverTimestamp(),
       user: localStorage.getItem('personal_id') as string,
       subject: this.subject,
       body: this.body,
-      updated_at: firebase.default.firestore.FieldValue.serverTimestamp(),
+      updated_at: serverTimestamp(),
     }
 
     console.log(noteData);

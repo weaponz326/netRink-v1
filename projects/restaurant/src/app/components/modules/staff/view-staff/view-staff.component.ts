@@ -82,9 +82,7 @@ export class ViewStaffComponent implements OnInit {
   updateStaff(){
     console.log('u are saving a new staff');
 
-    var data: Staff = {
-      created_at: this.staffFormData.data().created_at,
-      account: localStorage.getItem('restaurant_id') as string,
+    var data = {
       first_name: this.staffForm.staffForm.controls.firstName.value,
       last_name: this.staffForm.staffForm.controls.lastName.value,
       sex: this.staffForm.staffForm.controls.sex.value,

@@ -92,9 +92,7 @@ export class ViewReservationComponent implements OnInit {
   }
 
   updateReservation(){
-    let data: Reservation = {
-      created_at: this.reservationFormData.created_at,
-      account: localStorage.getItem('restaurant_id') as string,
+    let data = {
       reservation_code: this.reservationForm.controls.reservationCode.value,
       reservation_date: this.reservationForm.controls.reservationDate.value,
       number_guests: this.reservationForm.controls.numberGuests.value,

@@ -47,8 +47,7 @@ export class EditIncomeComponent implements OnInit {
   }
 
   saveIncome(){
-    let data: Income = {
-      created_at: this.incomeFormData.data().created_at,
+    let data = {
       item_number: this.editIncomeForm.controls.itemNumber.value,
       item_description: this.editIncomeForm.controls.itemDescription.value,
       amount: this.editIncomeForm.controls.amount.value,

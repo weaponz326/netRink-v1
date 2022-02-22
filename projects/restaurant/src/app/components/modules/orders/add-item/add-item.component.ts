@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, Output, EventEmitter, ElementRef } from '@angular/core';
 
-import * as firebase from 'firebase/compat/app';
+import { serverTimestamp } from 'firebase/firestore';
 
 import { ItemFormComponent } from '../item-form/item-form.component'
 
@@ -34,7 +34,7 @@ export class AddItemComponent implements OnInit {
 
   saveItem(){
     let data: OrderItem = {
-      created_at: firebase.default.firestore.FieldValue.serverTimestamp(),
+      created_at: serverTimestamp(),
       order: sessionStorage.getItem('restaurant_order_id') as string,
       quantity: this.itemForm.itemForm.controls.quantity.value,
       menu_item: {

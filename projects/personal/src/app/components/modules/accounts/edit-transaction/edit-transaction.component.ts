@@ -41,8 +41,7 @@ export class EditTransactionComponent implements OnInit {
   }
 
   saveTransaction(){
-    let data: Transaction = {
-      created_at: this.transactionFormData.data().created_at,
+    let data = {
       transaction_date: this.transactionForm.transactionForm.controls.transactionDate.value,
       description: this.transactionForm.transactionForm.controls.description.value,
       transaction_type: this.transactionForm.transactionForm.controls.transactionType.value,

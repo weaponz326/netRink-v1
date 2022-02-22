@@ -75,9 +75,7 @@ export class ViewCustomerComponent implements OnInit {
   updateCustomer(){
     console.log('u are saving a new customer');
 
-    var data: Customer = {
-      created_at: this.customerData.data().created_at,
-      account: localStorage.getItem('restaurant_id') as string,
+    var data = {
       customer_code: this.customerForm.customerForm.controls.customerCode.value,
       customer_name: this.customerForm.customerForm.controls.customerName.value,
       customer_type: this.customerForm.customerForm.controls.customerType.value,

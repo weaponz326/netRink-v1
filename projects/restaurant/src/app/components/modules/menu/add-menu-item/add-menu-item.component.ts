@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, Output, EventEmitter, ElementRef, Input } from '@angular/core';
 
-import * as firebase from 'firebase/compat/app';
+import { serverTimestamp } from 'firebase/firestore';
 
 import { MenuItemFormComponent } from '../menu-item-form/menu-item-form.component'
 
@@ -36,7 +36,7 @@ export class AddMenuItemComponent implements OnInit {
 
   saveMenuItem(){
     let data: MenuItem = {
-      created_at: firebase.default.firestore.FieldValue.serverTimestamp(),
+      created_at: serverTimestamp(),
       item_code: this.menuItemForm.menuItemForm.controls.itemCode.value,
       item_name: this.menuItemForm.menuItemForm.controls.itemName.value,
       price: this.menuItemForm.menuItemForm.controls.price.value,

@@ -40,9 +40,7 @@ export class EditItemComponent implements OnInit {
   }
 
   saveItem(){
-    let data: OrderItem = {
-      created_at: this.orderItemData.created_at,
-      order: sessionStorage.getItem('restaurant_order_id') as string,
+    let data = {
       quantity: this.itemForm.itemForm.controls.quantity.value,
       menu_item: {
         id: this.itemForm.selectedMenuItemId,

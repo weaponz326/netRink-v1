@@ -72,9 +72,7 @@ export class ViewDeliveryComponent implements OnInit {
   updateDelivery(){
     console.log('u are saving a new delivery');
 
-    let data: Delivery = {
-      created_at: this.deliveryData.data().created_at,
-      account: localStorage.getItem('restaurant_id') as string,
+    let data = {
       delivery_code: this.deliveryForm.deliveryForm.controls.deliveryCode.value,
       delivery_date: this.deliveryForm.deliveryForm.controls.deliveryDate.value,
       delivery_location: this.deliveryForm.deliveryForm.controls.deliveryLocation.value,

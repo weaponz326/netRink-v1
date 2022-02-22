@@ -2,7 +2,7 @@ import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angula
 import { Router } from '@angular/router';
 import { FormControl, FormGroup } from '@angular/forms';
 
-import * as firebase from 'firebase/compat/app';
+import { serverTimestamp } from 'firebase/firestore';
 
 import { ConnectionToastComponent } from '../../../module-utilities/connection-toast/connection-toast.component'
 
@@ -49,7 +49,7 @@ export class NewCalendarComponent implements OnInit {
     this.isSavingCalendar = true;
 
     let data: Calendar = {
-      created_at: firebase.default.firestore.FieldValue.serverTimestamp(),
+      created_at: serverTimestamp(),
       user: localStorage.getItem('personal_id') as string,
       calendar_name: this.calendarForm.controls.calendarName.value,
     }

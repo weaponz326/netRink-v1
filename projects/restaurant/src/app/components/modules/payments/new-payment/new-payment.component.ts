@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
-import * as firebase from 'firebase/compat/app';
+import { serverTimestamp } from 'firebase/firestore';
 
 import { PaymentFormComponent } from '../payment-form/payment-form.component';
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
@@ -43,7 +43,7 @@ export class NewPaymentComponent implements OnInit {
     console.log('u are saving a new payment');
 
     var data: Payment = {
-      created_at: firebase.default.firestore.FieldValue.serverTimestamp(),
+      created_at: serverTimestamp(),
       account: localStorage.getItem('restaurant_id') as string,
       payment_code: this.paymentForm.paymentForm.controls.paymentCode.value,
       payment_date: this.paymentForm.paymentForm.controls.paymentDate.value,

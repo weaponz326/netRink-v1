@@ -76,9 +76,7 @@ export class ViewPaymentComponent implements OnInit {
   updatePayment(){
     console.log('u are saving a new payment');
 
-    var data: Payment = {
-      created_at: this.paymentData.data().created_at,
-      account: localStorage.getItem('restaurant_id') as string,
+    var data = {
       payment_code: this.paymentForm.paymentForm.controls.paymentCode.value,
       payment_date: this.paymentForm.paymentForm.controls.paymentDate.value,
       amount_paid: this.paymentForm.paymentForm.controls.amountPaid.value,

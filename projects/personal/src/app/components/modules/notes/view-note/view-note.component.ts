@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
-import * as firebase from 'firebase/compat/app';
+import { serverTimestamp } from 'firebase/firestore';
 
 import { ConnectionToastComponent } from '../../../module-utilities/connection-toast/connection-toast.component'
 import { DeleteModalComponent } from '../../../module-utilities/delete-modal/delete-modal.component'
@@ -77,12 +77,10 @@ export class ViewNoteComponent implements OnInit {
   updateNote(){
     this.isNoteSaving = true;
 
-    let noteData: Note = {
-      created_at: this.noteData.data().created_at,
-      user: localStorage.getItem('personal_id') as string,
+    let noteData = {
       subject: this.subject,
       body: this.body,
-      updated_at: firebase.default.firestore.FieldValue.serverTimestamp(),
+      updated_at: serverTimestamp(),
     }
 
     console.log(noteData);

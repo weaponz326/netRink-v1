@@ -95,9 +95,7 @@ export class ViewOrderComponent implements OnInit {
   }
 
   updateOrder(){
-    let data: Order = {
-      created_at: this.orderFormData.created_at,
-      account: localStorage.getItem('restaurant_id') as string,
+    let data = {
       order_code: this.orderForm.controls.orderCode.value,
       order_date: this.orderForm.controls.orderDate.value,
       order_type: this.orderForm.controls.orderType.value,

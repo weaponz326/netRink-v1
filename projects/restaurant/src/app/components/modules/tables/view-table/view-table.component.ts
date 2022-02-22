@@ -52,9 +52,7 @@ export class ViewTableComponent implements OnInit {
   }
 
   saveTable(){
-    let data: Table = {
-      created_at: this.tableData.data().created_at,
-      account: localStorage.getItem('restaurant_id') as string,
+    let data = {
       table_number: this.tableForm.tableForm.controls.tableNumber.value,
       table_type: this.tableForm.tableForm.controls.tableType.value,
       capacity: this.tableForm.tableForm.controls.capacity.value,

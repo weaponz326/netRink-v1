@@ -44,9 +44,7 @@ export class EditBatchComponent implements OnInit {
   }
 
   saveBatch(){
-    let data: Batch = {
-      created_at: this.batchData.data().created_at,
-      roster: sessionStorage.getItem('restaurant_roster_id') as string,
+    let data = {
       batch_name: this.batchForm.controls.batchName.value,
       batch_symbol: this.batchForm.controls.batchSymbol.value,
     }

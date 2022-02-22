@@ -63,9 +63,7 @@ export class ViewCalendarComponent implements OnInit {
   }
 
   updateCalendar(){
-    let data: Calendar = {
-      created_at: this.calendarFormData.data().created_at,
-      user: localStorage.getItem('personal_id') as string,
+    let data = {
       calendar_name: this.calendarForm.controls.calendarName.value,
     }
 

@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormControl, FormGroup } from '@angular/forms';
 
-import * as firebase from 'firebase/compat/app';
+import { serverTimestamp } from 'firebase/firestore';
 
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 import { SelectCustomerComponent } from '../../../select-windows/customers-windows/select-customer/select-customer.component';
@@ -64,7 +64,7 @@ export class AddOrderComponent implements OnInit {
 
   createOrder(){
     let data: Order = {
-      created_at: firebase.default.firestore.FieldValue.serverTimestamp(),
+      created_at: serverTimestamp(),
       account: localStorage.getItem('restaurant_id') as string,
       order_code: this.orderForm.controls.orderCode.value,
       order_date: this.orderForm.controls.orderDate.value,
@@ -137,7 +137,7 @@ export class AddOrderComponent implements OnInit {
 
   createDelivery(){
     let data: Delivery = {
-      created_at: firebase.default.firestore.FieldValue.serverTimestamp(),
+      created_at: serverTimestamp(),
       account: localStorage.getItem('restaurant_id') as string,
       delivery_code: "",
       delivery_date: "",
