@@ -9,8 +9,8 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-uppercase mb-1">All Menu Groups</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{allMenuGroupsCount}}</div>
+                            <div class="text-xs font-weight-bold text-uppercase mb-1">Menu Groups this Week</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{weekMenuGroupsCount}}</div>
                         </div>
                     </div>
                 </div>
@@ -22,8 +22,8 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-uppercase mb-1">All Menu Items</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{allMenuItemsCount}}</div>
+                            <div class="text-xs font-weight-bold text-uppercase mb-1">Menu Items this Week</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{weekMenuItemsCount}}</div>
                         </div>
                     </div>
                 </div>
@@ -34,24 +34,42 @@
 
     <div class="row">
 
-        <div class="col-lg-6">
+        <div class="col-md-8">
             <div class="card shadow mb-4">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold">Menu Items by Menu Group</h6>
+                    <h6 class="m-0 font-weight-bold">Total Menu Groups by Day</h6>
                 </div>
                 <div class="card-body">
                     <div class="chart-area">
-                        <!-- <canvas baseChart
-                            [datasets]="doughnutChartData"
-                            [labels]="doughnutChartLabels"
-                            [options]="chartOptions"
-                            [legend]="true"
-                            [chartType]="'doughnut'"
-                        ></canvas> -->
                         <canvas baseChart
+                            [datasets]="menuGroupsLineChartData"
+                            [labels]="menuGroupsLineChartLabels"
                             [options]="chartOptions"
                             [legend]="true"
-                            [chartType]="'doughnut'"
+                            [chartType]="'line'"
+                        ></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-8">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold">Total Menu Items by Day</h6>
+                </div>
+                <div class="card-body">
+                    <div class="chart-area">
+                        <canvas baseChart
+                            [datasets]="menuItemsLineChartData"
+                            [labels]="menuItemsLineChartLabels"
+                            [options]="chartOptions"
+                            [legend]="true"
+                            [chartType]="'line'"
                         ></canvas>
                     </div>
                 </div>
@@ -62,6 +80,6 @@
 
 </div>
 
-<!-- connection error prompt component -->
+<!-- connection error toast component -->
 
 <app-connection-toast #connectionToastComponentReference></app-connection-toast>

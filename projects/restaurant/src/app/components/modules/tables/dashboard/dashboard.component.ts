@@ -28,21 +28,21 @@ export class DashboardComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    this.getTablesCount();
+    this.getAllAccountTable();
   }
 
-  getTablesCount(){
-    // this.tablesApi.getCounts("Table")
-    //   .subscribe(
-    //     res => {
-    //       console.log(res);
-    //       this.allTablesCount = res;
-    //     },
-    //     err => {
-    //       console.log(err);
-    //       this.connectionToast.openToast();
-    //     }
-    //   )
+  getAllAccountTable(){
+    this.tablesApi.getAllAccountTable()
+      .then(
+        res => {
+          console.log(res);
+          this.allTablesCount = res.docs.length;
+        },
+        err => {
+          console.log(err);
+          this.connectionToast.openToast();
+        }
+      )
   }
 
 }

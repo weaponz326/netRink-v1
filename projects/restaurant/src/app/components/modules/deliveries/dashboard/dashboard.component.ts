@@ -2,9 +2,11 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 
 import { ChartDataSets, ChartOptions } from 'chart.js';
 import { Color, Label, SingleDataSet } from 'ng2-charts';
+import moment from 'moment/moment';
+
+import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 
 import { DeliveriesApiService } from 'projects/restaurant/src/app/services/modules/deliveries-api/deliveries-api.service';
-import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 
 
 @Component({
@@ -22,27 +24,78 @@ export class DashboardComponent implements OnInit {
     { text: "Dashboard", url: "/home/deliveries/dashboard" },
   ];
 
-  allDeliveriesCount: number = 0;
+  weekDeliveriesData: any;
+
+  weekDeliveriesCount: number = 0;
+
+  deliveriesLineChartData: ChartDataSets[] = [{ data: [0], label: 'Menu Groups' }];
+  deliveriesLineChartLabels: Label[] = [""]
+
+  chartOptions = {};
+
+  today = moment();
 
   ngOnInit(): void {
+    this.initChart();
+    this.getWeekDelivery();
   }
 
-  ngAfterViewInit(): void {
-    this.getDeliveriesCount();
+  initChart(){
+    this.chartOptions = {
+      responsive: true,
+      scales: {
+        yAxes: [{
+          min: 0,
+          ticks: {
+            stepSize: 1,
+            beginAtZero: true,
+          }
+        }]
+      }
+    };
   }
 
-  getDeliveriesCount(){
-    // this.deliveriesApi.getCounts("Delivery")
-    //   .subscribe(
-    //     res => {
-    //       console.log(res);
-    //       this.allDeliveriesCount = res;
-    //     },
-    //     err => {
-    //       console.log(err);
-    //       this.connectionToast.openToast();
-    //     }
-    //   )
+  getWeekDelivery(){
+    this.deliveriesApi.getWeekDelivery(moment(this.today).add(-1, 'months'), this.today)
+      .then(
+        res => {
+          console.log(res);
+          this.weekDeliveriesData = res.docs;
+          this.weekDeliveriesCount = res.docs.length;
+
+          this.setDeliveryChartData();
+        },
+        err => {
+          console.log(err);
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  setDeliveryChartData(){
+    this.deliveriesLineChartLabels = [];
+    for (let i = 7; i > 0; i--) {
+      var d = moment(this.today).add(-i, 'days');
+      this.deliveriesLineChartLabels.push(d.toDate().toISOString().slice(0, 10));
+    }
+    console.log(this.deliveriesLineChartLabels);
+
+    let dataCount: any[] = [];
+    for (let i = 7; i > 0; i--) {
+      dataCount.push(0);
+    }
+    console.log(dataCount);
+
+    this.weekDeliveriesData.forEach((delivery: any) => {
+      var deliveryDate = delivery.data().created_at.toDate().toISOString().slice(0, 10);
+      for (let i = 7; i > 0; i--){
+        if (this.deliveriesLineChartLabels[i] == deliveryDate){
+          dataCount[i]++;
+        }
+      }
+    })
+    console.log(dataCount);
+    this.deliveriesLineChartData = [{ data: dataCount, label: 'Deliveries' }];
   }
 
 }

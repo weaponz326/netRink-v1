@@ -22,27 +22,41 @@ export class DashboardComponent implements OnInit {
     { text: "Dashboard", url: "/home/kitchen-stock/dashboard" },
   ];
 
+  weekStockItemData: any;
+  
   allStockItemsCount: number = 0;
+  outOfStockCount: number = 0;
 
   ngOnInit(): void {
   }
 
   ngAfterViewInit(): void {
-    this.getStockItemsCount();
+    this.getAllAccountStockItem();
   }
 
-  getStockItemsCount(){
-    // this.kitchenStockApi.getCounts("Stock Item")
-    //   .subscribe(
-    //     res => {
-    //       console.log(res);
-    //       this.allStockItemsCount = res;
-    //     },
-    //     err => {
-    //       console.log(err);
-    //       this.connectionToast.openToast();
-    //     }
-    //   )
+  getAllAccountStockItem(){
+    this.kitchenStockApi.getAllAccountStockItem()
+      .then(
+        res => {
+          console.log(res);
+          this.weekStockItemData = res.docs;
+          this.allStockItemsCount = res.docs.length;
+
+          this.countOutOfStock();
+        },
+        err => {
+          console.log(err);
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  countOutOfStock(){
+    this.weekStockItemData.forEach((item: any) => {
+      if (item.data().quantity == 0)
+      this.outOfStockCount++;
+    })
+    console.log(this.outOfStockCount);
   }
 
 }

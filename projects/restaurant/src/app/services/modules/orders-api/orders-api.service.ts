@@ -91,4 +91,13 @@ export class OrdersApiService {
       .get();
   }
 
+  // dashboard
+
+  getWeekOrder(startDate: any, endDate: any){
+    return this.orderRef.ref
+      .where("account", "==", localStorage.getItem('restaurant_id'))
+      // .where("created_at", "<", startDate).where("created_at", ">", endDate)
+      .get();
+  }
+  
 }

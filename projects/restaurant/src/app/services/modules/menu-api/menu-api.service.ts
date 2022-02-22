@@ -124,4 +124,20 @@ export class MenuApiService {
       .get();
   }
 
+  // dashboard
+
+  getWeekMenuGroup(startDate: any, endDate: any){
+    return this.menuItemRef.ref
+      .where("account", "==", localStorage.getItem('restaurant_id'))
+      // .where("created_at", "<", startDate).where("created_at", ">", endDate)
+      .get();
+  }
+
+  getWeekMenuItem(startDate: any, endDate: any){
+    return this.menuItemRef.ref
+      .where("menu_group.data.account", "==", localStorage.getItem('restaurant_id'))
+      // .where("created_at", "<", startDate).where("created_at", ">", endDate)
+      .get();
+  }
+
 }
