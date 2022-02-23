@@ -29,7 +29,7 @@ export class RecoveryFormComponent implements OnInit {
   onSubmit(){
     this.isSending = true;
     console.log(this.recoveryForm.value);
-    this.authApi.sendRecoveryEmail(this.recoveryForm.controls.eamil.value)
+    this.authApi.sendPasswordResetEmail(this.recoveryForm.controls.eamil.value)
       .then(
         res => {
           this.showPrompt =  true;

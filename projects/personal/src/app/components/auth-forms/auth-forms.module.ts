@@ -16,6 +16,7 @@ import { FormFooterComponent } from './form-footer/form-footer.component';
 import { SignupFormComponent } from './signup-form/signup-form.component';
 import { LoginFormComponent } from './login-form/login-form.component';
 import { RecoveryFormComponent } from './recovery-form/recovery-form.component';
+import { ResetFormComponent } from './reset-form/reset-form.component';
 
 
 
@@ -26,6 +27,7 @@ import { RecoveryFormComponent } from './recovery-form/recovery-form.component';
     SignupFormComponent,
     LoginFormComponent,
     RecoveryFormComponent,
+    ResetFormComponent,
   ],
   imports: [
     CommonModule,

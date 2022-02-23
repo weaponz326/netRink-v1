@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TablePaginationComponent } from './table-pagination.component';
+import { ResetFormComponent } from './reset-form.component';
 
-describe('TablePaginationComponent', () => {
-  let component: TablePaginationComponent;
-  let fixture: ComponentFixture<TablePaginationComponent>;
+describe('ResetFormComponent', () => {
+  let component: ResetFormComponent;
+  let fixture: ComponentFixture<ResetFormComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TablePaginationComponent ]
+      declarations: [ ResetFormComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TablePaginationComponent);
+    fixture = TestBed.createComponent(ResetFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

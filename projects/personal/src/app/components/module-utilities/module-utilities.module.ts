@@ -12,8 +12,6 @@ import { AccessToastComponent } from './access-toast/access-toast.component';
 import { DeleteModalComponent } from './delete-modal/delete-modal.component';
 import { ImageInputComponent } from './image-input/image-input.component';
 import { BdayInputComponent } from './bday-input/bday-input.component';
-import { TablePaginationComponent } from './table-pagination/table-pagination.component';
-import { TableSortingComponent } from './table-sorting/table-sorting.component';
 
 
 @NgModule({
@@ -25,8 +23,6 @@ import { TableSortingComponent } from './table-sorting/table-sorting.component';
     DeleteModalComponent,
     ImageInputComponent,
     BdayInputComponent,
-    TablePaginationComponent,
-    TableSortingComponent,
   ],
   imports: [
     CommonModule,
@@ -41,8 +37,6 @@ import { TableSortingComponent } from './table-sorting/table-sorting.component';
     DeleteModalComponent,
     ImageInputComponent,
     BdayInputComponent,
-    TablePaginationComponent,
-    TableSortingComponent,
   ]
 })
 export class ModuleUtilitiesModule { }

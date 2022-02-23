@@ -20,7 +20,11 @@ export class AuthApiService {
     return this.afAuth.createUserWithEmailAndPassword(email, password);
   }
 
-  sendRecoveryEmail(email: string){
+  sendEmailVerification() {
+    // return this.afAuth.sendEmailVerification();
+  }
+
+  sendPasswordResetEmail(email: string){
     return this.afAuth.sendPasswordResetEmail(email);
   }
 

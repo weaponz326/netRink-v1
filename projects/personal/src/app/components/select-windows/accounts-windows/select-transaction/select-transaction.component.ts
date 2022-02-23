@@ -1,10 +1,8 @@
 import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 
-import { AccountsApiService } from 'projects/personal/src/app/services/modules/accounts-api/accounts-api.service';
-
 import { ConnectionToastComponent } from '../../../module-utilities/connection-toast/connection-toast.component';
-import { TablePaginationComponent } from 'projects/personal/src/app/components/module-utilities/table-pagination/table-pagination.component'
-import { TableSortingComponent } from 'projects/personal/src/app/components/module-utilities/table-sorting/table-sorting.component'
+
+import { AccountsApiService } from 'projects/personal/src/app/services/modules/accounts-api/accounts-api.service';
 
 
 @Component({
@@ -22,11 +20,6 @@ export class SelectTransactionComponent implements OnInit {
   @ViewChild('closeButtonElementReference', { read: ElementRef, static: false }) closeButton!: ElementRef;
 
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
-  @ViewChild('tablePaginationComponentReference', { read: TablePaginationComponent, static: false }) tablePagination!: TablePaginationComponent;
-  @ViewChild('transactionDateSortingComponentReference', { read: TableSortingComponent, static: false }) transactionDateSorting!: TableSortingComponent;
-  @ViewChild('descriptionSortingComponentReference', { read: TableSortingComponent, static: false }) descriptionSorting!: TableSortingComponent;
-  @ViewChild('transactionTypeSortingComponentReference', { read: TableSortingComponent, static: false }) transactionTypeSorting!: TableSortingComponent;
-  @ViewChild('amountSortingComponentReference', { read: TableSortingComponent, static: false }) amountSorting!: TableSortingComponent;
 
   transactionsGridData: any[] = [];
 

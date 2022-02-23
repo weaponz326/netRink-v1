@@ -5,6 +5,7 @@ import { AuthPageComponent } from './auth-page.component';
 import { LoginFormComponent } from '../../components/auth-forms/login-form/login-form.component';
 import { SignupFormComponent } from '../../components/auth-forms/signup-form/signup-form.component';
 import { RecoveryFormComponent } from '../../components/auth-forms/recovery-form/recovery-form.component';
+import { ResetFormComponent } from '../../components/auth-forms/reset-form/reset-form.component';
 
 
 const routes: Routes = [
@@ -15,6 +16,7 @@ const routes: Routes = [
       { path: "login", component: LoginFormComponent },
       { path: "signup", component: SignupFormComponent },
       { path: "recovery", component: RecoveryFormComponent },
+      { path: "reset", component: ResetFormComponent },
     ]
   }
 ];
