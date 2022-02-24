@@ -5,7 +5,7 @@ export class AccountUser {
   access_level!: string;
   user!: {
     id: string;
-    name: string;
+    data: User;
   };
   account!: {
     id: string;

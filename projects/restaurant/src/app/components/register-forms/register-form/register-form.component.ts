@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 
 import * as firebase from 'firebase/compat/app';
 
+import { UserApiService } from 'projects/personal/src/app/services/user/user-api/user-api.service';
 import { AccountApiService } from '../../../services/account-api/account-api.service';
 import { AdminApiService } from '../../../services/modules/admin-api/admin-api.service';
 import { SettingsApiService } from '../../../services/modules/settings-api/settings-api.service';
@@ -22,6 +23,7 @@ export class RegisterFormComponent implements OnInit {
 
   constructor(
     private router: Router,
+    private userApi: UserApiService,
     private accountApi: AccountApiService,
     private adminApi: AdminApiService,
     private settingsApi: SettingsApiService,
@@ -33,6 +35,8 @@ export class RegisterFormComponent implements OnInit {
     about: new FormControl('', Validators.required),
   })
 
+  thisUser: any;
+
   isSending: boolean = false;
   showPrompt: boolean = false;
 
@@ -41,6 +45,20 @@ export class RegisterFormComponent implements OnInit {
   abtErrors: any;
 
   ngOnInit(): void {
+    this.getUser();
+  }
+
+  getUser(){
+    this.userApi.getUser()
+      .then(
+        (res: any) => {
+          console.log(res);
+          this.thisUser = res.data();
+        },
+        (err: any) => {
+          console.log(err);
+        }
+      )
   }
 
   onSubmit(){
@@ -80,7 +98,7 @@ export class RegisterFormComponent implements OnInit {
     let userData: AccountUser = {
       user: {
         id: localStorage.getItem('personal_id') as string,
-        name: sessionStorage.getItem('personal_name') as string,
+        data: this.thisUser,
       },
       access_level: "Admin",
       account: {
@@ -88,6 +106,8 @@ export class RegisterFormComponent implements OnInit {
         data: account,
       }
     }
+
+    console.log(userData);
 
     this.adminApi.createAccountUser(userData)
       .then(

@@ -2,6 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component';
 
+import { UserApiService } from 'projects/personal/src/app/services/user/user-api/user-api.service';
 import { SettingsApiService } from 'projects/personal/src/app/services/modules/settings-api/settings-api.service';
 import { AccountUser, UserAccess } from 'projects/restaurant/src/app/models/modules/admin/admin.model';
 import { AdminApiService as RestaurantAdminService } from 'projects/restaurant/src/app/services/modules/admin-api/admin-api.service';
@@ -15,6 +16,7 @@ import { AdminApiService as RestaurantAdminService } from 'projects/restaurant/s
 export class ViewInvitationComponent implements OnInit {
 
   constructor(
+    private userApi: UserApiService,
     private settingsApi: SettingsApiService,
     private restaurantAdminApi: RestaurantAdminService,
   ) { }
@@ -23,6 +25,8 @@ export class ViewInvitationComponent implements OnInit {
   @ViewChild('dismissButtonElementReference', { read: ElementRef, static: false }) dismissButton!: ElementRef;
 
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
+
+  thisUser: any;
 
   invitationData: any;
 
@@ -37,8 +41,23 @@ export class ViewInvitationComponent implements OnInit {
   }
 
   acceptInvitation(){
+    this.getUser();
     this.updateInvitation();
     this.createAccountUser();
+  }
+
+  getUser(){
+    this.userApi.getUser()
+      .then(
+        (res: any) => {
+          console.log(res);
+          this.thisUser = res.data();
+        },
+        (err: any) => {
+          console.log(err);
+          this.connectionToast.openToast();
+        }
+      )
   }
 
   updateInvitation(){
@@ -71,7 +90,7 @@ export class ViewInvitationComponent implements OnInit {
     let userData: AccountUser = {
       user: {
         id: localStorage.getItem('personal_id') as string,
-        name: sessionStorage.getItem('personal_name') as string,
+        data: this.thisUser,
       },
       access_level: "Admin",
       account: {
