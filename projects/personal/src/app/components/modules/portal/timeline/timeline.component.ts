@@ -32,9 +32,6 @@ export class TimelineComponent implements OnInit {
   isRinksLoading = false;
 
   ngOnInit(): void {
-  }
-
-  ngAfterViewInit(): void {
     this.getAllRink();
   }
 

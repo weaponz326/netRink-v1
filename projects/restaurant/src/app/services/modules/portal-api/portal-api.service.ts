@@ -47,4 +47,20 @@ export class PortalApiService {
     return this.restaurantAccountSearchRef.doc(restaurantId).ref.get();
   }
 
+  // dashboard
+
+  getWeekRinkIn(startDate: any, endDate: any){
+    return this.rinkRef.ref
+      .where("recipent.id", "==", localStorage.getItem('personal_id'))
+      // .where("created_at", "<", startDate).where("created_at", ">", endDate)
+      .get();
+  }
+
+  getWeekRinkOut(startDate: any, endDate: any){
+    return this.rinkRef.ref
+      .where("recipent.id", "==", localStorage.getItem('personal_id'))
+      // .where("created_at", "<", startDate).where("created_at", ">", endDate)
+      .get();
+  }
+
 }

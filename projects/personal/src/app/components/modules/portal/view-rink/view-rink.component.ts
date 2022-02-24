@@ -37,9 +37,6 @@ export class ViewRinkComponent implements OnInit {
   isRinkLoading = false;
 
   ngOnInit(): void {
-  }
-
-  ngAfterViewInit(): void {
     this.getRink();
   }
 
@@ -52,11 +49,11 @@ export class ViewRinkComponent implements OnInit {
           console.log(res);
           this.rinkData = res;
           sessionStorage.setItem('personal_rink_source_id', res.data().rink_source);
-          this.isRinkLoading = false;          
+          this.isRinkLoading = false;
         },
         (err: any) => {
           console.log(err);
-          this.isRinkLoading = false;          
+          this.isRinkLoading = false;
           this.connectionToast.openToast();
         }
       )

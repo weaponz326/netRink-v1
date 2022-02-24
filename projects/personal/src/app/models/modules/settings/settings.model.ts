@@ -1,3 +1,5 @@
+import { Account } from 'projects/restaurant/src/app/models/account/account.model';
+
 export class ExtendedProfile {
   date_of_birth!: string;
   gender!: string;
@@ -16,7 +18,7 @@ export class Invitation {
   account_invitaion!: string;
   account!: {
     id: string;
-    data: object;
+    data: Account;
   }
 }
 

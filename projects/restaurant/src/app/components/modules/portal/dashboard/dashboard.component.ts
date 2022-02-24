@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 
 import { ChartDataSets, ChartOptions } from 'chart.js';
 import { Color, Label, SingleDataSet } from 'ng2-charts';
+import moment from 'moment/moment';
 
 import { PortalApiService } from 'projects/restaurant/src/app/services/modules/portal-api/portal-api.service';
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
@@ -22,43 +23,99 @@ export class DashboardComponent implements OnInit {
     { text: "Dashboard", url: "/home/portal/dashboard" },
   ];
 
-  allRinkOutCount: number = 0;
-  allRinkInCount: number = 0;
+  weekRinkOutCount: number = 0;
+  weekRinkInCount: number = 0;
+
+  rinksLineChartData: ChartDataSets[] = [{ data: [0], label: 'Rink In' }, { data: [0], label: 'Rink Out' }];
+  rinksLineChartLabels: Label[] = [""];
+  rinkInGlobalData: any[] = [];
+  rinkOutGlobalData: any[] = [];
+
+  chartOptions = {};
+
+  today = moment();
 
   ngOnInit(): void {
+    this.initChart();
   }
 
-  ngAfterViewInit(): void {
-    this.getRinkOutCount();
-    this.getRinkInCount();
+  initChart(){
+    this.chartOptions = {
+      responsive: true,
+      scales: {
+        yAxes: [{
+          min: 0,
+          ticks: {
+            stepSize: 1,
+            beginAtZero: true,
+          }
+        }]
+      }
+    };
   }
 
-  getRinkOutCount(){
-    // this.portalApi.getCounts("Rink Out")
-    //   .subscribe(
-    //     res => {
-    //       console.log(res);
-    //       this.allRinkOutCount = res;
-    //     },
-    //     err => {
-    //       console.log(err);
-    //       this.connectionToast.openToast();
-    //     }
-    //   )
+  getWeekRinkIn(){
+    this.portalApi.getWeekRinkIn(moment(this.today).add(-6, 'days'), this.today)
+      .then(
+        res => {
+          console.log(res);
+          this.weekRinkInCount = res.docs.length;
+        },
+        err => {
+          console.log(err);
+          this.connectionToast.openToast();
+        }
+      )
   }
 
-  getRinkInCount(){
-    // this.portalApi.getCounts("Rink In")
-    //   .subscribe(
-    //     res => {
-    //       console.log(res);
-    //       this.allRinkInCount = res;
-    //     },
-    //     err => {
-    //       console.log(err);
-    //       this.connectionToast.openToast();
-    //     }
-    //   )
+  getWeekRinkOut(){
+    this.portalApi.getWeekRinkOut(moment(this.today).add(-6, 'days'), this.today)
+      .then(
+        res => {
+          console.log(res);
+          this.weekRinkOutCount = res.docs.length;
+        },
+        err => {
+          console.log(err);
+          this.connectionToast.openToast();
+        }
+      )
   }
+
+  setRinkLineChartLabels(data: any){
+    this.rinksLineChartLabels = [];
+    for(let x = 0; x < data.length; x++){
+      this.rinksLineChartLabels.push(data[x].date);
+    }
+    console.log(this.rinksLineChartLabels);
+  }
+
+  // setRinkInChartData(data: any){
+  //   let rawRinkInData = [];
+  //   for(let x = 0; x < data.length; x++){
+  //     rawRinkInData.push(data[x].count);
+  //   }
+  //   console.log(rawRinkInData);
+
+  //   this.rinkInGlobalData = rawRinkInData;
+  //   this.rinksLineChartData = [
+  //     { data: this.rinkOutGlobalData, label: 'Rink In' },
+  //     { data: rawRinkInData, label: 'Rink Out' }
+  //   ];
+  // }
+
+  // setRinkOutChartData(data: any){
+  //   let rawRinkOutData = [];
+  //   for(let x = 0; x < data.length; x++){
+  //     rawRinkOutData.push(data[x].count);
+  //   }
+  //   console.log(rawRinkOutData);
+
+  //   this.rinkOutGlobalData = rawRinkOutData;
+  //   this.rinksLineChartData = [
+  //     { data: rawRinkOutData, label: 'Rink In' },
+  //     { data: this.rinkInGlobalData, label: 'Rink Out' }
+  //   ];
+  // }
 
 }

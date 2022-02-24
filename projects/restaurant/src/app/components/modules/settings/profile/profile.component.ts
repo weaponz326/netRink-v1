@@ -40,12 +40,14 @@ export class ProfileComponent implements OnInit {
   extendedProfileData: any;
 
   ngOnInit(): void {
-  }
-
-  ngAfterViewInit(): void {
     this.getAccount();
     this.getExtendedProfile();
   }
+
+  // ngAfterViewInit(): void {
+  //   this.getAccount();
+  //   this.getExtendedProfile();
+  // }
 
   getAccount(){
     this.basic.isAccountLoading = true;

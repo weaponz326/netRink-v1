@@ -24,25 +24,27 @@ export class DashboardComponent implements OnInit {
 
   allUsersCount: number = 0;
 
+  sortParams = {
+    field: "created_at",
+    direction: "desc"
+  }
+
   ngOnInit(): void {
+    this.getAccountAccountUser()
   }
 
-  ngAfterViewInit(): void {
-    this.getUsersCount();
-  }
-
-  getUsersCount(){
-    // this.adminApi.getCounts("User")
-    //   .subscribe(
-    //     res => {
-    //       console.log(res);
-    //       this.allUsersCount = res;
-    //     },
-    //     err => {
-    //       console.log(err);
-    //       this.connectionToast.openToast();
-    //     }
-    //   )
+  getAccountAccountUser() {
+    this.adminApi.getAccountAccountUser(this.sortParams)
+      .then(
+        (res: any) => {
+          console.log(res);
+          this.allUsersCount = res.docs.length;
+        },
+        (err: any) => {
+          console.log(err);
+          this.connectionToast.openToast();
+        }
+      )
   }
 
 }

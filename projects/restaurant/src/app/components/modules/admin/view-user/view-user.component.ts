@@ -64,7 +64,7 @@ export class ViewUserComponent implements OnInit {
           console.log(res);
           this.userFormData = res;
 
-          this.userForm.controls.personalName.setValue(this.userFormData.data().personal_name);
+          this.userForm.controls.personalName.setValue(this.userFormData.data().user.name);
           this.userForm.controls.accessLevel.setValue(this.userFormData.data().access_level);
 
           this.isUserLoading = false;
