@@ -37,6 +37,7 @@ export class RegisterFormComponent implements OnInit {
 
   thisUser: any;
 
+  saved: boolean = false;
   isSending: boolean = false;
   showPrompt: boolean = false;
 
@@ -70,26 +71,33 @@ export class RegisterFormComponent implements OnInit {
       created_by: localStorage.getItem('personal_id') as string,
     }
 
-    this.isSending = true;
+    this.saved = true;
 
-    this.accountApi.createAccount(accountData)
-      .then(
-        (res: any) => {
-          console.log(res);
+    if (this.accountForm.valid){
+      this.isSending = true;
 
-          localStorage.setItem('restaurant_id', res.id);
-          this.showPrompt = true;
-          this.isSending = false;
+      this.accountApi.createAccount(accountData)
+        .then(
+          (res: any) => {
+            console.log(res);
 
-          this.createAccountUser(accountData);
-          this.createExtendedProfile();
-          this.createSubscription();
-        },
-        (err: any) => {
-          console.log(err);
-          this.isSending = false;
-        }
-      )
+            localStorage.setItem('restaurant_id', res.id);
+            this.showPrompt = true;
+            this.isSending = false;
+
+            this.createAccountUser(accountData);
+            this.createExtendedProfile();
+            this.createSubscription();
+          },
+          (err: any) => {
+            console.log(err);
+            this.isSending = false;
+          }
+        )
+    }
+    else{
+      console.log("form is invalid");
+    }
 
     console.log(this.accountForm.value);
   }

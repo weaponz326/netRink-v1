@@ -29,21 +29,13 @@ export class SignupFormComponent implements OnInit {
 
   signupForm = new FormGroup({})
 
+  saved: boolean = false;
   isSending: boolean = false;
   showPrompt: boolean = false;
 
   suiteRegistrationType: string = "";
 
   registeredUserId = "";
-
-  fnErrors: any;
-  lnErrors: any;
-  locErrors: any;
-  abtErrors: any;
-  emailErrors: any;
-  pass1Errors: any;
-  pass2Errors: any;
-  nfErrors: any;
 
   ngOnInit(): void {
     this.getSource();
@@ -67,7 +59,9 @@ export class SignupFormComponent implements OnInit {
   }
 
   onSubmit(){
-    if (this.signupForm.controls.password1.value == this.signupForm.controls.password2.value){
+    this.saved = true;
+
+    if (this.signupForm.valid && this.signupForm.controls.password1.value == this.signupForm.controls.password2.value){
       this.isSending = true;
 
       this.authApi.signup(this.signupForm.controls.email.value, this.signupForm.controls.password1.value)
@@ -92,7 +86,8 @@ export class SignupFormComponent implements OnInit {
         );
     }
     else{
-      console.log('passwords do not match');
+      console.log("form is invalid");
+      this.signupStepper.selectedIndex = 0;
     }
 
     console.log(this.signupForm.value);

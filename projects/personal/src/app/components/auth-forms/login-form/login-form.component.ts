@@ -22,10 +22,7 @@ export class LoginFormComponent implements OnInit {
     password: new FormControl('', Validators.required),
   })
 
-  emailErrors: any;
-  passErrors: any;
-  nfErrors: any;
-
+  saved: boolean = false;
   isSending: boolean = false;
   showPrompt: boolean = false;
 
@@ -40,24 +37,32 @@ export class LoginFormComponent implements OnInit {
   }
 
   onSubmit(){
-    this.isSending = true;
-    this.authApi.login(this.loginForm.controls.email.value, this.loginForm.controls.password.value)
-      .then(
-        res => {
-          console.log(res);
+    this.saved = true;
 
-          if (res.user){
-            localStorage.setItem('personal_id', res.user.uid);
-            this.registrationType();
+    if (this.loginForm.valid){
+      this.isSending = true;
+
+      this.authApi.login(this.loginForm.controls.email.value, this.loginForm.controls.password.value)
+        .then(
+          res => {
+            console.log(res);
+
+            if (res.user){
+              localStorage.setItem('personal_id', res.user.uid);
+              this.registrationType();
+            }
+
+            this.isSending = false;
+          },
+          err => {
+            console.log(err);
+            this.isSending = false;
           }
-
-          this.isSending = false;
-        },
-        err => {
-          console.log(err);
-          this.isSending = false;
-        }
-      )
+        )
+    }
+    else{
+      console.log("form is invalid");
+    }
   }
 
   registrationType(){

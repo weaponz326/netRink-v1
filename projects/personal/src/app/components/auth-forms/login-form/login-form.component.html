@@ -17,7 +17,7 @@
                                         <mat-label>Email</mat-label>
                                         <input matInput type="text" formControlName="email" required>
                                     </mat-form-field>
-                                    <mat-error *ngFor="let emailError of emailErrors">{{emailError}}</mat-error>
+                                    <mat-error *ngIf="saved && loginForm.controls.email.errors">Email format is Incorrect</mat-error>
                                 </div>
                             </div>
 
@@ -27,8 +27,7 @@
                                         <mat-label>Password</mat-label>
                                         <input matInput type="password" formControlName="password" required>
                                     </mat-form-field>
-                                    <mat-error *ngFor="let passErr of passErrors">{{passErr}}</mat-error>
-                                    <mat-error *ngFor="let nfErr of nfErrors">{{nfErr}}</mat-error>
+                                    <mat-error *ngIf="saved && loginForm.controls.password.errors">Password is too short</mat-error>
                                 </div>
                             </div>
 

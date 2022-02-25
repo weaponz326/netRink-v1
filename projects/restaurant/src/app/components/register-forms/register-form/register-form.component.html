@@ -17,7 +17,7 @@
                                         <mat-label>Restaurant Name</mat-label>
                                         <input matInput type="text" formControlName="name" required>
                                     </mat-form-field>
-                                    <mat-error *ngFor="let nameErr of nameErrors">{{nameErr}}</mat-error>
+                                    <mat-error *ngIf="saved && accountForm.controls.name.errors">Restaurant Name is required</mat-error>
                                 </div>
                             </div>
 
@@ -27,7 +27,7 @@
                                         <mat-label>Location</mat-label>
                                         <input matInput type="text" formControlName="location" required ngx-google-places-autocomplete #placesRef="ngx-places" (onAddressChange)="onAddressChange($event)">
                                     </mat-form-field>
-                                    <mat-error *ngFor="let locErr of locErrors">{{locErr}}</mat-error>
+                                    <mat-error *ngIf="saved && accountForm.controls.location.errors">Location is required</mat-error>
                                 </div>
                             </div>
 
@@ -37,7 +37,8 @@
                                         <mat-label>About</mat-label>
                                         <textarea matInput rows="3" formControlName="about" required maxlength="250"></textarea>
                                     </mat-form-field>
-                                    <mat-error *ngFor="let abtErr of abtErrors">{{abtErr}}</mat-error>
+                                    <mat-hint>Not more than 250 characters</mat-hint>
+                                    <mat-error *ngIf="saved && accountForm.controls.about.errors">About is required</mat-error>
                                 </div>
                             </div>
 

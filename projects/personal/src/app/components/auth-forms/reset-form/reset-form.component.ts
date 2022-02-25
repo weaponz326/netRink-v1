@@ -17,11 +17,8 @@ export class ResetFormComponent implements OnInit {
 
   resetForm = new FormGroup({})
 
+  saved: boolean = false;
   isSending: boolean = false;
-
-  pass1Errors: any;
-  pass2Errors: any;
-  nfErrors: any;
 
   ngOnInit(): void {
     this.initResetForm();
@@ -35,7 +32,14 @@ export class ResetFormComponent implements OnInit {
   }
 
   onSubmit(){
+    this.saved = true;
 
+    if (this.resetForm.valid && this.resetForm.controls.password1.value == this.resetForm.controls.password2.value){
+      // TODO:
+    }
+    else{
+      console.log("form is invalid");
+    }
   }
 
 }

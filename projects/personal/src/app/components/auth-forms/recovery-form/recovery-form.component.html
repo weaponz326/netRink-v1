@@ -17,8 +17,7 @@
                                         <mat-label>Email</mat-label>
                                         <input matInput type="text" formControlName="email" required>
                                     </mat-form-field>
-                                    <mat-error *ngFor="let emailError of emailErrors">{{emailError}}</mat-error>
-                                    <mat-error *ngFor="let nfErr of nfErrors">{{nfErrors}}</mat-error>
+                                    <mat-error *ngIf="saved && recoveryForm.controls.email.errors">Email format is Incorrect</mat-error>
                                 </div>
                             </div>
 
@@ -45,6 +44,6 @@
 
             </div>
         </div>
-        
+
     </div>
 </div>
