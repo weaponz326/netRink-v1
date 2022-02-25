@@ -7,7 +7,7 @@
                 <mat-card>
                     <mat-card-content>
 
-                        <app-form-header [formHeading]="'Sign up'"></app-form-header>
+                        <app-form-header [formHeading]="'Personal sign up'"></app-form-header>
 
                         <form *ngIf="!showPrompt" [formGroup]="signupForm" (ngSubmit)="onSubmit()">
                             <mat-stepper [linear]="true" #stepper>

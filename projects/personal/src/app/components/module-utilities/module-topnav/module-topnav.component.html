@@ -6,10 +6,10 @@
 
     <div class="navbar-expand">
         <div *ngFor="let heading of headings" class="module-heading d-inline-block">
-            <a class="align-items-center" routerLink={{heading.url}}>
+            <a class="align-items-center d-sm-none" routerLink={{heading.url}}>
                 <h3 class="d-inline-block">{{heading.text}}</h3>
             </a>
-            <span *ngIf="headings.indexOf(heading) != headings.length - 1" class="bi bi-chevron-double-right mx-2"></span>
+            <span class="d-sm-none" *ngIf="headings.indexOf(heading) != headings.length - 1" class="bi bi-chevron-double-right mx-2"></span>
         </div>
     </div>
 

@@ -32,7 +32,7 @@ export class NewReservationComponent implements OnInit {
 
   reservationForm: FormGroup = new FormGroup({});
 
-  selectedCustomerId: any;
+  selectedCustomerId = "";
 
   isReservationSaving = false;
 
