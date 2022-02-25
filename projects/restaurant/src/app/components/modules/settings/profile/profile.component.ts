@@ -44,11 +44,6 @@ export class ProfileComponent implements OnInit {
     this.getExtendedProfile();
   }
 
-  // ngAfterViewInit(): void {
-  //   this.getAccount();
-  //   this.getExtendedProfile();
-  // }
-
   getAccount(){
     this.basic.isAccountLoading = true;
     this.location.isAccountLoading = true;
@@ -101,69 +96,6 @@ export class ProfileComponent implements OnInit {
 
           this.location.isExtendedProfileLoading = false;
           this.contact.isExtendedProfileLoading = false;
-          this.connectionToast.openToast();
-        }
-      )
-  }
-
-  updateAccount(){
-    let data: Account = {
-      created_at: this.accountData.created_at,
-      name: this.basic.basicForm.controls.name.value,
-      location: this.location.locationForm.controls.location.value,
-      about: this.basic.basicForm.controls.about.value,
-      created_by: this.accountData.created_by,
-    }
-
-    this.basic.isBasicSaving = true;
-    this.logo.isLogoSaving = true;
-
-    this.accountApi.updateAccount(data)
-      .then(
-        (res: any) => {
-          console.log(res);
-
-          this.basic.isBasicSaving = false;
-          this.logo.isLogoSaving = false;
-        },
-        (err: any) => {
-          console.log(err);
-
-          this.basic.isBasicSaving = false;
-          this.logo.isLogoSaving = false;
-
-          this.connectionToast.openToast();
-        }
-      )
-  }
-
-  // extended profile
-  updateExtendedProfile(){
-    let data: ExtendedProfile = {
-      email: this.contact.contactForm.controls.email.value,
-      phone: this.contact.contactForm.controls.phone.value,
-      address: this.contact.contactForm.controls.address.value,
-      country: this.location.locationForm.controls.country.value,
-      state: this.location.locationForm.controls.state.value,
-      city: this.location.locationForm.controls.city.value,
-    }
-
-    this.location.isLocationSaving = true;
-    this.contact.isContactSaving = true;
-
-    this.settingsApi.updateExtendedProfile(data)
-      .then(
-        res => {
-          console.log(res);
-
-          this.location.isLocationSaving = false;
-          this.contact.isContactSaving = false;
-        },
-        err => {
-          console.log(err);
-
-          this.location.isLocationSaving = false;
-          this.contact.isContactSaving = false;
           this.connectionToast.openToast();
         }
       )

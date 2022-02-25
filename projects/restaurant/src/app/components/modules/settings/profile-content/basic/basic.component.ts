@@ -1,6 +1,10 @@
 import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 
+import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
+
+import { AccountApiService } from 'projects/restaurant/src/app/services/account-api/account-api.service';
+
 
 @Component({
   selector: 'app-basic',
@@ -9,9 +13,9 @@ import { FormControl, FormGroup } from '@angular/forms';
 })
 export class BasicComponent implements OnInit {
 
-  constructor() { }
+  constructor(private accountApi: AccountApiService) { }
 
-  @Output() basicEvent = new EventEmitter<any>();
+  @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
 
   basicForm: FormGroup = new FormGroup({});
 
@@ -29,8 +33,26 @@ export class BasicComponent implements OnInit {
     })
   }
 
-  emitBasic(){
-  	this.basicEvent.emit();
+  updateAccount(){
+    let data = {
+      name: this.basicForm.controls.name.value,
+      about: this.basicForm.controls.about.value,
+    }
+
+    this.isBasicSaving = true;
+
+    this.accountApi.updateAccount(data)
+      .then(
+        (res: any) => {
+          console.log(res);
+          this.isBasicSaving = false;
+        },
+        (err: any) => {
+          console.log(err);
+          this.isBasicSaving = false;
+          this.connectionToast.openToast();
+        }
+      )
   }
 
 }

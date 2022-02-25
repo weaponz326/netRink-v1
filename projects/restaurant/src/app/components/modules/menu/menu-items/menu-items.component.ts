@@ -1,4 +1,7 @@
 import { Component, OnInit, ViewChild, Output, EventEmitter, Input } from '@angular/core';
+import { finalize } from 'rxjs/operators';
+
+import { AngularFireStorage } from '@angular/fire/compat/storage';
 
 import { AddMenuItemComponent } from '../add-menu-item/add-menu-item.component'
 import { EditMenuItemComponent } from '../edit-menu-item/edit-menu-item.component'
@@ -17,12 +20,17 @@ import { MenuGroup } from 'projects/restaurant/src/app/models/modules/menu/menu.
 })
 export class MenuItemsComponent implements OnInit {
 
-  constructor(private menuApi: MenuApiService) { }
+  constructor(
+    private storage: AngularFireStorage,
+    private menuApi: MenuApiService
+  ) { }
 
   @ViewChild('addMenuItemComponentReference', { read: AddMenuItemComponent, static: false }) addMenuItem!: AddMenuItemComponent;
   @ViewChild('editMenuItemComponentReference', { read: EditMenuItemComponent, static: false }) editMenuItem!: EditMenuItemComponent;
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
   @ViewChild('deleteModalComponentReference', { read: DeleteModalComponent, static: false }) deleteModal!: DeleteModalComponent;
+
+  storageBasePath = "/restaurant/" + localStorage.getItem('restaurant_id') + "/module_menu/";
 
   menuItemsGridData: any[] = [];
 
@@ -61,15 +69,30 @@ export class MenuItemsComponent implements OnInit {
         (res: any) => {
           console.log(res);
 
-          this.addMenuItem.isMenuItemSaving = false;
-          this.addMenuItem.dismissButton.nativeElement.click();
-          this.addMenuItem.resetForm();
+          if (!this.addMenuItem.menuItemForm.image.isImageSet){
+            this.addMenuItem.isMenuItemSaving = false;
+            this.addMenuItem.dismissButton.nativeElement.click();
+            this.addMenuItem.resetForm();
 
-          this.getMenuGroupMenuItem();
+            this.getMenuGroupMenuItem();
+          }
+          else{
+            const storagePath = this.storageBasePath + res.id;
+            const storageRef = this.storage.ref(storagePath);
+            const task = this.storage.upload(storagePath, this.addMenuItem.menuItemForm.image.image);
+
+            task.snapshotChanges().pipe(
+                finalize(() => {
+                  storageRef.getDownloadURL().subscribe(downloadUrl => {
+                    this.updateImage(res.id, {image: downloadUrl});
+                  });
+                })
+              ).subscribe();
+          }
         },
         (err: any) => {
           console.log(err);
-          
+
           this.addMenuItem.dismissButton.nativeElement.click();
           this.addMenuItem.isMenuItemSaving = false;
 
@@ -87,14 +110,29 @@ export class MenuItemsComponent implements OnInit {
         (res: any) => {
           console.log(res);
 
-          this.editMenuItem.isMenuItemSaving = false;
-          this.editMenuItem.dismissButton.nativeElement.click();
+          if (!this.addMenuItem.menuItemForm.image.isImageSet){
+            this.editMenuItem.isMenuItemSaving = false;
+            this.editMenuItem.dismissButton.nativeElement.click();
 
-          this.getMenuGroupMenuItem();
+            this.getMenuGroupMenuItem();
+          }
+          else{
+            const storagePath = this.storageBasePath + menu_item.id;
+            const storageRef = this.storage.ref(storagePath);
+            const task = this.storage.upload(storagePath, this.addMenuItem.menuItemForm.image.image);
+
+            task.snapshotChanges().pipe(
+                finalize(() => {
+                  storageRef.getDownloadURL().subscribe(downloadUrl => {
+                    this.updateImage(menu_item.id, {image: downloadUrl});
+                  });
+                })
+              ).subscribe();
+          }
         },
         (err: any) => {
           console.log(err);
-          
+
           this.editMenuItem.dismissButton.nativeElement.click();
           this.editMenuItem.isMenuItemSaving = false;
 
@@ -122,6 +160,22 @@ export class MenuItemsComponent implements OnInit {
           this.editMenuItem.isMenuItemDeleting = false;
           this.editMenuItem.dismissButton.nativeElement.click();
 
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  updateImage(id: any, data: any){
+    console.log('u are updating menu item image url');
+    console.log(data);
+
+    this.menuApi.updateMenuItem(id, data)
+      .then(
+        (res: any) => {
+          console.log(res);
+        },
+        (err: any) => {
+          console.log(err);
           this.connectionToast.openToast();
         }
       )

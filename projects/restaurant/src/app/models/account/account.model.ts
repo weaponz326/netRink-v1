@@ -5,5 +5,6 @@ export class Account {
   name!: string;
   location!: string;
   about!: string;
+  logo!: string;
   created_by!: string;
 }

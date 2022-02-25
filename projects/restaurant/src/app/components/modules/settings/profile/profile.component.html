@@ -23,16 +23,16 @@
             </nav>
             <div class="tab-content" id="nav-tabContent">
                 <div class="tab-pane fade show active" id="nav-basic" role="tabpanel" aria-labelledby="nav-basic-tab">
-                    <app-basic #basicComponentReference (additionalEvent)="updateAccount()"></app-basic>
+                    <app-basic #basicComponentReference></app-basic>
                 </div>
                 <div class="tab-pane fade" id="nav-photo" role="tabpanel" aria-labelledby="nav-photo-tab">
-                    <app-logo #logoComponentReference (photoEvent)="updateAccount()"></app-logo>
+                    <app-logo #logoComponentReference></app-logo>
                 </div>
                 <div class="tab-pane fade" id="nav-location" role="tabpanel" aria-labelledby="nav-location-tab">
-                    <app-location #locationComponentReference (locationEvent)="updateExtendedProfile()"></app-location>
+                    <app-location #locationComponentReference></app-location>
                 </div>
                 <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
-                    <app-contact #contactComponentReference (contactEvent)="updateExtendedProfile()"></app-contact>
+                    <app-contact #contactComponentReference></app-contact>
                 </div>
             </div>
 

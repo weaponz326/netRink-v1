@@ -69,6 +69,7 @@ export class RegisterFormComponent implements OnInit {
       location: this.accountForm.controls.location.value,
       about: this.accountForm.controls.about.value,
       created_by: localStorage.getItem('personal_id') as string,
+      logo: ""
     }
 
     this.saved = true;

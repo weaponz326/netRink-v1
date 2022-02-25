@@ -4,4 +4,5 @@ export class User {
   last_name!: string;
   location!: string;
   about!: string;
+  photo!: string;
 }

@@ -1,8 +1,12 @@
 import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
+import { finalize } from 'rxjs/operators';
 
-import { ButtonComponent } from 'smart-webcomponents-angular/button';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
 
-import { ImageInputComponent } from '../../../../module-utilities/image-input/image-input.component'
+import { ImageInputComponent } from 'projects/personal/src/app/components/module-utilities/image-input/image-input.component'
+import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
+
+import { UserApiService } from 'projects/personal/src/app/services/user/user-api/user-api.service';
 
 
 @Component({
@@ -12,22 +16,52 @@ import { ImageInputComponent } from '../../../../module-utilities/image-input/im
 })
 export class PhotoComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private storage: AngularFireStorage,
+    private userApi: UserApiService
+  ) { }
 
-  @ViewChild('saveButtonference', { read: ButtonComponent, static: false }) saveButton!: ButtonComponent;
   @ViewChild('imageInputComponentReference', { read: ImageInputComponent, static: false }) imageInput!: ImageInputComponent;
+  @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
 
-  @Output() photoEvent = new EventEmitter<any>();
+  storageBasePath = "/personal/" + localStorage.getItem('personal_id') + "/user/";
+
+  isUserSaving = false;
 
   ngOnInit(): void {
   }
 
-  emitPhoto(){
-    let data = {
-      photo: this.imageInput.image
-    }
+  uploadImage(){
+    if (this.imageInput.isImageChanged){
+      this.isUserSaving = true;
 
-  	this.photoEvent.emit(data);
+      const storagePath = this.storageBasePath;
+      const storageRef = this.storage.ref(storagePath);
+      const task = this.storage.upload(storagePath, this.imageInput.image);
+
+      task.snapshotChanges().pipe(
+          finalize(() => {
+            storageRef.getDownloadURL().subscribe(downloadUrl => {
+              this.updateUser({photo: downloadUrl});
+            });
+          })
+        ).subscribe();
+    }
+  }
+
+  updateUser(data: any){
+    this.userApi.updateUser(data)
+      .then(
+        (res: any) => {
+          console.log(res);
+          this.isUserSaving = false;
+        },
+        (err: any) => {
+          console.log(err);
+          this.isUserSaving = false;
+          this.connectionToast.openToast();
+        }
+      )
   }
 
 }

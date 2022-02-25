@@ -10,6 +10,7 @@ export class MenuItem {
   item_code!: string;
   item_name!: string;
   price!: string;
+  image!: string;
   menu_group!: {
     id: string;
     data: MenuGroup;

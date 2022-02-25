@@ -40,6 +40,7 @@ export class AddMenuItemComponent implements OnInit {
       item_code: this.menuItemForm.menuItemForm.controls.itemCode.value,
       item_name: this.menuItemForm.menuItemForm.controls.itemName.value,
       price: this.menuItemForm.menuItemForm.controls.price.value,
+      image: this.menuItemForm.image.image,
       menu_group: {
         id: sessionStorage.getItem('restaurant_menu_group_id') as string,
         data: this.menuGroupData,

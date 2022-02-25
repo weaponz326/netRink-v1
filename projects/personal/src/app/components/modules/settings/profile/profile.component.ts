@@ -85,6 +85,7 @@ export class ProfileComponent implements OnInit {
           this.basic.basicForm.controls.lastName.setValue(this.userData.data().last_name);
           this.basic.basicForm.controls.about.setValue(this.userData.data().about);
           this.location.locationForm.controls.location.setValue(this.userData.data().location);
+          this.photo.imageInput.imgSrc = this.userData.data().photo;
 
           this.basic.isUserLoading = false;
           this.location.isUserLoading = false;
@@ -127,55 +128,5 @@ export class ProfileComponent implements OnInit {
       )
   }
 
-  updateUser(){
-    this.photo.saveButton.disabled = true;
-
-    let data: User = {
-      created_at: this.userData.data().created_at,
-      first_name: this.basic.basicForm.controls.first_name.value,
-      last_name: this.basic.basicForm.controls.last_name.value,
-      location: this.location.locationForm.controls.location.value,
-      about: this.basic.basicForm.controls.about.value,
-    }
-
-    this.userApi.updateUser(data)
-      .then(
-        (res: any) => {
-          console.log(res);
-          this.photo.saveButton.disabled = false;
-        },
-        (err: any) => {
-          console.log(err);
-          this.photo.saveButton.disabled = false;
-
-          this.connectionToast.openToast();
-        }
-      )
-  }
-
-  updateExtendedProfile(){
-    console.log();
-
-    let data: ExtendedProfile = {
-      date_of_birth: this.additional.bdayInput.value,
-      gender: this.additional.additionalForm.controls.gender.value,
-      phone: this.contact.contactForm.controls.phone.value,
-      address: this.contact.contactForm.controls.address.value,
-      country: this.location.locationForm.controls.country.value,
-      state: this.location.locationForm.controls.state.value,
-      city: this.location.locationForm.controls.city.value,
-    }
-
-    this.settingsApi.updateExtendedProfile(data)
-      .then(
-        (res: any) => {
-          console.log(res);
-        },
-        (err: any) => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
-  }
 
 }

@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+
+import { ImageInputComponent } from 'projects/personal/src/app/components/module-utilities/image-input/image-input.component'
 
 
 @Component({
@@ -10,6 +12,8 @@ import { FormControl, FormGroup } from '@angular/forms';
 export class MenuItemFormComponent implements OnInit {
 
   constructor() { }
+
+  @ViewChild('imageInputComponentReference', { read: ImageInputComponent, static: false }) image!: ImageInputComponent;
 
   menuItemForm: FormGroup = new FormGroup({});
 

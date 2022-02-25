@@ -100,6 +100,7 @@ export class SignupFormComponent implements OnInit {
       last_name: this.signupForm.controls.lastName.value,
       location: this.signupForm.controls.location.value,
       about: this.signupForm.controls.about.value,
+      photo: "",
     }
 
     this.userApi.createUser(this.registeredUserId, userData)
