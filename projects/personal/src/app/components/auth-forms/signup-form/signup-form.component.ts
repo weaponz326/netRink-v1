@@ -31,7 +31,7 @@ export class SignupFormComponent implements OnInit {
 
   saved: boolean = false;
   isSending: boolean = false;
-  showPrompt: boolean = true;
+  showPrompt: boolean = false;
 
   // suiteRegistrationType: string = "";
 
