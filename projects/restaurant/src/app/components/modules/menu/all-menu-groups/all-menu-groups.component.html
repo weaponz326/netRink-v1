@@ -2,14 +2,17 @@
 
 <div #print class="container">
 
-    <div class="row mb-3">
-        <div class="col-md-12">
-            <button class="btn btn-secondary page-add-btn" (click)="newMenuGroup.openModal()">New Menu Group</button>
-        </div>
-    </div>
-
     <div class="row">
         <div class="col-md-7">
+
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <button class="btn btn-secondary page-add-btn" (click)="newMenuGroup.openModal()">New Menu Group</button>
+                    <button [disabled]="isFetchingGridData" class="btn btn-light border float-end page-refresh-btn" (click)="getAccountMenuGroup()">
+                        <i class="bi bi-arrow-clockwise"></i>
+                    </button>
+                </div>
+            </div>
 
             <table class="table table-bordered table-sm w-100 page-table">
                 <thead>

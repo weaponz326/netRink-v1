@@ -79,6 +79,11 @@ hr {
   width: 150px;
 }
 
+.page-refresh-btn{
+  font-size: 14px;
+  width: 50px;
+}
+
 table.page-table{
   font-size: 14px;
 }

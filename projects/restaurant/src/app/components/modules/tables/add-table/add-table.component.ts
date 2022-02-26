@@ -23,7 +23,7 @@ export class AddTableComponent implements OnInit {
     private tablesApi: TablesApiService
   ) { }
 
-  @Output() saveItemEvent = new EventEmitter<any>();
+  @Output() saveTableEvent = new EventEmitter<any>();
 
   @ViewChild('tableFormComponentReference', { read: TableFormComponent, static: false }) tableForm!: TableFormComponent;
   @ViewChild('addButtonElementReference', { read: ElementRef, static: false }) addButton!: ElementRef;
@@ -51,7 +51,7 @@ export class AddTableComponent implements OnInit {
       table_status: this.tableForm.tableForm.controls.tableStatus.value,
     }
 
-    this.saveItemEvent.emit(data);
+    this.saveTableEvent.emit(data);
   }
 
   resetForm(){

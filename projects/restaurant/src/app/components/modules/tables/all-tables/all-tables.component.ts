@@ -168,6 +168,7 @@ export class AllTablesComponent implements OnInit {
           console.log(res);
           this.addTable.isTableSaving = false;
           this.addTable.dismissButton.nativeElement.click();
+          this.isDataAvailable = false;
 
           this.getAccountTable();
         },

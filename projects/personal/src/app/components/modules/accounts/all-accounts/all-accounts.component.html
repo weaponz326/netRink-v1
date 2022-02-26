@@ -2,14 +2,17 @@
 
 <div class="container">
 
-    <div class="row mb-3">
-        <div class="col-md-12">
-            <button class="btn btn-secondary page-add-btn" (click)="addAccount.openModal()">New Account</button>
-        </div>
-    </div>
-
     <div class="row">
         <div class="col-md-9">
+
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <button class="btn btn-secondary page-add-btn" (click)="addAccount.openModal()">New Account</button>
+                    <button [disabled]="isFetchingGridData" class="btn btn-light border float-end page-refresh-btn" (click)="getUserAccount()">
+                        <i class="bi bi-arrow-clockwise"></i>
+                    </button>
+                </div>
+            </div>
 
             <table class="table table-bordered table-sm w-100 page-table">
                 <thead>

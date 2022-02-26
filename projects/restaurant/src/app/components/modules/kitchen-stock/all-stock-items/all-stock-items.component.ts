@@ -167,6 +167,8 @@ export class AllStockItemsComponent implements OnInit {
             this.getAccountStockItem();
             this.addStockItem.isItemSaving = false;
             this.addStockItem.addButton.nativeElement.click();
+            this.isDataAvailable = false;
+
             this.addStockItem.resetForm();
           }
         },
