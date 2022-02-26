@@ -31,10 +31,11 @@ export class EditItemComponent implements OnInit {
   openModal(data: any){
     this.orderItemData = data;
 
-    this.itemForm.itemForm.controls.menuItem.setValue(data.data().menu_item.item_name);
-    this.itemForm.itemForm.controls.price.setValue(data.data().menu_item.price);
+    this.itemForm.itemForm.controls.menuItem.setValue(data.data().menu_item.data.item_name);
+    this.itemForm.itemForm.controls.price.setValue(data.data().menu_item.data.price);
     this.itemForm.itemForm.controls.quantity.setValue(data.data().quantity);
-    this.itemForm.selectedMenuItemId = data.data().menu_item.id;
+    this.itemForm.selectedMenuItemId = data.data.menu_item.id;
+    this.itemForm.selectedMenuItemData = data.data().menu_item.data;
 
     this.editButton.nativeElement.click();
   }
@@ -44,8 +45,7 @@ export class EditItemComponent implements OnInit {
       quantity: this.itemForm.itemForm.controls.quantity.value,
       menu_item: {
         id: this.itemForm.selectedMenuItemId,
-        item_name: this.itemForm.itemForm.controls.menuItem.value,
-        price: this.itemForm.itemForm.controls.price.value,
+        data: this.itemForm.selectedMenuItemData,
       }
     }
 

@@ -46,10 +46,6 @@ export class EditMenuItemComponent implements OnInit {
       item_code: this.menuItemForm.menuItemForm.controls.itemCode.value,
       item_name: this.menuItemForm.menuItemForm.controls.itemName.value,
       price: this.menuItemForm.menuItemForm.controls.price.value,
-      menu_group: {
-        id: sessionStorage.getItem('restaurant_menu_group_id') as string,
-        data: this.menuItemData.data().menu_group,
-      }
     }
 
     let menu_item = {

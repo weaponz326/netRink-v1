@@ -60,9 +60,10 @@ export class OrdersPrintService {
     for (let data of orderItemsGridData.docs){
       var row = [];
       let rowData: any = data.data();
-      row.push(rowData.item_code);
-      row.push(rowData.item_name);
-      row.push(rowData.price);
+      row.push(rowData.menu_item.data.item_name);
+      row.push(rowData.menu_item.data.price);
+      row.push(rowData.quantity);
+      row.push(rowData.menu_item.data.price * rowData.quantity);
 
       body.push(row);
     }
@@ -70,10 +71,10 @@ export class OrdersPrintService {
     var totalAmount = 0;
     for (let data of orderItemsGridData.docs){
       let rowData: any = data.data();
-      totalAmount += rowData.menu_item.price * rowData.quantity;
+      totalAmount += rowData.menu_item.data.price * rowData.quantity;
     }
 
-    body.push(['', '', totalAmount.toString()])
+    body.push(['', '', '', totalAmount.toString()])
 
     let content = [
       {

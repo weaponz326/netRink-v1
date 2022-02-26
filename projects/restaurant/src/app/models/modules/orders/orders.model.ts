@@ -1,3 +1,5 @@
+import { MenuItem } from '../menu/menu.model';
+
 export class Order {
   created_at!: any;
   account!: string;
@@ -22,7 +24,6 @@ export class OrderItem {
   quantity!: number;
   menu_item!: {
     id: string;
-    item_name: string;
-    price: number;
+    data: MenuItem;
   }
 }

@@ -35,4 +35,15 @@ export class PdfPrintService {
     pdfMake.createPdf(def).download();
   }
 
+  printRoll(content: any) {
+    // TODO:
+    const pageSize = {
+      width: 595.28,
+		  height: 'auto'
+    }
+
+    const def = { content: content };
+    pdfMake.createPdf(def).print();
+  }
+
 }

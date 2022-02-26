@@ -134,4 +134,10 @@ export class ViewPaymentComponent implements OnInit {
     this.paymentsPrint.printViewPayment();
   }
 
+  onPrintReceipt(){
+    console.log("lets start printing receipt...");
+    sessionStorage.setItem('restaurant_order_id', this.paymentData.data().order.id);
+    this.paymentsPrint.printPaymentReceipt();
+  }
+
 }

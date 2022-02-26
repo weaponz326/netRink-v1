@@ -17,7 +17,8 @@ export class ItemFormComponent implements OnInit {
 
   itemForm: FormGroup = new FormGroup({});
 
-  selectedMenuItemId: any;
+  selectedMenuItemId = "";
+  selectedMenuItemData: any;
 
   ngOnInit(): void {
     this.initItemForm();
@@ -38,10 +39,11 @@ export class ItemFormComponent implements OnInit {
 
   onMenuItemSelected(itemData: any){
     console.log(itemData);
+    this.selectedMenuItemId = itemData.id;
+    this.selectedMenuItemData = itemData.data();
 
     this.itemForm.controls.menuItem.setValue(itemData.data().item_name);
     this.itemForm.controls.price.setValue(itemData.data().price);
-    this.selectedMenuItemId = itemData.id;
   }
 
 }
