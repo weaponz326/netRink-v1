@@ -3,12 +3,13 @@ import { Router } from '@angular/router';
 import { FormControl, FormGroup } from '@angular/forms';
 
 import { serverTimestamp } from 'firebase/firestore';
+import moment from 'moment/moment';
 
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 
 import { RosterApiService } from 'projects/restaurant/src/app/services/modules/roster-api/roster-api.service';
 
-import { Roster } from 'projects/restaurant/src/app/models/modules/roster/roster.model';
+import { Roster, RosterSheet } from 'projects/restaurant/src/app/models/modules/roster/roster.model';
 
 
 @Component({
@@ -48,7 +49,7 @@ export class NewRosterComponent implements OnInit {
     })
   }
 
-  postRoster(){
+  createRoster(){
     let data: Roster = {
       created_at: serverTimestamp(),
       account: localStorage.getItem('restaurant_id') as string,
@@ -70,6 +71,8 @@ export class NewRosterComponent implements OnInit {
             this.dismissButton.nativeElement.click();
             this.router.navigateByUrl('/home/roster/view-roster');
             this.isRosterSaving = false;
+
+            this.createSheet();
           }
         },
         (err: any) => {
@@ -81,5 +84,35 @@ export class NewRosterComponent implements OnInit {
 
     console.log(data);
   }
+
+  createSheet(){
+    let sheetDays = this.enumerateDaysBetweenDates(this.rosterForm.controls.fromDate.value, this.rosterForm.controls.toDate.value);
+    let data: RosterSheet = {
+      shifts: [],
+      days: sheetDays,
+      sheet: []
+    }
+
+    this.rosterApi.createSheet(sessionStorage.getItem('restaurant_roster_id'), data)
+      .then(
+        (res: any) => console.log(res),
+        (err: any) => console.log(err)
+      )
+
+    console.log(data);
+  }
+
+  enumerateDaysBetweenDates(startDate: any, endDate: any) {
+    var sheetDays = [];
+    var firstDate = moment(startDate).startOf('day');
+    var lastDate = moment(endDate).startOf('day');
+
+    while(firstDate.add(1, 'days').diff(lastDate) <= 0) {
+        console.log(firstDate.toDate());
+        sheetDays.push(firstDate.clone().toDate());
+    }
+
+    return sheetDays;
+  };
 
 }

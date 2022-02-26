@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
+import moment from 'moment/moment';
+
 import { RosterApiService } from 'projects/restaurant/src/app/services/modules/roster-api/roster-api.service';
 
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
@@ -25,94 +27,79 @@ export class RosterSheetComponent implements OnInit {
   sheetDataFields: any = [];
   sheetEditDropDownSource: any[] = [];
 
+  isFetchingSheetData = false;
+  isSheetSaving = false;
+
+  rosterSheetData: any;
+  rosterShiftsData: any;
+  rosterBatchesData: any;
+
+  sheetDays: any[] = [];
+  sheetShifts: any[] = [];
+
   ngOnInit(): void {
+    this.getSheet();
+    this.getRosterShift();
+    this.getRosterBatch();
   }
 
-  ngAfterViewInit(): void {
-    this.refreshSheet();
-    this.getBatches();
+  getSheet(){
+    this.rosterApi.getSheet()
+      .then(
+        (res: any) => {
+          console.log(res);
+          this.sheetDays = res.data().days;
+        },
+        (err: any) => {
+          console.log(err);
+          this.connectionToast.openToast();
+        }
+      )
   }
 
-  refreshSheet(){
-    // this.rosterApi.refreshSheet()
-    //   .subscribe(
-    //     res => {
-    //       console.log(res);
-    //       this.getRosterDays();
-    //     },
-    //     err => {
-    //       console.log(err);
-    //       this.connectionToast.openToast();
-    //     }
-    //   )
+  getRosterShift(){
+    this.rosterApi.getRosterShift()
+      .then(
+        (res: any) => {
+          console.log(res);
+          this.rosterShiftsData = res;
+        },
+        (err: any) => {
+          console.log(err);
+          this.connectionToast.openToast();
+        }
+      )
   }
 
-  // for source of sheet custom cell edit widget
-  getBatches(){
-    // this.rosterApi.getBatches()
-    //   .subscribe(
-    //     res => {
-    //       console.log(res);
-
-    //       this.sheetEditDropDownSource = [];
-
-    //       res.forEach((batch: { batch_symbol: any; }) => {
-    //         this.sheetEditDropDownSource.push(batch.batch_symbol);
-    //       });
-    //       console.log(this.sheetEditDropDownSource);
-    //     },
-    //     err => {
-    //       console.log(err);
-    //       this.connectionToast.openToast();
-    //     }
-    //   )
+  getRosterBatch(){
+    this.rosterApi.getRosterBatch()
+      .then(
+        (res: any) => {
+          console.log(res);
+          this.rosterBatchesData = res.docs;
+        },
+        (err: any) => {
+          console.log(err);
+          this.connectionToast.openToast();
+        }
+      )
   }
 
-  // for populating columns
-  getRosterDays(){
-    // this.rosterApi.getRosterDays()
-    //   .subscribe(
-    //     res => {
-    //       console.log(res);
-    //       this.setRosterColumns(res);
+  enumerateDaysBetweenDates(startDate: any, endDate: any) {
+    var firstDate = moment(startDate).startOf('day');
+    var lastDate = moment(endDate).startOf('day');
 
-    //       this.getSheetShifts();
-    //     },
-    //     err => {
-    //       console.log(err);
-    //       this.connectionToast.openToast();
-    //     }
-    //   )
-  }
+    while(firstDate.add(1, 'days').diff(lastDate) < 0) {
+        console.log(firstDate.toDate());
+        this.sheetDays.push(firstDate.clone().toDate());
+    }
+  };
 
-  getSheetShifts(){
-    // this.rosterApi.getShifts()
-    //   .subscribe(
-    //     res => {
-    //       console.log(res);
-    //       this.populateSheetShifts(res);
-    //       this.getSheetBatches();
-    //     },
-    //     err => {
-    //       console.log(err);
-    //       this.connectionToast.openToast();
-    //     }
-    //   )
-  }
 
-  getSheetBatches(){
-    // this.rosterApi.getRosterSheet()
-    //   .subscribe(
-    //     res => {
-    //       console.log(res);
-    //       // this.populateSheetBatches(res);
-    //     },
-    //     err => {
-    //       console.log(err);
-    //       this.connectionToast.openToast();
-    //     }
-    //   )
-  }
+
+
+
+
 
   setRosterColumns(shiftDays: any){
     // set datafields

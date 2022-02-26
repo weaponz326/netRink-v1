@@ -34,13 +34,8 @@ export class Personnel {
   }
 }
 
-export class RosterDay {
-    roster!: string;
-    day!: string;
-}
-
 export class RosterSheet {
-    roster_day!: string;
-    shift!: string;
-    batch!: string;
+  shifts!: any[];
+  days!: any[];
+  sheet!: any[][];
 }

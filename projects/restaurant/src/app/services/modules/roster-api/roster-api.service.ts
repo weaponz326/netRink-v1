@@ -23,6 +23,7 @@ export class RosterApiService {
   shiftRef = this.afs.collection('restaurant/module_roster/restaurant_roster_shift');
   batchRef = this.afs.collection('restaurant/module_roster/restaurant_roster_batch');
   personnelRef = this.afs.collection('restaurant/module_roster/restaurant_roster_personnel');
+  sheetRef = this.afs.collection('restaurant/module_roster/restaurant_roster_sheet');
 
   // roster
 
@@ -145,6 +146,31 @@ export class RosterApiService {
 
   getRosterPersonnel(){
     return this.personnelRef.ref
+      .where("roster", "==", sessionStorage.getItem('restaurant_roster_id'))
+      // .orderBy("created_at", "desc")
+      .get();
+  }
+
+  // sheet
+
+  createSheet(rosterId: any, sheetData: any){
+    return this.sheetRef.doc(rosterId).set(sheetData);
+  }
+
+  getSheet(){
+    return this.sheetRef.doc(String(sessionStorage.getItem('restaurant_roster_id'))).ref.get();
+  }
+
+  updateSheet(sheetData: any){
+    return this.sheetRef.doc(String(sessionStorage.getItem('restaurant_roster_id'))).update(sheetData);
+  }
+
+  deleteSheet(){
+    return this.sheetRef.doc(String(sessionStorage.getItem('restaurant_roster_id'))).delete();
+  }
+
+  getRosterSheet(){
+    return this.sheetRef.ref
       .where("roster", "==", sessionStorage.getItem('restaurant_roster_id'))
       // .orderBy("created_at", "desc")
       .get();
