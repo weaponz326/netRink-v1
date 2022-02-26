@@ -37,7 +37,7 @@ export class ImageInputComponent implements OnInit {
       reader.readAsDataURL(file);
       reader.onload = (e: any) => {
         this.imgSrc = e.target.result;
-        this.image = reader.result;
+        this.image = file;
         this.isImageSet = true;
         this.isImageSet = true;
       }

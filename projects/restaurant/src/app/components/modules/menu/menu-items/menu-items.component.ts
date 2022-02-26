@@ -102,7 +102,7 @@ export class MenuItemsComponent implements OnInit {
   }
 
   updateMenuItem(menu_item: any){
-    this.addMenuItem.isMenuItemSaving = true;
+    this.editMenuItem.isMenuItemSaving = true;
     console.log(menu_item);
 
     this.menuApi.updateMenuItem(menu_item.id, menu_item.data)
@@ -110,16 +110,15 @@ export class MenuItemsComponent implements OnInit {
         (res: any) => {
           console.log(res);
 
-          if (!this.addMenuItem.menuItemForm.image.isImageSet){
+          if (!this.editMenuItem.menuItemForm.image.isImageSet){
             this.editMenuItem.isMenuItemSaving = false;
             this.editMenuItem.dismissButton.nativeElement.click();
-
             this.getMenuGroupMenuItem();
           }
           else{
             const storagePath = this.storageBasePath + menu_item.id;
             const storageRef = this.storage.ref(storagePath);
-            const task = this.storage.upload(storagePath, this.addMenuItem.menuItemForm.image.image);
+            const task = this.storage.upload(storagePath, this.editMenuItem.menuItemForm.image.image);
 
             task.snapshotChanges().pipe(
                 finalize(() => {
@@ -173,6 +172,11 @@ export class MenuItemsComponent implements OnInit {
       .then(
         (res: any) => {
           console.log(res);
+          this.addMenuItem.dismissButton.nativeElement.click();
+          this.editMenuItem.dismissButton.nativeElement.click();
+          this.addMenuItem.resetForm();
+
+          this.getMenuGroupMenuItem();
         },
         (err: any) => {
           console.log(err);

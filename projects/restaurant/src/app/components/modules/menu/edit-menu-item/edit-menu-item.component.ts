@@ -36,6 +36,7 @@ export class EditMenuItemComponent implements OnInit {
     this.menuItemForm.menuItemForm.controls.itemCode.setValue(data.data().item_code);
     this.menuItemForm.menuItemForm.controls.itemName.setValue(data.data().item_name);
     this.menuItemForm.menuItemForm.controls.price.setValue(data.data().price);
+    this.menuItemForm.image.imgSrc = data.data().image;
 
     this.editButton.nativeElement.click();
   }
@@ -47,7 +48,7 @@ export class EditMenuItemComponent implements OnInit {
       price: this.menuItemForm.menuItemForm.controls.price.value,
       menu_group: {
         id: sessionStorage.getItem('restaurant_menu_group_id') as string,
-        data: this.menuItemData.menu_group,
+        data: this.menuItemData.data().menu_group,
       }
     }
 
