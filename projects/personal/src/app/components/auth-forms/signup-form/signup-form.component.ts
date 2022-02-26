@@ -31,20 +31,20 @@ export class SignupFormComponent implements OnInit {
 
   saved: boolean = false;
   isSending: boolean = false;
-  showPrompt: boolean = false;
+  showPrompt: boolean = true;
 
-  suiteRegistrationType: string = "";
+  // suiteRegistrationType: string = "";
 
   registeredUserId = "";
 
   ngOnInit(): void {
-    this.getSource();
+    // this.getSource();
     this.initSignupForm();
   }
 
-  getSource(){
-    this.suiteRegistrationType = sessionStorage.getItem('app_source') as string;
-  }
+  // getSource(){
+  //   this.suiteRegistrationType = sessionStorage.getItem('app_source') as string;
+  // }
 
   initSignupForm(){
     this.signupForm = new FormGroup({
@@ -74,6 +74,7 @@ export class SignupFormComponent implements OnInit {
 
             this.createUSer();
             this.createExtendedProfile();
+            this.sendEmailVerification();
 
             this.isSending = false;
             this.showPrompt = true;
@@ -128,16 +129,32 @@ export class SignupFormComponent implements OnInit {
       );
   }
 
+  sendEmailVerification(){
+    let actionCodeSettings = {
+
+    }
+
+    this.authApi.sendEmailVerification(actionCodeSettings)
+      .then(
+        (res: any) => {
+          console.log(res);
+        },
+        (err: any) => {
+          console.log(err);
+        }
+      );
+  }
+
   onAddressChange(address: any) {
     this.signupForm.controls.location.setValue(address.formatted_address);
     console.log(address);
   }
 
-  registrationRedirect(){
-    if (this.suiteRegistrationType == "nR Personal" || this.suiteRegistrationType == "netRink")
-      window.location.href = "/";
-    else
-      window.location.href = "/register";
-  }
+  // registrationRedirect(){
+  //   if (this.suiteRegistrationType == "nR Personal" || this.suiteRegistrationType == "netRink")
+  //     window.location.href = "/";
+  //   else
+  //     window.location.href = "/register";
+  // }
 
 }

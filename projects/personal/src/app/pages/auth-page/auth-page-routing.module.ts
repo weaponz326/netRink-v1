@@ -5,7 +5,8 @@ import { AuthPageComponent } from './auth-page.component';
 import { LoginFormComponent } from '../../components/auth-forms/login-form/login-form.component';
 import { SignupFormComponent } from '../../components/auth-forms/signup-form/signup-form.component';
 import { RecoveryFormComponent } from '../../components/auth-forms/recovery-form/recovery-form.component';
-import { ResetFormComponent } from '../../components/auth-forms/reset-form/reset-form.component';
+import { SignupSuccessComponent } from '../../components/auth-forms/signup-success/signup-success.component';
+import { ResetSuccessComponent } from '../../components/auth-forms/reset-success/reset-success.component';
 
 
 const routes: Routes = [
@@ -16,7 +17,8 @@ const routes: Routes = [
       { path: "login", component: LoginFormComponent },
       { path: "signup", component: SignupFormComponent },
       { path: "recovery", component: RecoveryFormComponent },
-      { path: "reset", component: ResetFormComponent },
+      { path: "signup-success", component: SignupSuccessComponent },
+      { path: "reset-success", component: ResetSuccessComponent },
     ]
   }
 ];
