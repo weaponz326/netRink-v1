@@ -64,7 +64,9 @@ export class AllMenuGroupsComponent implements OnInit {
           this.nextStartAfter = res.docs[res.docs.length - 1];
           this.firstInResponse = res.docs[0];
           this.pageNumber = 1;
+
           if (!res.docs.length) this.isDataAvailable = false;
+          else this.isDataAvailable = true;
 
           if (!res.docs.length || res.docs.length < 20){
             this.disableNext = true;

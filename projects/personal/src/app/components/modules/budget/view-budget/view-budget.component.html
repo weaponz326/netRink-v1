@@ -37,7 +37,7 @@
                 <div *ngIf="!isBudgetLoading" class="row">
                     <div class="col-md-12">
                         <button type="button" class="btn btn-secondary btn-sm float-end ms-1 page-form-btn" routerLink="/home/budget/all-budget">Cancel</button>
-                        <button type="button" class="btn btn-secondary btn-sm float-end ms-1 page-form-btn" (click)="confirmDelete()">Delete</button>
+                        <button [disabled]="isBudgetDeleting" type="button" class="btn btn-secondary btn-sm float-end ms-1 page-form-btn" (click)="confirmDelete()">Delete</button>
                         <button [disabled]="isBudgetSaving" type="submit" class="btn btn-secondary btn-sm float-end ms-1 page-form-btn">Save</button>
                     </div>
                 </div>

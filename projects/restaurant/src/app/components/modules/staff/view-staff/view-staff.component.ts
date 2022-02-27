@@ -64,7 +64,6 @@ export class ViewStaffComponent implements OnInit {
           this.staffForm.staffForm.controls.lastName.setValue(this.staffFormData.data().last_name);
           this.staffForm.staffForm.controls.sex.setValue(this.staffFormData.data().sex);
           this.staffForm.bday.setValue(this.staffFormData.data().date_of_birth);
-          this.staffForm.photo.imgSrc = this.staffFormData.data().photo;
           this.staffForm.staffForm.controls.nationality.setValue(this.staffFormData.data().nationality);
           this.staffForm.staffForm.controls.religion.setValue(this.staffFormData.data().religion);
           this.staffForm.staffForm.controls.phone.setValue(this.staffFormData.data().phone);
@@ -77,7 +76,10 @@ export class ViewStaffComponent implements OnInit {
           this.staffForm.staffForm.controls.department.setValue(this.staffFormData.data().department);
           this.staffForm.staffForm.controls.job.setValue(this.staffFormData.data().job);
 
-          this.staffForm.photo.isImageSet = true;
+          if (this.staffFormData.data().photo != ""){
+            this.staffForm.photo.imgSrc = this.staffFormData.data().photo;
+            this.staffForm.photo.isImageSet = true;
+          }
         },
         (err: any) => {
           console.log(err);

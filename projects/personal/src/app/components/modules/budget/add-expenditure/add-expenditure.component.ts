@@ -30,7 +30,7 @@ export class AddExpenditureComponent implements OnInit {
   }
 
   openModal(){
-    this.addExpenditureForm.controls.amount.setValue(0);
+    this.addExpenditureForm.controls.amount.setValue(0.00);
     this.addButton.nativeElement.click();
   }
 
@@ -62,6 +62,5 @@ export class AddExpenditureComponent implements OnInit {
     this.addExpenditureForm.controls.itemDescription.setValue('');
     this.addExpenditureForm.controls.amount.setValue('');
   }
-
 
 }

@@ -30,7 +30,7 @@ export class AddIncomeComponent implements OnInit {
   }
 
   openModal(){
-    this.addIncomeForm.controls.amount.setValue(0);
+    this.addIncomeForm.controls.amount.setValue(0.00);
     this.addButton.nativeElement.click();
   }
 
@@ -38,7 +38,7 @@ export class AddIncomeComponent implements OnInit {
     this.addIncomeForm = new FormGroup({
       itemNumber: new FormControl(''),
       itemDescription: new FormControl(''),
-      amount: new FormControl('')
+      amount: new FormControl()
     })
   }
 

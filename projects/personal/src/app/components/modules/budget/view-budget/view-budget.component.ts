@@ -110,6 +110,7 @@ export class ViewBudgetComponent implements OnInit {
 
   deleteBudget(){
     this.isBudgetDeleting = true;
+    console.log('deleting...');
 
     this.budgetApi.deleteBudget()
       .then(

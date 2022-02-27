@@ -25,7 +25,7 @@ export class MenuItemFormComponent implements OnInit {
     this.menuItemForm = new FormGroup({
       itemCode: new FormControl(''),
       itemName: new FormControl(''),
-      price: new FormControl('')
+      price: new FormControl(0.00)
     })
   }
 

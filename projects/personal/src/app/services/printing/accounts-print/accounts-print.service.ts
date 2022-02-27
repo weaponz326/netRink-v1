@@ -109,7 +109,7 @@ export class AccountsPrintService {
   // all transaction
 
   async printAllTransactions(){
-    const transactionsGridData = await this.accountsApi.getAllUserAccount();
+    const transactionsGridData = await this.accountsApi.getAllUserTransaction();
 
     var body = [['Transaction Date', 'Account Name', 'Bank Name', 'Description', 'Transaction Type', 'Amount']];
 
@@ -117,8 +117,8 @@ export class AccountsPrintService {
       var row = [];
       let rowData: any = data.data();
       row.push(rowData.transaction_date);
-      row.push(rowData.account_name);
-      row.push(rowData.bank_name);
+      row.push(rowData.account.data.account_name);
+      row.push(rowData.account.data.bank_name);
       row.push(rowData.description);
       row.push(rowData.transaction_type);
       row.push(rowData.amount);

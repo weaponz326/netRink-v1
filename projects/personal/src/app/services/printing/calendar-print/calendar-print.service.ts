@@ -25,7 +25,7 @@ export class CalendarPrintService {
       var row = [];
       let rowData: any = data.data();
       row.push(rowData.calendar_name);
-      row.push(rowData.created_at);
+      row.push(rowData.created_at.toDate().toISOString().slice(0, 16));
 
       body.push(row);
     }
