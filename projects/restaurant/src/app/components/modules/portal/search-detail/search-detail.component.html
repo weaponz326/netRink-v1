@@ -1,7 +1,7 @@
 <div class="row mt-3">
     <div class="col-md-3 text-center align-middle">
-        <!-- <img *ngIf="searchDetail?.logo != null" [src]="restaurantUrl + searchDetail.logo" alt="" width="120" height="120" class="rounded" /> -->
-        <img src="../../../../../assets/images/utilities/logo-placeholder.jpg" alt="Company" width="120" height="120" class="rounded" />
+        <img *ngIf="searchDetail?.data().logo != ''" [src]="searchDetail?.data().logo" alt="" width="120" height="120" class="rounded" />
+        <img *ngIf="searchDetail?.data().logo == ''" src="../../../../../assets/images/utilities/logo-placeholder.jpg" alt="Company" width="120" height="120" class="rounded" />
     </div>
     <div class="col-md-9">
         <div class="row mb-3">

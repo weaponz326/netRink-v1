@@ -178,4 +178,9 @@ export class ViewOrderComponent implements OnInit {
     this.ordersPrint.printViewOrder();
   }
 
+  onPrintRoll(){
+    console.log("lets start printing roll...");
+    this.ordersPrint.printOrderRoll();
+  }
+
 }

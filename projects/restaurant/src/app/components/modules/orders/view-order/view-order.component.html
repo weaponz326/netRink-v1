@@ -78,6 +78,8 @@
 
         <div *ngIf="!isOrderLoading" class="row">
             <div class="col-md-12">
+                <button type="button" class="btn btn-secondary btn-sm page-form-btn" (click)="onPrintRoll()"><i class="bi bi-receipt me-2"></i>Print</button>
+
                 <button type="button" class="btn btn-secondary btn-sm float-end ms-1 page-form-btn" routerLink="/home/orders/all-orders">Cancel</button>
                 <button [disabled]="isOrderDeleting" type="button" class="btn btn-secondary btn-sm float-end ms-1 page-form-btn" (click)="confirmDelete()">Delete</button>
                 <button [disabled]="isOrderSaving" type="submit" class="btn btn-secondary btn-sm float-end ms-1 page-form-btn">Save</button>

@@ -1,7 +1,7 @@
 <div class="row mt-3">
     <div class="col-md-4 text-center align-middle">
-        <!-- <img *ngIf="searchDetail?.photo != null" [src]="personalUrl + searchDetail.photo" alt="" width="120" height="120" class="rounded-circle" /> -->
-        <img *ngIf="searchDetail?.photo == null" src="../../../../../assets/images/utilities/photo-avatar.jpg" alt="Company" width="120" height="120" class="rounded-circle" />
+        <img *ngIf="searchDetail?.data().photo != ''" [src]="searchDetail?.data().photo" alt="" width="120" height="120" class="rounded-circle" />
+        <img *ngIf="searchDetail?.data().photo == ''" src="../../../../../assets/images/utilities/photo-avatar.jpg" alt="Company" width="120" height="120" class="rounded-circle" />
     </div>
     <div class="col-md-8">
         <div class="row mb-3">

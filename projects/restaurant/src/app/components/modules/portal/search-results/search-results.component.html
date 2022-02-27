@@ -13,8 +13,8 @@
             <tbody>
                 <tr *ngFor="let result of searchResults" class="list-pointer" (click)="viewDetail(result.id)">
                     <td class="align-middle" width="75">
-                        <!-- <img *ngIf="result?.logo != null" [src]="restaurantUrl + result.logo" alt="Company" width="40" height="40" class="rounded" /> -->
-                        <img src="../../../../../assets/images/utilities/logo-placeholder.jpg" alt="Company" width="40" height="40" class="rounded" />
+                        <img *ngIf="result?.data().logo != ''" [src]="result?.data().logo" alt="Company" width="40" height="40" class="rounded" />
+                        <img *ngIf="result?.data().logo == ''" src="../../../../../assets/images/utilities/logo-placeholder.jpg" alt="Company" width="40" height="40" class="rounded" />
                     </td>
                     <td class="align-middle">
                         <p class="m-0"><strong>{{result?.data().name}}</strong></p>
