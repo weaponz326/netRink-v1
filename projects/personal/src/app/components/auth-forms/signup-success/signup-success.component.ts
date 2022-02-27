@@ -14,6 +14,7 @@ export class SignupSuccessComponent implements OnInit {
   suiteRegistrationType = "";
 
   ngOnInit(): void {
+    this.getRouterParams();
   }
 
   getRouterParams(){
@@ -30,6 +31,7 @@ export class SignupSuccessComponent implements OnInit {
   }
 
   registrationRedirect(){
+    // TODO: redirect to respective suite's login in new tab
     if (this.suiteRegistrationType == "nR Personal" || this.suiteRegistrationType == "netRink")
       window.location.href = "/";
     else

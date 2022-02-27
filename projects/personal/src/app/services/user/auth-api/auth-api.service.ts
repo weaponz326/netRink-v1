@@ -26,14 +26,14 @@ export class AuthApiService {
     let user: any;
     await this.afAuth.currentUser.then((res: any) => user = res);
     // const url = `${environment.baseUrl}/auth/success?id=${user.uid}&email=${user.email}&source=${sessionStorage.getItem('app_source')}`;
-    const url = `http://localhost:4200/auth/success?id=${user.uid}&email=${user.email}&source=${sessionStorage.getItem('app_source')}`;
+    const url = `http://localhost:4200/auth/signup-success?id=${user.uid}&email=${user.email}&source=${sessionStorage.getItem('app_source')}`;
 
     return user.sendEmailVerification({url: url});
   }
 
   sendPasswordResetEmail(email: string){
     // const url = `${environment.baseUrl}/auth/success?email=${email}&source=${sessionStorage.getItem('app_source')}`;
-    const url = `http://localhost:4200/auth/success?email=${email}&source=${sessionStorage.getItem('app_source')}`;
+    const url = `http://localhost:4200/auth/reset-success?email=${email}&source=${sessionStorage.getItem('app_source')}`;
 
     return this.afAuth.sendPasswordResetEmail(email);
   }

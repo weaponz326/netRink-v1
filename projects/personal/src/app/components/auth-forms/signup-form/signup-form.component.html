@@ -9,6 +9,12 @@
 
                         <app-form-header [formHeading]="'Personal sign up'"></app-form-header>
 
+                        <div class="row mb-4 text-center">
+                            <div class="col">
+                                <mat-error *ngIf="authError != ''">{{authError}}</mat-error>
+                            </div>
+                        </div>
+
                         <form *ngIf="!showPrompt" [formGroup]="signupForm" (ngSubmit)="onSubmit()">
                             <mat-stepper [linear]="true" #stepper>
 

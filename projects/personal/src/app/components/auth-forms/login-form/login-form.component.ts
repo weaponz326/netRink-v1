@@ -22,6 +22,8 @@ export class LoginFormComponent implements OnInit {
     password: new FormControl('', Validators.required),
   })
 
+  authError = "";
+
   saved: boolean = false;
   isSending: boolean = false;
   showPrompt: boolean = false;
@@ -56,6 +58,7 @@ export class LoginFormComponent implements OnInit {
           },
           err => {
             console.log(err);
+            this.authError = err.message.split(': ')[1].split('. ')[0];
             this.isSending = false;
           }
         )

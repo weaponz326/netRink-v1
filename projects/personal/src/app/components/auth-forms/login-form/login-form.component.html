@@ -9,6 +9,12 @@
 
                         <app-form-header [formHeading]="'Personal log in'"></app-form-header>
 
+                        <div class="row mb-4 text-center">
+                            <div class="col">
+                                <mat-error *ngIf="authError != ''">{{authError}}</mat-error>
+                            </div>
+                        </div>
+
                         <form *ngIf="!showPrompt" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
 
                             <div class="row mb-3">

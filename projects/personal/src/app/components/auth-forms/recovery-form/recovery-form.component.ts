@@ -17,6 +17,8 @@ export class RecoveryFormComponent implements OnInit {
     email: new FormControl('', [Validators.required, Validators.email]),
   })
 
+  authError = "";
+
   saved: boolean = false;
   isSending: boolean = false;
   showPrompt: boolean = false;
@@ -31,14 +33,17 @@ export class RecoveryFormComponent implements OnInit {
       this.isSending = true;
 
       console.log(this.recoveryForm.value);
-      this.authApi.sendPasswordResetEmail(this.recoveryForm.controls.eamil.value)
+      this.authApi.sendPasswordResetEmail(this.recoveryForm.controls.email.value)
         .then(
           res => {
+            console.log(res);
             this.showPrompt =  true;
             this.isSending = false;
           },
           err => {
+            console.log(err);
             this.isSending = false;
+            this.authError = err.message.split(': ')[1].split('. ')[0];
           }
         )
     }

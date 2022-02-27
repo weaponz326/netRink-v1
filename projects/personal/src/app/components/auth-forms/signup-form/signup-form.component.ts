@@ -29,6 +29,8 @@ export class SignupFormComponent implements OnInit {
 
   signupForm = new FormGroup({})
 
+  authError = "";
+
   saved: boolean = false;
   isSending: boolean = false;
   showPrompt: boolean = false;
@@ -69,7 +71,6 @@ export class SignupFormComponent implements OnInit {
           (res: any) => {
             console.log(res);
 
-            localStorage.setItem('personal_id', res.user.uid);
             this.registeredUserId = res.user.uid;
 
             this.createUSer();
@@ -83,6 +84,7 @@ export class SignupFormComponent implements OnInit {
             console.log(err);
             this.isSending = false;
             this.signupStepper.selectedIndex = 0;
+            this.authError = err.message.split(': ')[1].split('. ')[0];
           }
         );
     }
