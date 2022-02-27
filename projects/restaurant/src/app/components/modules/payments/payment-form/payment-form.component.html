@@ -49,21 +49,21 @@
             <div class="row mb-4">
                 <div class="col-md-4"><label class="float-end mt-1">Amount Due :</label></div>
                 <div class="col-md-8">
-                    <input type="number" formControlName="totalAmount" class="form-control form-control-sm w-100" (change)="setBalance()">
+                    <input type="number" min="0" step=".01" formControlName="totalAmount" class="form-control form-control-sm w-100" (change)="setBalance()">
                 </div>
             </div>
 
             <div class="row mb-1">
                 <div class="col-md-4"><label class="float-end mt-1">Amount Paid :</label></div>
                 <div class="col-md-8">
-                    <input type="number" formControlName="amountPaid" class="form-control form-control-sm w-100" (change)="setBalance()">
+                    <input type="number" min="0" step=".01" formControlName="amountPaid" class="form-control form-control-sm w-100" (change)="setBalance()">
                 </div>
             </div>
 
             <div class="row mb-1">
                 <div class="col-md-4"><label class="float-end mt-1">Balance :</label></div>
                 <div class="col-md-8">
-                    <input type="number" formControlName="balance" class="form-control form-control-sm w-100">
+                    <input type="number" min="0" step=".01" formControlName="balance" class="form-control form-control-sm w-100">
                 </div>
             </div>
 
