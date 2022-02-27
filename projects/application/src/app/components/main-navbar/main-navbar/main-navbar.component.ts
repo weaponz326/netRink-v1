@@ -60,7 +60,7 @@ export class MainNavbarComponent implements OnInit {
 
           this.isAuthLoading = false;
 
-          if (res.uid){
+          if (res.user?.emailVerified){
             this.isLoggedIn = true;
             this.email = res.email;
           }

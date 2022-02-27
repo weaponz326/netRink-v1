@@ -27,6 +27,7 @@ export class LoginFormComponent implements OnInit {
   saved: boolean = false;
   isSending: boolean = false;
   showPrompt: boolean = false;
+  sendVerification: boolean = false;
 
   suiteRegistrationType: string = "";
 
@@ -49,9 +50,14 @@ export class LoginFormComponent implements OnInit {
           res => {
             console.log(res);
 
-            if (res.user){
+            if (res.user?.emailVerified){
               localStorage.setItem('personal_id', res.user.uid);
               this.registrationType();
+            }
+            else{
+              this.authApi.sendEmailVerification(this.loginForm.controls.email.value);
+              this.sendVerification = true;
+              console.log("verification sent");
             }
 
             this.isSending = false;
