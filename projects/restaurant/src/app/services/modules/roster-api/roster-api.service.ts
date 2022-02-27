@@ -2,10 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs'
 
-import { environment } from 'projects/restaurant/src/environments/environment'
-import { EndpointsService } from 'projects/application/src/app/services/endpoints/endpoints.service';
-
 import { AngularFirestore } from '@angular/fire/compat/firestore';
+
+import { environment } from 'projects/restaurant/src/environments/environment'
 
 
 @Injectable({
@@ -16,7 +15,6 @@ export class RosterApiService {
   constructor(
     private afs: AngularFirestore,
     private http: HttpClient,
-    private endpoints: EndpointsService
   ) { }
 
   rosterRef = this.afs.collection('restaurant/module_roster/restaurant_roster');

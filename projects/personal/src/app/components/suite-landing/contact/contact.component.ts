@@ -1,5 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 
+import { serverTimestamp } from 'firebase/firestore';
+
 import { SupportContactApiService } from 'projects/application/src/app/services/support-contact-api/support-contact-api.service';
 
 
@@ -26,9 +28,8 @@ export class ContactComponent implements OnInit {
   }
 
   onSubmit() {
-    this.isSending = true;
-
     let data = {
+      created_at: serverTimestamp(),
       name: this.name,
       email: this.email,
       message: this.message,
@@ -36,28 +37,28 @@ export class ContactComponent implements OnInit {
     }
     console.log(data);
 
-    this.supportContactApi.postSupport(data)
-      .subscribe(
-        res => {
-          console.log(res);
+    if(this.name != "" && this.email != "" && this.message != ""){
+      this.isFieldEmpty = false;
+      this.isSending = true;
 
-          if (res.message == "OK"){
-            this.isFieldEmpty = false;
+      this.supportContactApi.createSupportContact(data)
+        .then(
+          (res: any) => {
+            console.log(res);
+
             this.isSubmitted = true;
+            this.isSending = false;
             this.resetForm();
+          },
+          (err: any) => {
+            console.log(err);
+            this.isSending = false;
           }
-          else{
-            this.isFieldEmpty = true
-          }
-
-          this.isSending = false;
-        },
-        err => {
-          console.log(err);
-
-          this.isSending = false;
-        }
-      )
+        )
+    }
+    else{
+      this.isFieldEmpty = true;
+    }
   }
 
   resetForm(){

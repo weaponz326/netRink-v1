@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
 
-import { environment } from 'projects/application/src/environments/environment';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 
 
 @Injectable({
@@ -10,12 +8,12 @@ import { environment } from 'projects/application/src/environments/environment';
 })
 export class SupportContactApiService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private afs: AngularFirestore) { }
 
-  baseUrl = environment.baseUrl;
+  supportRef = this.afs.collection('application/support/support_contact');
 
-  public postSupport(support: any): Observable<any>{
-    return this.http.post(this.baseUrl + "support/support-contact/", support);
+  createSupportContact(data: any){
+    return this.supportRef.add(data);
   }
 
 }
