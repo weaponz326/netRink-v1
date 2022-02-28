@@ -157,9 +157,9 @@ export class UserSearchComponent implements OnInit {
       user: this.searchDetailData.id,
       invitation_status: 'Awaiting',
       account_type: "Restaurant",
-      account_invitaion: localStorage.getItem('restaurant_invitation_id') as string,
+      account_invitaion: sessionStorage.getItem('restaurant_invitation_id') as string,
       account: {
-        id: sessionStorage.getItem('restaurant_id') as string,
+        id: localStorage.getItem('restaurant_id') as string,
         data: this.accountData.data(),
       }
     }

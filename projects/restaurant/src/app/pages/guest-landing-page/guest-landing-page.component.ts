@@ -31,7 +31,7 @@ export class GuestLandingPageComponent implements OnInit {
           console.log(res);
           this.isLoading = false;
 
-          if (res.user?.emailVerified){
+          if (res.emailVerified){
             this.router.navigateByUrl("/user");
           }
         },

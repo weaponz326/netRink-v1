@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component';
 
@@ -21,6 +21,8 @@ export class ViewInvitationComponent implements OnInit {
     private restaurantAdminApi: RestaurantAdminService,
   ) { }
 
+  @Output() updatedEvent = new EventEmitter<any>();
+
   @ViewChild('editButtonElementReference', { read: ElementRef, static: false }) editButton!: ElementRef;
   @ViewChild('dismissButtonElementReference', { read: ElementRef, static: false }) dismissButton!: ElementRef;
 
@@ -29,6 +31,7 @@ export class ViewInvitationComponent implements OnInit {
   thisUser: any;
 
   invitationData: any;
+  isUpdating = false;
 
   ngOnInit(): void {
   }
@@ -40,36 +43,22 @@ export class ViewInvitationComponent implements OnInit {
     this.editButton.nativeElement.click();
   }
 
-  acceptInvitation(){
-    this.getUser();
-    this.updateInvitation();
-    this.createAccountUser();
-  }
+  updateInvitation(choice: any){
+    this.isUpdating = true;
 
-  getUser(){
-    this.userApi.getUser()
+    let data = {invitation_status: choice}
+
+    this.settingsApi.updateInvitation(this.invitationData.id, data)
       .then(
         (res: any) => {
           console.log(res);
-          this.thisUser = res.data();
+          this.updatedEvent.emit();
+          this.editButton.nativeElement.click();
+          this.isUpdating = false;
         },
         (err: any) => {
           console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
-  }
-
-  updateInvitation(){
-    let data = {invitation_status: "Accepted"}
-
-    this.settingsApi.updateInvitation(this.invitationData.data().invitation_id, data)
-      .then(
-        (res: any) => {
-          console.log(res);
-        },
-        (err: any) => {
-          console.log(err);
+          this.isUpdating = false;
           this.connectionToast.openToast();
         }
       )
@@ -84,6 +73,26 @@ export class ViewInvitationComponent implements OnInit {
           this.connectionToast.openToast();
         }
       )
+
+    if (choice == "Accepted"){
+      console.log("accepted invitation!");
+      this.getUser();
+    }
+  }
+
+  getUser(){
+    this.userApi.getUser()
+      .then(
+        (res: any) => {
+          console.log(res);
+          this.thisUser = res.data();
+          this.createAccountUser();
+        },
+        (err: any) => {
+          console.log(err);
+          this.connectionToast.openToast();
+        }
+      )
   }
 
   createAccountUser(){
@@ -92,7 +101,7 @@ export class ViewInvitationComponent implements OnInit {
         id: localStorage.getItem('personal_id') as string,
         data: this.thisUser,
       },
-      access_level: "Admin",
+      access_level: "Staff",
       account: {
         id: this.invitationData.data().account.id,
         data: this.invitationData.data().account.data,
@@ -114,19 +123,19 @@ export class ViewInvitationComponent implements OnInit {
 
   createUserAccess(accountUserId: any){
     let accessData: UserAccess = {
-      admin_access: true,
-      customers_access: true,
-      deliveries_access: true,
-      kitchen_stock_access: true,
-      menu_access: true,
-      orders_access: true,
-      payments_access: true,
-      portal_access: true,
-      roster_access: true,
-      settings_access: true,
-      staff_access: true,
-      reservations_access: true,
-      tables_access: true,
+      admin_access: false,
+      customers_access: false,
+      deliveries_access: false,
+      kitchen_stock_access: false,
+      menu_access: false,
+      orders_access: false,
+      payments_access: false,
+      portal_access: false,
+      roster_access: false,
+      settings_access: false,
+      staff_access: false,
+      reservations_access: false,
+      tables_access: false,
     }
 
     this.restaurantAdminApi.createUserAccess(accountUserId, accessData)

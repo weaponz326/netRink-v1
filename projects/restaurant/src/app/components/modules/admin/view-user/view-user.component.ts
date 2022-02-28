@@ -83,7 +83,6 @@ export class ViewUserComponent implements OnInit {
     this.isUserSaving = true;
 
     let data = {
-      personal_name: this.userFormData.personal_name,
       access_level: this.userForm.controls.accessLevel.value,
     }
 

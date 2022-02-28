@@ -47,10 +47,10 @@ export class LoginFormComponent implements OnInit {
 
       this.authApi.login(this.loginForm.controls.email.value, this.loginForm.controls.password.value)
         .then(
-          res => {
+          (res: any) => {
             console.log(res);
 
-            if (res.user?.emailVerified){
+            if (res.user.emailVerified){
               localStorage.setItem('personal_id', res.user.uid);
               this.registrationType();
             }
@@ -62,7 +62,7 @@ export class LoginFormComponent implements OnInit {
 
             this.isSending = false;
           },
-          err => {
+          (err: any) => {
             console.log(err);
             this.authError = err.message.split(': ')[1].split('. ')[0];
             this.isSending = false;

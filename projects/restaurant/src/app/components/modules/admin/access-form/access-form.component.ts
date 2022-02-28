@@ -52,13 +52,15 @@ export class AccessFormComponent implements OnInit {
           this.accessForm.admin_access = res.data().admin_access;
           this.accessForm.customers_access = res.data().customers_access;
           this.accessForm.deliveries_access = res.data().deliveries_access;
+          this.accessForm.kitchen_stock_access = res.data().kitchen_stock_access;
           this.accessForm.menu_access = res.data().menu_access;
           this.accessForm.orders_access = res.data().orders_access;
           this.accessForm.payments_access = res.data().payments_access;
           this.accessForm.portal_access = res.data().portal_access;
+          this.accessForm.roster_access = res.data().roster_access;
+          this.accessForm.reservations_access = res.data().reservations_access;
           this.accessForm.settings_access = res.data().settings_access;
           this.accessForm.staff_access = res.data().staff_access;
-          this.accessForm.reservations_access = res.data().reservations_access;
           this.accessForm.tables_access = res.data().tables_access;
         },
         (err: any) => {
@@ -109,9 +111,10 @@ export class AccessFormComponent implements OnInit {
       this.accessForm.orders_access = true;
       this.accessForm.payments_access = true;
       this.accessForm.portal_access = true;
+      this.accessForm.reservations_access = true;
+      this.accessForm.roster_access = true;
       this.accessForm.settings_access = true;
       this.accessForm.staff_access = true;
-      this.accessForm.reservations_access = true;
       this.accessForm.tables_access = true;
     }
     else if (level == 'Manager'){
@@ -122,26 +125,26 @@ export class AccessFormComponent implements OnInit {
       this.accessForm.menu_access = true;
       this.accessForm.orders_access = true;
       this.accessForm.payments_access = true;
-      this.accessForm.portal_access = true;
-      this.accessForm.roster_access = false;
+      this.accessForm.portal_access = false;
+      this.accessForm.reservations_access = true;
+      this.accessForm.roster_access = true;
       this.accessForm.settings_access = false;
       this.accessForm.staff_access = true;
-      this.accessForm.reservations_access = true;
       this.accessForm.tables_access = true;
     }
     else if (level == 'Staff'){
       this.accessForm.admin_access = false;
       this.accessForm.customers_access = false;
       this.accessForm.deliveries_access = false;
-      this.accessForm.kitchen_stock_access = true;
+      this.accessForm.kitchen_stock_access = false;
       this.accessForm.menu_access = false;
       this.accessForm.orders_access = false;
       this.accessForm.payments_access = false;
       this.accessForm.portal_access = false;
+      this.accessForm.reservations_access = false;
       this.accessForm.roster_access = false;
       this.accessForm.settings_access = false;
       this.accessForm.staff_access = false;
-      this.accessForm.reservations_access = false;
       this.accessForm.tables_access = false;
     }
   }

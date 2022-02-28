@@ -35,7 +35,7 @@ export class MainNavbarComponent implements OnInit {
 
   name: string = "";
   email: string = "";
-  profilePhotoSrc: string = "../../../../assets/images/utilities/photo-avatar.jpg";
+  photo: string = "../../../../assets/images/utilities/photo-avatar.jpg";
 
   ngOnInit(): void {
     this.getAuth();
@@ -60,7 +60,7 @@ export class MainNavbarComponent implements OnInit {
 
           this.isAuthLoading = false;
 
-          if (res.user?.emailVerified){
+          if (res.emailVerified){
             this.isLoggedIn = true;
             this.email = res.email;
           }
@@ -84,10 +84,7 @@ export class MainNavbarComponent implements OnInit {
           this.userData = res.data();
 
           this.name = this.userData.first_name;
-          // this.profilePhotoSrc = res.photoUrl;
-
-          let full_name = this.userData.first_name + " " + this.userData.last_name;;
-          sessionStorage.setItem('personal_name', full_name);
+          if (this.userData.photo != "") this.photo = this.userData.photo;
         },
         (err: any) => {
           console.log(err);

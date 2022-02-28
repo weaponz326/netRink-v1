@@ -45,10 +45,10 @@ export class InvitationsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getAccountInvitation();
+    this.getUserInvitation();
   }
 
-  getAccountInvitation(){
+  getUserInvitation(){
     this.isFetchingGridData = true;
 
     this.settingsApi.getUserInvitation(this.sortParams, 20)
@@ -62,7 +62,9 @@ export class InvitationsComponent implements OnInit {
           this.nextStartAfter = res.docs[res.docs.length - 1];
           this.firstInResponse = res.docs[0];
           this.pageNumber = 1;
+
           if (!res.docs.length) this.isDataAvailable = false;
+          else this.isDataAvailable = true;
 
           if (!res.docs.length || res.docs.length < 20){
             this.disableNext = true;
@@ -149,7 +151,7 @@ export class InvitationsComponent implements OnInit {
     this.sortParams.field = field;
     this.sortParams.direction = direction;
 
-    this.getAccountInvitation();
+    this.getUserInvitation();
   }
 
 }

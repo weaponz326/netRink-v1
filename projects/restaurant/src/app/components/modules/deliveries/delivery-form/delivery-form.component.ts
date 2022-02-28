@@ -22,7 +22,7 @@ export class DeliveryFormComponent implements OnInit {
   initItemForm(){
     this.deliveryForm = new FormGroup({
       deliveryCode: new FormControl(''),
-      deliveryDate: new FormControl(''),
+      dateDelivered: new FormControl(''),
       orderCode: new FormControl({value: '', disabled: true}),
       orderDate: new FormControl({value: '', disabled: true}),
       customerName: new FormControl({value: '', disabled: true}),

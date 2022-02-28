@@ -36,34 +36,34 @@ export class AllAccountsComponent implements OnInit {
   userData: any;
 
   restaurantData: any[] = [];
-  schoolData: any[] = [];
-  enterpriseData: any[] = [];
-  associationData: any[] = [];
-  hospitalData: any[] = [];
-  hotelData: any[] = [];
-  shopData: any[] = [];
-  productionData: any[] = [];
+  // schoolData: any[] = [];
+  // enterpriseData: any[] = [];
+  // associationData: any[] = [];
+  // hospitalData: any[] = [];
+  // hotelData: any[] = [];
+  // shopData: any[] = [];
+  // productionData: any[] = [];
 
   suiteData = [
     this.restaurantData,
-    this.schoolData,
-    this.enterpriseData,
-    this.associationData,
-    this.hospitalData,
-    this.hotelData,
-    this.shopData,
-    this.productionData,
+    // this.schoolData,
+    // this.enterpriseData,
+    // this.associationData,
+    // this.hospitalData,
+    // this.hotelData,
+    // this.shopData,
+    // this.productionData,
   ]
 
   suiteNames = [
     'Restaurant',
-    'School',
-    'Enterprise',
-    'Association',
-    'Hospital',
-    'Hotel',
-    'Shop',
-    'Production',
+    // 'School',
+    // 'Enterprise',
+    // 'Association',
+    // 'Hospital',
+    // 'Hotel',
+    // 'Shop',
+    // 'Production',
   ]
 
   ngOnInit(): void {

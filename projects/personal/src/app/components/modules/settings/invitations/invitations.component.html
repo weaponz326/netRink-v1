@@ -13,6 +13,14 @@
                 </div>
             </div>
 
+            <div class="row mb-3">
+                <div class="col">
+                    <button [disabled]="isFetchingGridData" class="btn btn-light border float-end page-refresh-btn" (click)="getUserInvitation()">
+                        <i class="bi bi-arrow-clockwise"></i>
+                    </button>
+                </div>
+            </div>
+
             <table class="table table-bordered table-sm w-100 page-table">
                 <thead>
                     <tr class="bg-light">
@@ -101,4 +109,4 @@
 
 <!-- view invitation component -->
 
-<app-view-invitation #viewInvitationComponentReference></app-view-invitation>
+<app-view-invitation #viewInvitationComponentReference (updatedEvent)="getUserInvitation()"></app-view-invitation>

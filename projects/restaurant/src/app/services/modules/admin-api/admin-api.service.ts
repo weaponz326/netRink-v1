@@ -12,7 +12,7 @@ export class AdminApiService {
     private afs: AngularFirestore,
   ) { }
 
-  personalUserSearchRef = this.afs.collection('personal/users/user');
+  personalUserSearchRef = this.afs.collection('personal/users/personal_user');
   accountUserRef = this.afs.collection('restaurant/module_admin/restaurant_account_user');
   userAccessRef = this.afs.collection('restaurant/module_admin/restaurant_user_access');
   invitationRef = this.afs.collection('restaurant/module_admin/restaurant_invitation');
@@ -21,9 +21,9 @@ export class AdminApiService {
 
   getSearchResult(searchQuery: string){
     return this.personalUserSearchRef.ref
-    .where("last_name", ">=", searchQuery)
-    .where("last_name", "<", searchQuery + "z")
-    .get();
+      .where("last_name", ">=", searchQuery)
+      .where("last_name", "<", searchQuery + "z")
+      .get();
   }
 
   getSearchDetail(personalId: any){

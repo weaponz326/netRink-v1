@@ -54,7 +54,7 @@ export class ViewDeliveryComponent implements OnInit {
           this.isDeliveryLoading = false;
 
           this.deliveryForm.deliveryForm.controls.deliveryCode.setValue(this.deliveryData.data().delivery_code);
-          this.deliveryForm.deliveryForm.controls.deliveryDate.setValue(this.deliveryData.data().delivery_date);
+          this.deliveryForm.deliveryForm.controls.dateDelivered.setValue(this.deliveryData.data().date_delivered);
           this.deliveryForm.deliveryForm.controls.orderCode.setValue(this.deliveryData.data().order.order_code);
           this.deliveryForm.deliveryForm.controls.orderDate.setValue(this.deliveryData.data().order.order_date);
           this.deliveryForm.deliveryForm.controls.customerName.setValue(this.deliveryData.data().order.customer.customer_name);
@@ -74,7 +74,7 @@ export class ViewDeliveryComponent implements OnInit {
 
     let data = {
       delivery_code: this.deliveryForm.deliveryForm.controls.deliveryCode.value,
-      delivery_date: this.deliveryForm.deliveryForm.controls.deliveryDate.value,
+      date_delivered: this.deliveryForm.deliveryForm.controls.dateDelivered.value,
       delivery_location: this.deliveryForm.deliveryForm.controls.deliveryLocation.value,
       delivery_status: this.deliveryForm.deliveryForm.controls.deliveryStatus.value,
       order: {
