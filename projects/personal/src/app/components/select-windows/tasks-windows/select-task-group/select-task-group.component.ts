@@ -89,7 +89,7 @@ export class SelectTaskGroupComponent implements OnInit {
         (res: any) => {
           console.log(res);
           this.taskGroupsGridData = res.docs;
-          
+
           this.isFetchingGridData = false;
           if (!res.docs.length) this.isDataAvailable = false;
 
