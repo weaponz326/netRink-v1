@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormControl, FormGroup } from '@angular/forms';
 
-import * as firebase from 'firebase/compat/app';
+import { serverTimestamp } from 'firebase/firestore';
 
 import { ConnectionToastComponent } from '../../../module-utilities/connection-toast/connection-toast.component';
 
@@ -122,7 +122,7 @@ export class NewRinkComponent implements OnInit {
 
   createRink(){
     let data: Rink = {
-      created_at: firebase.default.firestore.FieldValue.serverTimestamp(),
+      created_at: serverTimestamp(),
       rink_type: this.rinkForm.controls.rinkType.value,
       rink_source: this.selectedSourceId,
       comment: this.rinkForm.controls.comment.value,

@@ -35,7 +35,7 @@ export class PaymentsApiService {
   getAccountPayment(sorting: any, pageSize: any){
     return this.paymentRef.ref
       .where("account", "==", localStorage.getItem('restaurant_id'))
-      // .orderBy(sorting?.field, sorting?.direction)
+      .orderBy(sorting?.field, sorting?.direction)
       .limit(pageSize)
       .get();
   }
@@ -43,7 +43,7 @@ export class PaymentsApiService {
   getAccountPaymentNext(sorting: any, pageSize: any, pageStart: any){
     return this.paymentRef.ref
       .where("account", "==", localStorage.getItem('restaurant_id'))
-      // .orderBy(sorting?.field, sorting?.direction)
+      .orderBy(sorting?.field, sorting?.direction)
       .startAfter(pageStart)
       .limit(pageSize)
       .get();
@@ -52,7 +52,7 @@ export class PaymentsApiService {
   getAccountPaymentPrev(sorting: any, pageSize: any, pageStart: any){
     return this.paymentRef.ref
       .where("account", "==", localStorage.getItem('restaurant_id'))
-      // .orderBy(sorting?.field, sorting?.direction)
+      .orderBy(sorting?.field, sorting?.direction)
       .startAt(pageStart)
       .limit(pageSize)
       .get();
@@ -61,7 +61,7 @@ export class PaymentsApiService {
   getAllAccountPayment(){
     return this.paymentRef.ref
       .where("account", "==", localStorage.getItem('restaurant_id'))
-      // .orderBy("created_at", "asc")
+      .orderBy("created_at", "desc")
       .get();
   }
 
@@ -70,7 +70,7 @@ export class PaymentsApiService {
   getWeekPayment(startDate: any, endDate: any){
     return this.paymentRef.ref
       .where("account", "==", localStorage.getItem('restaurant_id'))
-      // .where("created_at", "<", startDate).where("created_at", ">", endDate)
+      .where("created_at", "<", startDate).where("created_at", ">", endDate)
       .get();
   }
 

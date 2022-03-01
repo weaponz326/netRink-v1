@@ -75,7 +75,7 @@ export class DashboardComponent implements OnInit {
   }
 
   getWeekTransaction(){
-    this.accountsApi.getWeekTransaction(moment(this.today).add(-6, 'days'), this.today)
+    this.accountsApi.getWeekTransaction(moment(this.today).add(-6, 'days').toDate(), this.today.toDate())
       .then(
         res => {
           console.log(res);

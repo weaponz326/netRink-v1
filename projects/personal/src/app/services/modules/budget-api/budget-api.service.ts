@@ -37,7 +37,7 @@ export class BudgetApiService {
   getUserBudget(sorting: any, pageSize: any){
     return this.budgetRef.ref
       .where("user", "==", localStorage.getItem('personal_id'))
-      // .orderBy(sorting.field, sorting.direction)
+      .orderBy(sorting.field, sorting.direction)
       .limit(pageSize)
       .get();
   }
@@ -45,7 +45,7 @@ export class BudgetApiService {
   getUserBudgetNext(sorting: any, pageSize: any, pageStart: any){
     return this.budgetRef.ref
       .where("user", "==", localStorage.getItem('personal_id'))
-      // .orderBy(sorting?.field, sorting?.direction)
+      .orderBy(sorting?.field, sorting?.direction)
       .startAfter(pageStart)
       .limit(pageSize)
       .get();
@@ -54,7 +54,7 @@ export class BudgetApiService {
   getUserBudgetPrev(sorting: any, pageSize: any, pageStart: any){
     return this.budgetRef.ref
       .where("user", "==", localStorage.getItem('personal_id'))
-      // .orderBy(sorting?.field, sorting?.direction)
+      .orderBy(sorting?.field, sorting?.direction)
       .startAt(pageStart)
       .limit(pageSize)
       .get();
@@ -63,7 +63,7 @@ export class BudgetApiService {
   getAllUserBudget(){
     return this.budgetRef.ref
       .where("user", "==", localStorage.getItem('personal_id'))
-      // .orderBy("created_at", "asc")
+      .orderBy("created_at", "desc")
       .get();
   }
 
@@ -84,7 +84,7 @@ export class BudgetApiService {
   getBudgetIncome(){
     return this.incomeRef.ref
       .where("budget.id", "==", String(sessionStorage.getItem('personal_budget_id')))
-      // .orderBy("created_at", "asc")
+      .orderBy("created_at", "asc")
       .get();
   }
 
@@ -105,7 +105,7 @@ export class BudgetApiService {
   getBudgetExpenditure(){
     return this.expenditureRef.ref
       .where("budget.id", "==", String(sessionStorage.getItem('personal_budget_id')))
-      // .orderBy("created_at", "asc")
+      .orderBy("created_at", "asc")
       .get();
   }
 
@@ -114,21 +114,21 @@ export class BudgetApiService {
   getMonthBudget(startDate: any, endDate: any){
     return this.budgetRef.ref
       .where("user", "==", localStorage.getItem('personal_id'))
-      // .where("created_at", "<", startDate).where("created_at", ">", endDate)
+      .where("created_at", "<", startDate).where("created_at", ">", endDate)
       .get();
   }
 
   getWeekIncome(startDate: any, endDate: any){
     return this.incomeRef.ref
       .where("budget.data.user", "==", localStorage.getItem('personal_id'))
-      // .where("created_at", "<", startDate).where("created_at", ">", endDate)
+      .where("created_at", "<", startDate).where("created_at", ">", endDate)
       .get();
   }
 
   getWeekExpenditure(startDate: any, endDate: any){
     return this.expenditureRef.ref
       .where("budget.data.user", "==", localStorage.getItem('personal_id'))
-      // .where("created_at", "<", startDate).where("created_at", ">", endDate)
+      .where("created_at", "<", startDate).where("created_at", ">", endDate)
       .get();
   }
 

@@ -35,7 +35,7 @@ export class CalendarApiService {
   getUserCalendar(sorting: any, pageSize: any){
     return this.calendarRef.ref
       .where("user", "==", localStorage.getItem('personal_id'))
-      // .orderBy(sorting?.field, sorting?.direction)
+      .orderBy(sorting?.field, sorting?.direction)
       .limit(pageSize)
       .get();
   }
@@ -43,7 +43,7 @@ export class CalendarApiService {
   getUserCalendarNext(sorting: any, pageSize: any, pageStart: any){
     return this.calendarRef.ref
       .where("user", "==", localStorage.getItem('personal_id'))
-      // .orderBy(sorting?.field, sorting?.direction)
+      .orderBy(sorting?.field, sorting?.direction)
       .startAfter(pageStart)
       .limit(pageSize)
       .get();
@@ -52,7 +52,7 @@ export class CalendarApiService {
   getUserCalendarPrev(sorting: any, pageSize: any, pageStart: any){
     return this.calendarRef.ref
       .where("user", "==", localStorage.getItem('personal_id'))
-      // .orderBy(sorting?.field, sorting?.direction)
+      .orderBy(sorting?.field, sorting?.direction)
       .startAt(pageStart)
       .limit(pageSize)
       .get();
@@ -61,7 +61,7 @@ export class CalendarApiService {
   getAllUserCalendar(){
     return this.calendarRef.ref
       .where("user", "==", localStorage.getItem('personal_id'))
-      // .orderBy("created_at", "asc")
+      .orderBy("created_at", "desc")
       .get();
   }
 
@@ -91,8 +91,8 @@ export class CalendarApiService {
 
   getUserSchedule(sorting: any, pageSize: any){
     return this.scheduleRef.ref
-      .where("user", "==", localStorage.getItem('personal_id'))
-      // .orderBy(sorting.field, sorting.direction)
+      .where("calendar.data.user", "==", localStorage.getItem('personal_id'))
+      .orderBy(sorting.field, sorting.direction)
       .limit(pageSize)
       .get();
   }
@@ -100,7 +100,7 @@ export class CalendarApiService {
   getUserScheduleNext(sorting: any, pageSize: any, pageStart: any){
     return this.calendarRef.ref
       .where("calendar.data.user", "==", localStorage.getItem('personal_id'))
-      // .orderBy(sorting?.field, sorting?.direction)
+      .orderBy(sorting?.field, sorting?.direction)
       .startAfter(pageStart)
       .limit(pageSize)
       .get();
@@ -109,7 +109,7 @@ export class CalendarApiService {
   getUserSchedulePrev(sorting: any, pageSize: any, pageStart: any){
     return this.calendarRef.ref
       .where("calendar.data.user", "==", localStorage.getItem('personal_id'))
-      // .orderBy(sorting?.field, sorting?.direction)
+      .orderBy(sorting?.field, sorting?.direction)
       .startAt(pageStart)
       .limit(pageSize)
       .get();
@@ -118,7 +118,7 @@ export class CalendarApiService {
   getAllUserSchedule(){
     return this.scheduleRef.ref
       .where("calendar.data.user", "==", localStorage.getItem('personal_id'))
-      // .orderBy("created_at", "asc")
+      .orderBy("created_at", "desc")
       .get();
   }
 
@@ -127,14 +127,14 @@ export class CalendarApiService {
   getMonthCalendar(startDate: any, endDate: any){
     return this.calendarRef.ref
       .where("user", "==", localStorage.getItem('personal_id'))
-      // .where("created_at", "<", startDate).where("created_at", ">", endDate)
+      .where("created_at", "<", startDate).where("created_at", ">", endDate)
       .get();
   }
 
   getWeekSchedule(startDate: any, endDate: any){
     return this.calendarRef.ref
       .where("calendar.data.user", "==", localStorage.getItem('personal_id'))
-      // .where("created_at", "<", startDate).where("created_at", ">", endDate)
+      .where("created_at", "<", startDate).where("created_at", ">", endDate)
       .get();
   }
 

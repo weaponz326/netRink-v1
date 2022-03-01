@@ -60,7 +60,7 @@ export class DashboardComponent implements OnInit {
   }
 
   getMonthCalendar(){
-    this.calendarApi.getMonthCalendar(moment(this.today).add(-1, 'months'), this.today)
+    this.calendarApi.getMonthCalendar(moment(this.today).add(-1, 'months').toDate(), this.today.toDate())
       .then(
         res => {
           console.log(res);
@@ -75,7 +75,7 @@ export class DashboardComponent implements OnInit {
   }
 
   getWeekSchedule(){
-    this.calendarApi.getWeekSchedule(moment(this.today).add(-6, 'days'), this.today)
+    this.calendarApi.getWeekSchedule(moment(this.today).add(-6, 'days').toDate(), this.today.toDate())
       .then(
         res => {
           console.log(res);

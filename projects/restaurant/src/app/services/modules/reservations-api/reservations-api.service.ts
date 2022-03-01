@@ -36,7 +36,7 @@ export class ReservationsApiService {
   getAccountReservation(sorting: any, pageSize: any){
     return this.reservationRef.ref
       .where("account", "==", localStorage.getItem('restaurant_id'))
-      // .orderBy(sorting?.field, sorting?.direction)
+      .orderBy(sorting?.field, sorting?.direction)
       .limit(pageSize)
       .get();
   }
@@ -44,7 +44,7 @@ export class ReservationsApiService {
   getAccountReservationNext(sorting: any, pageSize: any, pageStart: any){
     return this.reservationRef.ref
       .where("account", "==", localStorage.getItem('restaurant_id'))
-      // .orderBy(sorting?.field, sorting?.direction)
+      .orderBy(sorting?.field, sorting?.direction)
       .startAfter(pageStart)
       .limit(pageSize)
       .get();
@@ -53,7 +53,7 @@ export class ReservationsApiService {
   getAccountReservationPrev(sorting: any, pageSize: any, pageStart: any){
     return this.reservationRef.ref
       .where("account", "==", localStorage.getItem('restaurant_id'))
-      // .orderBy(sorting?.field, sorting?.direction)
+      .orderBy(sorting?.field, sorting?.direction)
       .startAt(pageStart)
       .limit(pageSize)
       .get();
@@ -87,7 +87,7 @@ export class ReservationsApiService {
   getReservationReservationTable(){
     return this.reservationTableRef.ref
       .where("reservation", "==", sessionStorage.getItem('restaurant_reservation_id'))
-      // .orderBy("created_at", "asc")
+      .orderBy("created_at", "desc")
       .get();
   }
 
@@ -96,7 +96,7 @@ export class ReservationsApiService {
   getWeekReservation(startDate: any, endDate: any){
     return this.reservationTableRef.ref
       .where("account", "==", localStorage.getItem('restaurant_id'))
-      // .where("created_at", "<", startDate).where("created_at", ">", endDate)
+      .where("created_at", "<", startDate).where("created_at", ">", endDate)
       .get();
   }
 

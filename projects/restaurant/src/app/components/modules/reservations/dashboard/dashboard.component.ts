@@ -56,7 +56,7 @@ export class DashboardComponent implements OnInit {
   }
 
   getWeekReservation(){
-    this.reservationsApi.getWeekReservation(moment(this.today).add(-1, 'months'), this.today)
+    this.reservationsApi.getWeekReservation(moment(this.today).add(-1, 'months').toDate(), this.today.toDate())
       .then(
         res => {
           console.log(res);

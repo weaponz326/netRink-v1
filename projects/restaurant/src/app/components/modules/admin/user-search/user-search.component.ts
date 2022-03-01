@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import * as firebase from 'firebase/compat/app';
+import { serverTimestamp } from 'firebase/firestore';
 
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 import { SearchResultsComponent } from '../search-results/search-results.component';
@@ -120,7 +120,7 @@ export class UserSearchComponent implements OnInit {
 
   createAccountInvitation() {
     let data: RestaurantInvitation = {
-      created_at: firebase.default.firestore.FieldValue.serverTimestamp(),
+      created_at: serverTimestamp(),
       account: localStorage.getItem('restaurant_id') as string,
       invitation_status: 'Awaiting',
       user: {
@@ -153,7 +153,7 @@ export class UserSearchComponent implements OnInit {
 
   createUserInvitation(){
     let data: PersonalInvitation = {
-      created_at: firebase.default.firestore.FieldValue.serverTimestamp(),
+      created_at: serverTimestamp(),
       user: this.searchDetailData.id,
       invitation_status: 'Awaiting',
       account_type: "Restaurant",

@@ -58,7 +58,7 @@ export class DashboardComponent implements OnInit {
   }
 
   getWeekPayment(){
-    this.paymentsApi.getWeekPayment(moment(this.today).add(-1, 'months'), this.today)
+    this.paymentsApi.getWeekPayment(moment(this.today).add(-1, 'months').toDate(), this.today.toDate())
       .then(
         res => {
           console.log(res);

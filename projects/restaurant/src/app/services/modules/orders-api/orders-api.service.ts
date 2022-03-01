@@ -36,7 +36,7 @@ export class OrdersApiService {
   getAccountOrder(sorting: any, pageSize: any){
     return this.orderRef.ref
       .where("account", "==", localStorage.getItem('restaurant_id'))
-      // .orderBy(sorting?.field, sorting?.direction)
+      .orderBy(sorting?.field, sorting?.direction)
       .limit(pageSize)
       .get();
   }
@@ -44,7 +44,7 @@ export class OrdersApiService {
   getAccountOrderNext(sorting: any, pageSize: any, pageStart: any){
     return this.orderRef.ref
       .where("account", "==", localStorage.getItem('restaurant_id'))
-      // .orderBy(sorting?.field, sorting?.direction)
+      .orderBy(sorting?.field, sorting?.direction)
       .startAfter(pageStart)
       .limit(pageSize)
       .get();
@@ -53,7 +53,7 @@ export class OrdersApiService {
   getAccountOrderPrev(sorting: any, pageSize: any, pageStart: any){
     return this.orderRef.ref
       .where("account", "==", localStorage.getItem('restaurant_id'))
-      // .orderBy(sorting?.field, sorting?.direction)
+      .orderBy(sorting?.field, sorting?.direction)
       .startAt(pageStart)
       .limit(pageSize)
       .get();
@@ -62,7 +62,7 @@ export class OrdersApiService {
   getAllAccountOrder(){
     return this.orderRef.ref
       .where("account", "==", localStorage.getItem('restaurant_id'))
-      // .orderBy("created_at", "asc")
+      .orderBy("created_at", "desc")
       .get();
   }
 
@@ -86,8 +86,8 @@ export class OrdersApiService {
 
   getOrderOrderItem(){
     return this.orderItemRef.ref
-      .where("order", "==", sessionStorage.getItem('restaurant_order_id'))
-      // .orderBy("created_at", "asc")
+      .where("order.id", "==", sessionStorage.getItem('restaurant_order_id'))
+      .orderBy("created_at", "asc")
       .get();
   }
 
@@ -96,7 +96,7 @@ export class OrdersApiService {
   getWeekOrder(startDate: any, endDate: any){
     return this.orderRef.ref
       .where("account", "==", localStorage.getItem('restaurant_id'))
-      // .where("created_at", "<", startDate).where("created_at", ">", endDate)
+      .where("created_at", "<", startDate).where("created_at", ">", endDate)
       .get();
   }
 

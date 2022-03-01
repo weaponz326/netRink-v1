@@ -62,7 +62,7 @@ export class DashboardComponent implements OnInit {
   }
 
   getWeekMenuGroup(){
-    this.menuApi.getWeekMenuGroup(moment(this.today).add(-1, 'months'), this.today)
+    this.menuApi.getWeekMenuGroup(moment(this.today).add(-1, 'months').toDate(), this.today.toDate())
       .then(
         res => {
           console.log(res);
@@ -79,7 +79,7 @@ export class DashboardComponent implements OnInit {
   }
 
   getWeekMenuItem(){
-    this.menuApi.getWeekMenuItem(moment(this.today).add(-6, 'days'), this.today)
+    this.menuApi.getWeekMenuItem(moment(this.today).add(-6, 'days').toDate(), this.today.toDate())
       .then(
         res => {
           console.log(res);

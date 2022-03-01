@@ -30,7 +30,7 @@ export class PortalApiService {
     return this.rinkRef.ref
       .where("sender.id", "==", String(localStorage.getItem('restaurant_id')))
       .where("recipent.id", "==", String(localStorage.getItem('restaurant_id')))
-      // .orderBy("created_at", "asc")
+      .orderBy("created_at", "desc")
       .get();
   }
 
@@ -52,14 +52,14 @@ export class PortalApiService {
   getWeekRinkIn(startDate: any, endDate: any){
     return this.rinkRef.ref
       .where("recipent.id", "==", localStorage.getItem('personal_id'))
-      // .where("created_at", "<", startDate).where("created_at", ">", endDate)
+      .where("created_at", "<", startDate).where("created_at", ">", endDate)
       .get();
   }
 
   getWeekRinkOut(startDate: any, endDate: any){
     return this.rinkRef.ref
       .where("recipent.id", "==", localStorage.getItem('personal_id'))
-      // .where("created_at", "<", startDate).where("created_at", ">", endDate)
+      .where("created_at", "<", startDate).where("created_at", ">", endDate)
       .get();
   }
 

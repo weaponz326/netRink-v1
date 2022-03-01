@@ -56,7 +56,7 @@ export class DashboardComponent implements OnInit {
   }
 
   getWeekCustomer(){
-    this.customersApi.getWeekCustomer(moment(this.today).add(-1, 'months'), this.today)
+    this.customersApi.getWeekCustomer(moment(this.today).add(-1, 'months').toDate(), this.today.toDate())
       .then(
         res => {
           console.log(res);

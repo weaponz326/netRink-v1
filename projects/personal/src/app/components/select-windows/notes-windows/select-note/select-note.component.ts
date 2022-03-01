@@ -36,7 +36,7 @@ export class SelectNoteComponent implements OnInit {
 
   sortParams = {
     field: "updated_at",
-    direction: "asc"
+    direction: "desc"
   }
 
   ngOnInit(): void {

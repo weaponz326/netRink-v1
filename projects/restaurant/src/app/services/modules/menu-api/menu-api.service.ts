@@ -36,7 +36,7 @@ export class MenuApiService {
   getAccountMenuGroup(sorting: any, pageSize: any){
     return this.menuGroupRef.ref
       .where("account", "==", localStorage.getItem('restaurant_id'))
-      // .orderBy(sorting?.field, sorting?.direction)
+      .orderBy(sorting?.field, sorting?.direction)
       .limit(pageSize)
       .get();
   }
@@ -44,7 +44,7 @@ export class MenuApiService {
   getAccountMenuGroupNext(sorting: any, pageSize: any, pageStart: any){
     return this.menuGroupRef.ref
       .where("account", "==", localStorage.getItem('restaurant_id'))
-      // .orderBy(sorting?.field, sorting?.direction)
+      .orderBy(sorting?.field, sorting?.direction)
       .startAfter(pageStart)
       .limit(pageSize)
       .get();
@@ -53,7 +53,7 @@ export class MenuApiService {
   getAccountMenuGroupPrev(sorting: any, pageSize: any, pageStart: any){
     return this.menuGroupRef.ref
       .where("account", "==", localStorage.getItem('restaurant_id'))
-      // .orderBy(sorting?.field, sorting?.direction)
+      .orderBy(sorting?.field, sorting?.direction)
       .startAt(pageStart)
       .limit(pageSize)
       .get();
@@ -62,7 +62,7 @@ export class MenuApiService {
   getAllAccountMenuGroup(){
     return this.menuGroupRef.ref
       .where("account", "==", localStorage.getItem('restaurant_id'))
-      // .orderBy("created_at", "asc")
+      .orderBy("created_at", "desc")
       .get();
   }
 
@@ -87,14 +87,14 @@ export class MenuApiService {
   getMenuGroupMenuItem(){
     return this.menuItemRef.ref
       .where("menu_group.id", "==", sessionStorage.getItem('restaurant_menu_group_id'))
-      // .orderBy("created_at", "asc")
+      .orderBy("created_at", "desc")
       .get();
   }
 
   getAccountMenuItem(sorting: any, pageSize: any){
     return this.menuItemRef.ref
       .where("menu_group.data.account", "==", localStorage.getItem('restaurant_id'))
-      // .orderBy(sorting?.field, sorting?.direction)
+      .orderBy(sorting?.field, sorting?.direction)
       .limit(pageSize)
       .get();
   }
@@ -102,7 +102,7 @@ export class MenuApiService {
   getAccountMenuItemNext(sorting: any, pageSize: any, pageStart: any){
     return this.menuItemRef.ref
       .where("menu_group.data.account", "==", localStorage.getItem('restaurant_id'))
-      // .orderBy(sorting?.field, sorting?.direction)
+      .orderBy(sorting?.field, sorting?.direction)
       .startAfter(pageStart)
       .limit(pageSize)
       .get();
@@ -111,7 +111,7 @@ export class MenuApiService {
   getAccountMenuItemPrev(sorting: any, pageSize: any, pageStart: any){
     return this.menuItemRef.ref
       .where("menu_group.data.account", "==", localStorage.getItem('restaurant_id'))
-      // .orderBy(sorting?.field, sorting?.direction)
+      .orderBy(sorting?.field, sorting?.direction)
       .startAt(pageStart)
       .limit(pageSize)
       .get();
@@ -120,7 +120,7 @@ export class MenuApiService {
   getAllAccountMenuItem(){
     return this.menuItemRef.ref
       .where("menu_group.data.account", "==", localStorage.getItem('restaurant_id'))
-      // .orderBy("created_at", "asc")
+      .orderBy("created_at", "desc")
       .get();
   }
 
@@ -129,14 +129,14 @@ export class MenuApiService {
   getWeekMenuGroup(startDate: any, endDate: any){
     return this.menuItemRef.ref
       .where("account", "==", localStorage.getItem('restaurant_id'))
-      // .where("created_at", "<", startDate).where("created_at", ">", endDate)
+      .where("created_at", "<", startDate).where("created_at", ">", endDate)
       .get();
   }
 
   getWeekMenuItem(startDate: any, endDate: any){
     return this.menuItemRef.ref
       .where("menu_group.data.account", "==", localStorage.getItem('restaurant_id'))
-      // .where("created_at", "<", startDate).where("created_at", ">", endDate)
+      .where("created_at", "<", startDate).where("created_at", ">", endDate)
       .get();
   }
 

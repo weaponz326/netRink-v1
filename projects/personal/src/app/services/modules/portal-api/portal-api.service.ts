@@ -13,7 +13,7 @@ export class PortalApiService {
   ) { }
 
   rinkRef = this.afs.collection('personal/module_portal/personal_rink');
-  personalUserRef = this.afs.collection('personal/users/user');
+  personalUserRef = this.afs.collection('personal/users/personal_user');
 
   // rinks
 
@@ -28,8 +28,8 @@ export class PortalApiService {
   getUserRink(){
     return this.rinkRef.ref
       .where("sender.id", "==", localStorage.getItem('personal_id'))
-      .where("recipent.id", "==", localStorage.getItem('personal_id'))
-      .orderBy("rink_date", "desc")
+      .where("recipient.id", "==", localStorage.getItem('personal_id'))
+      .orderBy("created_at", "desc")
       .get();
   }
 
@@ -51,14 +51,14 @@ export class PortalApiService {
   getWeekRinkIn(startDate: any, endDate: any){
     return this.rinkRef.ref
       .where("recipent.id", "==", localStorage.getItem('personal_id'))
-      // .where("created_at", "<", startDate).where("created_at", ">", endDate)
+      .where("created_at", "<", startDate).where("created_at", ">", endDate)
       .get();
   }
 
   getWeekRinkOut(startDate: any, endDate: any){
     return this.rinkRef.ref
       .where("recipent.id", "==", localStorage.getItem('personal_id'))
-      // .where("created_at", "<", startDate).where("created_at", ">", endDate)
+      .where("created_at", "<", startDate).where("created_at", ">", endDate)
       .get();
   }
 

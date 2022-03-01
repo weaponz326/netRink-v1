@@ -35,7 +35,7 @@ export class KitchenStockApiService {
   getAccountStockItem(sorting: any, pageSize: any){
     return this.stockItemRef.ref
       .where("account", "==", localStorage.getItem('restaurant_id'))
-      // .orderBy(sorting?.field, sorting?.direction)
+      .orderBy(sorting?.field, sorting?.direction)
       .limit(pageSize)
       .get();
   }
@@ -43,7 +43,7 @@ export class KitchenStockApiService {
   getAccountStockItemNext(sorting: any, pageSize: any, pageStart: any){
     return this.stockItemRef.ref
       .where("account", "==", localStorage.getItem('restaurant_id'))
-      // .orderBy(sorting?.field, sorting?.direction)
+      .orderBy(sorting?.field, sorting?.direction)
       .startAfter(pageStart)
       .limit(pageSize)
       .get();
@@ -52,7 +52,7 @@ export class KitchenStockApiService {
   getAccountStockItemPrev(sorting: any, pageSize: any, pageStart: any){
     return this.stockItemRef.ref
       .where("account", "==", localStorage.getItem('restaurant_id'))
-      // .orderBy(sorting?.field, sorting?.direction)
+      .orderBy(sorting?.field, sorting?.direction)
       .startAt(pageStart)
       .limit(pageSize)
       .get();
@@ -61,7 +61,7 @@ export class KitchenStockApiService {
   getAllAccountStockItem(){
     return this.stockItemRef.ref
       .where("account", "==", localStorage.getItem('restaurant_id'))
-      // .orderBy("created", "desc")
+      .orderBy("created", "desc")
       .get();
   }
 

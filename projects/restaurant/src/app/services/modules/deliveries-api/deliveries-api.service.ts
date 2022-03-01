@@ -35,7 +35,7 @@ export class DeliveriesApiService {
   getAccountDelivery(sorting: any, pageSize: any){
     return this.deliveryRef.ref
       .where("account", "==", localStorage.getItem('restaurant_id'))
-      // .orderBy(sorting?.field, sorting?.direction)
+      .orderBy(sorting?.field, sorting?.direction)
       .limit(pageSize)
       .get();
   }
@@ -43,7 +43,7 @@ export class DeliveriesApiService {
   getAccountDeliveryNext(sorting: any, pageSize: any, pageStart: any){
     return this.deliveryRef.ref
       .where("account", "==", localStorage.getItem('restaurant_id'))
-      // .orderBy(sorting?.field, sorting?.direction)
+      .orderBy(sorting?.field, sorting?.direction)
       .startAfter(pageStart)
       .limit(pageSize)
       .get();
@@ -52,7 +52,7 @@ export class DeliveriesApiService {
   getAccountDeliveryPrev(sorting: any, pageSize: any, pageStart: any){
     return this.deliveryRef.ref
       .where("account", "==", localStorage.getItem('restaurant_id'))
-      // .orderBy(sorting?.field, sorting?.direction)
+      .orderBy(sorting?.field, sorting?.direction)
       .startAt(pageStart)
       .limit(pageSize)
       .get();
@@ -61,7 +61,7 @@ export class DeliveriesApiService {
   getAllAccountDelivery(){
     return this.deliveryRef.ref
       .where("account", "==", localStorage.getItem('restaurant_id'))
-      // .orderBy("created_at", "asc")
+      .orderBy("created_at", "desc")
       .get();
   }
 
@@ -70,7 +70,7 @@ export class DeliveriesApiService {
   getWeekDelivery(startDate: any, endDate: any){
     return this.deliveryRef.ref
       .where("account", "==", localStorage.getItem('restaurant_id'))
-      // .where("created_at", "<", startDate).where("created_at", ">", endDate)
+      .where("created_at", "<", startDate).where("created_at", ">", endDate)
       .get();
   }
 

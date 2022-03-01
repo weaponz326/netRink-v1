@@ -41,7 +41,7 @@ export class StaffApiService {
   getAccountStaff(sorting: any, pageSize: any){
     return this.staffRef.ref
       .where("account", "==", localStorage.getItem('restaurant_id'))
-      // .orderBy(sorting?.field, sorting?.direction)
+      .orderBy(sorting?.field, sorting?.direction)
       .limit(pageSize)
       .get();
   }
@@ -49,7 +49,7 @@ export class StaffApiService {
   getAccountStaffNext(sorting: any, pageSize: any, pageStart: any){
     return this.staffRef.ref
       .where("account", "==", localStorage.getItem('restaurant_id'))
-      // .orderBy(sorting?.field, sorting?.direction)
+      .orderBy(sorting?.field, sorting?.direction)
       .startAfter(pageStart)
       .limit(pageSize)
       .get();
@@ -58,7 +58,7 @@ export class StaffApiService {
   getAccountStaffPrev(sorting: any, pageSize: any, pageStart: any){
     return this.staffRef.ref
       .where("account", "==", localStorage.getItem('restaurant_id'))
-      // .orderBy(sorting?.field, sorting?.direction)
+      .orderBy(sorting?.field, sorting?.direction)
       .startAt(pageStart)
       .limit(pageSize)
       .get();
@@ -67,21 +67,8 @@ export class StaffApiService {
   getAllAccountStaff(){
     return this.staffRef.ref
       .where("account", "==", localStorage.getItem('restaurant_id'))
-      // .orderBy("created_at", "asc")
+      .orderBy("created_at", "desc")
       .get();
   }
 
-  uploadStaffPhoto(photo: File){
-    return this.storage.upload(this.storagePath, photo);
-    // const uploadTask = this.storage.upload(this.storagePath, photo);
-    // uploadTask.snapshotChanges().pipe(
-    //   finalize(() => {
-    //     this.storageRef.getDownloadURL().subscribe((downloadURL: any) => {
-    //       fileUpload.url = downloadURL;
-    //       fileUpload.name = fileUpload.file.name;
-    //       this.saveFileData(fileUpload);
-    //     });
-    //   })
-    // )
-  }
 }

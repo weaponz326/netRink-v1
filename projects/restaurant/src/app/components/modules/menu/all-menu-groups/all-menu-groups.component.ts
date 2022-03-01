@@ -43,7 +43,7 @@ export class AllMenuGroupsComponent implements OnInit {
 
   sortParams = {
     field: "created_at",
-    direction: "asc"
+    direction: "desc"
   }
 
   ngOnInit(): void {

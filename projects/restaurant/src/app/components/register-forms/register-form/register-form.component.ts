@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import * as firebase from 'firebase/compat/app';
+import { serverTimestamp } from 'firebase/firestore';
 
 import { UserApiService } from 'projects/personal/src/app/services/user/user-api/user-api.service';
 import { AccountApiService } from '../../../services/account-api/account-api.service';
@@ -64,7 +64,7 @@ export class RegisterFormComponent implements OnInit {
 
   onSubmit(){
     let accountData: Account = {
-      created_at: firebase.default.firestore.FieldValue.serverTimestamp(),
+      created_at: serverTimestamp(),
       name: this.accountForm.controls.name.value,
       location: this.accountForm.controls.location.value,
       about: this.accountForm.controls.about.value,

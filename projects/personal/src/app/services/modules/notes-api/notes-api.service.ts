@@ -35,7 +35,7 @@ export class NotesApiService {
   getUserNote(sorting: any, pageSize: any){
     return this.noteRef.ref
       .where("user", "==", localStorage.getItem('personal_id'))
-      // .orderBy(sorting.field, sorting.direction)
+      .orderBy(sorting.field, sorting.direction)
       .limit(pageSize)
       .get();
   }
@@ -43,7 +43,7 @@ export class NotesApiService {
   getUserNoteNext(sorting: any, pageSize: any, pageStart: any){
     return this.noteRef.ref
       .where("user", "==", localStorage.getItem('personal_id'))
-      // .orderBy(sorting.field, sorting.direction)
+      .orderBy(sorting.field, sorting.direction)
       .startAfter(pageStart)
       .limit(pageSize)
       .get();
@@ -52,7 +52,7 @@ export class NotesApiService {
   getUserNotePrev(sorting: any, pageSize: any, pageStart: any){
     return this.noteRef.ref
       .where("user", "==", localStorage.getItem('personal_id'))
-      // .orderBy(sorting.field, sorting.direction)
+      .orderBy(sorting.field, sorting.direction)
       .startAt(pageStart)
       .limit(pageSize)
       .get();
@@ -61,7 +61,7 @@ export class NotesApiService {
   getAllUserNote(){
     return this.noteRef.ref
       .where("user", "==", localStorage.getItem('personal_id'))
-      // .orderBy("created_at", "asc")
+      .orderBy("created_at", "desc")
       .get();
   }
 
@@ -70,7 +70,7 @@ export class NotesApiService {
   getWeekNote(startDate: any, endDate: any){
     return this.noteRef.ref
       .where("user", "==", localStorage.getItem('personal_id'))
-      // .where("created_at", "<", startDate).where("created_at", ">", endDate)
+      .where("created_at", "<", startDate).where("created_at", ">", endDate)
       .get();
   }
 

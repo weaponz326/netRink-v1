@@ -12,8 +12,8 @@ export class TasksApiService {
     private afs: AngularFirestore
   ) { }
 
-  taskGroupRef = this.afs.collection('personal/module_tasks/tasks_task_group');
-  taskItemRef = this.afs.collection('personal/module_tasks/tasks_task_item');
+  taskGroupRef = this.afs.collection('personal/module_tasks/personal_task_group');
+  taskItemRef = this.afs.collection('personal/module_tasks/personal_task_item');
 
   // task groups
 
@@ -36,7 +36,7 @@ export class TasksApiService {
   getUserTaskGroup(sorting: any, pageSize: any){
     return this.taskGroupRef.ref
       .where("user", "==", localStorage.getItem('personal_id'))
-      // .orderBy(sorting.field, sorting.direction)
+      .orderBy(sorting.field, sorting.direction)
       .limit(pageSize)
       .get();
   }
@@ -44,7 +44,7 @@ export class TasksApiService {
   getUserTaskGroupNext(sorting: any, pageSize: any, pageStart: any){
     return this.taskGroupRef.ref
       .where("user", "==", localStorage.getItem('personal_id'))
-      // .orderBy(sorting.field, sorting.direction)
+      .orderBy(sorting.field, sorting.direction)
       .startAfter(pageStart)
       .limit(pageSize)
       .get();
@@ -53,7 +53,7 @@ export class TasksApiService {
   getUserTaskGroupPrev(sorting: any, pageSize: any, pageStart: any){
     return this.taskGroupRef.ref
       .where("user", "==", localStorage.getItem('personal_id'))
-      // .orderBy(sorting.field, sorting.direction)
+      .orderBy(sorting.field, sorting.direction)
       .startAt(pageStart)
       .limit(pageSize)
       .get();
@@ -62,7 +62,7 @@ export class TasksApiService {
   getAllUserTaskGroup(){
     return this.taskGroupRef.ref
       .where("user", "==", localStorage.getItem('personal_id'))
-      // .orderBy("created_at", "asc")
+      .orderBy("created_at", "desc")
       .get();
   }
 
@@ -101,7 +101,7 @@ export class TasksApiService {
   getUserTaskItemNext(sorting: any, pageSize: any, pageStart: any){
     return this.taskItemRef.ref
       .where("task_group.data.user", "==", localStorage.getItem('personal_id'))
-      // .orderBy(sorting.field, sorting.direction)
+      .orderBy(sorting.field, sorting.direction)
       .startAfter(pageStart)
       .limit(pageSize)
       .get();
@@ -110,7 +110,7 @@ export class TasksApiService {
   getUserTaskItemPrev(sorting: any, pageSize: any, pageStart: any){
     return this.taskItemRef.ref
       .where("task_group.data.user", "==", localStorage.getItem('personal_id'))
-      // .orderBy(sorting.field, sorting.direction)
+      .orderBy(sorting.field, sorting.direction)
       .startAt(pageStart)
       .limit(pageSize)
       .get();
@@ -119,7 +119,7 @@ export class TasksApiService {
   getAllUserTaskItem(){
     return this.taskItemRef.ref
       .where("task_group.data.user", "==", localStorage.getItem('personal_id'))
-      // .orderBy("created_at", "asc")
+      .orderBy("created_at", "desc")
       .get();
   }
 
@@ -128,14 +128,14 @@ export class TasksApiService {
   getWeekTaskGroup(startDate: any, endDate: any){
     return this.taskItemRef.ref
       .where("user", "==", localStorage.getItem('personal_id'))
-      // .where("created_at", "<", startDate).where("created_at", ">", endDate)
+      .where("created_at", "<", startDate).where("created_at", ">", endDate)
       .get();
   }
 
   getWeekTaskItem(startDate: any, endDate: any){
     return this.taskItemRef.ref
       .where("task_group.data.user", "==", localStorage.getItem('personal_id'))
-      // .where("created_at", "<", startDate).where("created_at", ">", endDate)
+      .where("created_at", "<", startDate).where("created_at", ">", endDate)
       .get();
   }
 

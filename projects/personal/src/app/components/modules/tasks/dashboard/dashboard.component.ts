@@ -62,7 +62,7 @@ export class DashboardComponent implements OnInit {
   }
 
   getWeekTaskGroup(){
-    this.tasksApi.getWeekTaskGroup(moment(this.today).add(-1, 'months'), this.today)
+    this.tasksApi.getWeekTaskGroup(moment(this.today).add(-1, 'months').toDate(), this.today.toDate())
       .then(
         res => {
           console.log(res);
@@ -79,7 +79,7 @@ export class DashboardComponent implements OnInit {
   }
 
   getWeekTaskItem(){
-    this.tasksApi.getWeekTaskItem(moment(this.today).add(-6, 'days'), this.today)
+    this.tasksApi.getWeekTaskItem(moment(this.today).add(-6, 'days').toDate(), this.today.toDate())
       .then(
         res => {
           console.log(res);

@@ -36,7 +36,7 @@ export class AccountsApiService {
   getUserAccount(sorting: any, pageSize: any){
     return this.accountRef.ref
       .where("user", "==", localStorage.getItem('personal_id'))
-      // .orderBy(sorting.field, sorting.direction)
+      .orderBy(sorting.field, sorting.direction)
       .limit(pageSize)
       .get();
   }
@@ -44,7 +44,7 @@ export class AccountsApiService {
   getUserAccountNext(sorting: any, pageSize: any, pageStart: any){
     return this.accountRef.ref
       .where("user", "==", localStorage.getItem('personal_id'))
-      // .orderBy(sorting.field, sorting.direction)
+      .orderBy(sorting.field, sorting.direction)
       .startAfter(pageStart)
       .limit(pageSize)
       .get();
@@ -53,7 +53,7 @@ export class AccountsApiService {
   getUserAccountPrev(sorting: any, pageSize: any, pageStart: any){
     return this.accountRef.ref
       .where("user", "==", localStorage.getItem('personal_id'))
-      // .orderBy(sorting.field, sorting.direction)
+      .orderBy(sorting.field, sorting.direction)
       .startAt(pageStart)
       .limit(pageSize)
       .get();
@@ -62,7 +62,7 @@ export class AccountsApiService {
   getAllUserAccount(){
     return this.accountRef.ref
       .where("user", "==", localStorage.getItem('personal_id'))
-      // .orderBy("created_at", "asc")
+      .orderBy("created_at", "desc")
       .get();
   }
 
@@ -83,14 +83,14 @@ export class AccountsApiService {
   getAccountTransaction(){
     return this.transactionRef.ref
       .where("account.id", "==", String(sessionStorage.getItem('personal_account_id')))
-      // .orderBy("created_at", "asc")
+      .orderBy("created_at", "desc")
       .get();
   }
 
   getUserTransaction(sorting: any, pageSize: any){
     return this.transactionRef.ref
       .where("account.data.user", "==", localStorage.getItem('personal_id'))
-      // .orderBy(sorting.field, sorting.direction)
+      .orderBy(sorting.field, sorting.direction)
       .limit(pageSize)
       .get();
   }
@@ -98,7 +98,7 @@ export class AccountsApiService {
   getUserTransactionNext(sorting: any, pageSize: any, pageStart: any){
     return this.transactionRef.ref
       .where("account.data.user", "==", localStorage.getItem('personal_id'))
-      // .orderBy(sorting.field, sorting.direction)
+      .orderBy(sorting.field, sorting.direction)
       .startAfter(pageStart)
       .limit(pageSize)
       .get();
@@ -107,7 +107,7 @@ export class AccountsApiService {
   getUserTransactionPrev(sorting: any, pageSize: any, pageStart: any){
     return this.transactionRef.ref
       .where("account.data.user", "==", localStorage.getItem('personal_id'))
-      // .orderBy(sorting.field, sorting.direction)
+      .orderBy(sorting.field, sorting.direction)
       .startAt(pageStart)
       .limit(pageSize)
       .get();
@@ -116,7 +116,7 @@ export class AccountsApiService {
   getAllUserTransaction(){
     return this.transactionRef.ref
       .where("account.data.user", "==", localStorage.getItem('personal_id'))
-      // .orderBy("created_at", "asc")
+      .orderBy("created_at", "desc")
       .get();
   }
 
@@ -125,7 +125,7 @@ export class AccountsApiService {
   getWeekTransaction(startDate: any, endDate: any){
     return this.transactionRef.ref
       .where("account.data.user", "==", localStorage.getItem('personal_id'))
-      // .where("created_at", "<", startDate).where("created_at", ">", endDate)
+      .where("created_at", "<", startDate).where("created_at", ">", endDate)
       .get();
   }
 

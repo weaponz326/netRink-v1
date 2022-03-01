@@ -56,7 +56,7 @@ export class DashboardComponent implements OnInit {
   }
 
   getWeekRinkIn(){
-    this.portalApi.getWeekRinkIn(moment(this.today).add(-6, 'days'), this.today)
+    this.portalApi.getWeekRinkIn(moment(this.today).add(-6, 'days').toDate(), this.today.toDate())
       .then(
         res => {
           console.log(res);
@@ -70,7 +70,7 @@ export class DashboardComponent implements OnInit {
   }
 
   getWeekRinkOut(){
-    this.portalApi.getWeekRinkOut(moment(this.today).add(-6, 'days'), this.today)
+    this.portalApi.getWeekRinkOut(moment(this.today).add(-6, 'days').toDate(), this.today.toDate())
       .then(
         res => {
           console.log(res);

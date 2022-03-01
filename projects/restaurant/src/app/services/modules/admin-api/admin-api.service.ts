@@ -51,7 +51,7 @@ export class AdminApiService {
   getAccountAccountUser(ordering: any){
     return this.accountUserRef.ref
       .where("account.id", "==", String(localStorage.getItem('restaurant_id')))
-      // .orderBy(ordering.field, ordering.direction)
+      .orderBy(ordering.field, ordering.direction)
       .get();
   }
 
@@ -100,7 +100,7 @@ export class AdminApiService {
   getAccountInvitation(sorting: any, pageSize: any){
     return this.invitationRef.ref
       .where("account", "==", localStorage.getItem('restaurant_id'))
-      // .orderBy(sorting?.field, sorting?.direction)
+      .orderBy(sorting?.field, sorting?.direction)
       .limit(pageSize)
       .get();
   }
@@ -108,7 +108,7 @@ export class AdminApiService {
   getAccountInvitationNext(sorting: any, pageSize: any, pageStart: any){
     return this.invitationRef.ref
       .where("account", "==", localStorage.getItem('restaurant_id'))
-      // .orderBy(sorting?.field, sorting?.direction)
+      .orderBy(sorting?.field, sorting?.direction)
       .startAfter(pageStart)
       .limit(pageSize)
       .get();
@@ -117,7 +117,7 @@ export class AdminApiService {
   getAccountInvitationPrev(sorting: any, pageSize: any, pageStart: any){
     return this.invitationRef.ref
       .where("account", "==", localStorage.getItem('restaurant_id'))
-      // .orderBy(sorting?.field, sorting?.direction)
+      .orderBy(sorting?.field, sorting?.direction)
       .startAt(pageStart)
       .limit(pageSize)
       .get();

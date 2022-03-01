@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
-import * as firebase from 'firebase/compat/app';
+import { serverTimestamp } from 'firebase/firestore';
 
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 import { DeleteModalComponent } from 'projects/personal/src/app/components/module-utilities/delete-modal/delete-modal.component'
@@ -55,7 +55,7 @@ export class ReservationTablesComponent implements OnInit {
 
   createReservationTable(tableData: any){
     let data: ReservationTable = {
-      created_at: firebase.default.firestore.FieldValue.serverTimestamp(),
+      created_at: serverTimestamp(),
       reservation: sessionStorage.getItem('restaurant_reservation_id') as string,
       table: {
         id: tableData.id,

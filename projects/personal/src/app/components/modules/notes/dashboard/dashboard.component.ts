@@ -54,7 +54,7 @@ export class DashboardComponent implements OnInit {
   }
 
   getWeekNote(){
-    this.notesApi.getWeekNote(moment(this.today).add(-6, 'days'), this.today)
+    this.notesApi.getWeekNote(moment(this.today).add(-6, 'days').toDate(), this.today.toDate())
       .then(
         res => {
           console.log(res);

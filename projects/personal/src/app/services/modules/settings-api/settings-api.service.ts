@@ -50,7 +50,7 @@ export class SettingsApiService {
   getUserInvitation(sorting: any, pageSize: any){
     return this.invitationsRef.ref
       .where("user", "==", localStorage.getItem('personal_id'))
-      // .orderBy(sorting?.field, sorting?.direction)
+      .orderBy(sorting?.field, sorting?.direction)
       .limit(pageSize)
       .get();
   }
@@ -58,7 +58,7 @@ export class SettingsApiService {
   getUserInvitationNext(sorting: any, pageSize: any, pageStart: any){
     return this.invitationsRef.ref
       .where("user", "==", localStorage.getItem('personal_id'))
-      // .orderBy(sorting?.field, sorting?.direction)
+      .orderBy(sorting?.field, sorting?.direction)
       .startAfter(pageStart)
       .limit(pageSize)
       .get();
@@ -67,7 +67,7 @@ export class SettingsApiService {
   getUserInvitationPrev(sorting: any, pageSize: any, pageStart: any){
     return this.invitationsRef.ref
       .where("user", "==", localStorage.getItem('personal_id'))
-      // .orderBy(sorting?.field, sorting?.direction)
+      .orderBy(sorting?.field, sorting?.direction)
       .startAt(pageStart)
       .limit(pageSize)
       .get();

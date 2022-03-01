@@ -65,7 +65,7 @@ export class DashboardComponent implements OnInit {
   }
 
   getMonthBudget(){
-    this.budgetApi.getMonthBudget(moment(this.today).add(-7, 'days'), this.today)
+    this.budgetApi.getMonthBudget(moment(this.today).add(-7, 'days').toDate(), this.today.toDate())
       .then(
         res => {
           console.log(res);
@@ -79,7 +79,7 @@ export class DashboardComponent implements OnInit {
   }
 
   getWeekIncome(){
-    this.budgetApi.getWeekIncome(moment(this.today).add(-7, 'days'), this.today)
+    this.budgetApi.getWeekIncome(moment(this.today).add(-7, 'days').toDate(), this.today.toDate())
       .then(
         res => {
           console.log(res);
@@ -95,7 +95,7 @@ export class DashboardComponent implements OnInit {
   }
 
   getWeekExpenditure(){
-    this.budgetApi.getWeekExpenditure(moment(this.today).add(-1, 'months'), this.today)
+    this.budgetApi.getWeekExpenditure(moment(this.today).add(-1, 'months').toDate(), this.today.toDate())
       .then(
         res => {
           console.log(res);
