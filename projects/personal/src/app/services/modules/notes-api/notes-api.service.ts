@@ -61,7 +61,7 @@ export class NotesApiService {
   getAllUserNote(){
     return this.noteRef.ref
       .where("user", "==", localStorage.getItem('personal_id'))
-      // .orderBy("created_at", "desc")
+      // .orderBy("created_at", "asc")
       .get();
   }
 

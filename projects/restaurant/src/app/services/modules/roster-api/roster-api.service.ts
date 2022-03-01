@@ -70,7 +70,7 @@ export class RosterApiService {
   getAllAccountRoster(){
     return this.rosterRef.ref
       .where("account", "==", localStorage.getItem('restaurant_id'))
-      // .orderBy("created_at", "desc")
+      // .orderBy("created_at", "asc")
       .get();
   }
 
@@ -95,7 +95,7 @@ export class RosterApiService {
   getRosterShift(){
     return this.shiftRef.ref
       .where("roster", "==", sessionStorage.getItem('restaurant_roster_id'))
-      // .orderBy("created_at", "desc")
+      // .orderBy("created_at", "asc")
       .get();
   }
 
@@ -120,7 +120,7 @@ export class RosterApiService {
   getRosterBatch(){
     return this.batchRef.ref
       .where("roster", "==", sessionStorage.getItem('restaurant_roster_id'))
-      // .orderBy("created_at", "desc")
+      // .orderBy("created_at", "asc")
       .get();
   }
 
@@ -145,7 +145,7 @@ export class RosterApiService {
   getRosterPersonnel(){
     return this.personnelRef.ref
       .where("roster", "==", sessionStorage.getItem('restaurant_roster_id'))
-      // .orderBy("created_at", "desc")
+      // .orderBy("created_at", "asc")
       .get();
   }
 
@@ -170,7 +170,7 @@ export class RosterApiService {
   getRosterSheet(){
     return this.sheetRef.ref
       .where("roster", "==", sessionStorage.getItem('restaurant_roster_id'))
-      // .orderBy("created_at", "desc")
+      // .orderBy("created_at", "asc")
       .get();
   }
 

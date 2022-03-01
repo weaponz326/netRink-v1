@@ -30,7 +30,7 @@ export class PortalApiService {
     return this.rinkRef.ref
       .where("sender.id", "==", String(localStorage.getItem('restaurant_id')))
       .where("recipent.id", "==", String(localStorage.getItem('restaurant_id')))
-      // .orderBy("created_at", "desc")
+      // .orderBy("created_at", "asc")
       .get();
   }
 

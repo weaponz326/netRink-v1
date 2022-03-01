@@ -61,7 +61,7 @@ export class CalendarApiService {
   getAllUserCalendar(){
     return this.calendarRef.ref
       .where("user", "==", localStorage.getItem('personal_id'))
-      // .orderBy("created_at", "desc")
+      // .orderBy("created_at", "asc")
       .get();
   }
 
@@ -118,7 +118,7 @@ export class CalendarApiService {
   getAllUserSchedule(){
     return this.scheduleRef.ref
       .where("calendar.data.user", "==", localStorage.getItem('personal_id'))
-      // .orderBy("created_at", "desc")
+      // .orderBy("created_at", "asc")
       .get();
   }
 

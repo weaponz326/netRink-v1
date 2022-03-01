@@ -62,7 +62,7 @@ export class AccountsApiService {
   getAllUserAccount(){
     return this.accountRef.ref
       .where("user", "==", localStorage.getItem('personal_id'))
-      // .orderBy("created_at", "desc")
+      // .orderBy("created_at", "asc")
       .get();
   }
 
@@ -83,7 +83,7 @@ export class AccountsApiService {
   getAccountTransaction(){
     return this.transactionRef.ref
       .where("account.id", "==", String(sessionStorage.getItem('personal_account_id')))
-      // .orderBy("created_at", "desc")
+      // .orderBy("created_at", "asc")
       .get();
   }
 
@@ -116,7 +116,7 @@ export class AccountsApiService {
   getAllUserTransaction(){
     return this.transactionRef.ref
       .where("account.data.user", "==", localStorage.getItem('personal_id'))
-      // .orderBy("created_at", "desc")
+      // .orderBy("created_at", "asc")
       .get();
   }
 

@@ -47,7 +47,7 @@ export class AllTablesComponent implements OnInit {
 
   sortParams = {
     field: "created_at",
-    direction: "desc"
+    direction: "asc"
   }
 
   deleteId: any;

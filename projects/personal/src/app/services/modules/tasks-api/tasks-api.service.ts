@@ -62,7 +62,7 @@ export class TasksApiService {
   getAllUserTaskGroup(){
     return this.taskGroupRef.ref
       .where("user", "==", localStorage.getItem('personal_id'))
-      // .orderBy("created_at", "desc")
+      // .orderBy("created_at", "asc")
       .get();
   }
 
@@ -119,7 +119,7 @@ export class TasksApiService {
   getAllUserTaskItem(){
     return this.taskItemRef.ref
       .where("task_group.data.user", "==", localStorage.getItem('personal_id'))
-      // .orderBy("created_at", "desc")
+      // .orderBy("created_at", "asc")
       .get();
   }
 

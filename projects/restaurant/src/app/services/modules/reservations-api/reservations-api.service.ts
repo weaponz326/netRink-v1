@@ -87,7 +87,7 @@ export class ReservationsApiService {
   getReservationReservationTable(){
     return this.reservationTableRef.ref
       .where("reservation", "==", sessionStorage.getItem('restaurant_reservation_id'))
-      // .orderBy("created_at", "desc")
+      // .orderBy("created_at", "asc")
       .get();
   }
 

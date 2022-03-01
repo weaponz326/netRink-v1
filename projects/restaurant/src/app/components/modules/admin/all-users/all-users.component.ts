@@ -32,7 +32,7 @@ export class AllUsersComponent implements OnInit {
 
   sortParams = {
     field: "created_at",
-    direction: "desc"
+    direction: "asc"
   }
 
   ngOnInit(): void {

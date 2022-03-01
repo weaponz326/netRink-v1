@@ -67,7 +67,7 @@ export class StaffApiService {
   getAllAccountStaff(){
     return this.staffRef.ref
       .where("account", "==", localStorage.getItem('restaurant_id'))
-      // .orderBy("created_at", "desc")
+      // .orderBy("created_at", "asc")
       .get();
   }
 

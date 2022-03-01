@@ -41,7 +41,7 @@ export class AllRosterComponent implements OnInit {
 
   sortParams = {
     field: "created_at",
-    direction: "desc"
+    direction: "asc"
   }
 
   ngOnInit(): void {

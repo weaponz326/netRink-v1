@@ -44,7 +44,7 @@ export class AllNotesComponent implements OnInit {
 
   sortParams = {
     field: "updated_at",
-    direction: "desc"
+    direction: "asc"
   }
 
   ngOnInit(): void {

@@ -62,7 +62,7 @@ export class OrdersApiService {
   getAllAccountOrder(){
     return this.orderRef.ref
       .where("account", "==", localStorage.getItem('restaurant_id'))
-      // .orderBy("created_at", "desc")
+      // .orderBy("created_at", "asc")
       .get();
   }
 
@@ -87,7 +87,7 @@ export class OrdersApiService {
   getOrderOrderItem(){
     return this.orderItemRef.ref
       .where("order", "==", sessionStorage.getItem('restaurant_order_id'))
-      // .orderBy("created_at", "desc")
+      // .orderBy("created_at", "asc")
       .get();
   }
 
@@ -99,5 +99,5 @@ export class OrdersApiService {
       // .where("created_at", "<", startDate).where("created_at", ">", endDate)
       .get();
   }
-  
+
 }

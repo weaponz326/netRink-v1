@@ -63,7 +63,7 @@ export class BudgetApiService {
   getAllUserBudget(){
     return this.budgetRef.ref
       .where("user", "==", localStorage.getItem('personal_id'))
-      // .orderBy("created_at", "desc")
+      // .orderBy("created_at", "asc")
       .get();
   }
 
@@ -84,7 +84,7 @@ export class BudgetApiService {
   getBudgetIncome(){
     return this.incomeRef.ref
       .where("budget.id", "==", String(sessionStorage.getItem('personal_budget_id')))
-      // .orderBy("created_at", "desc")
+      // .orderBy("created_at", "asc")
       .get();
   }
 
@@ -105,7 +105,7 @@ export class BudgetApiService {
   getBudgetExpenditure(){
     return this.expenditureRef.ref
       .where("budget.id", "==", String(sessionStorage.getItem('personal_budget_id')))
-      // .orderBy("created_at", "desc")
+      // .orderBy("created_at", "asc")
       .get();
   }
 

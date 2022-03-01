@@ -62,7 +62,7 @@ export class MenuApiService {
   getAllAccountMenuGroup(){
     return this.menuGroupRef.ref
       .where("account", "==", localStorage.getItem('restaurant_id'))
-      // .orderBy("created_at", "desc")
+      // .orderBy("created_at", "asc")
       .get();
   }
 
@@ -87,7 +87,7 @@ export class MenuApiService {
   getMenuGroupMenuItem(){
     return this.menuItemRef.ref
       .where("menu_group.id", "==", sessionStorage.getItem('restaurant_menu_group_id'))
-      // .orderBy("created_at", "desc")
+      // .orderBy("created_at", "asc")
       .get();
   }
 
@@ -120,7 +120,7 @@ export class MenuApiService {
   getAllAccountMenuItem(){
     return this.menuItemRef.ref
       .where("menu_group.data.account", "==", localStorage.getItem('restaurant_id'))
-      // .orderBy("created_at", "desc")
+      // .orderBy("created_at", "asc")
       .get();
   }
 

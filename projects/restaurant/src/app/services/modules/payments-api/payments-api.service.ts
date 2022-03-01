@@ -61,7 +61,7 @@ export class PaymentsApiService {
   getAllAccountPayment(){
     return this.paymentRef.ref
       .where("account", "==", localStorage.getItem('restaurant_id'))
-      // .orderBy("created_at", "desc")
+      // .orderBy("created_at", "asc")
       .get();
   }
 
