@@ -13,6 +13,8 @@ export class SignupSuccessComponent implements OnInit {
 
   suiteRegistrationType = "";
 
+  showPrompt = false;
+
   ngOnInit(): void {
     this.getRouterParams();
   }
@@ -31,11 +33,10 @@ export class SignupSuccessComponent implements OnInit {
   }
 
   registrationRedirect(){
-    // TODO: redirect to respective suite's login in new tab
     if (this.suiteRegistrationType == "nR Personal" || this.suiteRegistrationType == "netRink")
       window.location.href = "/";
     else
-      window.location.href = "/register";
+      window.location.href = "/login";
   }
 
 }

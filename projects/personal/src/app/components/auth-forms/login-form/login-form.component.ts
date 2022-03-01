@@ -55,7 +55,7 @@ export class LoginFormComponent implements OnInit {
               this.registrationType();
             }
             else{
-              this.authApi.sendEmailVerification(this.loginForm.controls.email.value);
+              this.authApi.sendEmailVerification();
               this.sendVerification = true;
               console.log("verification sent");
             }
@@ -91,7 +91,6 @@ export class LoginFormComponent implements OnInit {
   }
 
   registrationRedirect(){
-    // TODO: can't get auth_token if angular router is used
     window.location.href = "/register";
   }
 

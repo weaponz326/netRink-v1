@@ -40,13 +40,8 @@ export class SignupFormComponent implements OnInit {
   registeredUserId = "";
 
   ngOnInit(): void {
-    // this.getSource();
     this.initSignupForm();
   }
-
-  // getSource(){
-  //   this.suiteRegistrationType = sessionStorage.getItem('app_source') as string;
-  // }
 
   initSignupForm(){
     this.signupForm = new FormGroup({
@@ -132,11 +127,7 @@ export class SignupFormComponent implements OnInit {
   }
 
   sendEmailVerification(){
-    let actionCodeSettings = {
-
-    }
-
-    this.authApi.sendEmailVerification(actionCodeSettings)
+    this.authApi.sendEmailVerification()
       .then(
         (res: any) => {
           console.log(res);
@@ -151,12 +142,5 @@ export class SignupFormComponent implements OnInit {
     this.signupForm.controls.location.setValue(address.formatted_address);
     console.log(address);
   }
-
-  // registrationRedirect(){
-  //   if (this.suiteRegistrationType == "nR Personal" || this.suiteRegistrationType == "netRink")
-  //     window.location.href = "/";
-  //   else
-  //     window.location.href = "/register";
-  // }
 
 }
