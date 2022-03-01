@@ -61,7 +61,7 @@ export class KitchenStockApiService {
   getAllAccountStockItem(){
     return this.stockItemRef.ref
       .where("account", "==", localStorage.getItem('restaurant_id'))
-      .orderBy("created", "desc")
+      .orderBy("created_at", "desc")
       .get();
   }
 

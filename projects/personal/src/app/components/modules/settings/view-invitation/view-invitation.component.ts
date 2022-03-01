@@ -1,5 +1,7 @@
 import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 
+import { serverTimestamp } from 'firebase/firestore';
+
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component';
 
 import { UserApiService } from 'projects/personal/src/app/services/user/user-api/user-api.service';
@@ -97,6 +99,7 @@ export class ViewInvitationComponent implements OnInit {
 
   createAccountUser(){
     let userData: AccountUser = {
+      created_at: serverTimestamp(),
       user: {
         id: localStorage.getItem('personal_id') as string,
         data: this.thisUser,

@@ -2,6 +2,7 @@ import { Account } from '../../account/account.model';
 import { User } from 'projects/personal/src/app/models/user/user.model';
 
 export class AccountUser {
+  created_at!: any;
   access_level!: string;
   user!: {
     id: string;

@@ -31,8 +31,8 @@ export class AllUsersComponent implements OnInit {
   isFetchingGridData = false;
 
   sortParams = {
-    field: "created_at",
-    direction: "desc"
+    field: "access_level",
+    direction: "asc"
   }
 
   ngOnInit(): void {

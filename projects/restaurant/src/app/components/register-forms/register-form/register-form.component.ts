@@ -105,6 +105,7 @@ export class RegisterFormComponent implements OnInit {
 
   createAccountUser(account: any){
     let userData: AccountUser = {
+      created_at: serverTimestamp(),
       user: {
         id: localStorage.getItem('personal_id') as string,
         data: this.thisUser,

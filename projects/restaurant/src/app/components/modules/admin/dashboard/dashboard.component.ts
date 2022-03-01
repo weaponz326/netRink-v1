@@ -25,8 +25,8 @@ export class DashboardComponent implements OnInit {
   allUsersCount: number = 0;
 
   sortParams = {
-    field: "created_at",
-    direction: "desc"
+    field: "access_level",
+    direction: "asc"
   }
 
   ngOnInit(): void {
