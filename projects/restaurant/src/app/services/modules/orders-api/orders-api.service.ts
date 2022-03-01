@@ -86,7 +86,7 @@ export class OrdersApiService {
 
   getOrderOrderItem(){
     return this.orderItemRef.ref
-      .where("order.id", "==", sessionStorage.getItem('restaurant_order_id'))
+      .where("order", "==", sessionStorage.getItem('restaurant_order_id'))
       .orderBy("created_at", "asc")
       .get();
   }
