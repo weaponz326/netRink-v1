@@ -10,6 +10,7 @@ const routes: Routes = [
     path: "", 
     component: LegalitiesPageComponent,
     children: [
+      { path: "", component: TermsComponent },
       { path: "terms", component: TermsComponent },
       { path: "privacy", component: PrivacyComponent },
     ] 
