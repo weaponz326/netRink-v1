@@ -35,8 +35,33 @@
                         </div>
                     </div>
 
+                    <hr />
+
+                    <div class="row mb-2">
+                        <div class="col-md-4"><label>First Name :</label></div>
+                        <div class="col-md-8">
+                            <input [(ngModel)]="firstNameValue" class="form-control form-control-sm w-100">
+                        </div>
+                    </div>
+
+                    <div class="row mb-2">
+                        <div class="col-md-4"><label>Last Name :</label></div>
+                        <div class="col-md-8">
+                            <input [(ngModel)]="firstNameValue" class="form-control form-control-sm w-100">
+                        </div>
+                    </div>
+
+                    <div class="row mb-2">
+                        <div class="col-md-4"><label>Email :</label></div>
+                        <div class="col-md-8">
+                            <input [(ngModel)]="firstNameValue" class="form-control form-control-sm w-100">
+                        </div>
+                    </div>
+
                 </div>
             </div>
+
+            <hr />
 
             <div *ngIf="!isSubscriptionLoading" class="row mb-3 page-form">
                 <div class="col-md-9">
@@ -52,12 +77,6 @@
                     </button>
                 </div>
             </div>
-
-            <hr />
-
-            <!-- ================================
-            TODO: payment form
-            ================================ -->
 
         </div>
 

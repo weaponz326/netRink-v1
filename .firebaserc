@@ -1,6 +1,6 @@
 {
   "projects": {
-    "default": "netrink-test-v1"
+    "default": "netrink-18"
   },
   "targets": {
     "netrink-test-v1": {

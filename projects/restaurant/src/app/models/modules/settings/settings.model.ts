@@ -11,6 +11,9 @@ export class Subscription {
   subscription_type!: string;
   billing_frequency!: string;
   number_users!: number;
+  email!: string;
+  first_name!: string;
+  last_name!: string;
 }
 
 export class PaystackCustomer {

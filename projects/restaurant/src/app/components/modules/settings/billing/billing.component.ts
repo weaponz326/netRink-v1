@@ -30,6 +30,10 @@ export class BillingComponent implements OnInit {
   billingFrequencyValue = "";
   numberUsersValue = 0;
 
+  firstNameValue = "";
+  lastNameValue = "";
+  emailValue = "";
+
   selectedSubscription = '';
   selectedFrequency = '';
   usersTextBoxIncrement = 1;
@@ -73,7 +77,7 @@ export class BillingComponent implements OnInit {
   }
 
   updateSubscription(){
-    let data: Subscription = {
+    let data = {
       subscription_type: this.subscriptionTypeValue,
       billing_frequency: this.billingFrequencyValue,
       number_users: this.numberUsersValue,

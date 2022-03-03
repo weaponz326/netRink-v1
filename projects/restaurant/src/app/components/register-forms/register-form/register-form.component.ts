@@ -178,6 +178,9 @@ export class RegisterFormComponent implements OnInit {
       subscription_type: "Individual",
       billing_frequency: "",
       number_users: 1,
+      first_name: this.thisUser.first_name,
+      last_name: this.thisUser.last_name,
+      email: this.thisUser.email,
     }
 
     this.settingsApi.createSubscription(data)
