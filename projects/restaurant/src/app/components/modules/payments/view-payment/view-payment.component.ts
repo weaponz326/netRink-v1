@@ -48,7 +48,7 @@ export class ViewPaymentComponent implements OnInit {
     this.paymentsApi.getPayment()
       .then(
         (res: any) => {
-          console.log(res);
+          console.log(res.data());
 
           this.paymentData = res;
           this.isPaymentLoading = false;
@@ -57,12 +57,13 @@ export class ViewPaymentComponent implements OnInit {
           this.paymentForm.paymentForm.controls.paymentDate.setValue(res.data().payment_date);
           this.paymentForm.paymentForm.controls.amountPaid.setValue(res.data().amount_paid);
 
-          this.paymentForm.paymentForm.controls.selectedOrderId = res.data().order.id;
-          this.paymentForm.paymentForm.controls.selectedCustomerId = res.data().order.customer.id;
-          this.paymentForm.paymentForm.controls.orderCode.setValue(res.data().order.order_code);
-          this.paymentForm.paymentForm.controls.customerName.setValue(res.data().order.customer_name);
-          this.paymentForm.paymentForm.controls.totalAmount.setValue(res.data().order.total_amount);
+          this.paymentForm.paymentForm.controls.selectedCustomerId = res.data().order.data.customer.id;
+          this.paymentForm.paymentForm.controls.orderCode.setValue(res.data().order.data.order_code);
+          this.paymentForm.paymentForm.controls.customerName.setValue(res.data().order.data.customer_name);
+          this.paymentForm.paymentForm.controls.totalAmount.setValue(res.data().order.data.total_amount);
 
+          this.paymentForm.selectedOrderId = res.data().order.id;
+          this.paymentForm.selectedOrderData = res.data().order.data;
           this.paymentForm.setBalance()
         },
         (err: any) => {
@@ -82,12 +83,7 @@ export class ViewPaymentComponent implements OnInit {
       amount_paid: this.paymentForm.paymentForm.controls.amountPaid.value,
       order: {
         id: this.paymentForm.selectedOrderId,
-        order_code: this.paymentForm.paymentForm.controls.orderCode.value,
-        total_amount: this.paymentForm.paymentForm.controls.totalAmount.value,
-        customer: {
-          id: this.paymentForm.selectedCustomerId,
-          customer_name: this.paymentForm.paymentForm.controls.customerName.value,
-        }
+        data: this.paymentForm.selectedOrderData,
       }
     }
 

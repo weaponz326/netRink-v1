@@ -21,7 +21,7 @@ export class ReservationTablesComponent implements OnInit {
   constructor(private reservationsApi: ReservationsApiService) { }
 
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
-  @ViewChild('deleteModalComponentReference', { read: DeleteModalComponent, static: false }) deleteModal!: DeleteModalComponent;
+  @ViewChild('deleteModalTwoComponentReference', { read: DeleteModalComponent, static: false }) deleteModal!: DeleteModalComponent;
   @ViewChild('selectTableComponentReference', { read: SelectTableComponent, static: false }) selectTable!: SelectTableComponent;
 
   reservationTablesGridData: any[] = [];
@@ -100,6 +100,7 @@ export class ReservationTablesComponent implements OnInit {
 
   confirmDelete(id: any){
     this.deleteId = id;
+    this.deleteModal.thisEvent = 2;
     this.deleteModal.openModal();
   }
 

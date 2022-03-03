@@ -36,7 +36,9 @@ export class EditMenuItemComponent implements OnInit {
     this.menuItemForm.menuItemForm.controls.itemCode.setValue(data.data().item_code);
     this.menuItemForm.menuItemForm.controls.itemName.setValue(data.data().item_name);
     this.menuItemForm.menuItemForm.controls.price.setValue(data.data().price);
+
     if (data.data().image != "") this.menuItemForm.image.imgSrc = data.data().image;
+    else this.menuItemForm.image.setPlaceholderImage;
 
     this.editButton.nativeElement.click();
   }

@@ -22,7 +22,7 @@
                     <div class="row mb-2">
                         <div class="col-md-4"><label>Billing Frequency :</label></div>
                         <div class="col-md-8">
-                            <select [(ngModel)]="billingFrequencyValue" class="form-control form-control-sm w-100" (change)="setFrequency($event)">
+                            <select [(ngModel)]="billingFrequencyValue" [disabled]="isFrequencyDisabled" class="form-control form-control-sm w-100" (change)="setFrequency($event)">
                                 <option *ngFor="let frequency of frequencySource">{{frequency}}</option>
                             </select>
                         </div>
@@ -31,7 +31,7 @@
                     <div class="row mb-2">
                         <div class="col-md-4"><label>No. of Users :</label></div>
                         <div class="col-md-4">
-                            <input [(ngModel)]="numberUsersValue" type="number" [step]="numberUsersStep" class="form-control form-control-sm w-100">
+                            <input [(ngModel)]="numberUsersValue" type="number" [step]="numberUsersStep" [disabled]="isnumberUsersDisabled" class="form-control form-control-sm w-100">
                         </div>
                     </div>
 
@@ -82,28 +82,28 @@
                         <p class="h5 mb-2">Individual Subscription</p>
                         <p class="m-0">Single User</p>
                         <p class="m-0">Free Upgrades</p>
-                        <p class="m-0">1GB Storage</p>
+                        <!-- <p class="m-0">1GB Storage</p> -->
                     </div>
                     <div *ngIf="selectedSubscription=='Small Team'">
                         <p class="h5 mb-2">Small Team Subscription</p>
                         <p class="m-0">10 Users</p>
                         <p class="m-0">Free Upgrades</p>
                         <p class="m-0">Technical Support</p>
-                        <p class="m-0">50GB Storage</p>
+                        <!-- <p class="m-0">50GB Storage</p> -->
                     </div>
                     <div *ngIf="selectedSubscription=='Large Team'">
                         <p class="h5 mb-2">Large Team Subscription</p>
                         <p class="m-0">50 Users</p>
                         <p class="m-0">Free Upgrades</p>
                         <p class="m-0">Technical Support</p>
-                        <p class="m-0">2TB Storage</p>
+                        <!-- <p class="m-0">2TB Storage</p> -->
                     </div>
                     <div *ngIf="selectedSubscription=='Comprehensive'">
                         <p class="h5 mb-2">Comprehensive Subscription</p>
                         <p class="m-0">Single User</p>
                         <p class="m-0">Free Upgrades</p>
                         <p class="m-0">Technical Support</p>
-                        <p class="m-0">Unlimited Storage</p>
+                        <!-- <p class="m-0">Unlimited Storage</p> -->
                         <p class="m-0">Customized Functions</p>
                     </div>
 
@@ -115,23 +115,23 @@
                     <div *ngIf="selectedSubscription=='Small Team'">
                         <div *ngIf="selectedFrequency=='Monthly'">
                             <p class="h5 mb-2">Monthly Plan</p>
-                            <p class="h4 m-0"><strong>$19.99</strong></p>
+                            <p class="h4 m-0"><strong>GHS 150</strong></p>
                         </div>
                         <div *ngIf="selectedFrequency=='Yearly'">
                             <p class="h5 mb-2">Yearly Plan</p>
-                            <p class="h4 m-0"><strong>$199.99</strong></p>
-                            <p class="m-0">Save $39.89 per 10 Users</p>
+                            <p class="h4 m-0"><strong>GHS 1,500</strong></p>
+                            <p class="m-0">Save GHS 300 per 10 Users</p>
                         </div>
                     </div>
                     <div *ngIf="selectedSubscription=='Large Team'">
                         <div *ngIf="selectedFrequency=='Monthly'">
                             <p class="h5 mb-2">Monthly Plan</p>
-                            <p class="h4 m-0"><strong>$74.99</strong></p>
+                            <p class="h4 m-0"><strong>GHS 500</strong></p>
                         </div>
                         <div *ngIf="selectedFrequency=='Yearly'">
                             <p class="h5 mb-2">Yearly Plan</p>
-                            <p class="h4 m-0"><strong>$749.99</strong></p>
-                            <p class="m-0">Save $149.89 per 50 Users</p>
+                            <p class="h4 m-0"><strong>GHS 5,000</strong></p>
+                            <p class="m-0">Save GHS 1,000 per 50 Users</p>
                         </div>
                     </div>
                     <div *ngIf="selectedSubscription=='Comprehensive'">
@@ -144,13 +144,13 @@
                         <div *ngIf="selectedFrequency=='Monthly'">
                             <p class="mb-2">Total Bill :</p>
                             <p class="h3 m-0">
-                                ${{19.99 * (numberUsersValue / 10)}} / month
+                                ${{150 * (numberUsersValue / 10)}} / month
                             </p>
                         </div>
                         <div *ngIf="selectedFrequency=='Yearly'">
                             <p class="mb-2">Total Bill :</p>
                             <p class="h3 m-0">
-                                ${{199.99 * (numberUsersValue / 10)}} / year
+                                ${{1500 * (numberUsersValue / 10)}} / year
                             </p>
                         </div>
                     </div>
@@ -158,13 +158,13 @@
                         <div *ngIf="selectedFrequency=='Monthly'">
                             <p class="mb-2">Total Bill :</p>
                             <p class="h3 m-0">
-                                ${{74.99 * (numberUsersValue / 50)}} / month
+                                ${{500 * (numberUsersValue / 50)}} / month
                             </p>
                         </div>
                         <div *ngIf="selectedFrequency=='Yearly'">
                             <p class="mb-2">Total Bill :</p>
                             <p class="h3 m-0">
-                                ${{749.99 * (numberUsersValue / 50)}} / year
+                                ${{5000 * (numberUsersValue / 50)}} / year
                             </p>
                         </div>
                     </div>

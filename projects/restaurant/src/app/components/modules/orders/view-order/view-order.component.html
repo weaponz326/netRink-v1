@@ -42,11 +42,21 @@
                 <div class="row mb-1">
                     <div class="col-md-4"><label class="float-end mt-1">Order Type :</label></div>
                     <div class="col-md-8">
-                        <select formControlName="orderType" class="form-control form-control-sm w-100">
+                        <select *ngIf="orderForm.controls.orderType.value != 'Delivery'" formControlName="orderType" class="form-control form-control-sm w-100">
                             <option>Dine In</option>
                             <option>Delivery</option>
                             <option>Take Away</option>
                         </select>
+                        <div *ngIf="orderForm.controls.orderType.value == 'Delivery'" class="input-group input-group-sm w-100">
+                            <select formControlName="orderType" class="form-control">
+                                <option>Dine In</option>
+                                <option>Delivery</option>
+                                <option>Take Away</option>
+                            </select>
+                            <button type="button" class="btn btn-secondary" (click)="gotoDelivery(orderFormData.id)">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
 

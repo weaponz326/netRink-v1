@@ -113,7 +113,7 @@
 
 <app-add-stock-item #addStockItemComponentReference (saveItemEvent)="createStockItem($event)"></app-add-stock-item>
 
-<app-edit-stock-item #editStockItemComponentReference (saveItemEvent)="updateStockItem($event)" (deleteItem)="confirmDelete($event)"></app-edit-stock-item>
+<app-edit-stock-item #editStockItemComponentReference (saveItemEvent)="updateStockItem($event)" (deleteItemEvent)="confirmDelete($event)"></app-edit-stock-item>
 
 <!-- connection error toast component -->
 

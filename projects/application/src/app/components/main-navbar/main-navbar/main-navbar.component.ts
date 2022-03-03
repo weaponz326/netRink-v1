@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 
+import { environment } from 'projects/personal/src/environments/environment';
 import { AuthApiService } from 'projects/personal/src/app/services/user/auth-api/auth-api.service';
 import { UserApiService } from 'projects/personal/src/app/services/user/user-api/user-api.service';
 
@@ -27,6 +28,8 @@ export class MainNavbarComponent implements OnInit {
   @Input() isForms: boolean = false;
 
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
+
+  personalUrl = environment.personalUrl;
 
   userData: any;
 
@@ -71,7 +74,8 @@ export class MainNavbarComponent implements OnInit {
           this.isLoggedIn = false;
           this.isAuthLoading = false;
 
-          this.connectionToast.openToast();
+          if (!!localStorage.getItem('personal_id'))
+            this.connectionToast.openToast();
         }
       )
   }
@@ -88,7 +92,9 @@ export class MainNavbarComponent implements OnInit {
         },
         (err: any) => {
           console.log(err);
-          this.connectionToast.openToast();
+
+          if (!!localStorage.getItem('personal_id'))
+            this.connectionToast.openToast();
         }
       )
   }

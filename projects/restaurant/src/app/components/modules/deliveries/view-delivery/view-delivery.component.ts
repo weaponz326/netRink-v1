@@ -53,13 +53,14 @@ export class ViewDeliveryComponent implements OnInit {
           this.deliveryData = res;
           this.isDeliveryLoading = false;
 
-          this.deliveryForm.deliveryForm.controls.deliveryCode.setValue(this.deliveryData.data().delivery_code);
-          this.deliveryForm.deliveryForm.controls.dateDelivered.setValue(this.deliveryData.data().date_delivered);
           this.deliveryForm.deliveryForm.controls.orderCode.setValue(this.deliveryData.data().order.order_code);
           this.deliveryForm.deliveryForm.controls.orderDate.setValue(this.deliveryData.data().order.order_date);
           this.deliveryForm.deliveryForm.controls.customerName.setValue(this.deliveryData.data().order.customer.customer_name);
+          this.deliveryForm.deliveryForm.controls.dateDelivered.setValue(this.deliveryData.data().date_delivered);
           this.deliveryForm.deliveryForm.controls.deliveryLocation.setValue(this.deliveryData.data().delivery_location);
           this.deliveryForm.deliveryForm.controls.deliveryStatus.setValue(this.deliveryData.data().delivery_status);
+
+          this.deliveryForm.orderId = this.deliveryData.id;
         },
         (err: any) => {
           console.log(err);

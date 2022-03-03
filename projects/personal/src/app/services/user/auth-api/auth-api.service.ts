@@ -27,7 +27,7 @@ export class AuthApiService {
     await this.afAuth.currentUser.then((res: any) => user = res);
 
     const baseUrl = this.getBaseUrl();
-    const url = `${baseUrl}/auth/success?id=${user.uid}&email=${user.email}`;
+    const url = `${baseUrl}/auth/signup-success?id=${user.uid}&email=${user.email}`;
     // const url = `http://localhost:4200/auth/signup-success?id=${user.uid}&email=${user.email}`;
 
     return user.sendEmailVerification({url: url});
@@ -35,7 +35,7 @@ export class AuthApiService {
 
   sendPasswordResetEmail(email: string){
     const baseUrl = this.getBaseUrl();
-    const url = `${baseUrl}/auth/success?email=${email}`;
+    const url = `${baseUrl}/auth/reset-success?email=${email}`;
     // const url = `http://localhost:4200/auth/reset-success?email=${email}`;
 
     return this.afAuth.sendPasswordResetEmail(email);

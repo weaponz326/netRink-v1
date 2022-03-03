@@ -119,7 +119,7 @@ export class ViewStaffComponent implements OnInit {
         (res: any) => {
           console.log(res);
 
-          if (!this.staffForm.photo.isImageSet && !this.staffForm.photo.isImageChanged){
+          if (this.staffForm.photo.isImageSet && !this.staffForm.photo.isImageChanged){
             this.isStaffSaving = false;
           }
           else{

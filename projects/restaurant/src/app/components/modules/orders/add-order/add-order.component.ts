@@ -144,7 +144,6 @@ export class AddOrderComponent implements OnInit {
       delivery_status: "",
       date_delivered: "",
       order: {
-        id: sessionStorage.getItem('restaurant_order_id') as string,
         order_code: this.orderForm.controls.orderCode.value,
         order_date: this.orderForm.controls.orderDate.value,
         customer: {

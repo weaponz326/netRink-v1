@@ -17,7 +17,7 @@ export class DeliveriesApiService {
   // deliveries
 
   createDelivery(deliveryData: any){
-    return this.deliveryRef.add(deliveryData);
+    return this.deliveryRef.doc(String(sessionStorage.getItem("restaurant_order_id"))).set(deliveryData);
   }
 
   getDelivery(){

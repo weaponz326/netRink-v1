@@ -1,3 +1,5 @@
+import { Order } from "../orders/orders.model";
+
 export class Payment {
   created_at!: any;
   account!: string;
@@ -6,11 +8,6 @@ export class Payment {
   amount_paid!: string;
   order!: {
     id: string;
-    order_code: string;
-    total_amount: number;
-    customer: {
-      id: string;
-      customer_name: string;
-    }
+    data: Order
   }
 }

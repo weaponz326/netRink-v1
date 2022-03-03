@@ -123,6 +123,7 @@ export class ViewReservationComponent implements OnInit {
   }
 
   confirmDelete(){
+    this.deleteModal.thisEvent = 1;
     this.deleteModal.openModal();
   }
 

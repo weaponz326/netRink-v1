@@ -169,6 +169,7 @@ export class AllTablesComponent implements OnInit {
         (res: any) => {
           console.log(res);
           this.addTable.isTableSaving = false;
+          this.addTable.resetForm();
           this.addTable.dismissButton.nativeElement.click();
           this.isDataAvailable = false;
 
@@ -183,7 +184,7 @@ export class AllTablesComponent implements OnInit {
   }
 
   updateTable(table: any){
-    console.log('u are saving a new table');
+    console.log('u are updating a table');
 
     console.log(table);
     this.viewTable.isTableSaving = true;
@@ -192,7 +193,9 @@ export class AllTablesComponent implements OnInit {
       .then(
         (res: any) => {
           console.log(res);
+          this.viewTable.dismissButton.nativeElement.click();
           this.viewTable.isTableSaving = false;
+          this.getAccountTable();
         },
         (err: any) => {
           console.log(err);
@@ -215,6 +218,8 @@ export class AllTablesComponent implements OnInit {
         (res: any) => {
           console.log(res);
           this.viewTable.isTableDeleting = false;
+          this.viewTable.editButton.nativeElement.click();
+          this.getAccountTable();
         },
         (err: any) => {
           console.log(err);

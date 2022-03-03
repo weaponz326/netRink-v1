@@ -20,16 +20,18 @@ export class TablesApiService {
     return this.tableRef.add(tableData);
   }
 
-  getTable(){
-    return this.tableRef.doc(String(sessionStorage.getItem('restaurant_table_id'))).ref.get();
+  getTable(tableId: any){
+    return this.tableRef.doc(tableId).ref.get();
   }
 
   updateTable(tableId: any, tableData: any){
-    return this.tableRef.doc(String(sessionStorage.getItem('restaurant_table_id'))).update(tableData);
+    console.log(tableId);
+    console.log(tableData);
+    return this.tableRef.doc(tableId).update(tableData);
   }
 
   deleteTable(tableId: any){
-    return this.tableRef.doc(String(sessionStorage.getItem('restaurant_table_id'))).delete();
+    return this.tableRef.doc(tableId).delete();
   }
 
   getAccountTable(sorting: any, pageSize: any){

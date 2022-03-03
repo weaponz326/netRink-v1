@@ -20,13 +20,11 @@ export class TableDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     let sourceId = sessionStorage.getItem("restaurant_rink_source_id") as string;
-    sessionStorage.setItem("restaurant_table_id", sourceId);
-
-    this.getTable();
+    this.getTable(sourceId);
   }
 
-  getTable(){
-    this.tablesApi.getTable()
+  getTable(tableId: any){
+    this.tablesApi.getTable(tableId)
       .then(
         (res: any) => {
           console.log(res);

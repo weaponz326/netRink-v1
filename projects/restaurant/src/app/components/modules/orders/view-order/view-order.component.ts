@@ -173,6 +173,12 @@ export class ViewOrderComponent implements OnInit {
     this.selectedTableId = tableData.id;
   }
 
+  gotoDelivery(deliveryId: any){
+    console.log(deliveryId);
+    sessionStorage.setItem('restaurant_delivery_id', deliveryId);
+    this.router.navigateByUrl('/home/deliveries/view-delivery')
+  }
+
   onPrint(){
     console.log("lets start printing...");
     this.ordersPrint.printViewOrder();

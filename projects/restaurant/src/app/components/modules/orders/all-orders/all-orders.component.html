@@ -36,10 +36,10 @@
                             <i *ngIf="sortParams.field == 'customer_name' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('customer_name', 'desc')"></i>
                         </th>
                         <th width="15%">
-                            Table
-                            <i *ngIf="sortParams.field != 'table_number'" class="bi bi-filter float-end list-pointer" (click)="sortTable('table_number', 'desc')"></i>
-                            <i *ngIf="sortParams.field == 'table_number' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('table_number', 'asc')"></i>
-                            <i *ngIf="sortParams.field == 'table_number' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('table_number', 'desc')"></i>
+                            Order Type
+                            <i *ngIf="sortParams.field != 'order_type'" class="bi bi-filter float-end list-pointer" (click)="sortTable('order_type', 'desc')"></i>
+                            <i *ngIf="sortParams.field == 'order_type' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('order_type', 'asc')"></i>
+                            <i *ngIf="sortParams.field == 'order_type' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('order_type', 'desc')"></i>
                         </th>
                         <th width="20%">
                             Total Amount
@@ -54,7 +54,7 @@
                         <td>{{data?.data().order_code}}</td>
                         <td>{{data?.data().order_date | date}}</td>
                         <td>{{data?.data().customer.customer_name}}</td>
-                        <td>{{data?.data().table.table_number}}</td>
+                        <td>{{data?.data().order_type}}</td>
                         <td>{{data?.data().total_amount}}</td>
                     </tr>
                     <tr *ngIf="isFetchingGridData" class="text-center">

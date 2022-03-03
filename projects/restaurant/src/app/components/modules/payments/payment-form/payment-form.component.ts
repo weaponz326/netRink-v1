@@ -18,7 +18,7 @@ export class PaymentFormComponent implements OnInit {
   paymentForm: FormGroup = new FormGroup({});
 
   selectedOrderId: any;
-  selectedCustomerId: any;
+  selectedOrderData: any;
 
   ngOnInit(): void {
     this.initPaymentForm();
@@ -32,7 +32,7 @@ export class PaymentFormComponent implements OnInit {
       customerName: new FormControl({value: '', disabled: true}),
       totalAmount: new FormControl({value: 0, disabled: true}),
       amountPaid: new FormControl(''),
-      balance: new FormControl(''),
+      balance: new FormControl({value: '', disabled: true}),
     })
   }
 
@@ -40,7 +40,8 @@ export class PaymentFormComponent implements OnInit {
     console.log(orderData);
 
     this.selectedOrderId = orderData.id;
-    this.selectedCustomerId = orderData.data().customer.id;
+    this.selectedOrderData = orderData.data();
+
     this.paymentForm.controls.orderCode.setValue(orderData.data().order_code);
     this.paymentForm.controls.customerName.setValue(orderData.data().customer.customer_name);
     this.paymentForm.controls.totalAmount.setValue(orderData.data().total_amount);

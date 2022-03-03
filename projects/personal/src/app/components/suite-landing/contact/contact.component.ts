@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 
 import { serverTimestamp } from 'firebase/firestore';
 
+import { environment } from 'projects/personal/src/environments/environment';
 import { SupportContactApiService } from 'projects/application/src/app/services/support-contact-api/support-contact-api.service';
 
 
@@ -15,6 +16,8 @@ export class ContactComponent implements OnInit {
   constructor(private supportContactApi: SupportContactApiService) { }
 
   @Input() suiteName: string = "";
+
+  baseUrl = environment.baseUrl;
 
   name: string = "";
   email: string = "";

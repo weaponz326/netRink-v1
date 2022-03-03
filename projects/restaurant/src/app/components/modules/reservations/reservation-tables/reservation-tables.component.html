@@ -20,7 +20,7 @@
                     <td>{{data?.data().table.table_number}}</td>
                     <td>{{data?.data().table.capacity}}</td>
                     <td class="p-0">
-                        <button [disabled]="isTableDeleting" class="btn btn-sm border w-100" (click)="confirmDelete(data.id)">
+                        <button class="btn btn-sm border w-100" (click)="confirmDelete(data.id)">
                             <i class="bi bi-trash"></i>
                         </button>
                     </td>
@@ -44,7 +44,7 @@
 
 <!-- delete confirmation modal component -->
 
-<app-delete-modal #deleteModalComponentReference (confirmEvent)="deleteReservationTable()"></app-delete-modal>
+<app-delete-modal #deleteModalTwoComponentReference (confirmEventTwo)="deleteReservationTable()"></app-delete-modal>
 
 <!-- select table window component -->
 

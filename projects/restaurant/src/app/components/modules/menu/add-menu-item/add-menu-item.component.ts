@@ -54,6 +54,7 @@ export class AddMenuItemComponent implements OnInit {
     this.menuItemForm.menuItemForm.controls.itemCode.setValue('');
     this.menuItemForm.menuItemForm.controls.itemName.setValue('');
     this.menuItemForm.menuItemForm.controls.price.setValue('');
+    this.menuItemForm.image.imgSrc = "";
   }
 
 }

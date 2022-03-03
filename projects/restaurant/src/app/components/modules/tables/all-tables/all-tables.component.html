@@ -92,7 +92,7 @@
 
 <app-add-table #addTableComponentReference (saveTableEvent)="createTable($event)"></app-add-table>
 
-<app-view-table #viewTableComponentReference (saveTableEvent)="updateTable($event)" (deleteTable)="confirmDelete($event)"></app-view-table>
+<app-view-table #viewTableComponentReference (saveTableEvent)="updateTable($event)" (deleteTableEvent)="confirmDelete($event)"></app-view-table>
 
 <!-- connection error prompt component -->
 

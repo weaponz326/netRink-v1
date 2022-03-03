@@ -6,7 +6,6 @@ export class Delivery {
   delivery_status!: string;
   date_delivered!: string;
   order!: {
-    id: string;
     order_code: string;
     order_date: string;
     customer: {

@@ -345,7 +345,7 @@
       "queryScope": "COLLECTION",
       "fields": [
         {
-          "fieldPath": "order.id",
+          "fieldPath": "order",
           "order": "ASCENDING"
         },
         {

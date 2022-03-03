@@ -45,29 +45,29 @@ export class TablesPrintService {
     this.pdfPrint.openPdf(content);
   }
 
-  // view table
+  // // view table
 
-  async printViewTable(){
-    const tableFormData = await this.tablesApi.getTable();
+  // async printViewTable(){
+  //   const tableFormData = await this.tablesApi.getTable();
 
-    let formData: any = tableFormData.data();
+  //   let formData: any = tableFormData.data();
 
-    let content = [
-      {
-        columns: [
-          [
-            { text: 'Table No.: ' + formData.table_number },
-            { text: 'Table Type: ' + formData.table_type },
-            { text: 'Capcity: ' + formData.capacity },
-            { text: 'Location: ' + formData.location },
-            { text: 'Table Status: ' + formData.table_status },
-          ],
-          []
-        ]
-      },
-    ]
+  //   let content = [
+  //     {
+  //       columns: [
+  //         [
+  //           { text: 'Table No.: ' + formData.table_number },
+  //           { text: 'Table Type: ' + formData.table_type },
+  //           { text: 'Capcity: ' + formData.capacity },
+  //           { text: 'Location: ' + formData.location },
+  //           { text: 'Table Status: ' + formData.table_status },
+  //         ],
+  //         []
+  //       ]
+  //     },
+  //   ]
 
-    this.pdfPrint.openPdf(content);
-  }
+  //   this.pdfPrint.openPdf(content);
+  // }
 
 }

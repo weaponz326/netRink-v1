@@ -21,6 +21,10 @@ export class ImageInputComponent implements OnInit {
   isImageChanged = false;
 
   ngOnInit(): void {
+    this.setPlaceholderImage();
+  }
+
+  setPlaceholderImage(){
     if(this.imgType == 'photo'){
       this.imgSrc = 'assets/images/utilities/photo-avatar.jpg';
     }
