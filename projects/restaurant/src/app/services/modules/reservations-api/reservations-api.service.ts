@@ -30,7 +30,6 @@ export class ReservationsApiService {
   }
 
   deleteReservation(){
-    console.log("here too")
     return this.reservationRef.doc(String(sessionStorage.getItem('restaurant_reservation_id'))).delete();
   }
 

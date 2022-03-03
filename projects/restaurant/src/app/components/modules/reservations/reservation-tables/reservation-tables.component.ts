@@ -80,10 +80,10 @@ export class ReservationTablesComponent implements OnInit {
       )
   }
 
-  deleteReservationTable(){
+  deleteReservationTable(id: any){
     this.isTableDeleting = true;
 
-    this.reservationsApi.deleteReservationTable(this.deleteId)
+    this.reservationsApi.deleteReservationTable(id)
       .then(
         (res: any) => {
           console.log(res);
@@ -100,7 +100,7 @@ export class ReservationTablesComponent implements OnInit {
 
   confirmDelete(id: any){
     this.deleteId = id;
-    this.deleteModal.thisEvent = 2;
+    this.deleteModal.thisEvent = 'modalTwo';
     this.deleteModal.openModal();
   }
 

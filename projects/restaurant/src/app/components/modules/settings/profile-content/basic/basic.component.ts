@@ -19,8 +19,8 @@ export class BasicComponent implements OnInit {
 
   basicForm: FormGroup = new FormGroup({});
 
-  isAccountLoading = false;
-  isBasicSaving = false;
+  isAccountLoading = true;
+  isBasicSaving = true;
 
   ngOnInit(): void {
     this.initBasicForm();

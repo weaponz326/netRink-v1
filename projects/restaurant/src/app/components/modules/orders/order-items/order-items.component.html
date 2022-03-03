@@ -25,7 +25,9 @@
                     <td>{{data?.data().menu_item.data.price * data?.data().quantity}}</td>
                     <td class="p-0">
                         <button class="btn btn-sm border w-50" (click)="openEditItem(data)"><i class="bi bi-pen"></i></button>
-                        <button [disabled]="isItemDeleting" class="btn btn-sm border w-50" (click)="confirmDelete(data.id)"><i class="bi bi-trash"></i></button>
+                        <button [disabled]="isItemDeleting" class="btn btn-sm border w-50" (click)="deleteOrderItem(data.id)">
+                            <i class="bi bi-trash"></i>
+                        </button>
                     </td>
                 </tr>
                 <tr *ngIf="isFetchingGridData" class="text-center">
@@ -58,4 +60,4 @@
 
 <!-- delete confirmation modal component -->
 
-<app-delete-modal #deleteModalComponentReference (confirmEvent)="deleteOrderItem()"></app-delete-modal>
+<!-- <app-delete-modal #deleteModalComponentReference (confirmEvent)="deleteOrderItem()"></app-delete-modal> -->

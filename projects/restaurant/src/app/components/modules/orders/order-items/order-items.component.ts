@@ -58,7 +58,7 @@ export class OrderItemsComponent implements OnInit {
   calculateTotalPrice(){
     this.totalAmount = 0;
     for (let item of this.itemsGridData){
-      this.totalAmount += item.data().menu_item.price * item.data().quantity;
+      this.totalAmount += item.data().menu_item.data.price * item.data().quantity;
     }
 
     this.updateTotalAmount();
@@ -98,8 +98,8 @@ export class OrderItemsComponent implements OnInit {
     this.ordersApi.updateOrderItem(order_item.id, order_item.data)
       .then(
         (res: any) => {
-          console.log(res);        
-          
+          console.log(res);
+
           this.editItem.isItemSaving = false;
           this.editItem.dismissButton.nativeElement.click();
           this.getOrderOrderItem();
@@ -113,10 +113,10 @@ export class OrderItemsComponent implements OnInit {
       )
   }
 
-  deleteOrderItem(){
+  deleteOrderItem(id: any){
     this.isItemDeleting = true;
 
-    this.ordersApi.deleteOrderItem(this.deleteId)
+    this.ordersApi.deleteOrderItem(id)
       .then(
         (res: any) => {
           console.log(res);

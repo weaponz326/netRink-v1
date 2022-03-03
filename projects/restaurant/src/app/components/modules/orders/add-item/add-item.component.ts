@@ -39,7 +39,7 @@ export class AddItemComponent implements OnInit {
       quantity: this.itemForm.itemForm.controls.quantity.value,
       menu_item: {
         id: this.itemForm.selectedMenuItemId,
-        data: this.itemForm.selectedMenuItemData.data(),
+        data: this.itemForm.selectedMenuItemData,
       }
     }
 

@@ -45,8 +45,8 @@ export class ProfileComponent implements OnInit {
   }
 
   getAccount(){
-    this.basic.isAccountLoading = true;
-    this.location.isAccountLoading = true;
+    // this.basic.isAccountLoading = true;
+    // this.location.isAccountLoading = true;
 
     this.accountApi.getAccount()
       .then(
@@ -72,8 +72,8 @@ export class ProfileComponent implements OnInit {
   }
 
   getExtendedProfile(){
-    this.location.isExtendedProfileLoading = true;
-    this.contact.isExtendedProfileLoading = true;
+    // this.location.isExtendedProfileLoading = true;
+    // this.contact.isExtendedProfileLoading = true;
 
     this.settingsApi.getExtendedProfile()
       .then(

@@ -16,7 +16,7 @@ export class DeleteModalComponent implements OnInit {
 
   @ViewChild('buttonElementReference', { read: ElementRef, static: false }) buttonElement!: ElementRef;
 
-  thisEvent = 1;
+  thisEvent = 'modal';
 
   ngOnInit(): void {
   }
@@ -30,15 +30,15 @@ export class DeleteModalComponent implements OnInit {
 
     console.log(this.thisEvent)
 
-    if(this.thisEvent == 1){
+    if(this.thisEvent == 'modal'){
       console.log("from 1");
       this.confirmEvent.emit("OK");
     }
-    if(this.thisEvent == 2){
+    if(this.thisEvent == 'modalTwo'){
       console.log("from 2");
       this.confirmEventTwo.emit("OK");
     }
-    if(this.thisEvent == 3){
+    if(this.thisEvent == 'modalThree'){
       console.log("from 3");
       this.confirmEventThree.emit("OK");
     }

@@ -23,8 +23,8 @@ export class LocationComponent implements OnInit {
 
   locationForm: FormGroup = new FormGroup({});
 
-  isAccountLoading = false;
-  isExtendedProfileLoading = false;
+  isAccountLoading = true;
+  isExtendedProfileLoading = true;
   isAccountSaving = false;
   isExtendedProfileSaving = false;
 

@@ -19,7 +19,7 @@ export class ContactComponent implements OnInit {
 
   contactForm: FormGroup = new FormGroup({});
 
-  isExtendedProfileLoading = false;
+  isExtendedProfileLoading = true;
   isExtendedProfileSaving = false;
 
   ngOnInit(): void {
