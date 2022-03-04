@@ -33,8 +33,8 @@
                     <div class="row mb-2">
                         <div class="col-md-4"><label>No. of Users :</label></div>
                         <div class="col-md-4">
-                            <input [(ngModel)]="numberUsersValue" type="number" [step]="numberUsersStep" [disabled]="isnumberUsersDisabled" class="form-control form-control-sm w-100"
-                            [ngClass]="!isNumberUsersValid ? 'is-invalid' : ''">
+                            <input [(ngModel)]="numberUsersValue" type="number" [step]="numberUsersStep" [disabled]="isnumberUsersDisabled" min="0" [max]="numberUsersStep * 4" (change)="setOptions()"
+                            class="form-control form-control-sm w-100" [ngClass]="!isNumberUsersValid ? 'is-invalid' : ''">
 
                             <p *ngIf="!isNumberUsersValid" class="text-danger m-0">
                                 <small *ngIf="subscriptionTypeValue == 'Small Team'">Should be multiples of 10</small>
@@ -50,16 +50,10 @@
 
             <div *ngIf="!isSubscriptionLoading" class="row mb-3 page-form">
                 <div class="col-md-9">
-                    <button [disabled]="isSubscriptionSaving" (click)="paymentInit()"
-                        angular4-paystack
-                        [class]="'btn btn-secondary float-end'"
-                        (paymentInit)="paymentInit()"
-                        (onClose)="paymentCancel()"
-                        (callback)="paymentDone($event)"
-                    >
+                    <button class="btn btn-secondary float-end" (click)="validateSubcriptionForm()"
+                    [disabled]="isSubscriptionSaving || subscriptionTypeValue == 'Individual' || subscriptionTypeValue == 'Comprehensive'">
                         Subscribe
                     </button>
-                    <!-- TODO: [paystackOptions]="options" -->
                 </div>
             </div>
 
@@ -72,6 +66,16 @@
                     </button>
                 </div>
             </div>
+
+            <button [hidden]="true" #paystackButtonElementReference
+                angular4-paystack
+                [paystackOptions]="paystackOptions"
+                (paymentInit)="paymentInit()"
+                (onClose)="paymentCancel()"
+                (callback)="paymentDone($event)"
+            >
+                Subscribe
+            </button>
 
         </div>
 
@@ -149,7 +153,9 @@
                         </div>
                     </div>
                     <div *ngIf="selectedSubscription=='Comprehensive'">
-                        <button class="btn btn-primary">Contact Us</button>
+                        <a href="mailto:sales@netrink.com">
+                            <button class="btn btn-primary">Contact Us</button>
+                        </a>
                     </div>
 
                     <br />

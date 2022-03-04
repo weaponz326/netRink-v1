@@ -92,7 +92,7 @@ export class NewRinkComponent implements OnInit {
       recipientName: new FormControl({valaue: "", disabled: true}),
       recipientLocation: new FormControl({valaue: "", disabled: true}),
       rinkType: new FormControl('Customer'),
-      rinkSource: new FormControl({valaue: "", disabled: true}),
+      rinkSource: new FormControl({value: "", disabled: true}),
       comment: new FormControl('')
     })
   }

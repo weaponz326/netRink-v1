@@ -17,7 +17,7 @@ export class PaymentsHistoryComponent implements OnInit {
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
 
   navHeading: any[] = [
-    { text: "Billing", url: "/home/settings/billing" },
+    { text: "Subscription", url: "/home/settings/billing" },
     { text: "Billing History", url: "/home/settings/payments-history" },
   ];
 
