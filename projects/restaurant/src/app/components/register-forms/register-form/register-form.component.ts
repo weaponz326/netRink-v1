@@ -180,7 +180,7 @@ export class RegisterFormComponent implements OnInit {
       number_users: 1,
       first_name: this.thisUser.first_name,
       last_name: this.thisUser.last_name,
-      email: this.thisUser.email,
+      email: "restaurant." + localStorage.getItem('restaurant_id') + "netrink.com",
     }
 
     this.settingsApi.createSubscription(data)

@@ -8,12 +8,13 @@
             <div class="row billing-form">
                 <div class="col-md-9">
 
-                    <h3 class="mb-3">Subscription Details</h3>
+                    <h3 class="mb-3">Subscription Plan</h3>
 
                     <div class="row mb-2">
                         <div class="col-md-4"><label>Subscription Type :</label></div>
                         <div class="col-md-8">
-                            <select [(ngModel)]="subscriptionTypeValue" class="form-control form-control-sm w-100" (change)="setSubscription($any($event.target).value)">
+                            <select [(ngModel)]="subscriptionTypeValue" class="form-control form-control-sm w-100" (change)="setSubscription($any($event.target).value)"
+                            [ngClass]="!isSubscriptionValid ? 'is-invalid' : ''">
                                 <option *ngFor="let subscription of subscriptionSource">{{subscription}}</option>
                             </select>
                         </div>
@@ -22,7 +23,8 @@
                     <div class="row mb-2">
                         <div class="col-md-4"><label>Billing Frequency :</label></div>
                         <div class="col-md-8">
-                            <select [(ngModel)]="billingFrequencyValue" [disabled]="isFrequencyDisabled" class="form-control form-control-sm w-100" (change)="setFrequency($event)">
+                            <select [(ngModel)]="billingFrequencyValue" [disabled]="isFrequencyDisabled" class="form-control form-control-sm w-100" (change)="setFrequency($event)"
+                            [ngClass]="!isFrequencyValid ? 'is-invalid' : ''">
                                 <option *ngFor="let frequency of frequencySource">{{frequency}}</option>
                             </select>
                         </div>
@@ -31,30 +33,13 @@
                     <div class="row mb-2">
                         <div class="col-md-4"><label>No. of Users :</label></div>
                         <div class="col-md-4">
-                            <input [(ngModel)]="numberUsersValue" type="number" [step]="numberUsersStep" [disabled]="isnumberUsersDisabled" class="form-control form-control-sm w-100">
-                        </div>
-                    </div>
+                            <input [(ngModel)]="numberUsersValue" type="number" [step]="numberUsersStep" [disabled]="isnumberUsersDisabled" class="form-control form-control-sm w-100"
+                            [ngClass]="!isNumberUsersValid ? 'is-invalid' : ''">
 
-                    <hr />
-
-                    <div class="row mb-2">
-                        <div class="col-md-4"><label>First Name :</label></div>
-                        <div class="col-md-8">
-                            <input [(ngModel)]="firstNameValue" class="form-control form-control-sm w-100">
-                        </div>
-                    </div>
-
-                    <div class="row mb-2">
-                        <div class="col-md-4"><label>Last Name :</label></div>
-                        <div class="col-md-8">
-                            <input [(ngModel)]="firstNameValue" class="form-control form-control-sm w-100">
-                        </div>
-                    </div>
-
-                    <div class="row mb-2">
-                        <div class="col-md-4"><label>Email :</label></div>
-                        <div class="col-md-8">
-                            <input [(ngModel)]="firstNameValue" class="form-control form-control-sm w-100">
+                            <p *ngIf="!isNumberUsersValid" class="text-danger m-0">
+                                <small *ngIf="subscriptionTypeValue == 'Small Team'">Should be multiples of 10</small>
+                                <small *ngIf="subscriptionTypeValue == 'Large Team'">Should be multiples of 50</small>
+                            </p>
                         </div>
                     </div>
 
@@ -65,12 +50,22 @@
 
             <div *ngIf="!isSubscriptionLoading" class="row mb-3 page-form">
                 <div class="col-md-9">
-                    <button class="btn btn-secondary btn-sm float-end page-form-btn" (click)="updateSubscription()">Save</button>
+                    <button [disabled]="isSubscriptionSaving" (click)="paymentInit()"
+                        angular4-paystack
+                        [class]="'btn btn-secondary float-end'"
+                        (paymentInit)="paymentInit()"
+                        (onClose)="paymentCancel()"
+                        (callback)="paymentDone($event)"
+                    >
+                        Subscribe
+                    </button>
+                    <!-- TODO: [paystackOptions]="options" -->
                 </div>
             </div>
+
             <div *ngIf="isSubscriptionLoading" class="row mb-3 page-form">
                 <div class="col-md-9">
-                    <button type="button" class="btn btn-sm float-end ms-1 btn-light page-form-btn">
+                    <button type="button" class="btn float-end ms-1 btn-light">
                         <div class="spinner-grow spinner-grow-sm" role="status">
                             <span class="visually-hidden">Loading...</span>
                         </div>
@@ -160,36 +155,34 @@
                     <br />
 
                     <div *ngIf="selectedSubscription=='Small Team'">
-                        <div *ngIf="selectedFrequency=='Monthly'">
-                            <p class="mb-2">Total Bill :</p>
-                            <p class="h3 m-0">
-                                ${{150 * (numberUsersValue / 10)}} / month
-                            </p>
-                        </div>
-                        <div *ngIf="selectedFrequency=='Yearly'">
-                            <p class="mb-2">Total Bill :</p>
-                            <p class="h3 m-0">
-                                ${{1500 * (numberUsersValue / 10)}} / year
-                            </p>
-                        </div>
+                        <p class="m-0"><i class="bi bi-cash m-1"></i>Total Bill :</p>
+                        <p *ngIf="selectedFrequency=='Monthly'" class="h3 mt-0">
+                            ${{150 * (numberUsersValue / 10)}} / month
+                        </p>
+                        <p *ngIf="selectedFrequency=='Yearly'" class="h3 mt-0">
+                            ${{1500 * (numberUsersValue / 10)}} / year
+                        </p>
                     </div>
                     <div *ngIf="selectedSubscription=='Large Team'">
-                        <div *ngIf="selectedFrequency=='Monthly'">
-                            <p class="mb-2">Total Bill :</p>
-                            <p class="h3 m-0">
-                                ${{500 * (numberUsersValue / 50)}} / month
-                            </p>
-                        </div>
-                        <div *ngIf="selectedFrequency=='Yearly'">
-                            <p class="mb-2">Total Bill :</p>
-                            <p class="h3 m-0">
-                                ${{5000 * (numberUsersValue / 50)}} / year
-                            </p>
-                        </div>
+                        <p class="m-0"><i class="bi bi-cash m-1"></i>Total Bill :</p>
+                        <p *ngIf="selectedFrequency=='Monthly'" class="h3 mt-0">
+                            ${{500 * (numberUsersValue / 50)}} / month
+                        </p>
+                        <p *ngIf="selectedFrequency=='Yearly'" class="h3 mt-0">
+                            ${{5000 * (numberUsersValue / 50)}} / year
+                        </p>
+                    </div>
+
+                    <div>
+                        <p class="m-0"><i class="bi bi-person m-1"></i>Total Users :</p>
+                        <p class="h4 mt-0">
+                            {{numberUsersValue}}
+                        </p>
                     </div>
 
                 </div>
             </div>
+
         </div>
     </div>
 

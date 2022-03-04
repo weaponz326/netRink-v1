@@ -11,7 +11,7 @@ export class SettingsPageComponent implements OnInit {
 
   navLinks: any[] = [
     { text: "Profile", url: "/home/settings/profile", icon: "bi bi-building" },
-    { text: "Billing", url: "/home/settings/billing", icon: "bi bi-cash" },
+    { text: "Subscription", url: "/home/settings/billing", icon: "bi bi-cash" },
   ]
 
   ngOnInit(): void {

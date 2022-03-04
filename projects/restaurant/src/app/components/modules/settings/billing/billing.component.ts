@@ -1,7 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
+import { PaystackOptions } from 'angular4-paystack';
+
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 
+import { environment } from 'projects/restaurant/src/environments/environment';
 import { SettingsApiService } from 'projects/restaurant/src/app/services/modules/settings-api/settings-api.service';
 
 import { Subscription } from 'projects/restaurant/src/app/models/modules/settings/settings.model';
@@ -19,10 +22,11 @@ export class BillingComponent implements OnInit {
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
 
   navHeading: any[] = [
-    { text: "Billing", url: "/home/settings/billing" },
+    { text: "Subscription", url: "/home/settings/billing" },
   ];
 
   isSubscriptionLoading = false;
+  isSubscriptionSaving = false;
 
   subscriptionData: any;
 
@@ -30,25 +34,24 @@ export class BillingComponent implements OnInit {
   billingFrequencyValue = "";
   numberUsersValue = 0;
 
-  firstNameValue = "";
-  lastNameValue = "";
-  emailValue = "";
-
   selectedSubscription = '';
   selectedFrequency = '';
   usersTextBoxIncrement = 1;
 
-  subscriptionSource = ["Individual", "Small Team", "Large Team", "Comprehensive", ""];
+  subscriptionSource = ["Individual", "Small Team", "Large Team", "Comprehensive"];
   frequencySource = ["Monthly", "Yearly", ""];
-
   numberUsersStep = 1;
+
   isFrequencyDisabled = false;
   isnumberUsersDisabled = false;
 
-  ngOnInit(): void {
-  }
+  isSubscriptionValid = true;
+  isFrequencyValid = true;
+  isNumberUsersValid = true;
 
-  ngAfterViewInit(): void {
+  options: PaystackOptions = { email: "", amount: 0, ref: ""};
+
+  ngOnInit(): void {
     this.getSubscription();
   }
 
@@ -128,6 +131,58 @@ export class BillingComponent implements OnInit {
   setFrequency(event: any){
     this.selectedFrequency = event.target.value;
     console.log(this.selectedFrequency);
+  }
+
+  setOptions(){
+    var plan;
+    // TODO: set plan
+
+    this.options = {
+      email: `restaurant.${localStorage.getItem('restaurant_id')}@netrink.com`,
+      amount: 200,
+      plan: plan,
+      ref: `${Math.ceil(Math.random() * 10e10)}`
+    }
+  }
+
+  paymentInit() {
+    console.log('Payment initialized');
+
+    if ((this.subscriptionTypeValue == "Small Team" || this.subscriptionTypeValue == "Large Team") && this.billingFrequencyValue == ""){
+      this.isFrequencyValid = false;
+      return false;
+    }
+    else{
+      this.isFrequencyValid = true;
+    }
+
+    if (this.subscriptionTypeValue == "Small Team" && (this.numberUsersValue % 10) != 0){
+      this.isNumberUsersValid = false;
+      return false;
+    }
+    else{
+      this.isNumberUsersValid = true;
+    }
+
+    if (this.subscriptionTypeValue == "Large Team" && (this.numberUsersValue % 50) != 0){
+      this.isNumberUsersValid = false;
+      return false;
+    }
+    else{
+      this.isNumberUsersValid = true;
+    }
+
+    this.setOptions();
+
+    return true;
+  }
+
+  paymentDone(ref: any) {
+    console.log('Payment done');
+  }
+
+  paymentCancel() {
+    console.log('payment failed');
   }
 
 }
