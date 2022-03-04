@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 
@@ -6,6 +6,7 @@ import { ConnectionToastComponent } from 'projects/personal/src/app/components/m
 import { DeleteModalComponent } from 'projects/personal/src/app/components/module-utilities/delete-modal/delete-modal.component'
 import { AccessFormComponent } from '../access-form/access-form.component';
 
+import { AccountApiService } from 'projects/restaurant/src/app/services/account-api/account-api.service';
 import { AdminApiService } from 'projects/restaurant/src/app/services/modules/admin-api/admin-api.service';
 
 import { AccountUser } from 'projects/restaurant/src/app/models/modules/admin/admin.model';
@@ -20,8 +21,11 @@ export class ViewUserComponent implements OnInit {
 
   constructor(
     private router: Router,
+    private accountApi: AccountApiService,
     private adminApi: AdminApiService
   ) { }
+
+  @ViewChild('buttonElementReference', { read: ElementRef, static: false }) buttonElement!: ElementRef;
 
   @ViewChild('accessFormComponentReference', { read: AccessFormComponent, static: false }) accessFormComponent!: AccessFormComponent;
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
@@ -34,6 +38,9 @@ export class ViewUserComponent implements OnInit {
 
   userForm: FormGroup = new FormGroup({});
   userFormData: any;
+
+  AccountUserPersonalId: any;
+  accountData: any;
 
   isUserLoading: boolean = false;
   isUserSaving: boolean = false;
@@ -55,6 +62,21 @@ export class ViewUserComponent implements OnInit {
     })
   }
 
+  getAccount(){
+    this.accountApi.getAccount()
+      .then(
+        (res: any) => {
+          console.log(res);
+          this.accountData = res;
+        },
+        (err: any) => {
+          console.log(err);
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+
   getAccountUser() {
     this.isUserLoading = true;
 
@@ -64,6 +86,7 @@ export class ViewUserComponent implements OnInit {
           console.log(res);
           this.userFormData = res;
 
+          this.AccountUserPersonalId = res.data().user.id;
           this.userForm.controls.personalName.setValue(res.data().user.data.first_name + " " + res.data().user.data.last_name);
           this.userForm.controls.accessLevel.setValue(res.data().access_level);
 
@@ -86,18 +109,23 @@ export class ViewUserComponent implements OnInit {
       access_level: this.userForm.controls.accessLevel.value,
     }
 
-    this.adminApi.updateAccountUser(data)
-      .then(
-        (res: any) => {
-          console.log(res);
-          this.isUserSaving = false;
-        },
-        (err: any) => {
-          console.log(err);
-          this.isUserSaving = false;
-          this.connectionToast.openToast();
-        }
-      )
+    if (this.accountData.data().created_by != this.AccountUserPersonalId){
+      this.adminApi.updateAccountUser(data)
+        .then(
+          (res: any) => {
+            console.log(res);
+            this.isUserSaving = false;
+          },
+          (err: any) => {
+            console.log(err);
+            this.isUserSaving = false;
+            this.connectionToast.openToast();
+          }
+        )
+    }
+    else{
+      this.buttonElement.nativeElement.click();
+    }
 
     this.accessFormComponent.updateUserAccess();
   }
@@ -114,20 +142,25 @@ export class ViewUserComponent implements OnInit {
   deleteAdminUser(){
     this.isUserDeleting = true;
 
-    this.adminApi.deleteAccountUser()
-      .then(
-        (res: any) => {
-          console.log(res);
-          this.isUserDeleting = false;
+    if (this.accountData.data().created_by != this.AccountUserPersonalId){
+      this.adminApi.deleteAccountUser()
+        .then(
+          (res: any) => {
+            console.log(res);
+            this.isUserDeleting = false;
 
-          this.router.navigateByUrl('/home/admin/all-users');
-        },
-        (err: any) => {
-          console.log(err);
-          this.isUserDeleting = false;
-          this.connectionToast.openToast();
-        }
-      )
+            this.router.navigateByUrl('/home/admin/all-users');
+          },
+          (err: any) => {
+            console.log(err);
+            this.isUserDeleting = false;
+            this.connectionToast.openToast();
+          }
+        )
+    }
+    else{
+      this.buttonElement.nativeElement.click();
+    }
   }
 
 }
