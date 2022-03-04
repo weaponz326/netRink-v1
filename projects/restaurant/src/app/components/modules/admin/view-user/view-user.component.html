@@ -65,6 +65,28 @@
 
 </div>
 
+<!-- subscription check modal -->
+
+<button [hidden]="true" #buttonElementReference data-bs-toggle="modal" data-bs-target="#creatorDeleteErrorModal">
+    Launch demo modal
+</button>
+
+<div class="modal fade form-modal" id="creatorDeleteErrorModal" tabindex="-1" aria-labelledby="creatorDeleteErrorModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content text-center">
+
+            <div class="modal-header bg-light">
+                <button #dismissButtonElementReference type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <p class="my-4">You cannot delete or change the access level of the creator of the account</p>
+            </div>
+
+        </div>
+    </div>
+</div>
+
 <!-- connection error prompt component -->
 
 <app-connection-toast #connectionToastComponentReference></app-connection-toast>

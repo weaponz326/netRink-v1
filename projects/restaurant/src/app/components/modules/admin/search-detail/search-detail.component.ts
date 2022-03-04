@@ -1,8 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 
-import { ButtonComponent } from 'smart-webcomponents-angular/button';
-
-import { environment } from 'projects/restaurant/src/environments/environment';
 
 
 @Component({
@@ -14,12 +11,10 @@ export class SearchDetailComponent implements OnInit {
 
   constructor() { }
 
-  @ViewChild('buttonReference', { read: ButtonComponent, static: false }) button!: ButtonComponent;
-
   @Input() searchDetail: any;
   @Output() sendInvitationEvent = new EventEmitter<string>();
 
-  personalUrl = environment.personalUrl;
+  @ViewChild('buttonElementReference', { read: ElementRef, static: false }) buttonElement!: ElementRef;
 
   isSending = false;
 
@@ -28,6 +23,10 @@ export class SearchDetailComponent implements OnInit {
 
   sendInvitation(){
     this.sendInvitationEvent.emit();
+  }
+
+  openModal(){
+    this.buttonElement.nativeElement.click();
   }
 
 }

@@ -41,7 +41,7 @@
 
             <div *ngIf="isSearchDetailReady">
                 <app-search-detail #searchDetailComponentReference
-                    (sendInvitationEvent)="createAccountInvitation()"
+                    (sendInvitationEvent)="checkSubscriptionStatus()"
                     [searchDetail]="searchDetailData"
                 ></app-search-detail>
             </div>

@@ -26,3 +26,27 @@
         <button [disabled]="isSending" class="btn btn-secondary page-add-btn" (click)="sendInvitation()">Send Invitation</button>
     </div>
 </div>
+
+<!-- subscription check modal -->
+
+<button [hidden]="true" #buttonElementReference data-bs-toggle="modal" data-bs-target="#subscriptionCheckModal">
+    Launch demo modal
+</button>
+
+<div class="modal fade form-modal" id="subscriptionCheckModal" tabindex="-1" aria-labelledby="subscriptionCheckModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content text-center">
+
+            <div class="modal-header bg-light">
+                <button #dismissButtonElementReference type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <p class="my-4">You have reached the maximum allowed users for your subscription plan.</p>
+                <button routerLink="/home/settings/billing" class="btn btn-sm btn-secondary mb-3" data-bs-dismiss="modal">Upgrade Plan</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+

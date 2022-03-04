@@ -178,9 +178,8 @@ export class RegisterFormComponent implements OnInit {
       subscription_type: "Individual",
       billing_frequency: "",
       number_users: 1,
-      first_name: this.thisUser.first_name,
-      last_name: this.thisUser.last_name,
       email: "restaurant." + localStorage.getItem('restaurant_id') + "netrink.com",
+      status: "",
     }
 
     this.settingsApi.createSubscription(data)

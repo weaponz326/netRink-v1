@@ -9,7 +9,8 @@ import { SearchDetailComponent } from '../search-detail/search-detail.component'
 
 import { AccountApiService } from 'projects/restaurant/src/app/services/account-api/account-api.service';
 import { AdminApiService } from 'projects/restaurant/src/app/services/modules/admin-api/admin-api.service';
-import { SettingsApiService } from 'projects/personal/src/app/services/modules/settings-api/settings-api.service';
+import { SettingsApiService as RestaurantSettingsApiService } from 'projects/restaurant/src/app/services/modules/settings-api/settings-api.service';
+import { SettingsApiService as PersonalSettingsApiService } from 'projects/personal/src/app/services/modules/settings-api/settings-api.service';
 
 import { Invitation as RestaurantInvitation } from 'projects/restaurant/src/app/models/modules/admin/admin.model';
 import { Invitation as PersonalInvitation } from 'projects/personal/src/app/models/modules/settings/settings.model';
@@ -26,7 +27,8 @@ export class UserSearchComponent implements OnInit {
     private router: Router,
     private accountApi: AccountApiService,
     private adminApi: AdminApiService,
-    private settingsApi: SettingsApiService
+    private restaurantSettingsApi: RestaurantSettingsApiService,
+    private personalSettingsApi: PersonalSettingsApiService
   ) { }
 
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
@@ -46,6 +48,11 @@ export class UserSearchComponent implements OnInit {
   searchResultsData: any;
   searchDetailData: any;
   searchQuery: any;
+
+  sortParams = {
+    field: "access_level",
+    direction: "asc"
+  }
 
   ngOnInit(): void {
     this.getAccount();
@@ -118,6 +125,27 @@ export class UserSearchComponent implements OnInit {
       )
   }
 
+  async checkSubscriptionStatus(){
+    this.searchDetail.isSending = true;
+
+    const accountUsersPromise = this.adminApi.getAccountAccountUser(this.sortParams);
+    const subscriptionPromise = this.restaurantSettingsApi.getSubscription();
+    const [accountUsersData, subscriptionData] = await Promise.all([accountUsersPromise, subscriptionPromise]);
+
+    let accountNumberUsers = accountUsersData.docs.length;
+    let subscriptionNumberUsers: any = subscriptionData?.data();
+
+    if (accountNumberUsers >= subscriptionNumberUsers.number_users){
+      console.log('maximum users reached');
+
+      this.searchDetail.isSending = false;
+      this.searchDetail.openModal();
+    }
+    else {
+      this.createAccountInvitation();
+    }
+  }
+
   createAccountInvitation() {
     let data: RestaurantInvitation = {
       created_at: serverTimestamp(),
@@ -166,7 +194,7 @@ export class UserSearchComponent implements OnInit {
 
     console.log(data);
 
-    this.settingsApi.createInvitation(data)
+    this.personalSettingsApi.createInvitation(data)
       .then(
         (res: any) => {
           console.log(res);
