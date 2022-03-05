@@ -9,11 +9,12 @@
     (contactEvent)="gotoContact()"
 ></app-suite-scrollnav>
 
-<app-user-top
+<app-user-top #userTopComponentReference
     [suiteName]="'School'"
     [accountsData]="accountsData"
     [isAccountLoading]="isAccountLoading"
-    (selectAccount)="activateAccount($event)"
+    [isAccountChecking]="isAccountChecking"
+    (selectAccount)="checkAccountActive($event)"
 ></app-user-top>
 
 <app-about id="aboutComponentReference"
