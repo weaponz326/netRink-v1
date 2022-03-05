@@ -10,14 +10,14 @@ export const environment = {
   schoolUrl: "https://netrink-test-school-v1.web.app/",
 
   firebase: {
-    apiKey: "xxxxx",
-    authDomain: "xxxxx",
-    databaseURL: "xxxxx",
-    projectId: "xxxxx",
-    storageBucket: "xxxxx",
-    messagingSenderId: "xxxxx",
-    appId: "xxxxx",
-    measurementId: "xxxxx"
+    apiKey: "AIzaSyC-pUZi6j5AecjEKiBaQL1nTZrKWB_J9w0",
+    authDomain: "netrink-test-v1.firebaseapp.com",
+    databaseURL: "https://netrink-test-v1-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "netrink-test-v1",
+    storageBucket: "netrink-test-v1.appspot.com",
+    messagingSenderId: "140608103001",
+    appId: "1:140608103001:web:1f2bee128728d85578c748",
+    measurementId: "G-BR5CK23ZQC"
   },
 
   paystackPublicKey: "pk_test_275f8f544fab9c9c78a1e8789d8c883f0102f708",
