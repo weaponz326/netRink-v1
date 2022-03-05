@@ -5,9 +5,22 @@
 export const environment = {
   production: false,
 
-  baseUrl: "http://localhost:8000/",                // url for application backend
-  personalUrl: "http://localhost:8001/",            // url for personal backend
-  schoolUrl: "http://localhost:8003/",              // url for school backend
+  baseUrl: "https://netrink-test-v1.web.app/",
+  personalUrl: "https://netrink-test-personal-v1.web.app/",
+  schoolUrl: "https://netrink-test-school-v1.web.app/",
+
+  firebase: {
+    apiKey: "xxxxx",
+    authDomain: "xxxxx",
+    databaseURL: "xxxxx",
+    projectId: "xxxxx",
+    storageBucket: "xxxxx",
+    messagingSenderId: "xxxxx",
+    appId: "xxxxx",
+    measurementId: "xxxxx"
+  },
+
+  paystackPublicKey: "pk_test_275f8f544fab9c9c78a1e8789d8c883f0102f708",
 };
 
 /*

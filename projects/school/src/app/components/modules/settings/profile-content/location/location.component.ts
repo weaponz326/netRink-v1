@@ -1,7 +1,10 @@
 import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 
-import { InputComponent } from 'smart-webcomponents-angular/input';
-import { ButtonComponent } from 'smart-webcomponents-angular/button';
+import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
+
+import { AccountApiService } from 'projects/school/src/app/services/account-api/account-api.service';
+import { SettingsApiService } from 'projects/school/src/app/services/modules/settings-api/settings-api.service';
 
 
 @Component({
@@ -11,26 +14,87 @@ import { ButtonComponent } from 'smart-webcomponents-angular/button';
 })
 export class LocationComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private accountApi: AccountApiService,
+    private settingsApi: SettingsApiService,
+  ) { }
 
-  @ViewChild('countrySelectReference', { read: InputComponent, static: false }) countrySelectInput!: InputComponent;
-  @ViewChild('stateSelectReference', { read: InputComponent, static: false }) stateSelectInput!: InputComponent;
-  @ViewChild('citySelectReference', { read: InputComponent, static: false }) citySelectInput!: InputComponent;
-  @ViewChild('saveButtonReference', { read: ButtonComponent, static: false }) saveButton!: ButtonComponent;
+  @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
 
-  @Output() locationEvent = new EventEmitter<any>();
+  locationForm: FormGroup = new FormGroup({});
+
+  isAccountLoading = true;
+  isExtendedProfileLoading = true;
+  isAccountSaving = false;
+  isExtendedProfileSaving = false;
 
   ngOnInit(): void {
+    this.initLocationForm();
   }
 
-  emitLocation(){
+  initLocationForm(){
+    this.locationForm = new FormGroup({
+      location: new FormControl(),
+      country: new FormControl(),
+      state: new FormControl(),
+      city: new FormControl(),
+    })
+  }
+
+  updateLocation(){
+    this.updateAccount();
+    this.updateExtendedProfile();
+  }
+
+  updateAccount(){
     let data = {
-      country: this.countrySelectInput.value,
-      state: this.stateSelectInput.value,
-      city: this.citySelectInput.value,
+      location: this.locationForm.controls.location.value,
     }
 
-  	this.locationEvent.emit(data);
+    this.isAccountLoading = true;
+
+    this.accountApi.updateAccount(data)
+      .then(
+        (res: any) => {
+          console.log(res);
+          this.isAccountLoading = false;
+        },
+        (err: any) => {
+          console.log(err);
+          this.isAccountLoading = false;
+
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  // extended profile
+  updateExtendedProfile(){
+    let data = {
+      country: this.locationForm.controls.country.value,
+      state: this.locationForm.controls.state.value,
+      city: this.locationForm.controls.city.value,
+    }
+
+    this.isExtendedProfileSaving = true;
+
+    this.settingsApi.updateExtendedProfile(data)
+      .then(
+        res => {
+          console.log(res);
+          this.isExtendedProfileSaving = false;
+        },
+        err => {
+          console.log(err);
+          this.isExtendedProfileSaving = false;
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  onAddressChange(address: any) {
+    this.locationForm.controls.location.setValue(address.formatted_address);
+    console.log(address);
   }
 
 }

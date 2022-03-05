@@ -1,10 +1,11 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { GridComponent, GridColumn, DataAdapter, Smart } from 'smart-webcomponents-angular/grid';
+import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 
 import { AdminApiService } from 'projects/school/src/app/services/modules/admin-api/admin-api.service';
-import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
+
+import { AccountUser } from 'projects/school/src/app/models/modules/admin/admin.model';
 
 
 @Component({
@@ -19,66 +20,56 @@ export class AllUsersComponent implements OnInit {
     private adminApi: AdminApiService,
   ) { }
 
-  @ViewChild('gridReference', { read: GridComponent, static: false }) grid!: GridComponent;
-
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
 
   navHeading: any[] = [
     { text: "All Users", url: "/home/admin/all-users" },
   ];
 
+  usersGridData: any[] = [];
+
+  isFetchingGridData = false;
+
+  sortParams = {
+    field: "access_level",
+    direction: "asc"
+  }
+
   ngOnInit(): void {
+    this.getAccountAccountUser();
   }
 
-  ngAfterViewInit(): void {
-    this.setGridConfig();
-  }
+  getAccountAccountUser() {
+    this.isFetchingGridData = true;
 
-  getAllUsers() {
-    this.adminApi.getAllUsers()
-      .subscribe(
-        res => {
+    this.adminApi.getAccountAccountUser(this.sortParams)
+      .then(
+        (res: any) => {
           console.log(res);
-          return res;
+
+          this.usersGridData = res.docs;
+          this.isFetchingGridData = false;
         },
-        err => {
+        (err: any) => {
           console.log(err);
+          this.isFetchingGridData = false;
           this.connectionToast.openToast();
         }
       )
   }
 
-  viewUser(event: any){
-    console.log(event.args.row.bounddata);
-    sessionStorage.setItem('school_admin_user_id', event.args.row.bounddata.id);
+  sortTable(field: any, direction: any){
+    this.sortParams.field = field;
+    this.sortParams.direction = direction;
 
-    this.router.navigateByUrl('/home/admin/view-user');
+    this.getAccountAccountUser();
   }
 
-  // ------------------------------------------------------------------------------------------------
-  // grid config
+  viewUser(personalId: any){
+    console.log(personalId);
+    sessionStorage.setItem('school_account_user_id', personalId);
 
-  setGridConfig(){
-    this.grid.dataSource = new Smart.DataAdapter(
-      <DataAdapter>{
-        id: 'id',
-        dataSource: this.getAllUsers(),
-        dataFields: [
-          'id: string',
-          'personal_name: string',
-          'user_level: string'
-        ]
-      }
-    );
-
-    this.grid.columns = <GridColumn[]>[
-      { label: "User's Name", dataField: "personal_name", width: "60%" },
-      { label: "User Level", dataField: "user_level", width: "40%" },
-    ];
-
-    this.grid.paging.enabled = true;
-    this.grid.sorting.enabled = true;
-    this.grid.filtering.enabled = true;
+    this.router.navigateByUrl('/home/admin/view-user');
   }
 
 }

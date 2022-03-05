@@ -1,8 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { PortalApiService } from 'projects/school/src/app/services/modules/portal-api/portal-api.service';
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
+
+import { PortalApiService } from 'projects/school/src/app/services/modules/portal-api/portal-api.service';
+
+import { Account } from 'projects/school/src/app/models/account/account.model';
+import { Rink } from 'projects/school/src/app/models/modules/portal/portal.model';
 
 
 @Component({
@@ -25,31 +29,31 @@ export class ViewRinkComponent implements OnInit {
   ];
 
   schoolId = localStorage.getItem('school_id');
-  rink: any;
+
+  senderData: any;
+  recipientData: any;
+  rinkData: any;
+
+  isRinkLoading = false;
 
   ngOnInit(): void {
     this.getRink();
   }
 
   getRink(){
-    this.portalApi.getSingleRink(sessionStorage.getItem('school_rink_id'))
-      .subscribe(
-        res => {
-          console.log(res);
-          this.rink = res;
-          sessionStorage.setItem('school_rink_source_id', res.rink_source)
+    this.isRinkLoading = true;
 
-          // // route to show rink detail
-          // if (res.rink_type == "Task"){
-          //   this.router.navigateByUrl('suite/suite/view-rink/task');
-          // }else if(res.rink_type == "Appointment"){
-          //   this.router.navigateByUrl('suite/suite/view-rink/appointment');
-          // }else if(res.rink_type == "Note"){
-          //   this.router.navigateByUrl('suite/suite/view-rink/note');
-          // }
+    this.portalApi.getRink()
+      .then(
+        (res: any) => {
+          console.log(res);
+          this.rinkData = res;
+          sessionStorage.setItem('school_rink_source_id', res.data().rink_source)
+          this.isRinkLoading = false;
         },
-        err => {
+        (err: any) => {
           console.log(err);
+          this.isRinkLoading = false;
           this.connectionToast.openToast();
         }
       )

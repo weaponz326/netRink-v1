@@ -1,12 +1,16 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { FormControl, FormGroup } from '@angular/forms';
 
-import { ButtonComponent } from 'smart-webcomponents-angular/button';
-import { InputComponent } from 'smart-webcomponents-angular/input';
-import { MultilineTextBoxComponent } from 'smart-webcomponents-angular/multilinetextbox';
+import { serverTimestamp } from 'firebase/firestore';
 
-import { PortalApiService } from 'projects/school/src/app/services/modules/portal-api/portal-api.service';
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
+
+import { AccountApiService } from 'projects/school/src/app/services/account-api/account-api.service';
+import { PortalApiService } from 'projects/school/src/app/services/modules/portal-api/portal-api.service';
+
+import { Account } from 'projects/school/src/app/models/account/account.model';
+import { Rink } from 'projects/school/src/app/models/modules/portal/portal.model';
 
 
 @Component({
@@ -18,16 +22,9 @@ export class NewRinkComponent implements OnInit {
 
   constructor(
     private router: Router,
+    private accountApi: AccountApiService,
     private portalApi: PortalApiService,
   ) { }
-
-  @ViewChild('nameInputReference', { read: InputComponent, static: false }) nameInput!: InputComponent;
-  @ViewChild('locationInputReference', { read: InputComponent, static: false }) locationInput!: InputComponent;
-  @ViewChild('typeDropDownListReference', { read: InputComponent, static: false }) typeDropDownList!: InputComponent;
-  @ViewChild('sourceInputReference', { read: InputComponent, static: false }) sourceInput!: InputComponent;
-  @ViewChild('commentTextAreaReference', { read: MultilineTextBoxComponent, static: false }) commentTextArea!: MultilineTextBoxComponent;
-  @ViewChild('sendButtonReference', { read: ButtonComponent, static: false }) sendButton!: ButtonComponent;
-  @ViewChild('cancelButtonReference', { read: ButtonComponent, static: false }) cancelButton!: ButtonComponent;
 
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
 
@@ -36,59 +33,118 @@ export class NewRinkComponent implements OnInit {
     { text: "Send Rink", url: "/home/portal/search/new-rink" },
   ];
 
-  typeSource: any[] = [];
+  rinkForm: FormGroup = new FormGroup({});
+  senderData: any;
+  recipientData: any;
+
+  selectedSourceId: any;
+  typeSource: any[] = [
+  ];
+
+  isRinkSending = false;
 
   ngOnInit(): void {
+    this.initRinkForm();
   }
 
   ngAfterViewInit(): void {
-    this.getDetail();
+    this.getSenderDetail()
+    this.getRecipientDetail();
   }
 
-  getDetail(){
-    this.portalApi.getDetail(String(sessionStorage.getItem('schoolSearchUser')))
-      .subscribe(
-        res => {
+  initRinkForm(){
+    this.rinkForm = new FormGroup({
+      recipientName: new FormControl({valaue: "", disabled: true}),
+      recipientLocation: new FormControl({valaue: "", disabled: true}),
+      rinkType: new FormControl('Customer'),
+      rinkSource: new FormControl({value: "", disabled: true}),
+      comment: new FormControl('')
+    })
+  }
+
+  getSenderDetail(){
+    this.accountApi.getAccount()
+      .then(
+        (res: any) => {
           console.log(res);
-          this.nameInput.value = res.first_name + " " + res.last_name;
-          this.locationInput.value = res.location;
+          this.senderData = res.data();
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }
       )
   }
 
-  sendRink(){
-    let rinkData = {
-      sender: localStorage.getItem('school_id'),
-      recipient: sessionStorage.getItem('school_rink_recipient'),
-      rink_type: this.typeDropDownList.value,
-      // rink_source: this.selectedSourceId,
-      comment: this.commentTextArea.value
+  getRecipientDetail(){
+    this.portalApi.getSearchDetail(String(sessionStorage.getItem('schoolSearchAccount')))
+      .then(
+        (res: any) => {
+          console.log(res);
+          this.recipientData = res.data();
+
+          this.rinkForm.controls.recipientName.setValue(this.recipientData.name);
+          this.rinkForm.controls.recipientLocation.setValue(this.recipientData.location);
+        },
+        (err: any) => {
+          console.log(err);
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  createRink(){
+    let data: Rink = {
+      created_at: serverTimestamp(),
+      rink_type: this.rinkForm.controls.rinkType.value,
+      rink_source: this.selectedSourceId,
+      comment: this.rinkForm.controls.comment.value,
+      sender: {
+        id: localStorage.getItem('school_id') as string,
+        data: this.senderData,
+      },
+      recipient: {
+        id: sessionStorage.getItem('schoolSearchAccount') as string,
+        data: this.recipientData
+      }
     }
 
-    console.log(rinkData);
-    this.sendButton.disabled = true;
+    console.log(data);
+    this.isRinkSending = true;
 
-    this.portalApi.postRink(rinkData)
-      .subscribe(
-        res => {
+    this.portalApi.createRink(data)
+      .then(
+        (res: any) => {
           console.log(res);
-          this.sendButton.disabled = false;
+          this.isRinkSending = false;
 
-          if (res.message == "OK"){
-            sessionStorage.setItem('school_rink_id', res.data.id);
-            this.router.navigateByUrl('/home/portal/view-rink');
-          }
+          sessionStorage.setItem('school_rink_id', res.id);
+          this.router.navigateByUrl('/home/portal/view-rink');
         },
         err => {
           console.log(err);
-          this.sendButton.disabled = false;
+          this.isRinkSending = false;
           this.connectionToast.openToast();
         }
       )
+  }
+
+  onTypeSelected(){
+    console.log("why did u change the type?");
+    this.rinkForm.controls.rinkSource.setValue("");
+  }
+
+  openSourceWindow(){
+    let type = this.rinkForm.controls.rinkType.value;
+    console.log("You are opening a " + type + " rink type")
+
+  }
+
+  onSourceSelected(sourceData: any){
+    console.log(sourceData);
+    let type = this.rinkForm.controls.rinkType.value;
+    this.selectedSourceId = sourceData.id;
+
   }
 
 }

@@ -1,9 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
-import { CheckBoxComponent } from 'smart-webcomponents-angular/checkbox';
+import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component';
 
 import { AdminApiService } from 'projects/school/src/app/services/modules/admin-api/admin-api.service';
-import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component';
+
+import { UserAccess } from 'projects/school/src/app/models/modules/admin/admin.model';
 
 
 @Component({
@@ -17,81 +18,77 @@ export class AccessFormComponent implements OnInit {
     private adminApi: AdminApiService,
   ) { }
 
-  @ViewChild('adminCheckBoxReference', { read: CheckBoxComponent, static: false }) adminCheckBox!: CheckBoxComponent;
-  @ViewChild('assessmentCheckBoxReference', { read: CheckBoxComponent, static: false }) assessmentCheckBox!: CheckBoxComponent;
-  @ViewChild('attendanceCheckBoxReference', { read: CheckBoxComponent, static: false }) attendanceCheckBox!: CheckBoxComponent;
-  @ViewChild('classesCheckBoxReference', { read: CheckBoxComponent, static: false }) classesCheckBox!: CheckBoxComponent;
-  @ViewChild('feesCheckBoxReference', { read: CheckBoxComponent, static: false }) feesCheckBox!: CheckBoxComponent;
-  @ViewChild('parentsCheckBoxReference', { read: CheckBoxComponent, static: false }) parentsCheckBox!: CheckBoxComponent;
-  @ViewChild('paymentsCheckBoxReference', { read: CheckBoxComponent, static: false }) paymentsCheckBox!: CheckBoxComponent;
-  @ViewChild('portalCheckBoxReference', { read: CheckBoxComponent, static: false }) portalCheckBox!: CheckBoxComponent;
-  @ViewChild('reportsCheckBoxReference', { read: CheckBoxComponent, static: false }) reportsCheckBox!: CheckBoxComponent;
-  @ViewChild('settingsCheckBoxReference', { read: CheckBoxComponent, static: false }) settingsCheckBox!: CheckBoxComponent;
-  @ViewChild('staffCheckBoxReference', { read: CheckBoxComponent, static: false }) staffCheckBox!: CheckBoxComponent;
-  @ViewChild('studentsCheckBoxReference', { read: CheckBoxComponent, static: false }) studentsCheckBox!: CheckBoxComponent;
-  @ViewChild('subjectsCheckBoxReference', { read: CheckBoxComponent, static: false }) subjectsCheckBox!: CheckBoxComponent;
-  @ViewChild('teachersCheckBoxReference', { read: CheckBoxComponent, static: false }) teachersCheckBox!: CheckBoxComponent;
-  @ViewChild('timetableCheckBoxReference', { read: CheckBoxComponent, static: false }) timetableCheckBox!: CheckBoxComponent;
-
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
+
+  accessForm: UserAccess = {
+    admin_access: false,
+    assessment_access: false,
+    attendance_access: false,
+    classes_stock_access: false,
+    fees_access: false,
+    lesson_notes_access: false,
+    parents_access: false,
+    payments_access: false,
+    portal_access: false,
+    reports_access: false,
+    sections_access: false,
+    settings_access: false,
+    staff_access: false,
+    students_access: false,
+    subjects_access: false,
+    teachers_access: false,
+    timetable_access: false,
+  }
 
   ngOnInit(): void {
   }
 
-  initAccessLevel(){
+  ngAfterViewInit(): void {
+    this.getUserAccess();
+  }
+
+  getUserAccess(){
     this.adminApi.getUserAccess()
-      .subscribe(
-        res => {
+      .then(
+        (res: any) => {
           console.log(res);
 
-          this.adminCheckBox.value = res.admin_access;
-          this.assessmentCheckBox.value = res.assessment_access;
-          this.attendanceCheckBox.value = res.attendance_access;
-          this.classesCheckBox.value = res.classess_access;
-          this.feesCheckBox.value = res.fees_access;
-          this.parentsCheckBox.value = res.parents_access;
-          this.paymentsCheckBox.value = res.payments_access;
-          this.portalCheckBox.value = res.portal_access;
-          this.reportsCheckBox.value = res.reports_access;
-          this.settingsCheckBox.value = res.settings_access;
-          this.staffCheckBox.value = res.staff_access;
-          this.studentsCheckBox.value = res.students_access;
-          this.subjectsCheckBox.value = res.subjects_access;
-          this.teachersCheckBox.value = res.teachers_access;
-          this.timetableCheckBox.value = res.timetable_access;
+          this.accessForm.admin_access = res.data().admin_access;
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }
       )
   }
 
-  saveAccessLevel(){
-    let access = {
-      admin_access: this.adminCheckBox.value,
-      assessment_access: this.assessmentCheckBox.value,
-      attendance_access: this.attendanceCheckBox.value,
-      classess_access: this.classesCheckBox.value,
-      fees_access: this.feesCheckBox.value,
-      parents_access: this.parentsCheckBox.value,
-      payments_access: this.paymentsCheckBox.value,
-      portal_access: this.portalCheckBox.value,
-      reports_access: this.reportsCheckBox.value,
-      settings_access: this.settingsCheckBox.value,
-      staff_access: this.staffCheckBox.value,
-      students_access: this.studentsCheckBox.value,
-      subjects_access: this.subjectsCheckBox.value,
-      teachers_access: this.teachersCheckBox.value,
-      timetable_access: this.timetableCheckBox.value,
+  updateUserAccess(){
+    let access: UserAccess = {
+      admin_access: this.accessForm.admin_access,
+      assessment_access: this.accessForm.assessment_access,
+      attendance_access: this.accessForm.attendance_access,
+      classes_stock_access: this.accessForm.classes_stock_access,
+      fees_access: this.accessForm.fees_access,
+      lesson_notes_access: this.accessForm.lesson_notes_access,
+      parents_access: this.accessForm.parents_access,
+      payments_access: this.accessForm.payments_access,
+      portal_access: this.accessForm.portal_access,
+      reports_access: this.accessForm.reports_access,
+      sections_access: this.accessForm.sections_access,
+      settings_access: this.accessForm.settings_access,
+      staff_access: this.accessForm.staff_access,
+      students_access: this.accessForm.students_access,
+      subjects_access: this.accessForm.subjects_access,
+      teachers_access: this.accessForm.teachers_access,
+      timetable_access: this.accessForm.timetable_access,
     }
 
-    this.adminApi.putUserAccess(access)
-      .subscribe(
-        res => {
+    this.adminApi.updateUserAccess(access)
+      .then(
+        (res: any) => {
           console.log(res);
         },
-        err => {
+        (err: any) => {
           console.log(err);
           this.connectionToast.openToast();
         }
@@ -101,56 +98,62 @@ export class AccessFormComponent implements OnInit {
   setLevelAccess(level: string) {
     console.log("u are changing user level to " + level);
 
-    if (level == 'Admin') {
-      this.adminCheckBox.value = 'true';
-      this.assessmentCheckBox.value = 'true';
-      this.attendanceCheckBox.value = 'true';
-      this.classesCheckBox.value = 'true';
-      this.feesCheckBox.value = 'true';
-      this.parentsCheckBox.value = 'true';
-      this.paymentsCheckBox.value = 'true';
-      this.portalCheckBox.value = 'true';
-      this.reportsCheckBox.value = 'true';
-      this.settingsCheckBox.value = 'true';
-      this.staffCheckBox.value = 'true';
-      this.studentsCheckBox.value = 'true';
-      this.subjectsCheckBox.value = 'true';
-      this.teachersCheckBox.value = 'true';
-      this.timetableCheckBox.value = 'true';
+    if (level == 'Admin'){
+      this.accessForm.admin_access = true;
+      this.accessForm.assessment_access = true;
+      this.accessForm.attendance_access = true;
+      this.accessForm.classes_stock_access = true;
+      this.accessForm.fees_access = true;
+      this.accessForm.lesson_notes_access = true;
+      this.accessForm.parents_access = true;
+      this.accessForm.payments_access = true;
+      this.accessForm.portal_access = true;
+      this.accessForm.reports_access = true;
+      this.accessForm.sections_access = true;
+      this.accessForm.settings_access = true;
+      this.accessForm.staff_access = true;
+      this.accessForm.students_access = true;
+      this.accessForm.subjects_access = true;
+      this.accessForm.teachers_access = true;
+      this.accessForm.timetable_access = true;
     }
-    else if (level == 'Manager') {
-      this.adminCheckBox.value = 'false';
-      this.assessmentCheckBox.value = 'true';
-      this.attendanceCheckBox.value = 'true';
-      this.classesCheckBox.value = 'true';
-      this.feesCheckBox.value = 'true';
-      this.parentsCheckBox.value = 'true';
-      this.paymentsCheckBox.value = 'true';
-      this.portalCheckBox.value = 'true';
-      this.reportsCheckBox.value = 'true';
-      this.settingsCheckBox.value = 'false';
-      this.staffCheckBox.value = 'true';
-      this.studentsCheckBox.value = 'true';
-      this.subjectsCheckBox.value = 'true';
-      this.teachersCheckBox.value = 'true';
-      this.timetableCheckBox.value = 'true';
+    else if (level == 'Manager'){
+      this.accessForm.admin_access = false;
+      this.accessForm.assessment_access = true;
+      this.accessForm.attendance_access = true;
+      this.accessForm.classes_stock_access = true;
+      this.accessForm.fees_access = true;
+      this.accessForm.lesson_notes_access = true;
+      this.accessForm.parents_access = true;
+      this.accessForm.payments_access = true;
+      this.accessForm.portal_access = false;
+      this.accessForm.reports_access = true;
+      this.accessForm.sections_access = false;
+      this.accessForm.settings_access = true;
+      this.accessForm.staff_access = true;
+      this.accessForm.students_access = true;
+      this.accessForm.subjects_access = true;
+      this.accessForm.teachers_access = true;
+      this.accessForm.timetable_access = true;
     }
-    else if (level == 'Staff') {
-      this.adminCheckBox.value = 'false';
-      this.assessmentCheckBox.value = 'false';
-      this.attendanceCheckBox.value = 'false';
-      this.classesCheckBox.value = 'false';
-      this.feesCheckBox.value = 'false';
-      this.parentsCheckBox.value = 'false';
-      this.paymentsCheckBox.value = 'false';
-      this.portalCheckBox.value = 'false';
-      this.reportsCheckBox.value = 'false';
-      this.settingsCheckBox.value = 'false';
-      this.staffCheckBox.value = 'false';
-      this.studentsCheckBox.value = 'false';
-      this.subjectsCheckBox.value = 'false';
-      this.teachersCheckBox.value = 'false';
-      this.timetableCheckBox.value = 'false';
+    else if (level == 'Staff'){
+      this.accessForm.admin_access = false;
+      this.accessForm.assessment_access = false;
+      this.accessForm.attendance_access = false;
+      this.accessForm.classes_stock_access = false;
+      this.accessForm.fees_access = false;
+      this.accessForm.lesson_notes_access = false;
+      this.accessForm.parents_access = false;
+      this.accessForm.payments_access = false;
+      this.accessForm.portal_access = false;
+      this.accessForm.reports_access = false;
+      this.accessForm.sections_access = false;
+      this.accessForm.settings_access = false;
+      this.accessForm.staff_access = false;
+      this.accessForm.students_access = false;
+      this.accessForm.subjects_access = false;
+      this.accessForm.teachers_access = false;
+      this.accessForm.timetable_access = false;
     }
   }
 

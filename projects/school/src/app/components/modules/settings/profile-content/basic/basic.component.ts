@@ -1,8 +1,9 @@
 import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 
-import { InputComponent } from 'smart-webcomponents-angular/input';
-import { ButtonComponent } from 'smart-webcomponents-angular/button';
-import { MultilineTextBoxComponent } from 'smart-webcomponents-angular/multilinetextbox';
+import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
+
+import { AccountApiService } from 'projects/school/src/app/services/account-api/account-api.service';
 
 
 @Component({
@@ -12,26 +13,46 @@ import { MultilineTextBoxComponent } from 'smart-webcomponents-angular/multiline
 })
 export class BasicComponent implements OnInit {
 
-  constructor() { }
+  constructor(private accountApi: AccountApiService) { }
 
-  @ViewChild('nameInputReference', { read: InputComponent, static: false }) nameInput!: InputComponent;
-  @ViewChild('locationInputReference', { read: InputComponent, static: false }) locationInput!: InputComponent;
-  @ViewChild('aboutTextAreaReference', { read: MultilineTextBoxComponent, static: false }) aboutTextArea!: MultilineTextBoxComponent;
-  @ViewChild('saveButtonReference', { read: ButtonComponent, static: false }) saveButton!: ButtonComponent;
+  @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
 
-  @Output() basicEvent = new EventEmitter<any>();
+  basicForm: FormGroup = new FormGroup({});
+
+  isAccountLoading = true;
+  isBasicSaving = true;
 
   ngOnInit(): void {
+    this.initBasicForm();
   }
 
-  emitBasic(){
+  initBasicForm(){
+    this.basicForm = new FormGroup({
+      name: new FormControl(''),
+      about: new FormControl('')
+    })
+  }
+
+  updateAccount(){
     let data = {
-      name: this.nameInput.value,
-      location: this.locationInput.value,
-      about: this.aboutTextArea.value
+      name: this.basicForm.controls.name.value,
+      about: this.basicForm.controls.about.value,
     }
 
-  	this.basicEvent.emit(data);
+    this.isBasicSaving = true;
+
+    this.accountApi.updateAccount(data)
+      .then(
+        (res: any) => {
+          console.log(res);
+          this.isBasicSaving = false;
+        },
+        (err: any) => {
+          console.log(err);
+          this.isBasicSaving = false;
+          this.connectionToast.openToast();
+        }
+      )
   }
 
 }

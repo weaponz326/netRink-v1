@@ -1,9 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs'
 
-import { environment } from 'projects/school/src/environments/environment'
-import { EndpointsService } from 'projects/application/src/app/services/endpoints/endpoints.service';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 
 
 @Injectable({
@@ -12,46 +9,38 @@ import { EndpointsService } from 'projects/application/src/app/services/endpoint
 export class SettingsApiService {
 
   constructor(
-    private http: HttpClient,
-    private endpoints: EndpointsService
+    private afs: AngularFirestore,
   ) { }
 
-  schoolUrl = environment.schoolUrl;
-  personalUrl = environment.personalUrl;
+  extendedProfileRef = this.afs.collection('school/module_settings/school_extended_profile');
+  subscriptionRef = this.afs.collection('school/module_settings/school_subscription');
 
-  // get all profile categories
+  // extended profile
 
-  public getAccount(): Observable<any>{
-    return this.http.get(this.schoolUrl + "accounts/account/" + localStorage.getItem('school_id'));
+  createExtendedProfile(extendedProfile: any){
+    return this.extendedProfileRef.doc(String(localStorage.getItem('school_id'))).set(extendedProfile);
   }
 
-  public getExtendedProfile(): Observable<any>{
-    return this.http.get(this.schoolUrl + "module-settings/extended-profile/" + localStorage.getItem('school_id'));
+  getExtendedProfile(){
+    return this.extendedProfileRef.doc(String(localStorage.getItem('school_id'))).ref.get();
   }
 
-  // send basic profile
-  public putAccount(account: any): Observable<any>{
-    return this.http.put(this.schoolUrl + "accounts/account/" + localStorage.getItem('school_id'), account);
+  updateExtendedProfile(extendedProfile: any){
+    return this.extendedProfileRef.doc(String(localStorage.getItem('school_id'))).update(extendedProfile);
   }
 
-  // send extended profile
-  public putExtendedProfile(extended: any): Observable<any>{
-    return this.http.put(this.schoolUrl + "module-settings/extended-profile/" + localStorage.getItem('school_id'), extended);
+  // subscription
+
+  createSubscription(subscription: any){
+    return this.subscriptionRef.doc(String(localStorage.getItem('school_id'))).set(subscription);
   }
 
-  // subscriptions
-
-  public getSubscription(): Observable<any>{
-    return this.http.get(this.schoolUrl + "module-settings/subscription/" + localStorage.getItem('school_id'));
+  getSubscription(){
+    return this.subscriptionRef.doc(String(localStorage.getItem('school_id'))).ref.get();
   }
 
-  public putSubscription(subscription: any): Observable<any>{
-    return this.http.put(this.schoolUrl + "module-settings/subscription/" + localStorage.getItem('school_id'), subscription);
-  }
-
-  // history
-  public getHistory(): Observable<any>{
-    return this.http.get(this.schoolUrl + "module-settings/history/" + localStorage.getItem('school_id'));
+  updateSubscription(subscription: any){
+    return this.subscriptionRef.doc(String(localStorage.getItem('school_id'))).update(subscription);
   }
 
 }

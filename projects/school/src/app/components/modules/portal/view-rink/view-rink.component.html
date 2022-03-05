@@ -2,16 +2,24 @@
 
 <div class="container">
 
-    <div class="row">
+    <div *ngIf="isRinkLoading" class="row text-center">
+        <div class="col-md-9">
+            <div class="spinner-grow m-3" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="!isRinkLoading" class="row">
         <div class="col-md-8">
 
-            <div *ngIf="rink?.sender.id==schoolId; then senderBlock else recipientBlock"></div>
+            <div *ngIf="rinkData?.data().sender?.id==schoolId; then senderBlock else recipientBlock"></div>
 
             <ng-template #senderBlock>
                 <div class="row mb-3">
                     <div class="col-md-12">
                         <i class="bi bi-arrow-up-circle me-2 rinkout-icon"></i>
-                        <small><strong>RinkOut</strong> - {{rink?.rink_date | date: 'MMMM d, y, hh:mm:ss a'}}</small>
+                        <small><strong>RinkOut</strong> - {{rinkData?.data().created_at.toDate() | date: 'MMMM d, y, hh:mm:ss a'}}</small>
                     </div>
                 </div>
 
@@ -20,26 +28,23 @@
                         <img src="../../../../../assets/images/utilities/logo-placeholder.jpg" alt="" width="40" height="40" class="rounded" />
                     </div>
                     <div class="col-md-5 align-middle">
-                        <strong>{{rink?.recipient.name}}</strong>
+                        <strong>{{rinkData?.data().recipient?.data.name}}</strong>
                     </div>
                     <div class="col-md-5 align-middle">
-                        {{rink?.recipient.location}}
+                        {{rinkData?.data().recipient?.data.location}}
                     </div>
                 </div>
 
                 <div class="row mb-3">
                     <div class="offset-md-1 col-md-5">
-                        <!-- <img *ngIf="rink?.rink_type == 'Appointment'" src="../../../../../assets/images/modules/calendar.png" alt="" width="25" height="25" class="me-2" />
-                        <img *ngIf="rink?.rink_type == 'Note'" src="../../../../../assets/images/modules/notes.png" alt="" width="25" height="25" class="me-2" />
-                        <img *ngIf="rink?.rink_type == 'Task'" src="../../../../../assets/images/modules/tasks.png" alt="" width="25" height="25" class="me-2" /> -->
-                        School - {{rink?.rink_type}}
+                        School - {{rinkData?.data().rink_type}}
                     </div>
                 </div>
 
                 <div class="row">
-                    <div class="offset-md-1 col-md-5">
+                    <div class="offset-md-1 col-md-8">
                         <em><small>Comment :</small></em><br>
-                        {{rink?.comment}}
+                        {{rinkData?.data().comment}}
                     </div>
                 </div>
             </ng-template>
@@ -48,7 +53,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <i class="bi bi-arrow-down-circle me-2 rinkin-icon"></i>
-                        <small><strong>RinkIn</strong> - {{rink?.rink_date | date: 'MMMM d, y, hh:mm:ss a'}}</small>
+                        <small><strong>RinkIn</strong> - {{rinkData?.data().created_at.toDate() | date: 'MMMM d, y, hh:mm:ss a'}}</small>
                     </div>
                 </div>
 
@@ -57,26 +62,23 @@
                         <img src="../../../../../assets/images/utilities/logo-placeholder.jpg" alt="" width="40" height="40" class="rounded" />
                     </div>
                     <div class="col-md-5 align-middle">
-                        <strong>{{rink?.sender.name}}</strong>
+                        <strong>{{rinkData?.data().sender?.data.name}}</strong>
                     </div>
                     <div class="col-md-5 align-middle">
-                        {{rink?.sender.location}}
+                        {{rinkData?.data().sender?.data.location}}
                     </div>
                 </div>
 
                 <div class="row mb-3">
                     <div class="offset-md-1 col-md-5">
-                        <!-- <img *ngIf="rink?.rink_type == 'Appointment'" src="../../../../../assets/images/modules/calendar.png" alt="" width="25" height="25" class="me-2" />
-                        <img *ngIf="rink?.rink_type == 'Note'" src="../../../../../assets/images/modules/notes.png" alt="" width="25" height="25" class="me-2" />
-                        <img *ngIf="rink?.rink_type == 'Task'" src="../../../../../assets/images/modules/tasks.png" alt="" width="25" height="25" class="me-2" /> -->
-                        School - {{rink?.rink_type}}
+                        School - {{rinkData?.data().rink_type}}
                     </div>
                 </div>
 
                 <div class="row">
-                    <div class="offset-md-1 col-md-5">
+                    <div class="offset-md-1 col-md-8">
                         <em><small>Comment :</small></em><br>
-                        {{rink?.comment}}
+                        {{rinkData?.data().comment}}
                     </div>
                 </div>
             </ng-template>
@@ -84,12 +86,13 @@
             <hr class="top-divider" />
             <hr class="bottom-divider" />
 
+            <!-- rink details components -->
+
+
+
         </div>
     </div>
 
-    <!-- rink details router -->
-
-    <router-outlet></router-outlet>
 
 </div>
 

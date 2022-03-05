@@ -1,10 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { ButtonComponent } from 'smart-webcomponents-angular/button';
+import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 
 import { PortalApiService } from 'projects/school/src/app/services/modules/portal-api/portal-api.service';
-import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
+
+import { Rink } from 'projects/school/src/app/models/modules/portal/portal.model';
 
 
 @Component({
@@ -19,7 +20,6 @@ export class TimelineComponent implements OnInit {
     private portalApi: PortalApiService,
   ) { }
 
-  @ViewChild('buttonReference', { read: ButtonComponent, static: false }) button!: ButtonComponent;
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
 
   navHeading: any[] = [
@@ -27,21 +27,27 @@ export class TimelineComponent implements OnInit {
   ];
 
   schoolId = localStorage.getItem('school_id');
-  rinks: any;
+  rinksData: any[] = [];
+
+  isRinksLoading = false;
 
   ngOnInit(): void {
-    this.getRinks();
+    this.getAllRink();
   }
 
-  getRinks(){
-    this.portalApi.getRinks()
-      .subscribe(
-        res => {
+  getAllRink(){
+    this.isRinksLoading = true;
+
+    this.portalApi.getAccountRink()
+      .then(
+        (res: any) => {
           console.log(res);
-          this.rinks = res;
+          this.rinksData = res.docs;
+          this.isRinksLoading = false;
         },
-        err => {
+        (err: any) => {
           console.log(err);
+          this.isRinksLoading = false;
           this.connectionToast.openToast();
         }
       )

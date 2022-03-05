@@ -1,9 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs'
 
-import { environment } from 'projects/school/src/environments/environment'
-import { EndpointsService } from 'projects/application/src/app/services/endpoints/endpoints.service';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 
 
 @Injectable({
@@ -12,43 +9,58 @@ import { EndpointsService } from 'projects/application/src/app/services/endpoint
 export class PortalApiService {
 
   constructor(
-    private http: HttpClient,
-    private endpoints: EndpointsService
+    private afs: AngularFirestore,
   ) { }
 
-  schoolUrl = environment.schoolUrl;
-  personalUrl = environment.personalUrl;
+  rinkRef = this.afs.collection('school/module_portal/school_rink');
+  personalUserSearchRef = this.afs.collection('personal/users/user');
+  schoolAccountSearchRef = this.afs.collection('school/accounts/account');
 
-  // create and get all sent and recieved by account
+  // rinks
 
-  public getRinks(): Observable<any>{
-    return this.http.get(this.schoolUrl + "module-portal/rink-list?account=" + localStorage.getItem('school_id'));
+  createRink(rink: any){
+    return this.rinkRef.add(rink);
   }
 
-  public postRink(rink: any): Observable<any>{
-    return this.http.post(this.schoolUrl + "module-portal/rink/", rink);
+  getRink(){
+    return this.rinkRef.doc(String(sessionStorage.getItem('school_rink_id'))).ref.get();
   }
 
-  // get search results
-  public getSearch(input: string, filter: string): Observable<any>{
-    // return this.http.get(this.schoolUrl + "module-portal/search?input=" + input + "&filter=" + filter);
-    return this.http.get(this.schoolUrl + "accounts/search/?search=" + input);
+  getAccountRink(){
+    return this.rinkRef.ref
+      .where("sender.id", "==", String(localStorage.getItem('school_id')))
+      .where("recipent.id", "==", String(localStorage.getItem('school_id')))
+      .orderBy("created_at", "desc")
+      .get();
   }
 
-  // get search detail of selected account
-  public getDetail(account: string): Observable<any>{
-    return this.http.get(this.schoolUrl + "accounts/search/" + account);
+  // school search
+
+  getSearchResult(searchQuery: string, searchFilter: string){
+    return this.schoolAccountSearchRef.ref
+      .where("name", ">=", searchQuery)
+      .where("name", "<", searchQuery + "z")
+      .get();
   }
 
-  // get accounts rinks with detailed sender and recipient
-  public getSingleRink(rinkId: any): Observable<any>{
-    return this.http.get(this.schoolUrl + "module-portal/rink/" + rinkId);
+  getSearchDetail(schoolId: any){
+    return this.schoolAccountSearchRef.doc(schoolId).ref.get();
   }
 
   // dashboard
 
-  public getCountRinkDate(): Observable<any>{
-    return this.http.get(this.schoolUrl + "module-portal/count-rink-date/");
+  getWeekRinkIn(startDate: any, endDate: any){
+    return this.rinkRef.ref
+      .where("recipent.id", "==", localStorage.getItem('personal_id'))
+      .where("created_at", "<", startDate).where("created_at", ">", endDate)
+      .get();
+  }
+
+  getWeekRinkOut(startDate: any, endDate: any){
+    return this.rinkRef.ref
+      .where("recipent.id", "==", localStorage.getItem('personal_id'))
+      .where("created_at", "<", startDate).where("created_at", ">", endDate)
+      .get();
   }
 
 }

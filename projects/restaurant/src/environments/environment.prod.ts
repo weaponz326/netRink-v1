@@ -1,9 +1,9 @@
 export const environment = {
   production: true,
 
-  baseUrl: "https://netrink.com/",
-  personalUrl: "https://personal.netrink.com/api/",
-  restaurantUrl: "https://restaurant.netrink.com/api/",
+  baseUrl: "https://www.netrink.com/",
+  personalUrl: "https://personal.netrink.com/",
+  restaurantUrl: "https://restaurant.netrink.com/",
 
   firebase: {
     apiKey: "AIzaSyCdIR_KDHHiiG7bJU5w0AHDDKXB4MDmwLw",

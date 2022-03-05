@@ -1,9 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs'
 
-import { environment } from 'projects/school/src/environments/environment'
-import { EndpointsService } from 'projects/application/src/app/services/endpoints/endpoints.service';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 
 
 @Injectable({
@@ -12,57 +9,118 @@ import { EndpointsService } from 'projects/application/src/app/services/endpoint
 export class AdminApiService {
 
   constructor(
-    private http: HttpClient,
-    private endpoints: EndpointsService
+    private afs: AngularFirestore,
   ) { }
 
-  schoolUrl = environment.schoolUrl;
-  personalUrl = environment.personalUrl;
+  personalUserSearchRef = this.afs.collection('personal/users/personal_user');
+  accountUserRef = this.afs.collection('school/module_admin/school_account_user');
+  userAccessRef = this.afs.collection('school/module_admin/school_user_access');
+  invitationRef = this.afs.collection('school/module_admin/school_invitation');
 
-  // get search results
-  public getSearch(input: string): Observable<any>{
-    return this.http.get(this.personalUrl + "users/search?search=" + input, this.endpoints.headers);
+  // accountUser search
+
+  getSearchResult(searchQuery: string){
+    return this.personalUserSearchRef.ref
+      .where("last_name", ">=", searchQuery)
+      .where("last_name", "<", searchQuery + "z")
+      .get();
   }
 
-  // get search detail of selected account
-  public getDetail(account: string): Observable<any>{
-    return this.http.get(this.personalUrl + "users/search/" + account, this.endpoints.headers);
+  getSearchDetail(personalId: any){
+    return this.personalUserSearchRef.doc(personalId).ref.get();
+  }
+
+  // accountUser
+
+  createAccountUser(userData: any){
+    return this.accountUserRef.add(userData);
+  }
+
+  getAccountUser(){
+    return this.accountUserRef.doc(String(sessionStorage.getItem('school_account_user_id'))).ref.get();
+  }
+
+  updateAccountUser(userData: any){
+    return this.accountUserRef.doc(String(sessionStorage.getItem('school_account_user_id'))).update(userData);
+  }
+
+  deleteAccountUser(){
+    return this.accountUserRef.doc(String(sessionStorage.getItem('school_account_user_id'))).delete();
+  }
+
+  getAccountAccountUser(ordering: any){
+    return this.accountUserRef.ref
+      .where("account.id", "==", String(localStorage.getItem('school_id')))
+      .orderBy(ordering.field, ordering.direction)
+      .get();
+  }
+
+  getUserAccountUser(){
+    return this.accountUserRef.ref
+      .where("user.id", "==", String(localStorage.getItem('personal_id')))
+      .get();
+  }
+
+  // access
+
+  createUserAccess(accountUserID: any, accessData: any){
+    return this.userAccessRef.doc(accountUserID).set(accessData);
+  }
+
+  getUserAccess(){
+    return this.userAccessRef.doc(String(sessionStorage.getItem('school_account_user_id'))).ref.get();
+  }
+
+  updateUserAccess(accessData: any){
+    return this.userAccessRef.doc(String(sessionStorage.getItem('school_account_user_id'))).update(accessData);
+  }
+
+  deleteUserAccess(){
+    return this.userAccessRef.doc(String(sessionStorage.getItem('school_account_user_id'))).delete();
   }
 
   // invitations
 
-  public sendInvitation(invitation: any): Observable<any>{
-    return this.http.post(this.schoolUrl + "module-admin/invitation/", invitation);
+  createInvitation(invitationData: any){
+    return this.invitationRef.add(invitationData);
   }
 
-  public getInvitation(): Observable<any>{
-    return this.http.get(this.schoolUrl + "module-admin/invitation/" + sessionStorage.getItem('school_invitation_id'));
+  getInvitation(invitationId: any){
+    return this.invitationRef.doc(invitationId).ref.get();
   }
 
-  public getAllInvitations(): Observable<any>{
-    return this.http.get(this.schoolUrl + "module-admin/invitation?account=" + localStorage.getItem('school_id'));
+  updateInvitation(invitationId: any, invitationData: any){
+    return this.invitationRef.doc(invitationId).update(invitationData);
   }
 
-  // users
-
-  public getAllUsers(): Observable<any>{
-    return this.http.get(this.schoolUrl + "module-admin/user?account=" + localStorage.getItem('school_id'));
+  deleteInvitation(invitationId: any){
+    return this.invitationRef.doc(invitationId).delete();
   }
 
-  public getUser(): Observable<any>{
-    return this.http.get(this.schoolUrl + "module-admin/user/" + sessionStorage.getItem('school_admin_user_id'));
+  getAccountInvitation(sorting: any, pageSize: any){
+    return this.invitationRef.ref
+      .where("account", "==", localStorage.getItem('school_id'))
+      .orderBy(sorting?.field, sorting?.direction)
+      .limit(pageSize)
+      .get();
   }
 
-  public getUserAccess(): Observable<any>{
-    return this.http.get(this.schoolUrl + "module-admin/user-access/" + sessionStorage.getItem('school_admin_user_id'));
+  getAccountInvitationNext(sorting: any, pageSize: any, pageStart: any){
+    return this.invitationRef.ref
+      .where("account", "==", localStorage.getItem('school_id'))
+      .orderBy(sorting?.field, sorting?.direction)
+      .startAfter(pageStart)
+      .limit(pageSize)
+      .get();
   }
 
-  public putUser(user: any): Observable<any>{
-    return this.http.put(this.schoolUrl + "module-admin/user/" + localStorage.getItem('school_admin_user_id'), user);
-  }
-
-  public putUserAccess(userAccess: any): Observable<any>{
-    return this.http.put(this.schoolUrl + "module-admin/user-access/" + sessionStorage.getItem('school_admin_user_id'), userAccess);
+  getAccountInvitationPrev(sorting: any, pageSize: any, pageStart: any){
+    return this.invitationRef.ref
+      .where("account", "==", localStorage.getItem('school_id'))
+      .orderBy(sorting?.field, sorting?.direction)
+      .startAt(pageStart)
+      .limit(pageSize)
+      .get();
   }
 
 }

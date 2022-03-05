@@ -5,9 +5,9 @@
 export const environment = {
   production: false,
 
-  baseUrl: "http://localhost:8000/",                // url for application backend
-  personalUrl: "http://localhost:8001/",            // url for personal backend
-  restaurantUrl: "http://localhost:8002/",          // url for restaurant backend
+  baseUrl: "https://netrink-test-v1.web.app/",
+  personalUrl: "https://netrink-test-personal-v1.web.app/",
+  restaurantUrl: "https://netrink-test-restaurant-v1.web.app/",
 
   firebase: {
     apiKey: "AIzaSyC-pUZi6j5AecjEKiBaQL1nTZrKWB_J9w0",

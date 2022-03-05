@@ -1,8 +1,9 @@
 import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 
-import { InputComponent } from 'smart-webcomponents-angular/input';
-import { MultilineTextBoxComponent } from 'smart-webcomponents-angular/multilinetextbox';
-import { ButtonComponent } from 'smart-webcomponents-angular/button';
+import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
+
+import { SettingsApiService } from 'projects/school/src/app/services/modules/settings-api/settings-api.service';
 
 
 @Component({
@@ -12,26 +13,48 @@ import { ButtonComponent } from 'smart-webcomponents-angular/button';
 })
 export class ContactComponent implements OnInit {
 
-  constructor() { }
+  constructor(private settingsApi: SettingsApiService) { }
 
-  @ViewChild('emailInputReference', { read: InputComponent, static: false }) emailInput!: InputComponent;
-  @ViewChild('phoneInputReference', { read: InputComponent, static: false }) phoneInput!: InputComponent;
-  @ViewChild('addressTextAreaReference', { read: MultilineTextBoxComponent, static: false }) addressTextArea!: MultilineTextBoxComponent;
-  @ViewChild('saveButtonReference', { read: ButtonComponent, static: false }) saveButton!: ButtonComponent;
+  @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
 
-  @Output() contactEvent = new EventEmitter<any>();
+  contactForm: FormGroup = new FormGroup({});
+
+  isExtendedProfileLoading = true;
+  isExtendedProfileSaving = false;
 
   ngOnInit(): void {
+    this.initContactForm();
   }
 
-  emitContact(){
+  initContactForm(){
+    this.contactForm = new FormGroup({
+      email: new FormControl(),
+      phone: new FormControl(),
+      address: new FormControl(),
+    })
+  }
+
+  updateExtendedProfile(){
     let data = {
-      email: this.emailInput.value,
-      phone: this.phoneInput.value,
-      address: this.addressTextArea.value
+      email: this.contactForm.controls.email.value,
+      phone: this.contactForm.controls.phone.value,
+      address: this.contactForm.controls.address.value,
     }
 
-  	this.contactEvent.emit(data);
+    this.isExtendedProfileSaving = true;
+
+    this.settingsApi.updateExtendedProfile(data)
+      .then(
+        res => {
+          console.log(res);
+          this.isExtendedProfileSaving = false;
+        },
+        err => {
+          console.log(err);
+          this.isExtendedProfileSaving = false;
+          this.connectionToast.openToast();
+        }
+      )
   }
 
 }

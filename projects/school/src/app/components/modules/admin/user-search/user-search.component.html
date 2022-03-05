@@ -9,11 +9,16 @@
                 <div class="col-md-8 mx-auto">
 
                     <form (ngSubmit)="doSearch()">
-                        <div class="input-group">
+                        <div class="input-group input-group-sm">
                             <input [(ngModel)]="searchInput" [ngModelOptions]="{standalone: true}" type="text" class="form-control" placeholder="Search for users" aria-label="Search for users" aria-describedby="button-addon2">
                             <div class="input-group-append">
-                                <button class="btn btn-secondary" type="submit" id="button-addon2">Search</button>
+                                <button class="btn btn-sm btn-secondary" type="submit" id="button-addon2">
+                                    Search <i class="bi bi-search ms-1"></i>
+                                </button>
                             </div>
+                        </div>
+                        <div class="text-center">
+                            <small class="text-info">Search with user's last name</small>
                         </div>
                     </form>
 
@@ -27,17 +32,17 @@
         <div class="col-md-8">
 
             <div *ngIf="isSearchResultsReady">
-                <app-search-results
+                <app-search-results #searchResultsComponentReference
                     (viewDetailEvent)="gotoSearchDetail($event)"
                     [searchQuery]="searchQuery"
-                    [searchResults]="searchResults"
+                    [searchResults]="searchResultsData"
                 ></app-search-results>
             </div>
 
             <div *ngIf="isSearchDetailReady">
-                <app-search-detail
-                    (sendInvitationEvent)="sendInvitation()"
-                    [searchDetail]="searchDetail"
+                <app-search-detail #searchDetailComponentReference
+                    (sendInvitationEvent)="checkSubscriptionStatus()"
+                    [searchDetail]="searchDetailData"
                 ></app-search-detail>
             </div>
 
