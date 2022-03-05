@@ -115,7 +115,7 @@ export class ViewMenuGroupComponent implements OnInit {
         (res: any) => {
           console.log(res);
 
-          this.router.navigateByUrl('/home/menu/all-menu-group');
+          this.router.navigateByUrl('/home/menu/all-menu-groups');
         },
         (err: any) => {
           console.log(err);

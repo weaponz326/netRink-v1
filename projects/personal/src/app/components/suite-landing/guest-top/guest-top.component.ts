@@ -31,11 +31,11 @@ export class GuestTopComponent implements OnInit {
       if (localStorage.getItem('personal_id'))
         this.router.navigateByUrl("/register");
       else
-        this.router.navigateByUrl("/auth/signup");
+        this.router.navigateByUrl("/auth/login");
     }
     else{
       sessionStorage.setItem("isSuiteRegistration", "");
-      this.router.navigateByUrl("/auth/signup");
+      this.router.navigateByUrl("/auth/login");
     }
   }
 

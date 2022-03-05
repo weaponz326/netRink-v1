@@ -60,8 +60,8 @@ export class PaymentsPrintService {
           [
             { text: 'Payment ID: ' + formData.payment_code },
             { text: 'Payment Date: ' + formData.payment_date },
-            { text: 'Order ID: ' + formData.order.order_code },
-            { text: 'Customer Name: ' + formData.order.customer.customer_name },
+            { text: 'Order ID: ' + formData.order.data.order_code },
+            { text: 'Customer Name: ' + formData.order.data.customer.customer_name },
             { text: 'Amount Due: ' + formData.order.total_amount },
             { text: 'Amount Paid: ' + formData.amount_paid },
             { text: 'Balance: ' + (formData.order.total_amount - formData.amount_paid) },
@@ -85,8 +85,8 @@ export class PaymentsPrintService {
           [
             { text: 'Payment ID: ' + formData.payment_code },
             { text: 'Payment Date: ' + formData.payment_date },
-            { text: 'Order ID: ' + formData.order.order_code },
-            { text: 'Customer Name: ' + formData.order.customer.customer_name },
+            { text: 'Order ID: ' + formData.order.data.order_code },
+            { text: 'Customer Name: ' + formData.order.data.customer.customer_name },
             { text: 'Amount Due: ' + formData.order.total_amount },
             { text: 'Amount Paid: ' + formData.amount_paid },
             { text: 'Balance: ' + (formData.order.total_amount - formData.amount_paid) },

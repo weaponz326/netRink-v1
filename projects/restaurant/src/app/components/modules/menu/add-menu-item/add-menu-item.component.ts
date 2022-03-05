@@ -53,8 +53,8 @@ export class AddMenuItemComponent implements OnInit {
   resetForm(){
     this.menuItemForm.menuItemForm.controls.itemCode.setValue('');
     this.menuItemForm.menuItemForm.controls.itemName.setValue('');
-    this.menuItemForm.menuItemForm.controls.price.setValue('');
-    this.menuItemForm.image.imgSrc = "";
+    this.menuItemForm.menuItemForm.controls.price.setValue(1);
+    this.menuItemForm.image.setPlaceholderImage();
   }
 
 }

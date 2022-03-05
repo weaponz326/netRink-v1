@@ -36,7 +36,7 @@ export class SignupSuccessComponent implements OnInit {
     if (this.suiteRegistrationType == "nR Personal" || this.suiteRegistrationType == "netRink")
       window.location.href = "/";
     else
-      window.location.href = "/login";
+      window.location.href = "/register";
   }
 
 }

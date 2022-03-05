@@ -36,6 +36,7 @@ export class SettingsApiService {
   }
 
   getSubscription(){
+    console.log(localStorage.getItem('restaurant_id'));
     return this.subscriptionRef.doc(String(localStorage.getItem('restaurant_id'))).ref.get();
   }
 

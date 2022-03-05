@@ -182,7 +182,7 @@ export class RegisterFormComponent implements OnInit {
       subscription_type: "Individual",
       billing_frequency: "",
       number_users: 1,
-      email: "school." + localStorage.getItem('school_id') + "netrink.com",
+      email: "school." + localStorage.getItem('school_id') + "@netrink.com",
       status: "",
     }
 

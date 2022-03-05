@@ -52,13 +52,14 @@ export class UserLandingPageComponent implements OnInit {
 
   checkAccountActive(data: any){
     this.isAccountChecking = true;
+    console.log(data.data());
 
     localStorage.setItem('restaurant_id', data.data().account.id);
 
     this.settingsApi.getSubscription()
       .then(
         (res: any) => {
-          console.log(res);
+          console.log(res.data());
           this.isAccountChecking = false;
 
           if (res.data().status == "Active" || res.data().status == "Active" && data.data().created_by == localStorage.getItem('personal_id')){
