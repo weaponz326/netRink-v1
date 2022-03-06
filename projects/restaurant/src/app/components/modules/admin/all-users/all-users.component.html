@@ -1,0 +1,55 @@
+<app-module-topnav [headings]="navHeading"></app-module-topnav>
+
+<div class="container">
+
+    <div class="row mb-3">
+        <div class="col">
+            <button class="btn btn-secondary page-add-btn" routerLink="/home/admin/search">Invite User</button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-7">
+
+            <div class="overflow-auto">
+                <table class="table table-bordered table-sm w-100 page-table">
+                    <thead>
+                        <tr class="bg-light">
+                            <th width="65%" class="min-width-4">
+                                User's Name
+                                <i *ngIf="sortParams.field != 'personal_name'" class="bi bi-filter float-end list-pointer" (click)="sortTable('personal_name', 'desc')"></i>
+                                <i *ngIf="sortParams.field == 'personal_name' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('personal_name', 'asc')"></i>
+                                <i *ngIf="sortParams.field == 'personal_name' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('personal_name', 'desc')"></i>
+                            </th>
+                            <th width="35%" class="min-width-2">
+                                User Level
+                                <i *ngIf="sortParams.field != 'access_level'" class="bi bi-filter float-end list-pointer" (click)="sortTable('access_level', 'desc')"></i>
+                                <i *ngIf="sortParams.field == 'access_level' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('access_level', 'asc')"></i>
+                                <i *ngIf="sortParams.field == 'access_level' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('access_level', 'desc')"></i>
+                            </th>
+                        </tr>
+                        <tr *ngIf="isFetchingGridData" class="text-center">
+                            <td colspan="4">
+                                <div class="spinner-grow m-4" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let data of usersGridData" (dblclick)="viewUser(data.id)" class="table-pointer">
+                            <td>{{data?.data().user.data.first_name}} {{data?.data().user.data.last_name}}</td>
+                            <td>{{data?.data().access_level}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- connection error prompt component -->
+
+<app-connection-toast #connectionToastComponentReference></app-connection-toast>

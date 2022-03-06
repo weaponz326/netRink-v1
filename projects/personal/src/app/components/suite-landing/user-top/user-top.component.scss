@@ -1,0 +1,19 @@
+@import url('../../../../../../application/src/assets/styles/landing.css');
+
+tr{
+  cursor: pointer;
+}
+
+td{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.table{
+  --bs-table-striped-color: #858796;
+}
+
+.checking-color{
+  color: #8587965c !important;
+}

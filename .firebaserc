@@ -1,0 +1,25 @@
+{
+  "projects": {
+    "default": "netrink-18",
+    "dev": "netrink-test-v1",
+    "test": "netrink-test-v1"
+  },
+  "targets": {
+    "netrink-test-v1": {
+      "hosting": {
+        "target": [
+          "appl",
+          "pers",
+          "rest"
+        ],
+        "pers": [
+          "netrink-test-personal-v1"
+        ],
+        "rest": [
+          "netrink-test-restaurant-v1",
+          "to"
+        ]
+      }
+    }
+  }
+}

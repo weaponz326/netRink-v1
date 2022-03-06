@@ -1,0 +1,88 @@
+<button [hidden]="true" #openButtonElementReference data-bs-toggle="modal" data-bs-target="#selectMenuGroupModal">
+    Launch demo modal
+</button>
+
+<div class="modal fade select-table-modal" id="selectMenuGroupModal" tabindex="-1" aria-labelledby="selectMenuGroupModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header bg-light">
+                <span class="modal-title" id="selectMenuGroupModalLabel">Select Restaurant Menu Group</span>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body overflow-auto">
+                <table class="table table-bordered table-sm w-100 page-table">
+                    <thead>
+                        <tr class="bg-light">
+                            <th width="60%" class="min-width-4">
+                                Menu Group
+                                <i *ngIf="sortParams.field != 'menu_group'" class="bi bi-filter float-end list-pointer" (click)="sortTable('menu_group', 'desc')"></i>
+                                <i *ngIf="sortParams.field == 'menu_group' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('menu_group', 'asc')"></i>
+                                <i *ngIf="sortParams.field == 'menu_group' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('menu_group', 'desc')"></i>
+                            </th>
+                            <th width="40%" class="min-width-3">
+                                Category
+                                <i *ngIf="sortParams.field != 'category'" class="bi bi-filter float-end list-pointer" (click)="sortTable('category', 'desc')"></i>
+                                <i *ngIf="sortParams.field == 'category' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('category', 'asc')"></i>
+                                <i *ngIf="sortParams.field == 'category' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('category', 'desc')"></i>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let data of menuGroupGridData" (dblclick)="selectRow(data)" class="table-pointer">
+                            <td>{{data?.data().menu_group}}</td>
+                            <td>{{data?.data().category}}</td>
+                        </tr>
+                        <tr *ngIf="isFetchingGridData" class="text-center">
+                            <td colspan="2">
+                                <div class="spinner-grow m-4" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr *ngIf="!isDataAvailable && !isFetchingGridData" class="text-center">
+                            <td colspan="2">
+                                <p class="m-4">No data available</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr class="bg-light">
+                            <td colspan="2">
+                                <nav class="nav-light float-end" aria-label="Page navigation">
+                                    <ul class="pagination pagination-sm mb-0 justify-content-end">
+                                        <li class="page-item" [ngClass]="disablePrev ? 'disabled' : ''">
+                                            <a class="page-link" href="#" aria-label="First" (click)="previousPage($event)">
+                                                <i class="bi bi-caret-left-fill"></i>
+                                            </a>
+                                        </li>
+                                        <li class="page-item">
+                                            <a class="page-link" href="#" aria-label="Current" (click)="$event.preventDefault()">
+                                                {{pageNumber}}
+                                            </a>
+                                        </li>
+                                        <li class="page-item" [ngClass]="disableNext ? 'disabled' : ''">
+                                            <a class="page-link" href="#" aria-label="Last" (click)="nextPage($event)">
+                                                <i class="bi bi-caret-right-fill"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <button [hidden]="true" #closeButtonElementReference data-bs-toggle="modal" data-bs-target="#selectMenuGroupModal">
+                Launch demo modal
+            </button>
+
+        </div>
+    </div>
+</div>
+
+<!-- connection error toast component -->
+
+<app-connection-toast #connectionToastComponentReference></app-connection-toast>

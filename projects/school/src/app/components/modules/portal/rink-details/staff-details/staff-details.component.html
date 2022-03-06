@@ -1,0 +1,47 @@
+<div class="row">
+    <div class="col-md-9">
+
+        <div class="card shadow py-3">
+            <div class="card-body">
+
+                <p class="lead">Restaurant Staff</p>
+
+                <div class="row mb-2">
+                    <div class="col-md-4"><em><small class="float-end">Staff ID :</small></em></div>
+                    <div class="col-md-8">{{staffData?.data().staff_code}}</div>
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col-md-4"><em><small class="float-end">Staff Name :</small></em></div>
+                    <div class="col-md-8">{{staffData?.data().first_name}} {{staffData?.data().last_name}}</div>
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col-md-4"><em><small class="float-end">Phone :</small></em></div>
+                    <div class="col-md-8">{{staffData?.data().phone}}</div>
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col-md-4"><em><small class="float-end">Email :</small></em></div>
+                    <div class="col-md-8">{{staffData?.data().email}}</div>
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col-md-4"><em><small class="float-end">Department :</small></em></div>
+                    <div class="col-md-8">{{staffData?.data().department}}</div>
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col-md-4"><em><small class="float-end">Job :</small></em></div>
+                    <div class="col-md-8">{{staffData?.data().job}}</div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- connection error prompt component -->
+
+<app-connection-toast #connectionToastComponentReference></app-connection-toast>

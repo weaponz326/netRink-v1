@@ -1,0 +1,29 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import url("../../application/src/assets/styles/main.css");
+@import url("../src/assets/styles/modules.css");
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+// doesn't work when placed in modules.css
+
+th.min-width-1{
+  min-width: 40px;
+}
+
+th.min-width-2{
+  min-width: 80px;
+}
+
+th.min-width-3{
+  min-width: 120px;
+}
+
+th.min-width-4{
+  min-width: 160px;
+}
+
+th.min-width-5{
+  min-width: 200px;
+}

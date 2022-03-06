@@ -1,0 +1,42 @@
+<div class="row">
+    <div class="col-md-9">
+
+        <div class="card shadow py-3">
+            <div class="card-body">
+
+                <p class="lead">Restaurant Rservation</p>
+
+                <div class="row mb-2">
+                    <div class="col-md-4"><em><small class="float-end">Reservation ID :</small></em></div>
+                    <div class="col-md-8">{{reservationData?.data().reservation_code}}</div>
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col-md-4"><em><small class="float-end">Reservation Date :</small></em></div>
+                    <div class="col-md-8">{{reservationData?.data().reservation_date | date}}</div>
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col-md-4"><em><small class="float-end">Customer Name :</small></em></div>
+                    <div class="col-md-8">{{reservationData?.data().customer.customer_name}}</div>
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col-md-4"><em><small class="float-end">Arrival Date :</small></em></div>
+                    <div class="col-md-8">{{reservationData?.data().arrival_date | date}}</div>
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col-md-4"><em><small class="float-end">Status :</small></em></div>
+                    <div class="col-md-8">{{reservationData?.data().status}}</div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- connection error prompt component -->
+
+<app-connection-toast #connectionToastComponentReference></app-connection-toast>

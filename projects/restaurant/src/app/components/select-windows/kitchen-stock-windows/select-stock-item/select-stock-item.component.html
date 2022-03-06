@@ -1,0 +1,102 @@
+<button [hidden]="true" #openButtonElementReference data-bs-toggle="modal" data-bs-target="#selectStockItemModal">
+    Launch demo modal
+</button>
+
+<div class="modal fade select-table-modal" id="selectStockItemModal" tabindex="-1" aria-labelledby="selectStockItemModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header bg-light">
+                <span class="modal-title" id="selectStockItemModalLabel">Select Restaurant Stock Item</span>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body overflow-auto">
+                <table class="table table-bordered table-sm w-100 page-table">
+                    <thead>
+                        <tr class="bg-light">
+                            <th width="20%" class="min-width-2">
+                                Stock Item ID
+                                <i *ngIf="sortParams.field != 'item_code'" class="bi bi-filter float-end list-pointer" (click)="sortTable('item_code', 'desc')"></i>
+                                <i *ngIf="sortParams.field == 'item_code' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('item_code', 'asc')"></i>
+                                <i *ngIf="sortParams.field == 'item_code' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('item_code', 'desc')"></i>
+                            </th>
+                            <th width="40%" class="min-width-4">
+                                Stock Item Name
+                                <i *ngIf="sortParams.field != 'item_name'" class="bi bi-filter float-end list-pointer" (click)="sortTable('item_name', 'desc')"></i>
+                                <i *ngIf="sortParams.field == 'item_name' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('item_name', 'asc')"></i>
+                                <i *ngIf="sortParams.field == 'item_name' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('item_name', 'desc')"></i>
+                            </th>
+                            <th width="15%" class="min-width-2">
+                                Quantity
+                                <i *ngIf="sortParams.field != 'quantity'" class="bi bi-filter float-end list-pointer" (click)="sortTable('quantity', 'desc')"></i>
+                                <i *ngIf="sortParams.field == 'quantity' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('quantity', 'asc')"></i>
+                                <i *ngIf="sortParams.field == 'quantity' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('quantity', 'desc')"></i>
+                            </th>
+                            <th width="25%" class="min-width-3">
+                                Item Type
+                                <i *ngIf="sortParams.field != 'item_type'" class="bi bi-filter float-end list-pointer" (click)="sortTable('item_type', 'desc')"></i>
+                                <i *ngIf="sortParams.field == 'item_type' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('item_type', 'asc')"></i>
+                                <i *ngIf="sortParams.field == 'item_type' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('item_type', 'desc')"></i>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let data of itemsGridData; index as i" (dblclick)="selectRow(data)" class="table-pointer">
+                            <td>{{data?.item_code}}</td>
+                            <td>{{data?.item_name}}</td>
+                            <td>{{data?.quantity}}</td>
+                            <td>{{data?.item_type}}</td>
+                        </tr>
+                        <tr *ngIf="isFetchingGridData" class="text-center">
+                            <td colspan="6">
+                                <div class="spinner-grow m-4" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr *ngIf="!isDataAvailable && !isFetchingGridData" class="text-center">
+                            <td colspan="6">
+                                <p class="m-4">No data available</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr class="bg-light">
+                            <td colspan="6">
+                                <nav class="nav-light float-end" aria-label="Page navigation">
+                                    <ul class="pagination pagination-sm mb-0 justify-content-end">
+                                        <li class="page-item" [ngClass]="disablePrev ? 'disabled' : ''">
+                                            <a class="page-link" href="#" aria-label="First" (click)="previousPage($event)">
+                                                <i class="bi bi-caret-left-fill"></i>
+                                            </a>
+                                        </li>
+                                        <li class="page-item">
+                                            <a class="page-link" href="#" aria-label="Current" (click)="$event.preventDefault()">
+                                                {{pageNumber}}
+                                            </a>
+                                        </li>
+                                        <li class="page-item" [ngClass]="disableNext ? 'disabled' : ''">
+                                            <a class="page-link" href="#" aria-label="Last" (click)="nextPage($event)">
+                                                <i class="bi bi-caret-right-fill"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <button [hidden]="true" #closeButtonElementReference data-bs-toggle="modal" data-bs-target="#selectStockItemModal">
+                Launch demo modal
+            </button>
+
+        </div>
+    </div>
+</div>
+
+<!-- connection error toast component -->
+
+<app-connection-toast #connectionToastComponentReference></app-connection-toast>

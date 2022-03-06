@@ -1,0 +1,125 @@
+<app-module-topnav [headings]="navHeading"></app-module-topnav>
+
+<div class="container">
+
+    <div *ngIf="isRinkLoading" class="row text-center">
+        <div class="col-md-9">            
+            <div class="spinner-grow m-3" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="!isRinkLoading" class="row">
+        <div class="col-md-9">
+
+            <div *ngIf="rinkData?.data().sender?.id==personalId; then senderBlock else recipientBlock"></div>
+
+            <ng-template #senderBlock>
+                <div class="row mb-2">
+                    <div class="col-md-12">
+                        <i class="bi bi-arrow-up-circle-fill me-2 rinkout-icon"></i>
+                        <small><strong>RinkOut</strong> - {{rinkData?.data().created_at.toDate() | date: 'MMMM d, y, hh:mm:ss a'}}</small>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-2 text-center">
+                        <img src="../../../../../assets/images/utilities/photo-avatar.jpg" alt="" width="80" height="80" class="rounded-circle" />
+                    </div>
+                    <div class="col-md-5 mt-2">
+                        <em><small>Recipient's Name :</small></em><br>
+                        <strong>{{rinkData?.data().recipient.data.first_name}} {{rinkData?.data().recipient.data.last_name}}</strong>
+                    </div>
+                    <div class="col-md-5 mt-2">
+                        <em><small>Recipient's Location :</small></em><br>
+                        {{rinkData?.data().recipient.data.location}}
+                    </div>
+                </div>
+
+                <div class="row mt-2 mb-3">
+                    <div class="offset-md-2 col-md-5">
+                        <em><small>Rink type :  </small></em>
+                        Personal - {{rinkData?.data().rink_type}}
+                        <img *ngIf="rinkData?.data().rink_type == 'Calendar' || rinkData?.data().rink_type == 'Schedule'" src="../../../../../assets/images/modules/calendar.png" alt="" width="25" height="25" class="ms-2" />
+                        <img *ngIf="rinkData?.data().rink_type == 'Budget'" src="../../../../../assets/images/modules/budget.png" alt="" width="25" height="25" class="ms-2" />
+                        <img *ngIf="rinkData?.data().rink_type == 'Note'" src="../../../../../assets/images/modules/notes.png" alt="" width="25" height="25" class="ms-2" />
+                        <img *ngIf="rinkData?.data().rink_type == 'Account' || rinkData?.data().rink_type == 'Transaction'" src="../../../../../assets/images/modules/accounts.png" alt="" width="25" height="25" class="ms-2" />
+                        <img *ngIf="rinkData?.data().rink_type == 'Task Group' || rinkData?.data().rink_type == 'Task Item'" src="../../../../../assets/images/modules/tasks.png" alt="" width="25" height="25" class="ms-2" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="offset-md-2 col-md-7">
+                        <em><small>Comment :</small></em><br>
+                        {{rinkData?.data().comment}}
+                    </div>
+                </div>
+            </ng-template>
+
+            <ng-template #recipientBlock>
+                <div class="row mb-2">
+                    <div class="col-md-12">
+                        <i class="bi bi-arrow-down-circle-fill me-2 rinkin-icon"></i>
+                        <small><strong>RinkIn</strong> - {{rinkData?.data().created_at.toDate() | date: 'MMMM d, y, hh:mm:ss a'}}</small>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-2 text-center">
+                        <img src="../../../../../assets/images/utilities/photo-avatar.jpg" alt="" width="80" height="80" class="rounded-circle" />
+                    </div>
+                    <div class="col-md-5 mt-2">
+                        <em><small>Sender's Name :</small></em><br>
+                        <strong>{{rinkData?.data().sender.data.first_name}} {{rinkData?.data().sender.data.last_name}}</strong>
+                    </div>
+                    <div class="col-md-5 mt-2">
+                        <em><small>Sender's Location :</small></em><br>
+                        {{rinkData?.data().sender.data.location}}
+                    </div>
+                </div>
+
+                <div class="row mt-2 mb-3">
+                    <div class="offset-md-2 col-md-5">
+                        <em><small>Rink type :  </small></em>
+                        Personal - {{rinkData?.data().rink_type}}
+                        <img *ngIf="rinkData?.data().rink_type == 'Calendar' || rinkData?.data().rink_type == 'Schedule'" src="../../../../../assets/images/modules/calendar.png" alt="" width="25" height="25" class="ms-2" />
+                        <img *ngIf="rinkData?.data().rink_type == 'Budget'" src="../../../../../assets/images/modules/budget.png" alt="" width="25" height="25" class="ms-2" />
+                        <img *ngIf="rinkData?.data().rink_type == 'Note'" src="../../../../../assets/images/modules/notes.png" alt="" width="25" height="25" class="ms-2" />
+                        <img *ngIf="rinkData?.data().rink_type == 'Account' || rinkData?.data().rink_type == 'Transaction'" src="../../../../../assets/images/modules/accounts.png" alt="" width="25" height="25" class="ms-2" />
+                        <img *ngIf="rinkData?.data().rink_type == 'Task Group' || rinkData?.data().rink_type == 'Task Item'" src="../../../../../assets/images/modules/tasks.png" alt="" width="25" height="25" class="ms-2" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="offset-md-2 col-md-7">
+                        <em><small>Comment :</small></em><br>
+                        {{rinkData?.data().comment}}
+                    </div>
+                </div>
+            </ng-template>
+
+            <hr class="top-divider" />
+            <hr class="bottom-divider" />
+
+            <h4>Rink Details</h4>
+
+        </div>
+    </div>
+
+    <!-- rink details components -->
+
+    <app-calendar-details *ngIf="rinkData?.data().rink_type == 'Calendar'" #calendarDetailsComponentReference></app-calendar-details>
+    <app-schedule-details *ngIf="rinkData?.data().rink_type == 'Schedule'" #scheduleDetailsComponentReference></app-schedule-details>
+    <app-budget-details *ngIf="rinkData?.data().rink_type == 'Budget'" #budgetDetailsComponentReference></app-budget-details>
+    <app-note-details *ngIf="rinkData?.data().rink_type == 'Note'" #noteDetailsComponentReference></app-note-details>
+    <app-account-details *ngIf="rinkData?.data().rink_type == 'Account'" #accountDetailsComponentReference></app-account-details>
+    <app-transaction-details *ngIf="rinkData?.data().rink_type == 'Transaction'" #transactionDetailsComponentReference></app-transaction-details>
+    <app-task-group-details *ngIf="rinkData?.data().rink_type == 'Task Group'" #taskGroupDetailsComponentReference></app-task-group-details>
+    <app-task-item-details *ngIf="rinkData?.data().rink_type == 'Task Item'" #taskItemDetailsComponentReference></app-task-item-details>
+
+</div>
+
+<!-- connection error toast component -->
+
+<app-connection-toast #connectionToastComponentReference></app-connection-toast>
