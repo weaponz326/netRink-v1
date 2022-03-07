@@ -94,6 +94,16 @@
         </div>
 
         <div class="col-md-2 col-sm-6 text-center">
+            <a id="lessonNotes" routerLink="/home/lesson-notes/dashboard" (click)="checkAccess('lesson_notes')"
+            data-bs-toggle="tooltip" title="Prepare and supervise lesson notes">
+                <figure>
+                    <img src="assets/images/modules/lesson-notes.png" class="home-icons" />
+                    <figcaption>Lesson Notes</figcaption>
+                </figure>
+            </a>
+        </div>
+
+        <div class="col-md-2 col-sm-6 text-center">
             <a id="reports" routerLink="/home/reports/dashboard" (click)="checkAccess('reports')"
             data-bs-toggle="tooltip" title="Generate students' academic reports">
                 <figure>
@@ -109,16 +119,6 @@
                 <figure>
                     <img src="assets/images/modules/payments.png" class="home-icons" />
                     <figcaption>Payments</figcaption>
-                </figure>
-            </a>
-        </div>
-
-        <div class="col-md-2 col-sm-6 text-center">
-            <a id="staff" routerLink="/home/staff/dashboard" (click)="checkAccess('staff')"
-            data-bs-toggle="tooltip" title="Manage all non-teaching staff">
-                <figure>
-                    <img src="assets/images/modules/staff.png" class="home-icons" />
-                    <figcaption>Staff</figcaption>
                 </figure>
             </a>
         </div>
@@ -171,10 +171,10 @@
         </div>
 
         <div class="col-md-2 col-sm-6 text-center">
-            <a id="timetables" routerLink="/home/timetables/dashboard" (click)="checkAccess('timetables')"
+            <a id="timetable" routerLink="/home/timetable/dashboard" (click)="checkAccess('timetable')"
             data-bs-toggle="tooltip" title="Plan and manage academic timetables">
                 <figure>
-                    <img src="assets/images/modules/timetables.png" class="home-icons" />
+                    <img src="assets/images/modules/timetable.png" class="home-icons" />
                     <figcaption>Timetables</figcaption>
                 </figure>
             </a>
@@ -196,16 +196,6 @@
                 <figure>
                     <img src="assets/images/modules/sections.png" class="home-icons" />
                     <figcaption>Sections</figcaption>
-                </figure>
-            </a>
-        </div>
-
-        <div class="col-md-2 col-sm-6 text-center">
-            <a id="lessonNotes" routerLink="/home/lesson-notes/dashboard" (click)="checkAccess('lesson_notes')"
-            data-bs-toggle="tooltip" title="Prepare and supervise lesson notes">
-                <figure>
-                    <img src="assets/images/modules/lesson-notes.png" class="home-icons" />
-                    <figcaption>Lesson Notes</figcaption>
                 </figure>
             </a>
         </div>

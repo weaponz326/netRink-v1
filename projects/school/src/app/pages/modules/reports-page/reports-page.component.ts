@@ -9,6 +9,10 @@ export class ReportsPageComponent implements OnInit {
 
   constructor() { }
 
+  navLinks: any[] = [
+    { text: "All Reports", url: "/home/reports/all-reports", icon: "fa fa-fw fa-list" },
+  ]
+
   ngOnInit(): void {
   }
 

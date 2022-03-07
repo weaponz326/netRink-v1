@@ -9,6 +9,10 @@ export class AttendancePageComponent implements OnInit {
 
   constructor() { }
 
+  navLinks: any[] = [
+    { text: "All Attendance", url: "/home/attendance/all-attendance", icon: "fa fa-fw fa-list" },
+  ]
+
   ngOnInit(): void {
   }
 

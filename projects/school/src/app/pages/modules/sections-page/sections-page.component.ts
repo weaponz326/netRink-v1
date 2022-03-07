@@ -9,6 +9,10 @@ export class SectionsPageComponent implements OnInit {
 
   constructor() { }
 
+  navLinks: any[] = [
+    { text: "All Sections", url: "/home/sections/all-sections", icon: "fa fa-fw fa-list" },
+  ]
+
   ngOnInit(): void {
   }
 

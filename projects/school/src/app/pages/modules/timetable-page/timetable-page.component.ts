@@ -9,6 +9,10 @@ export class TimetablePageComponent implements OnInit {
 
   constructor() { }
 
+  navLinks: any[] = [
+    { text: "All Timetables", url: "/home/timetable/all-timetable", icon: "fa fa-fw fa-list" },
+  ]
+
   ngOnInit(): void {
   }
 
