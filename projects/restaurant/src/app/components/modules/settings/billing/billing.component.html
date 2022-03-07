@@ -163,19 +163,19 @@
                     <div *ngIf="selectedSubscription=='Small Team'">
                         <p class="m-0"><i class="bi bi-cash m-1"></i>Total Bill :</p>
                         <p *ngIf="selectedFrequency=='Monthly'" class="h3 mt-0">
-                            ${{150 * (numberUsersValue / 10)}} / month
+                            GHS {{150 * (numberUsersValue / 10)}} / month
                         </p>
                         <p *ngIf="selectedFrequency=='Yearly'" class="h3 mt-0">
-                            ${{1500 * (numberUsersValue / 10)}} / year
+                            GHS {{1500 * (numberUsersValue / 10)}} / year
                         </p>
                     </div>
                     <div *ngIf="selectedSubscription=='Large Team'">
                         <p class="m-0"><i class="bi bi-cash m-1"></i>Total Bill :</p>
                         <p *ngIf="selectedFrequency=='Monthly'" class="h3 mt-0">
-                            ${{500 * (numberUsersValue / 50)}} / month
+                            GHS {{500 * (numberUsersValue / 50)}} / month
                         </p>
                         <p *ngIf="selectedFrequency=='Yearly'" class="h3 mt-0">
-                            ${{5000 * (numberUsersValue / 50)}} / year
+                            GHS {{5000 * (numberUsersValue / 50)}} / year
                         </p>
                     </div>
 
