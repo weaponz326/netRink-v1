@@ -1,7 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-// import { ChartsModule } from 'ng2-charts';
+import { ChartsModule } from 'ng2-charts';
 
 import { ModuleUtilitiesModule } from 'projects/personal/src/app/components/module-utilities/module-utilities.module';
 
@@ -27,7 +29,10 @@ import { CheckAttendanceComponent } from './check-attendance/check-attendance.co
   ],
   imports: [
     CommonModule,
-    // ChartsModule,
+    RouterModule,
+    FormsModule,
+    ReactiveFormsModule,
+    ChartsModule,
     ModuleUtilitiesModule,
   ]
 })

@@ -78,11 +78,8 @@ export class ViewAssessmentComponent implements OnInit {
           this.isAssessmentLoading = false;
 
           this.assessmentForm.controls.assessmentCode.setValue(this.assessmentFormData.data().assessment_code);
+          this.assessmentForm.controls.assessmentName.setValue(this.assessmentFormData.data().assessment_name);
           this.assessmentForm.controls.assessmentDate.setValue(this.assessmentFormData.data().assessment_date);
-          this.assessmentForm.controls.arrivalDate.setValue(this.assessmentFormData.data().arrival_date);
-          this.assessmentForm.controls.status.setValue(this.assessmentFormData.data().status);
-          this.assessmentForm.controls.numberGuests.setValue(this.assessmentFormData.data().number_guests);
-          this.assessmentForm.controls.numberTable.setValue(this.assessmentFormData.data().number_table);
 
           this.selectedTermId = this.assessmentFormData.data().term.id;
           this.selectedTermData = this.assessmentFormData.data().term.data;
@@ -182,6 +179,5 @@ export class ViewAssessmentComponent implements OnInit {
     console.log("lets start printing...");
     // this.assessmentPrint.printViewAssessment();
   }
-
 
 }
