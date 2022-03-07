@@ -98,5 +98,4 @@ export class DashboardComponent implements OnInit {
     this.reservationsLineChartData = [{ data: dataCount, label: 'Reservations' }];
   }
 
-
 }

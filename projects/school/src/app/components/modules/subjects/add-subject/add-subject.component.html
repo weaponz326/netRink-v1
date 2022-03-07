@@ -1,1 +1,20 @@
-<p>add-subject works!</p>
+<app-module-topnav [headings]="navHeading"></app-module-topnav>
+
+<div class="container">
+
+    <!-- subject page form -->
+
+    <app-subject-form #subjectFormComponentReference></app-subject-form>
+
+    <div class="row page-form">
+        <div class="col-md-12">
+            <button type="button" class="btn btn-secondary btn-sm float-end ms-1 page-form-btn" routerLink="/home/subjects/all-subjects">Cancel</button>
+            <button [disabled]="isSubjectSaving" class="btn btn-secondary btn-sm float-end ms-1 page-form-btn" (click)="createSubject()">Save</button>
+        </div>
+    </div>
+
+</div>
+
+<!-- connection error prompt component -->
+
+<app-connection-toast #connectionToastComponentReference></app-connection-toast>

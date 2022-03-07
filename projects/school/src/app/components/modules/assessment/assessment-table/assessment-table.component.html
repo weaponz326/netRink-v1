@@ -1,1 +1,41 @@
-<p>assessment-table works!</p>
+<div class="row">
+    <div class="col-md-10">
+
+        <h4>Assessment Sheet</h4>
+
+        <div class="overflow-auto">
+            <table class="table table-bordered table-sm w-100 page-table">
+                <thead>
+                    <tr class="bg-light">
+                        <th width="15%" class="min-width-2">Student ID</th>
+                        <th width="35%" class="min-width-3">Student Name</th>
+                        <th width="10%" class="min-width-1">Score</th>
+                        <th width="10%" class="min-width-1">Grade</th>
+                        <th width="30%" class="min-width-3">Remarks</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let data of assessmentTableGridData; index as i">
+                        <td>{{data?.data().student.data.student_code}}</td>
+                        <td>{{data?.data().student.data.student_name}}</td>
+                        <td>{{data?.data().score}}</td>
+                        <td>{{data?.data().grade}}</td>
+                        <td>{{data?.data().remarks}}</td>
+                    </tr>
+                    <tr *ngIf="isFetchingGridData" class="text-center">
+                        <td colspan="5">
+                            <div class="spinner-grow m-2" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+<!-- connection error toast component -->
+
+<app-connection-toast #connectionToastComponentReference></app-connection-toast>

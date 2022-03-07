@@ -1,7 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-// import { ChartsModule } from 'ng2-charts';
+import { ChartsModule } from 'ng2-charts';
 
 import { ModuleUtilitiesModule } from 'projects/personal/src/app/components/module-utilities/module-utilities.module';
 
@@ -12,6 +14,7 @@ import { NewAssessmentComponent } from './new-assessment/new-assessment.componen
 import { ViewAssessmentComponent } from './view-assessment/view-assessment.component';
 import { AssessmentFormComponent } from './assessment-form/assessment-form.component';
 import { AssessmentTableComponent } from './assessment-table/assessment-table.component';
+import { AssessmentClassesComponent } from './assessment-classes/assessment-classes.component';
 
 
 
@@ -23,11 +26,15 @@ import { AssessmentTableComponent } from './assessment-table/assessment-table.co
     NewAssessmentComponent,
     ViewAssessmentComponent,
     AssessmentFormComponent,
-    AssessmentTableComponent
+    AssessmentTableComponent,
+    AssessmentClassesComponent
   ],
   imports: [
     CommonModule,
-    // ChartsModule,
+    RouterModule,
+    FormsModule,
+    ReactiveFormsModule,
+    ChartsModule,
     ModuleUtilitiesModule,
   ]
 })

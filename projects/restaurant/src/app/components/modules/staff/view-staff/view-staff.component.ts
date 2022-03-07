@@ -97,7 +97,6 @@ export class ViewStaffComponent implements OnInit {
       last_name: this.staffForm.staffForm.controls.lastName.value,
       sex: this.staffForm.staffForm.controls.sex.value,
       date_of_birth: this.staffForm.bday.value,
-      photo: this.staffForm.photo.imgSrc,
       nationality: this.staffForm.staffForm.controls.nationality.value,
       religion: this.staffForm.staffForm.controls.religion.value,
       phone: this.staffForm.staffForm.controls.phone.value,
@@ -174,7 +173,6 @@ export class ViewStaffComponent implements OnInit {
       .then(
         (res: any) => {
           console.log(res);
-          this.router.navigateByUrl('/home/staff/view-staff');
           this.isStaffSaving = false;
         },
         (err: any) => {

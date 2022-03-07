@@ -5,49 +5,49 @@ import { serverTimestamp } from 'firebase/firestore';
 
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 import { DeleteModalComponent } from 'projects/personal/src/app/components/module-utilities/delete-modal/delete-modal.component'
-// import { SelectTeacherComponent } from '../../../select-windows/teachers-windows/select-teacher/select-teacher.component';
+// import { SelectClassComponent } from '../../../select-windows/classes-windows/select-class/select-class.component';
 
-import { SubjectsApiService } from 'projects/school/src/app/services/modules/subjects-api/subjects-api.service';
+import { AssessmentApiService } from 'projects/school/src/app/services/modules/assessment-api/assessment-api.service';
 
-import { SubjectTeacher } from 'projects/school/src/app/models/modules/subjects/subjects.model';
+import { AssessmentClass } from 'projects/school/src/app/models/modules/assessment/assessment.model';
 
 
 @Component({
-  selector: 'app-subject-teachers',
-  templateUrl: './subject-teachers.component.html',
-  styleUrls: ['./subject-teachers.component.scss']
+  selector: 'app-assessment-classes',
+  templateUrl: './assessment-classes.component.html',
+  styleUrls: ['./assessment-classes.component.scss']
 })
-export class SubjectTeachersComponent implements OnInit {
+export class AssessmentClassesComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private subjectsApi: SubjectsApiService,
+    private assessmentApi: AssessmentApiService,
   ) { }
 
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
   @ViewChild('deleteModalTwoComponentReference', { read: DeleteModalComponent, static: false }) deleteModal!: DeleteModalComponent;
-  // @ViewChild('selectTeacherComponentReference', { read: SelectTeacherComponent, static: false }) selectTeacher!: SelectTeacherComponent;
+  // @ViewChild('selectStudentComponentReference', { read: SelectStudentComponent, static: false }) selectStudent!: SelectStudentComponent;
 
-  subjectTeachersGridData: any[] = [];
+  assessmentClassesGridData: any[] = [];
 
   deleteId = "";
 
   isFetchingGridData = false;
-  isTeacherDeleting = false;
+  isClassDeleting = false;
 
   ngOnInit(): void {
-    this.getSubjectSubjectTeacher();
+    this.getAssessmentAssessmentClass();
   }
 
-  getSubjectSubjectTeacher(){
+  getAssessmentAssessmentClass(){
     this.isFetchingGridData = true;
 
-    this.subjectsApi.getSubjectSubjectTeacher()
+    this.assessmentApi.getAssessmentAssessmentClass()
       .then(
         (res: any) => {
           console.log(res);
           this.isFetchingGridData = false;
-          this.subjectTeachersGridData = res.docs;
+          this.assessmentClassesGridData = res.docs;
         },
         (err: any) => {
           console.log(err);
@@ -57,24 +57,24 @@ export class SubjectTeachersComponent implements OnInit {
       )
   }
 
-  createSubjectTeacher(teacherData: any){
-    let data: SubjectTeacher = {
-      subject: sessionStorage.getItem('school_subject_id') as string,
-      teacher: {
-        id: teacherData.id,
+  createAssessmentClass(classData: any){
+    let data: AssessmentClass = {
+      assessment: sessionStorage.getItem('school_assessment_id') as string,
+      clase: {
+        id: classData.id,
         data: {
 
         }
       }
     }
 
-    this.subjectsApi.createSubjectTeacher(data)
+    this.assessmentApi.createAssessmentClass(data)
       .then(
         (res: any) => {
           console.log(res);
 
           if(res.id){
-            this.getSubjectSubjectTeacher();
+            this.getAssessmentAssessmentClass();
           }
         },
         (err: any) => {
@@ -84,19 +84,19 @@ export class SubjectTeachersComponent implements OnInit {
       )
   }
 
-  deleteSubjectTeacher(id: any){
-    this.isTeacherDeleting = true;
+  deleteAssessmentClass(id: any){
+    this.isClassDeleting = true;
 
-    this.subjectsApi.deleteSubjectTeacher()
+    this.assessmentApi.deleteAssessmentClass()
       .then(
         (res: any) => {
           console.log(res);
-          this.isTeacherDeleting = false;
-          this.getSubjectSubjectTeacher();
+          this.isClassDeleting = false;
+          this.getAssessmentAssessmentClass();
         },
         (err: any) => {
           console.log(err);
-          this.isTeacherDeleting = false;
+          this.isClassDeleting = false;
           this.connectionToast.openToast();
         }
       )

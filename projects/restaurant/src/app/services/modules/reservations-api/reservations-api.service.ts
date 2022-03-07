@@ -94,7 +94,7 @@ export class ReservationsApiService {
   // dashboard
 
   getWeekReservation(startDate: any, endDate: any){
-    return this.reservationTableRef.ref
+    return this.reservationRef.ref
       .where("account", "==", localStorage.getItem('restaurant_id'))
       .where("created_at", "<", startDate).where("created_at", ">", endDate)
       .get();
