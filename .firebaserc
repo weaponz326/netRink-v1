@@ -1,6 +1,6 @@
 {
   "projects": {
-    "default": "netrink-18",
+    "default": "netrink-test-v1",
     "dev": "netrink-test-v1",
     "test": "netrink-test-v1"
   },
