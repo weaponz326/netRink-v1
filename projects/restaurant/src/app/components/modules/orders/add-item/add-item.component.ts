@@ -29,6 +29,9 @@ export class AddItemComponent implements OnInit {
   }
 
   openModal(){
+    this.itemForm.itemForm.controls.price.setValue(0.00);
+    this.itemForm.itemForm.controls.quantity.setValue(1);
+
     this.addButton.nativeElement.click();
   }
 
@@ -48,8 +51,8 @@ export class AddItemComponent implements OnInit {
 
   resetForm(){
     this.itemForm.itemForm.controls.menuItem.setValue('');
-    this.itemForm.itemForm.controls.price.setValue('');
-    this.itemForm.itemForm.controls.quantity.setValue('');
+    this.itemForm.itemForm.controls.price.setValue(0.00);
+    this.itemForm.itemForm.controls.quantity.setValue(1);
   }
 
 }

@@ -38,7 +38,7 @@ export class AddIncomeComponent implements OnInit {
     this.addIncomeForm = new FormGroup({
       itemNumber: new FormControl(''),
       itemDescription: new FormControl(''),
-      amount: new FormControl()
+      amount: new FormControl(0)
     })
   }
 

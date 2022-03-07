@@ -56,43 +56,45 @@
 
                 <h4 class="mb-3">Expenditure</h4>
 
-                <table class="table table-bordered table-sm w-100 page-table">
-                    <thead>
-                        <tr class="bg-light">
-                            <th width="10%">No.</th>
-                            <th width="55%">Item</th>
-                            <th width="20%">Amount</th>
-                            <th width="15%" class="p-0">
-                                <button class="btn btn-secondary btn-sm w-100" (click)="addExpenditure.openModal()">
-                                    <i class="bi bi-plus"></i>
-                                </button>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let data of expenditureGridData; index as i">
-                            <td>{{data?.data().item_number}}</td>
-                            <td>{{data?.data().item_description}}</td>
-                            <td>{{data?.data().amount}}</td>
-                            <td class="p-0">
-                                <button class="btn btn-sm border w-50" (click)="openEditExpenditure(data)"><i class="bi bi-pen"></i></button>
-                                <button [disabled]="isExpenditureDeleting" class="btn btn-sm border w-50" (click)="confirmDelete('Expenditure', data.id)"><i class="bi bi-trash"></i></button>
-                            </td>
-                        </tr>
-                        <tr *ngIf="isFetchingExpenditureGridData" class="text-center">
-                            <td colspan="4">
-                                <div class="spinner-grow spinner-grow-sm m-2" role="status">
-                                    <span class="visually-hidden">Loading...</span>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr class="bg-light">
-                            <td colspan="2"></td>
-                            <td>{{totalExpenditure}}</td>
-                            <td></td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="overflow-auto">
+                    <table class="table table-bordered table-sm w-100 page-table">
+                        <thead>
+                            <tr class="bg-light">
+                                <th width="10%" class="min-width-1">No.</th>
+                                <th width="55%" class="min-width-3">Item</th>
+                                <th width="20%" class="min-width-2">Amount</th>
+                                <th width="15%" class="p-0 min-width-2">
+                                    <button class="btn btn-secondary btn-sm w-100" (click)="addExpenditure.openModal()">
+                                        <i class="bi bi-plus"></i>
+                                    </button>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let data of expenditureGridData; index as i">
+                                <td>{{data?.data().item_number}}</td>
+                                <td>{{data?.data().item_description}}</td>
+                                <td>{{data?.data().amount}}</td>
+                                <td class="p-0">
+                                    <button class="btn btn-sm border w-50" (click)="openEditExpenditure(data)"><i class="bi bi-pen"></i></button>
+                                    <button [disabled]="isExpenditureDeleting" class="btn btn-sm border w-50" (click)="confirmDelete('Expenditure', data.id)"><i class="bi bi-trash"></i></button>
+                                </td>
+                            </tr>
+                            <tr *ngIf="isFetchingExpenditureGridData" class="text-center">
+                                <td colspan="4">
+                                    <div class="spinner-grow spinner-grow-sm m-2" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="bg-light">
+                                <td colspan="2"></td>
+                                <td>{{totalExpenditure}}</td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
             </div>
 

@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 (pdfMake as any).vfs = pdfFonts.pdfMake.vfs;
+import { PageSize } from 'pdfmake/interfaces';
 import htmlToPdfmake from 'html-to-pdfmake';
 export default 'html-to-pdfmake';
 
@@ -37,12 +38,12 @@ export class PdfPrintService {
 
   printRoll(content: any) {
     // TODO:
-    const pageSize = {
+    const pageSize: PageSize = {
       width: 595.28,
 		  height: 'auto'
     }
 
-    const def = { content: content };
+    const def = { content: content, pageSize: pageSize };
     pdfMake.createPdf(def).print();
   }
 

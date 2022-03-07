@@ -58,7 +58,7 @@ export class AddTransactionComponent implements OnInit {
     this.transactionForm.transactionForm.controls.transactionDate.setValue('');
     this.transactionForm.transactionForm.controls.description.setValue('');
     this.transactionForm.transactionForm.controls.transactionType.setValue('');
-    this.transactionForm.transactionForm.controls.amount.setValue('');
+    this.transactionForm.transactionForm.controls.amount.setValue(0);
   }
 
 }

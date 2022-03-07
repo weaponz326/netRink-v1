@@ -31,6 +31,7 @@ export class AddMenuItemComponent implements OnInit {
   }
 
   openModal(){
+    this.menuItemForm.menuItemForm.controls.price.setValue(1.00);
     this.addButton.nativeElement.click();
   }
 
