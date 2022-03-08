@@ -50,8 +50,8 @@ export class SignupFormComponent implements OnInit {
       location: new FormControl('', Validators.required),
       about: new FormControl('', Validators.required),
       email: new FormControl('', [Validators.required, Validators.email]),
-      password1: new FormControl('', [Validators.required, Validators.min(8)]),
-      password2: new FormControl('', [Validators.required, Validators.min(8)]),
+      password1: new FormControl('', Validators.required),
+      password2: new FormControl('', Validators.required),
     })
   }
 

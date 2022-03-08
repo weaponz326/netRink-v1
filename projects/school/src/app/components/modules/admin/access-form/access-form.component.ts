@@ -26,7 +26,7 @@ export class AccessFormComponent implements OnInit {
     attendance_access: false,
     classes_stock_access: false,
     fees_access: false,
-    lesson_notes_access: false,
+    lesson_plan_access: false,
     parents_access: false,
     payments_access: false,
     portal_access: false,
@@ -69,7 +69,7 @@ export class AccessFormComponent implements OnInit {
       attendance_access: this.accessForm.attendance_access,
       classes_stock_access: this.accessForm.classes_stock_access,
       fees_access: this.accessForm.fees_access,
-      lesson_notes_access: this.accessForm.lesson_notes_access,
+      lesson_plan_access: this.accessForm.lesson_plan_access,
       parents_access: this.accessForm.parents_access,
       payments_access: this.accessForm.payments_access,
       portal_access: this.accessForm.portal_access,
@@ -104,7 +104,7 @@ export class AccessFormComponent implements OnInit {
       this.accessForm.attendance_access = true;
       this.accessForm.classes_stock_access = true;
       this.accessForm.fees_access = true;
-      this.accessForm.lesson_notes_access = true;
+      this.accessForm.lesson_plan_access = true;
       this.accessForm.parents_access = true;
       this.accessForm.payments_access = true;
       this.accessForm.portal_access = true;
@@ -123,7 +123,7 @@ export class AccessFormComponent implements OnInit {
       this.accessForm.attendance_access = true;
       this.accessForm.classes_stock_access = true;
       this.accessForm.fees_access = true;
-      this.accessForm.lesson_notes_access = true;
+      this.accessForm.lesson_plan_access = true;
       this.accessForm.parents_access = true;
       this.accessForm.payments_access = true;
       this.accessForm.portal_access = false;
@@ -142,7 +142,7 @@ export class AccessFormComponent implements OnInit {
       this.accessForm.attendance_access = false;
       this.accessForm.classes_stock_access = false;
       this.accessForm.fees_access = false;
-      this.accessForm.lesson_notes_access = false;
+      this.accessForm.lesson_plan_access = false;
       this.accessForm.parents_access = false;
       this.accessForm.payments_access = false;
       this.accessForm.portal_access = false;

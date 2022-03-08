@@ -62,6 +62,10 @@ const routes: Routes = [
         loadChildren: () => import("./pages/modules/students-page/students-page.module").then(m => m.StudentsPageModule)
       },
       {
+        path: "lesson-plan",
+        loadChildren: () => import("./pages/modules/lesson-plan-page/lesson-plan-page.module").then(m => m.LessonPlanPageModule)
+      },
+      {
         path: "reports",
         loadChildren: () => import("./pages/modules/reports-page/reports-page.module").then(m => m.ReportsPageModule)
       },

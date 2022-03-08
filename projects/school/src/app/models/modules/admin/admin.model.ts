@@ -30,7 +30,7 @@ export class UserAccess {
   attendance_access!: boolean;
   classes_stock_access!: boolean;
   fees_access!: boolean;
-  lesson_notes_access!: boolean;
+  lesson_plan_access!: boolean;
   parents_access!: boolean;
   payments_access!: boolean;
   portal_access!: boolean;

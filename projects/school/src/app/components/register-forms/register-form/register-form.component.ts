@@ -139,7 +139,7 @@ export class RegisterFormComponent implements OnInit {
       attendance_access: true,
       classes_stock_access: true,
       fees_access: true,
-      lesson_notes_access: true,
+      lesson_plan_access: true,
       parents_access: true,
       payments_access: true,
       portal_access: true,
