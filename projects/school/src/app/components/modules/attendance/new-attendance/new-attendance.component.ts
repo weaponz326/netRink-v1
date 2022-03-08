@@ -105,7 +105,7 @@ export class NewAttendanceComponent implements OnInit {
   onTermSelected(termData: any){
     console.log(termData);
 
-    this.attendanceForm.controls.term.setValue(termData.data().term_name);
+    this.attendanceForm.controls.term.setValue(termData.data().term.term_name);
     this.selectedTermId = termData.id;
     this.selectedTermData = termData.data();
   }
@@ -118,7 +118,7 @@ export class NewAttendanceComponent implements OnInit {
   onClassSelected(classData: any){
     console.log(classData);
 
-    this.attendanceForm.controls.class.setValue(classData.data().class_name);
+    this.attendanceForm.controls.class.setValue(classData.data().clase.class_name);
     this.selectedClassId = classData.id;
     this.selectedClassData = classData.data();
   }

@@ -72,15 +72,15 @@ export class AssessmentApiService {
   }
 
   getAssessmentClass(){
-    return this.assessmentClassRef.doc(String(sessionStorage.getItem('school_assessment_assessmentClass_id'))).ref.get();
+    return this.assessmentClassRef.doc(String(sessionStorage.getItem('school_assessment_class_id'))).ref.get();
   }
 
   updateAssessmentClass(assessmentClass: any){
-    return this.assessmentClassRef.doc(String(sessionStorage.getItem('school_assessment_assessmentClass_id'))).update(assessmentClass);
+    return this.assessmentClassRef.doc(String(sessionStorage.getItem('school_assessment_class_id'))).update(assessmentClass);
   }
 
   deleteAssessmentClass(){
-    return this.assessmentClassRef.doc(String(sessionStorage.getItem('school_assessment_assessmentClass_id'))).delete();
+    return this.assessmentClassRef.doc(String(sessionStorage.getItem('school_assessment_class_id'))).delete();
   }
 
   getAssessmentAssessmentClass(){

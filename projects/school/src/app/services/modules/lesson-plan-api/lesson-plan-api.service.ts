@@ -64,4 +64,13 @@ export class LessonPlanApiService {
       .get();
   }
 
+  // dashboard
+
+  getWeekLessonPlan(startDate: any, endDate: any){
+    return this.lessonPlanRef.ref
+      .where("account", "==", localStorage.getItem('school_id'))
+      .where("created_at", "<", startDate).where("created_at", ">", endDate)
+      .get();
+  }
+
 }
