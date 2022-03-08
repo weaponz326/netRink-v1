@@ -30,6 +30,7 @@ export class ViewParentComponent implements OnInit {
   ) { }
 
   @ViewChild('parentFormComponentReference', { read: ParentFormComponent, static: false }) parentForm!: ParentFormComponent;
+  @ViewChild('parentWardsComponentReference', { read: ParentWardsComponent, static: false }) parentWards!: ParentWardsComponent;
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
   @ViewChild('deleteModalComponentReference', { read: DeleteModalComponent, static: false }) deleteModal!: DeleteModalComponent;
 

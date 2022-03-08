@@ -45,14 +45,14 @@
                             <td>{{data?.data().phone}}</td>
                         </tr>
                         <tr *ngIf="isFetchingGridData" class="text-center">
-                            <td colspan="4">
+                            <td colspan="3">
                                 <div class="spinner-grow m-4" role="status">
                                     <span class="visually-hidden">Loading...</span>
                                 </div>
                             </td>
                         </tr>
                         <tr *ngIf="!isDataAvailable && !isFetchingGridData" class="text-center">
-                            <td colspan="4">
+                            <td colspan="3">
                                 <p class="m-4">No data available</p>
                             </td>
                         </tr>

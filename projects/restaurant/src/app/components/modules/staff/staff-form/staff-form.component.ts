@@ -30,15 +30,15 @@ export class StaffFormComponent implements OnInit {
       sex: new FormControl(''),
       nationality: new FormControl(''),
       religion: new FormControl(''),
+      staffCode: new FormControl(''),
+      department: new FormControl(''),
+      job: new FormControl(''),
       phone: new FormControl(''),
       email: new FormControl(''),
       address: new FormControl(''),
       state: new FormControl(''),
       city: new FormControl(''),
       postCode: new FormControl(''),
-      staffCode: new FormControl(''),
-      department: new FormControl(''),
-      job: new FormControl(''),
     })
   }
 
