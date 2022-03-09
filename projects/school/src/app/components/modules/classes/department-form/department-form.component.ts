@@ -1,0 +1,61 @@
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+
+
+@Component({
+  selector: 'app-department-form',
+  templateUrl: './department-form.component.html',
+  styleUrls: ['./department-form.component.scss']
+})
+export class DepartmentFormComponent implements OnInit {
+
+  constructor() { }
+
+  departmentForm: FormGroup = new FormGroup({});
+
+  selectedTermId = "";
+  selectedTermData = {};
+  selectedTeacherId = "";
+  selectedTeacherData = {};
+
+  ngOnInit(): void {
+    this.initDepartmentForm();
+  }
+
+  initDepartmentForm(){
+    this.departmentForm = new FormGroup({
+      departmentCode: new FormControl(''),
+      departmentName: new FormControl(''),
+      departmentDescription: new FormControl(''),
+      term: new FormControl(''),
+      departmentHead: new FormControl(''),
+    })
+  }
+
+  openTermWindow(){
+    console.log("You are opening select term window")
+    // this.selectTerm.openModal();
+  }
+
+  onTermSelected(termData: any){
+    console.log(termData);
+
+    this.departmentForm.controls.term.setValue(termData.data().term.term_name);
+    this.selectedTermId = termData.id;
+    this.selectedTermData = termData.data();
+  }
+
+  openTeacherWindow(){
+    console.log("You are opening select teacher window")
+    // this.selectTeacher.openModal();
+  }
+
+  onTeacherSelected(teacherData: any){
+    console.log(teacherData);
+
+    this.departmentForm.controls.departmentHead.setValue(teacherData.data().dpartment_head.teacher_name);
+    this.selectedTeacherId = teacherData.id;
+    this.selectedTeacherData = teacherData.data();
+  }
+
+}

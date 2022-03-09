@@ -1,7 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-// import { ChartsModule } from 'ng2-charts';
+import { ChartsModule } from 'ng2-charts';
 
 import { ModuleUtilitiesModule } from 'projects/personal/src/app/components/module-utilities/module-utilities.module';
 
@@ -13,6 +15,10 @@ import { ViewClassComponent } from './view-class/view-class.component';
 import { ClassFormComponent } from './class-form/class-form.component';
 import { ClassStudentsComponent } from './class-students/class-students.component';
 import { ClassSubjectsComponent } from './class-subjects/class-subjects.component';
+import { AllDepartmentsComponent } from './all-departments/all-departments.component';
+import { AddDepartmentComponent } from './add-department/add-department.component';
+import { EditDepartmentComponent } from './edit-department/edit-department.component';
+import { DepartmentFormComponent } from './department-form/department-form.component';
 
 
 
@@ -25,11 +31,18 @@ import { ClassSubjectsComponent } from './class-subjects/class-subjects.componen
     ViewClassComponent,
     ClassFormComponent,
     ClassStudentsComponent,
-    ClassSubjectsComponent
+    ClassSubjectsComponent,
+    AllDepartmentsComponent,
+    AddDepartmentComponent,
+    EditDepartmentComponent,
+    DepartmentFormComponent
   ],
   imports: [
     CommonModule,
-    // ChartsModule,
+    RouterModule,
+    FormsModule,
+    ReactiveFormsModule,
+    ChartsModule,
     ModuleUtilitiesModule,
   ]
 })

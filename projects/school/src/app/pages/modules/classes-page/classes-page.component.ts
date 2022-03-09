@@ -10,8 +10,8 @@ export class ClassesPageComponent implements OnInit {
   constructor() { }
 
   navLinks: any[] = [
-    { text: "All Classes", url: "/home/classes/all-classes", icon: "fa fa-fw fa-list" },
-    { text: "New Class", url: "/home/classes/new-class", icon: "fa fa-fw fa-plus" }
+    { text: "All Classes", url: "/home/classes/all-classes", icon: "bi bi-list-ul" },
+    { text: "All Departments", url: "/home/classes/all-departments", icon: "bi bi-list-ul" }
   ]
 
   ngOnInit(): void {
