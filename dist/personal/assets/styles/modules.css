@@ -113,26 +113,6 @@ table.page-table .disabled .page-link{
   color: #85879683 !important;
 }
 
-th.min-width-1{
-  min-width: 40px;
-}
-
-th.min-width-2{
-  min-width: 80px;
-}
-
-th.min-width-3{
-  min-width: 120px;
-}
-
-th.min-width-4{
-  min-width: 160px;
-}
-
-th.min-width-5{
-  min-width: 200px;
-}
-
 /* modals */
 
 .form-modal{
