@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { PaymentsPageComponent } from './payments-page.component';
 import { AllPaymentsComponent } from '../../../components/modules/payments/all-payments/all-payments.component';
+import { NewPaymentComponent } from '../../../components/modules/payments/new-payment/new-payment.component';
 import { ViewPaymentComponent } from '../../../components/modules/payments/view-payment/view-payment.component';
 import { DashboardComponent } from '../../../components/modules/payments/dashboard/dashboard.component';
 import { SettingsComponent } from '../../../components/modules/payments/settings/settings.component';
@@ -16,6 +17,7 @@ const routes: Routes = [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'settings', component: SettingsComponent },
       { path: "all-payments", component: AllPaymentsComponent },
+      { path: "new-payment", component: NewPaymentComponent  },
       { path: "view-payment", component: ViewPaymentComponent  }
     ]
   }

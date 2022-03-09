@@ -20,7 +20,8 @@ export const environment = {
     measurementId: "G-BR5CK23ZQC"
   },
 
-  paystackPublicKey: "pk_test_275f8f544fab9c9c78a1e8789d8c883f0102f708",
+  paystackTestPublicKey: "pk_test_275f8f544fab9c9c78a1e8789d8c883f0102f708",
+  paystackLivePublicKey: "pk_live_921d89f7a824979fe69d35154cce546431f15d7b",
 };
 
 /*

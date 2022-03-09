@@ -19,7 +19,7 @@ import { LocationComponent } from './profile-content/location/location.component
 import { ContactComponent } from './profile-content/contact/contact.component';
 import { PaymentsHistoryComponent } from './payments-history/payments-history.component';
 
-import { environment } from 'projects/restaurant/src/environments/environment';
+import { environment } from 'projects/school/src/environments/environment';
 
 
 
@@ -42,7 +42,7 @@ import { environment } from 'projects/restaurant/src/environments/environment';
     ReactiveFormsModule,
     ChartsModule,
     GooglePlaceModule,
-    Angular4PaystackModule.forRoot(environment.paystackPublicKey),
+    Angular4PaystackModule.forRoot(environment.paystackLivePublicKey),
     ModuleUtilitiesModule,
   ]
 })

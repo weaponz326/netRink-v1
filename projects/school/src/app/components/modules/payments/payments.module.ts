@@ -1,7 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-// import { ChartsModule } from 'ng2-charts';
+import { ChartsModule } from 'ng2-charts';
 
 import { ModuleUtilitiesModule } from 'projects/personal/src/app/components/module-utilities/module-utilities.module';
 
@@ -10,6 +12,7 @@ import { SettingsComponent } from './settings/settings.component';
 import { AllPaymentsComponent } from './all-payments/all-payments.component';
 import { NewPaymentComponent } from './new-payment/new-payment.component';
 import { ViewPaymentComponent } from './view-payment/view-payment.component';
+import { PaymentFormComponent } from './payment-form/payment-form.component';
 
 
 
@@ -19,11 +22,15 @@ import { ViewPaymentComponent } from './view-payment/view-payment.component';
     SettingsComponent,
     AllPaymentsComponent,
     NewPaymentComponent,
-    ViewPaymentComponent
+    ViewPaymentComponent,
+    PaymentFormComponent
   ],
   imports: [
     CommonModule,
-    // ChartsModule,
+    RouterModule,
+    FormsModule,
+    ReactiveFormsModule,
+    ChartsModule,
     ModuleUtilitiesModule,
   ]
 })
