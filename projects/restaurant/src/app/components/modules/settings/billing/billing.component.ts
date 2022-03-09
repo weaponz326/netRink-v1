@@ -1,4 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
 
 import { PaystackOptions } from 'angular4-paystack';
 
@@ -27,13 +28,14 @@ export class BillingComponent implements OnInit {
     { text: "Subscription", url: "/home/settings/billing" },
   ];
 
-  paystackPublicKey = environment.paystackPublicKey;
+  paystackPublicKey = environment.paystackLivePublicKey;
 
   isSubscriptionLoading = false;
   isSubscriptionSaving = false;
 
   subscriptionData: any;
 
+  emailValue = "";
   subscriptionTypeValue = "";
   billingFrequencyValue = "";
   numberUsersValue = 0;
@@ -49,11 +51,23 @@ export class BillingComponent implements OnInit {
   isFrequencyDisabled = false;
   isnumberUsersDisabled = false;
 
+  isEmailValid = false;
   isSubscriptionValid = true;
   isFrequencyValid = true;
   isNumberUsersValid = true;
 
-  paystackOptions: PaystackOptions = { email: "", amount: 0, ref: ""};
+  plans = {
+    smallTeamMonthly: "PLN_scww6u5e6ocqtw6",
+    smallTeamYearly: "PLN_qxq74hmegjdag94",
+    largeTeamMonthly: "PLN_ts2kk0j0cek0sky",
+    largeTeamYearly: "PLN_3p7epe1wgthaie7",
+  }
+
+  paystackOptions = {
+    ref: `${Math.ceil(Math.random() * 10e10)}`,
+    plan: "",
+    quantity: "",
+  };
 
   ngOnInit(): void {
     this.getSubscription();
@@ -152,20 +166,20 @@ export class BillingComponent implements OnInit {
   }
 
   setOptions(){
-    var plan;
-    var quantity;
+    var plan = "";
+    var quantity = "";
 
     if (this.subscriptionTypeValue == "Small Team"){
       if (this.billingFrequencyValue == "Monthly")
-        plan = "PLN_c8d7gmxsxu46txm";
+        plan = this.plans.smallTeamMonthly;
       else if (this.billingFrequencyValue == "Yearly")
-        plan = "PLN_4f7s2k14b7avsqk";
+        plan = this.plans.smallTeamYearly;
     }
     else if (this.subscriptionTypeValue == "Large Team"){
       if (this.billingFrequencyValue == "Monthly")
-        plan = "PLN_r6z7mitp4leqrsn";
+        plan = this.plans.largeTeamMonthly;
       else if (this.billingFrequencyValue == "Yearly")
-        plan = "PLN_vqyw66kl64t8xwq";
+        plan = this.plans.largeTeamYearly;
     }
 
     if (this.subscriptionTypeValue == "Small Team"){
@@ -175,19 +189,16 @@ export class BillingComponent implements OnInit {
       quantity = String(this.numberUsersValue / 50);
     }
 
-    this.paystackOptions = {
-      email: `restaurant.${localStorage.getItem('restaurant_id')}@netrink.com`,
-      amount: 200,
-      plan: plan,
-      quantity: quantity,
-      currency: 'GHS',
-      ref: `${Math.ceil(Math.random() * 10e10)}`
-    }
-
-    console.log(this.paystackOptions);
+    this.paystackOptions.plan = plan;
+    this.paystackOptions.quantity = quantity;
   }
 
-  validateSubcriptionForm() {
+  validateSubcriptionForm(f: NgForm) {
+    if (f.controls.email.invalid){
+      console.log("email invalid");
+      return false;
+    }
+
     if ((this.subscriptionTypeValue == "Small Team" || this.subscriptionTypeValue == "Large Team") && this.billingFrequencyValue == ""){
       this.isFrequencyValid = false;
       return false;
@@ -217,8 +228,10 @@ export class BillingComponent implements OnInit {
     return true;
   }
 
-  paymentInit(){
+  paymentInit() {
     console.log('Payment initialized');
+    console.log(this.emailValue);
+    console.log(this.paystackOptions);
   }
 
   paymentDone(ref: any) {
@@ -227,6 +240,7 @@ export class BillingComponent implements OnInit {
 
   paymentCancel() {
     console.log('payment failed');
+    this.paystackOptions.ref = `${Math.ceil(Math.random() * 10e10)}`;
   }
 
 }

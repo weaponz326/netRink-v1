@@ -42,7 +42,7 @@ import { environment } from 'projects/restaurant/src/environments/environment';
     ReactiveFormsModule,
     ChartsModule,
     GooglePlaceModule,
-    Angular4PaystackModule.forRoot(environment.paystackPublicKey),
+    Angular4PaystackModule.forRoot(environment.paystackLivePublicKey),
     ModuleUtilitiesModule,
   ]
 })

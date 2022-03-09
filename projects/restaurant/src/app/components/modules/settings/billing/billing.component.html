@@ -10,66 +10,83 @@
 
                     <h3 class="mb-3">Subscription Plan</h3>
 
-                    <div class="row mb-2">
-                        <div class="col-md-4"><label>Subscription Type :</label></div>
-                        <div class="col-md-8">
-                            <select [(ngModel)]="subscriptionTypeValue" class="form-control form-control-sm w-100" (change)="setSubscription($any($event.target).value)"
-                            [ngClass]="!isSubscriptionValid ? 'is-invalid' : ''">
-                                <option *ngFor="let subscription of subscriptionSource">{{subscription}}</option>
-                            </select>
+                    <form #f="ngForm" (ngSubmit)="validateSubcriptionForm(f)">
+
+                        <div class="row mb-2">
+                            <div class="col-md-4"><label>Subscription Type :</label></div>
+                            <div class="col-md-8">
+                                <select [(ngModel)]="subscriptionTypeValue" name="subscription" class="form-control form-control-sm w-100" (change)="setSubscription($any($event.target).value)"
+                                [ngClass]="!isSubscriptionValid ? 'is-invalid' : ''">
+                                    <option *ngFor="let subscription of subscriptionSource">{{subscription}}</option>
+                                </select>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="row mb-2">
-                        <div class="col-md-4"><label>Billing Frequency :</label></div>
-                        <div class="col-md-8">
-                            <select [(ngModel)]="billingFrequencyValue" [disabled]="isFrequencyDisabled" class="form-control form-control-sm w-100" (change)="setFrequency($event)"
-                            [ngClass]="!isFrequencyValid ? 'is-invalid' : ''">
-                                <option *ngFor="let frequency of frequencySource">{{frequency}}</option>
-                            </select>
+                        <div class="row mb-2">
+                            <div class="col-md-4"><label>Billing Frequency :</label></div>
+                            <div class="col-md-8">
+                                <select [(ngModel)]="billingFrequencyValue" name="frequency" [disabled]="isFrequencyDisabled" class="form-control form-control-sm w-100" (change)="setFrequency($event)"
+                                [ngClass]="!isFrequencyValid ? 'is-invalid' : ''">
+                                    <option *ngFor="let frequency of frequencySource">{{frequency}}</option>
+                                </select>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="row mb-2">
-                        <div class="col-md-4"><label>No. of Users :</label></div>
-                        <div class="col-md-4">
-                            <input [(ngModel)]="numberUsersValue" type="number" [step]="numberUsersStep" [disabled]="isnumberUsersDisabled" min="0" [max]="numberUsersStep * 4" (change)="setOptions()"
-                            class="form-control form-control-sm w-100" [ngClass]="!isNumberUsersValid ? 'is-invalid' : ''">
+                        <div class="row mb-2">
+                            <div class="col-md-4"><label>No. of Users :</label></div>
+                            <div class="col-md-4">
+                                <input [(ngModel)]="numberUsersValue" name="users" type="number" [step]="numberUsersStep" [disabled]="isnumberUsersDisabled" min="0" [max]="numberUsersStep * 4" (change)="setOptions()"
+                                class="form-control form-control-sm w-100" [ngClass]="!isNumberUsersValid ? 'is-invalid' : ''">
 
-                            <p *ngIf="!isNumberUsersValid" class="text-danger m-0">
-                                <small *ngIf="subscriptionTypeValue == 'Small Team'">Should be multiples of 10</small>
-                                <small *ngIf="subscriptionTypeValue == 'Large Team'">Should be multiples of 50</small>
-                            </p>
+                                <p *ngIf="!isNumberUsersValid" class="text-danger m-0">
+                                    <small *ngIf="subscriptionTypeValue == 'Small Team'">Should be multiples of 10</small>
+                                    <small *ngIf="subscriptionTypeValue == 'Large Team'">Should be multiples of 50</small>
+                                </p>
+                            </div>
                         </div>
-                    </div>
 
-                </div>
-            </div>
+                        <hr />
 
-            <hr />
-
-            <div *ngIf="!isSubscriptionLoading" class="row mb-3 page-form">
-                <div class="col-md-9">
-                    <button class="btn btn-secondary float-end" (click)="validateSubcriptionForm()"
-                    [disabled]="isSubscriptionSaving || subscriptionTypeValue == 'Individual' || subscriptionTypeValue == 'Comprehensive'">
-                        Subscribe
-                    </button>
-                </div>
-            </div>
-
-            <div *ngIf="isSubscriptionLoading" class="row mb-3 page-form">
-                <div class="col-md-9">
-                    <button type="button" class="btn float-end ms-1 btn-light">
-                        <div class="spinner-grow spinner-grow-sm" role="status">
-                            <span class="visually-hidden">Loading...</span>
+                        <div class="row mb-2">
+                            <div class="col-md-4"><label>Email :</label></div>
+                            <div class="col-md-8">
+                                <input [(ngModel)]="emailValue" type="email" name="email"  #emailReference="ngModel" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required
+                                class="form-control form-control-sm w-100" [ngClass]="emailReference.touched && emailReference.errors ? 'is-invalid' : ''">
+                            </div>
                         </div>
-                    </button>
+
+                        <div *ngIf="!isSubscriptionLoading" class="row mb-3 page-form">
+                            <div class="col-md-12">
+                                <button class="btn btn-secondary float-end"
+                                [disabled]="isSubscriptionSaving || subscriptionTypeValue == 'Individual' || subscriptionTypeValue == 'Comprehensive'">
+                                    Subscribe
+                                </button>
+                            </div>
+                        </div>
+
+                        <div *ngIf="isSubscriptionLoading" class="row mb-3 page-form">
+                            <div class="col-md-12">
+                                <button type="button" class="btn float-end ms-1 btn-light">
+                                    <div class="spinner-grow spinner-grow-sm" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
+
+                    </form>
+
                 </div>
             </div>
 
             <button [hidden]="true" #paystackButtonElementReference
                 angular4-paystack
-                [paystackOptions]="paystackOptions"
+                [email]="emailValue"
+                [amount]="200"
+                [currency]="'GHS'"
+                [ref]="paystackOptions.ref"
+                [plan]="paystackOptions.plan"
+                [quantity]="paystackOptions.quantity"
                 (paymentInit)="paymentInit()"
                 (onClose)="paymentCancel()"
                 (callback)="paymentDone($event)"
