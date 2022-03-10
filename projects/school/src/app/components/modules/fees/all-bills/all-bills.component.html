@@ -1,1 +1,96 @@
-<p>all-bills works!</p>
+<div class="row mb-3">
+    <div class="col">
+        <h4 class="d-inline mb-3">Fees Bills</h4>
+        <button class="btn btn-secondary float-end nr-standard-font" routerLink="/home/fees/view-fees/fees-items">
+            <i class="bi bi-arrow-left-right me-2"></i> Fees Items
+        </button>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-9">
+
+        <div class="overflow-auto">
+            <table class="table table-bordered table-sm w-100 page-table">
+                <thead>
+                    <tr class="bg-light">
+                        <th width="15%" class="min-width-2">
+                            Student ID
+                            <i *ngIf="sortParams.field != 'student_code'" class="bi bi-filter float-end list-pointer" (click)="sortTable('student_code', 'desc')"></i>
+                            <i *ngIf="sortParams.field == 'student_code' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('student_code', 'asc')"></i>
+                            <i *ngIf="sortParams.field == 'student_code' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('student_code', 'desc')"></i>
+                        </th>
+                        <th width="35%" class="min-width-4">
+                            Student Name
+                            <i *ngIf="sortParams.field != 'student_name'" class="bi bi-filter float-end list-pointer" (click)="sortTable('student_name', 'desc')"></i>
+                            <i *ngIf="sortParams.field == 'student_name' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('student_name', 'asc')"></i>
+                            <i *ngIf="sortParams.field == 'student_name' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('student_name', 'desc')"></i>
+                        </th>
+                        <th width="30%" class="min-width-3">
+                            Class Name
+                            <i *ngIf="sortParams.field != 'class_name'" class="bi bi-filter float-end list-pointer" (click)="sortTable('class_name', 'desc')"></i>
+                            <i *ngIf="sortParams.field == 'class_name' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('class_name', 'asc')"></i>
+                            <i *ngIf="sortParams.field == 'class_name' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('class_name', 'desc')"></i>
+                        </th>
+                        <th width="20%" class="min-width-3">
+                            Amount
+                            <i *ngIf="sortParams.field != 'class_name'" class="bi bi-filter float-end list-pointer" (click)="sortTable('class_name', 'desc')"></i>
+                            <i *ngIf="sortParams.field == 'class_name' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('class_name', 'asc')"></i>
+                            <i *ngIf="sortParams.field == 'class_name' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('class_name', 'desc')"></i>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let data of billsGridData" (dblclick)="viewBill(data.id)" class="table-pointer">
+                        <td>{{data?.data().student.data.student_code}}</td>
+                        <td>{{data?.data().student.data.student_name}}</td>
+                        <td>{{data?.data().class.data.class_name}}</td>
+                        <td>{{data?.data().amount}}</td>
+                    </tr>
+                    <tr *ngIf="isFetchingGridData" class="text-center">
+                        <td colspan="4">
+                            <div class="spinner-grow m-4" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="!isDataAvailable && !isFetchingGridData" class="text-center">
+                        <td colspan="4">
+                            <p class="m-4">No data available</p>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr class="bg-light">
+                        <td colspan="4">
+                            <nav class="nav-light float-end" aria-label="Page navigation">
+                                <ul class="pagination pagination-sm mb-0 justify-content-end">
+                                    <li class="page-item" [ngClass]="disablePrev ? 'disabled' : ''">
+                                        <a class="page-link" href="#" aria-label="First" (click)="previousPage($event)">
+                                            <i class="bi bi-caret-left-fill"></i>
+                                        </a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" aria-label="Current" (click)="$event.preventDefault()">
+                                            {{pageNumber}}
+                                        </a>
+                                    </li>
+                                    <li class="page-item" [ngClass]="disableNext ? 'disabled' : ''">
+                                        <a class="page-link" href="#" aria-label="Last" (click)="nextPage($event)">
+                                            <i class="bi bi-caret-right-fill"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+<!-- connection error prompt component -->
+
+<app-connection-toast #connectionToastComponentReference></app-connection-toast>

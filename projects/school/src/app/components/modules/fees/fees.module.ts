@@ -1,7 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-// import { ChartsModule } from 'ng2-charts';
+import { ChartsModule } from 'ng2-charts';
 
 import { ModuleUtilitiesModule } from 'projects/personal/src/app/components/module-utilities/module-utilities.module';
 
@@ -17,6 +19,7 @@ import { EditItemComponent } from './edit-item/edit-item.component';
 import { AddArrearsComponent } from './add-arrears/add-arrears.component';
 import { AllBillsComponent } from './all-bills/all-bills.component';
 import { StudentBillComponent } from './student-bill/student-bill.component';
+import { FeesTargetComponent } from './fees-target/fees-target.component';
 
 
 
@@ -33,11 +36,15 @@ import { StudentBillComponent } from './student-bill/student-bill.component';
     EditItemComponent,
     AddArrearsComponent,
     AllBillsComponent,
-    StudentBillComponent
+    StudentBillComponent,
+    FeesTargetComponent
   ],
   imports: [
     CommonModule,
-    // ChartsModule,
+    RouterModule,
+    FormsModule,
+    ReactiveFormsModule,
+    ChartsModule,
     ModuleUtilitiesModule,
   ]
 })

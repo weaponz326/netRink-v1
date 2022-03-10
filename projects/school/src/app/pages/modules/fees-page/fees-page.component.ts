@@ -10,8 +10,7 @@ export class FeesPageComponent implements OnInit {
   constructor() { }
 
   navLinks: any[] = [
-    { text: "All Fees", url: "/home/fees/all-fees", icon: "fa fa-fw fa-list" },
-    { text: "Create Fees", url: "/home/fees/create-fees", icon: "fa fa-fw fa-plus" },
+    { text: "All Fees", url: "/home/fees/all-fees", icon: "bi bi-list-ul" },
   ]
 
   ngOnInit(): void {
