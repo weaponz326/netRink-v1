@@ -6,7 +6,7 @@ import moment from 'moment/moment';
 
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 
-import { ParentsApiService } from 'projects/school/src/app/services/modules/parents-api/parents-api.service';
+import { ClassesApiService } from 'projects/school/src/app/services/modules/classes-api/classes-api.service';
 
 
 @Component({
@@ -16,7 +16,7 @@ import { ParentsApiService } from 'projects/school/src/app/services/modules/pare
 })
 export class DashboardComponent implements OnInit {
 
-  constructor(private parentsApi: ParentsApiService) { }
+  constructor(private classesApi: ClassesApiService) { }
 
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
 
