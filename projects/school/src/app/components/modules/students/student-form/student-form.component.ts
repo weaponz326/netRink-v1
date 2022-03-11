@@ -80,5 +80,4 @@ export class StudentFormComponent implements OnInit {
     this.selectedClassData = classData.data();
   }
 
-
 }

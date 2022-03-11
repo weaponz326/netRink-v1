@@ -6,7 +6,7 @@ import moment from 'moment/moment';
 
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 
-import { StudentsApiService } from 'projects/school/src/app/services/modules/students-api/students-api.service';
+import { ReportsApiService } from 'projects/school/src/app/services/modules/reports-api/reports-api.service';
 
 
 @Component({
@@ -16,12 +16,12 @@ import { StudentsApiService } from 'projects/school/src/app/services/modules/stu
 })
 export class DashboardComponent implements OnInit {
 
-  constructor(private studentsApi: StudentsApiService) { }
+  constructor(private reportsApi: ReportsApiService) { }
 
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
 
   navHeading: any[] = [
-    { text: "Dashboard", url: "/home/resports/dashboard" },
+    { text: "Dashboard", url: "/home/reports/dashboard" },
   ];
 
   ngOnInit(): void {

@@ -25,7 +25,7 @@ export class AllReportsComponent implements OnInit {
   @ViewChild('newReportComponentReference', { read: NewReportComponent, static: false }) newReport!: NewReportComponent;
 
   navHeading: any[] = [
-    { text: "All Report", url: "/home/reports/all-report" },
+    { text: "All Report", url: "/home/reports/all-reports" },
   ];
 
   reportsGridData: any[] = [];

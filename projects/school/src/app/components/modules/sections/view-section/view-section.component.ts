@@ -1,4 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
+import { FormControl, FormGroup } from '@angular/forms';
+
+import { SectionStudentsComponent } from '../section-students/section-students.component';
+import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
+import { DeleteModalComponent } from 'projects/personal/src/app/components/module-utilities/delete-modal/delete-modal.component'
+// import { SelectTermComponent } from '../../../select-windows/terms-windows/select-term/select-term.component';
+
+import { SectionsApiService } from 'projects/school/src/app/services/modules/sections-api/sections-api.service';
+// import { SectionsPrintService } from 'projects/school/src/app/services/printing/sections-print/sections-print.service';
+
+import { Section } from 'projects/school/src/app/models/modules/sections/sections.model';
+
 
 @Component({
   selector: 'app-view-section',
@@ -7,9 +20,134 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ViewSectionComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private router: Router,
+    private sectionsApi: SectionsApiService,
+    // private sectionsPrint: SectionsPrintService
+  ) { }
+
+  @ViewChild('sectionStudentsComponentReference', { read: SectionStudentsComponent, static: false }) sectionStudents!: SectionStudentsComponent;
+  @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
+  @ViewChild('deleteModalComponentReference', { read: DeleteModalComponent, static: false }) deleteModal!: DeleteModalComponent;
+  // @ViewChild('selectTermComponentReference', { read: SelectTermComponent, static: false }) selectTerm!: SelectTermComponent;
+
+  navHeading: any[] = [
+    { text: "All Sections", url: "/home/sections/all-sections" },
+    { text: "View Section", url: "/home/sections/view-section" },
+  ];
+
+  sectionForm: FormGroup = new FormGroup({});
+  sectionFormData: any;
+
+  selectedTermId = "";
+  selectedTermData = {};
+
+  isSectionLoading = false;
+  isSectionSaving = false;
+  isSectionDeleting = false;
 
   ngOnInit(): void {
+    this.initSectionsForm();
+    this.getSection();
+  }
+
+  initSectionsForm(){
+    this.sectionForm = new FormGroup({
+      sectionsCode: new FormControl(''),
+      sectionsName: new FormControl(''),
+      term: new FormControl({value: "", disabled: true}),
+    })
+  }
+
+  getSection(){
+    this.isSectionLoading = true;
+
+    this.sectionsApi.getSection()
+      .then(
+        (res: any) => {
+          console.log(res);
+          this.sectionFormData = res;
+          this.isSectionLoading = false;
+
+          this.sectionForm.controls.sectionsCode.setValue(this.sectionFormData.data().sections_code);
+          this.sectionForm.controls.sectionsName.setValue(this.sectionFormData.data().sections_name);
+
+          this.selectedTermId = this.sectionFormData.data().term.id;
+          this.selectedTermData = this.sectionFormData.data().term.data;
+          this.sectionForm.controls.termName.setValue(this.sectionFormData.data().term.term_name);
+        },
+        (err: any) => {
+          console.log(err);
+          this.isSectionLoading = false;
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  updateSection(){
+    let data = {
+      sections_code: this.sectionForm.controls.sectionsCode.value,
+      sections_name: this.sectionForm.controls.sectionsName.value,
+      term: {
+        id: this.selectedTermId,
+        data: this.selectedTermData,
+      },
+    }
+
+    console.log(data);
+    this.isSectionSaving = true;
+
+    this.sectionsApi.updateSection(data)
+      .then(
+        (res: any) => {
+          console.log(res);
+          this.isSectionSaving = false;
+        },
+        (err: any) => {
+          console.log(err);
+          this.isSectionSaving = false;
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  confirmDelete(){
+    this.deleteModal.openModal();
+  }
+
+  deleteSection(){
+    this.isSectionDeleting = true;
+
+    this.sectionsApi.deleteSection()
+      .then(
+        (res: any) => {
+          console.log(res);
+
+          this.router.navigateByUrl('/home/sections/all-sections');
+        },
+        (err: any) => {
+          console.log(err);
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  openTermWindow(){
+    console.log("You are opening select term window")
+    // this.selectTerm.openModal();
+  }
+
+  onTermSelected(termData: any){
+    console.log(termData);
+
+    this.sectionForm.controls.term.setValue(termData.data().term.term_name);
+    this.selectedTermId = termData.id;
+    this.selectedTermData = termData.data();
+  }
+
+  onPrint(){
+    console.log("lets start printing...");
+    // this.sectionsPrint.printViewSection();
   }
 
 }

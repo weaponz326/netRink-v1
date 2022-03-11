@@ -1,1 +1,106 @@
-<p>all-sections works!</p>
+<app-module-topnav [headings]="navHeading" [showPrint]="true" (print)="onPrint()"></app-module-topnav>
+
+<div class="container">
+
+    <div class="row">
+        <div class="col-md-10">
+
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <button class="btn btn-secondary page-add-btn" (click)="newSection.openModal()">New Section</button>
+                    <button [disabled]="isFetchingGridData" class="btn btn-light border float-end page-refresh-btn" (click)="getAccountSection()">
+                        <i class="bi bi-arrow-clockwise"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="overflow-auto">
+                <table class="table table-bordered table-sm w-100 page-table">
+                    <thead>
+                        <tr class="bg-light">
+                            <th width="15%" class="min-width-2">
+                                Section ID
+                                <i *ngIf="sortParams.field != 'section_code'" class="bi bi-filter float-end list-pointer" (click)="sortTable('section_code', 'desc')"></i>
+                                <i *ngIf="sortParams.field == 'section_code' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('section_code', 'asc')"></i>
+                                <i *ngIf="sortParams.field == 'section_code' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('section_code', 'desc')"></i>
+                            </th>
+                            <th width="35%" class="min-width-4">
+                                Section Name
+                                <i *ngIf="sortParams.field != 'section_name'" class="bi bi-filter float-end list-pointer" (click)="sortTable('section_name', 'desc')"></i>
+                                <i *ngIf="sortParams.field == 'section_name' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('section_name', 'asc')"></i>
+                                <i *ngIf="sortParams.field == 'section_name' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('section_name', 'desc')"></i>
+                            </th>
+                            <th width="25%" class="min-width-3">
+                                Term
+                                <i *ngIf="sortParams.field != 'term'" class="bi bi-filter float-end list-pointer" (click)="sortTable('term', 'desc')"></i>
+                                <i *ngIf="sortParams.field == 'term' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('term', 'asc')"></i>
+                                <i *ngIf="sortParams.field == 'term' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('term', 'desc')"></i>
+                            </th>
+                            <th width="25%" class="min-width-3">
+                                Source
+                                <i *ngIf="sortParams.field != 'source'" class="bi bi-filter float-end list-pointer" (click)="sortTable('source', 'desc')"></i>
+                                <i *ngIf="sortParams.field == 'source' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('source', 'asc')"></i>
+                                <i *ngIf="sortParams.field == 'source' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('source', 'desc')"></i>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let data of sectionsGridData" (dblclick)="viewSection(data.id)" class="table-pointer">
+                            <td>{{data?.data().section_code}}</td>
+                            <td>{{data?.data().section_name}}</td>
+                            <td>{{data?.data().term.data.term_name}}</td>
+                            <td>{{data?.data().source.data.source_name}}</td>
+                        </tr>
+                        <tr *ngIf="isFetchingGridData" class="text-center">
+                            <td colspan="4">
+                                <div class="spinner-grow m-4" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr *ngIf="!isDataAvailable && !isFetchingGridData" class="text-center">
+                            <td colspan="4">
+                                <p class="m-4">No data available</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr class="bg-light">
+                            <td colspan="5">
+                                <nav class="nav-light float-end" aria-label="Page navigation">
+                                    <ul class="pagination pagination-sm mb-0 justify-content-end">
+                                        <li class="page-item" [ngClass]="disablePrev ? 'disabled' : ''">
+                                            <a class="page-link" href="#" aria-label="First" (click)="previousPage($event)">
+                                                <i class="bi bi-caret-left-fill"></i>
+                                            </a>
+                                        </li>
+                                        <li class="page-item">
+                                            <a class="page-link" href="#" aria-label="Current" (click)="$event.preventDefault()">
+                                                {{pageNumber}}
+                                            </a>
+                                        </li>
+                                        <li class="page-item" [ngClass]="disableNext ? 'disabled' : ''">
+                                            <a class="page-link" href="#" aria-label="Last" (click)="nextPage($event)">
+                                                <i class="bi bi-caret-right-fill"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- new section modal component -->
+
+<app-new-section #newSectionComponentReference></app-new-section>
+
+<!-- connection error prompt component -->
+
+<app-connection-toast #connectionToastComponentReference></app-connection-toast>

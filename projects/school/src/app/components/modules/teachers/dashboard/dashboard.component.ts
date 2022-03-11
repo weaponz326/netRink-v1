@@ -1,4 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+
+import { ChartDataSets, ChartOptions } from 'chart.js';
+import { Color, Label, SingleDataSet } from 'ng2-charts';
+import moment from 'moment/moment';
+
+import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
+
+import { TeachersApiService } from 'projects/school/src/app/services/modules/teachers-api/teachers-api.service';
+
 
 @Component({
   selector: 'app-dashboard',
@@ -7,7 +16,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DashboardComponent implements OnInit {
 
-  constructor() { }
+  constructor(private teachersApi: TeachersApiService) { }
+
+  @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
+
+  navHeading: any[] = [
+    { text: "Dashboard", url: "/home/subjects/dashboard" },
+  ];
 
   ngOnInit(): void {
   }
