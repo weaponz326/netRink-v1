@@ -69,6 +69,13 @@ export class BillingComponent implements OnInit {
     quantity: "",
   };
 
+  metadata = {
+    account: localStorage.getItem('restaurant_id'),
+    subscription_type: "",
+    billing_frequency: "",
+    number_users: 0,
+  }
+
   ngOnInit(): void {
     this.getSubscription();
   }
@@ -117,8 +124,8 @@ export class BillingComponent implements OnInit {
       )
   }
 
-  setSubscription(subscription: any){
-    this.selectedSubscription = subscription;
+  setSubscription(event: any){
+    this.selectedSubscription = event.target.value;
     console.log(this.selectedSubscription);
 
     if (this.selectedSubscription == "Individual"){
@@ -191,6 +198,10 @@ export class BillingComponent implements OnInit {
 
     this.paystackOptions.plan = plan;
     this.paystackOptions.quantity = quantity;
+
+    this.metadata.subscription_type = this.subscriptionTypeValue;
+    this.metadata.billing_frequency = this.billingFrequencyValue;
+    this.metadata.number_users = this.numberUsersValue;
   }
 
   validateSubcriptionForm(f: NgForm) {

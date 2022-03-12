@@ -15,7 +15,7 @@
                         <div class="row mb-2">
                             <div class="col-md-4"><label>Subscription Type :</label></div>
                             <div class="col-md-8">
-                                <select [(ngModel)]="subscriptionTypeValue" name="subscription" class="form-control form-control-sm w-100" (change)="setSubscription($any($event.target).value)"
+                                <select [(ngModel)]="subscriptionTypeValue" name="subscription" class="form-control form-control-sm w-100" (change)="setSubscription($event)"
                                 [ngClass]="!isSubscriptionValid ? 'is-invalid' : ''">
                                     <option *ngFor="let subscription of subscriptionSource">{{subscription}}</option>
                                 </select>
@@ -87,6 +87,7 @@
                 [ref]="paystackOptions.ref"
                 [plan]="paystackOptions.plan"
                 [quantity]="paystackOptions.quantity"
+                [metadata]="metadata"
                 (paymentInit)="paymentInit()"
                 (onClose)="paymentCancel()"
                 (callback)="paymentDone($event)"
