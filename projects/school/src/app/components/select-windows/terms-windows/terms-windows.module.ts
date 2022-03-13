@@ -3,17 +3,17 @@ import { CommonModule } from '@angular/common';
 
 import { ModuleUtilitiesModule } from 'projects/personal/src/app/components/module-utilities/module-utilities.module';
 
-import { SelectStudentComponent } from './select-student/select-student.component';
+import { SelectTermComponent } from './select-term/select-term.component';
 
 
 
 @NgModule({
   declarations: [
-    SelectStudentComponent
+    SelectTermComponent
   ],
   imports: [
     CommonModule,
     ModuleUtilitiesModule,
   ]
 })
-export class StudentsWindowsModule { }
+export class TermsWindowsModule { }

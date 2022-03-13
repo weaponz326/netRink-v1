@@ -2,17 +2,17 @@ import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '
 
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component';
 
-import { SectionsApiService } from 'projects/school/src/app/services/modules/sections-api/sections-api.service';
+import { TermsApiService } from 'projects/school/src/app/services/modules/terms-api/terms-api.service';
 
 
 @Component({
-  selector: 'app-select-section',
-  templateUrl: './select-section.component.html',
-  styleUrls: ['./select-section.component.scss']
+  selector: 'app-select-term',
+  templateUrl: './select-term.component.html',
+  styleUrls: ['./select-term.component.scss']
 })
-export class SelectSectionComponent implements OnInit {
+export class SelectTermComponent implements OnInit {
 
-  constructor(private sectionsApi: SectionsApiService) { }
+  constructor(private termsApi: TermsApiService) { }
 
   @Output() rowSelected = new EventEmitter<object>();
 
@@ -21,7 +21,7 @@ export class SelectSectionComponent implements OnInit {
 
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
 
-  sectionsGridData: any[] = [];
+  termsGridData: any[] = [];
 
   isFetchingGridData: boolean =  false;
   isDataAvailable: boolean =  true;
@@ -43,19 +43,19 @@ export class SelectSectionComponent implements OnInit {
   }
 
   openModal(){
-    this.sectionsGridData = [];
-    this.getAccountSection();
+    this.termsGridData = [];
+    this.getAccountTerm();
     this.openButton.nativeElement.click();
   }
 
-  getAccountSection(){
+  getAccountTerm(){
     this.isFetchingGridData = true;
 
-    this.sectionsApi.getAccountSection(this.sortParams, 15)
+    this.termsApi.getAccountTerm(this.sortParams, 15)
       .then(
         (res: any) => {
           console.log(res);
-          this.sectionsGridData = res.docs;
+          this.termsGridData = res.docs;
 
           this.isFetchingGridData = false;
           this.prevStartAt = this.firstInResponse;
@@ -85,11 +85,11 @@ export class SelectSectionComponent implements OnInit {
     e.preventDefault();
     this.isFetchingGridData = true;
 
-    this.sectionsApi.getAccountSectionNext(this.sortParams, 15, this.nextStartAfter)
+    this.termsApi.getAccountTermNext(this.sortParams, 15, this.nextStartAfter)
       .then(
         (res: any) => {
           console.log(res);
-          this.sectionsGridData = res.docs;
+          this.termsGridData = res.docs;
 
           this.isFetchingGridData = false;
           this.prevStartAt = this.firstInResponse;
@@ -114,11 +114,11 @@ export class SelectSectionComponent implements OnInit {
     e.preventDefault();
     this.isFetchingGridData = true;
 
-    this.sectionsApi.getAccountSectionPrev(this.sortParams, 15, this.prevStartAt)
+    this.termsApi.getAccountTermPrev(this.sortParams, 15, this.prevStartAt)
       .then(
         (res: any) => {
           console.log(res);
-          this.sectionsGridData = res.docs;
+          this.termsGridData = res.docs;
 
           this.isFetchingGridData = false;
           if (!res.docs.length) this.isDataAvailable = false;
@@ -145,7 +145,7 @@ export class SelectSectionComponent implements OnInit {
     this.sortParams.field = field;
     this.sortParams.direction = direction;
 
-    this.getAccountSection();
+    this.getAccountTerm();
   }
 
   selectRow(row: any){

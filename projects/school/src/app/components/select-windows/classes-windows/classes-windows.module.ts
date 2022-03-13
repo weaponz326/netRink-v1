@@ -1,15 +1,21 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+
+import { ModuleUtilitiesModule } from 'projects/personal/src/app/components/module-utilities/module-utilities.module';
+
 import { SelectClassComponent } from './select-class/select-class.component';
+import { SelectDepartmentComponent } from './select-department/select-department.component';
 
 
 
 @NgModule({
   declarations: [
-    SelectClassComponent
+    SelectClassComponent,
+    SelectDepartmentComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    ModuleUtilitiesModule,
   ]
 })
 export class ClassesWindowsModule { }

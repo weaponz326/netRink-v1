@@ -1,13 +1,13 @@
-<button [hidden]="true" #openButtonElementReference data-bs-toggle="modal" data-bs-target="#selectTeacherModal">
+<button [hidden]="true" #openButtonElementReference data-bs-toggle="modal" data-bs-target="#selectDepartmentModal">
     Launch demo modal
 </button>
 
-<div class="modal fade select-table-modal" id="selectTeacherModal" tabindex="-1" aria-labelledby="selectTeacherModalLabel" aria-hidden="true">
+<div class="modal fade select-table-modal" id="selectDepartmentModal" tabindex="-1" aria-labelledby="selectDepartmentModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
 
             <div class="modal-header bg-light">
-                <span class="modal-title" id="selectTeacherModalLabel">Select School Teacher</span>
+                <span class="modal-title" id="selectDepartmentModalLabel">Select School Department</span>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
@@ -15,19 +15,13 @@
                 <table class="table table-bordered table-sm w-100 page-table">
                     <thead>
                         <tr class="bg-light">
-                            <th width="15%" class="min-width-2">
-                                Teacher ID
-                                <i *ngIf="sortParams.field != 'teacher_code'" class="bi bi-filter float-end list-pointer" (click)="sortTable('teacher_code', 'desc')"></i>
-                                <i *ngIf="sortParams.field == 'teacher_code' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('teacher_code', 'asc')"></i>
-                                <i *ngIf="sortParams.field == 'teacher_code' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('teacher_code', 'desc')"></i>
+                            <th width="30%" class="min-width-2">
+                                Department ID.
+                                <i *ngIf="sortParams.field != 'department_code'" class="bi bi-filter float-end list-pointer" (click)="sortTable('department_code', 'desc')"></i>
+                                <i *ngIf="sortParams.field == 'department_code' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('department_code', 'asc')"></i>
+                                <i *ngIf="sortParams.field == 'department_code' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('department_code', 'desc')"></i>
                             </th>
-                            <th width="50%" class="min-width-4">
-                                Teacher Name
-                                <i *ngIf="sortParams.field != 'teacher_name'" class="bi bi-filter float-end list-pointer" (click)="sortTable('teacher_name', 'desc')"></i>
-                                <i *ngIf="sortParams.field == 'teacher_name' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('teacher_name', 'asc')"></i>
-                                <i *ngIf="sortParams.field == 'teacher_name' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('teacher_name', 'desc')"></i>
-                            </th>
-                            <th width="35%" class="min-width-3">
+                            <th width="70%" class="min-width-3">
                                 Department Name
                                 <i *ngIf="sortParams.field != 'department_name'" class="bi bi-filter float-end list-pointer" (click)="sortTable('department_name', 'desc')"></i>
                                 <i *ngIf="sortParams.field == 'department_name' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('department_name', 'asc')"></i>
@@ -36,27 +30,26 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let data of teachersGridData" (dblclick)="selectRow(data)" class="table-pointer">
-                            <td>{{data?.data().teacher_code}}</td>
-                            <td>{{data?.data().first_name}} {{data?.data().last_name}}</td>
-                            <td>{{data?.data().department.data.department_name}}</td>
+                        <tr *ngFor="let data of departmentsGridData" (dblclick)="selectRow(data)" class="department-pointer">
+                            <td>{{data?.data().department_code}}</td>
+                            <td>{{data?.data().department_name}}</td>
                         </tr>
                         <tr *ngIf="isFetchingGridData" class="text-center">
-                            <td colspan="3">
-                                <div class="spinner-grow m-4" role="status">
+                            <td colspan="2">
+                                <div class="spinner-grow spinner-grow-sm m-2" role="status">
                                     <span class="visually-hidden">Loading...</span>
                                 </div>
                             </td>
                         </tr>
                         <tr *ngIf="!isDataAvailable && !isFetchingGridData" class="text-center">
-                            <td colspan="3">
+                            <td colspan="2">
                                 <p class="m-4">No data available</p>
                             </td>
                         </tr>
                     </tbody>
                     <tfoot>
                         <tr class="bg-light">
-                            <td colspan="3">
+                            <td colspan="2">
                                 <nav class="nav-light float-end" aria-label="Page navigation">
                                     <ul class="pagination pagination-sm mb-0 justify-content-end">
                                         <li class="page-item" [ngClass]="disablePrev ? 'disabled' : ''">
@@ -82,7 +75,7 @@
                 </table>
             </div>
 
-            <button [hidden]="true" #closeButtonElementReference data-bs-toggle="modal" data-bs-target="#selectTeacherModal">
+            <button [hidden]="true" #closeButtonElementReference data-bs-toggle="modal" data-bs-target="#selectDepartmentModal">
                 Launch demo modal
             </button>
 

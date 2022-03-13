@@ -1,5 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+
+import { ModuleUtilitiesModule } from 'projects/personal/src/app/components/module-utilities/module-utilities.module';
+
 import { SelectSubjectComponent } from './select-subject/select-subject.component';
 
 
@@ -9,7 +12,8 @@ import { SelectSubjectComponent } from './select-subject/select-subject.componen
     SelectSubjectComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    ModuleUtilitiesModule,
   ]
 })
 export class SubjectsWindowsModule { }

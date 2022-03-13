@@ -1,1 +1,95 @@
-<p>select-class works!</p>
+<button [hidden]="true" #openButtonElementReference data-bs-toggle="modal" data-bs-target="#selectClassModal">
+    Launch demo modal
+</button>
+
+<div class="modal fade select-table-modal" id="selectClassModal" tabindex="-1" aria-labelledby="selectClassModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header bg-light">
+                <span class="modal-title" id="selectClassModalLabel">Select School Class</span>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body overflow-auto">
+                <table class="table table-bordered table-sm w-100 page-table">
+                    <thead>
+                        <tr class="bg-light">
+                            <th width="20%" class="min-width-2">
+                                Class ID
+                                <i *ngIf="sortParams.field != 'class_code'" class="bi bi-filter float-end list-pointer" (click)="sortTable('class_code', 'desc')"></i>
+                                <i *ngIf="sortParams.field == 'class_code' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('class_code', 'asc')"></i>
+                                <i *ngIf="sortParams.field == 'class_code' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('class_code', 'desc')"></i>
+                            </th>
+                            <th width="45%" class="min-width-4">
+                                Class Name
+                                <i *ngIf="sortParams.field != 'class_name'" class="bi bi-filter float-end list-pointer" (click)="sortTable('class_name', 'desc')"></i>
+                                <i *ngIf="sortParams.field == 'class_name' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('class_name', 'asc')"></i>
+                                <i *ngIf="sortParams.field == 'class_name' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('class_name', 'desc')"></i>
+                            </th>
+                            <th width="35%" class="min-width-2">
+                                Department
+                                <i *ngIf="sortParams.field != 'department'" class="bi bi-filter float-end list-pointer" (click)="sortTable('department', 'desc')"></i>
+                                <i *ngIf="sortParams.field == 'department' && sortParams.direction == 'desc'" class="bi bi-sort-down float-end list-pointer" (click)="sortTable('department', 'asc')"></i>
+                                <i *ngIf="sortParams.field == 'department' && sortParams.direction == 'asc'" class="bi bi-sort-up float-end list-pointer" (click)="sortTable('department', 'desc')"></i>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let data of classesGridData" (dblclick)="selectRow(data)" class="table-pointer">
+                            <td>{{data?.data().class_code}}</td>
+                            <td>{{data?.data().class_name}}</td>
+                            <td>{{data?.data().department.data.department_name}}</td>
+                        </tr>
+                        <tr *ngIf="isFetchingGridData" class="text-center">
+                            <td colspan="4">
+                                <div class="spinner-grow m-4" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr *ngIf="!isDataAvailable && !isFetchingGridData" class="text-center">
+                            <td colspan="4">
+                                <p class="m-4">No data available</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr class="bg-light">
+                            <td colspan="3">
+                                <nav class="nav-light float-end" aria-label="Page navigation">
+                                    <ul class="pagination pagination-sm mb-0 justify-content-end">
+                                        <li class="page-item" [ngClass]="disablePrev ? 'disabled' : ''">
+                                            <a class="page-link" href="#" aria-label="First" (click)="previousPage($event)">
+                                                <i class="bi bi-caret-left-fill"></i>
+                                            </a>
+                                        </li>
+                                        <li class="page-item">
+                                            <a class="page-link" href="#" aria-label="Current" (click)="$event.preventDefault()">
+                                                {{pageNumber}}
+                                            </a>
+                                        </li>
+                                        <li class="page-item" [ngClass]="disableNext ? 'disabled' : ''">
+                                            <a class="page-link" href="#" aria-label="Last" (click)="nextPage($event)">
+                                                <i class="bi bi-caret-right-fill"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <button [hidden]="true" #closeButtonElementReference data-bs-toggle="modal" data-bs-target="#selectClassModal">
+                Launch demo modal
+            </button>
+
+        </div>
+    </div>
+</div>
+
+<!-- connection error toast component -->
+
+<app-connection-toast #connectionToastComponentReference></app-connection-toast>
