@@ -127,12 +127,12 @@ export class ViewParentComponent implements OnInit {
           const task = this.storage.upload(storagePath, this.parentForm.photo.image);
 
           task.snapshotChanges().pipe(
-              finalize(() => {
-                storageRef.getDownloadURL().subscribe(downloadUrl => {
-                  this.updateImage({photo: downloadUrl});
-                });
-              })
-            ).subscribe();
+            finalize(() => {
+              storageRef.getDownloadURL().subscribe(downloadUrl => {
+                this.updateImage({photo: downloadUrl});
+              });
+            })
+          ).subscribe();
         }
       },
       (err: any) => {

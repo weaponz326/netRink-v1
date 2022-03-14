@@ -14,6 +14,9 @@ import { SelectReportComponent } from './select-report/select-report.component';
   imports: [
     CommonModule,
     ModuleUtilitiesModule,
+  ],
+  exports: [
+    SelectReportComponent
   ]
 })
 export class ReportsWindowsModule { }

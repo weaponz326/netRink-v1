@@ -14,6 +14,9 @@ import { SelectTermComponent } from './select-term/select-term.component';
   imports: [
     CommonModule,
     ModuleUtilitiesModule,
+  ],
+  exports: [
+    SelectTermComponent
   ]
 })
 export class TermsWindowsModule { }

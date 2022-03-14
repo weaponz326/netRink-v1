@@ -16,6 +16,10 @@ import { SelectDepartmentComponent } from './select-department/select-department
   imports: [
     CommonModule,
     ModuleUtilitiesModule,
+  ],
+  exports: [
+    SelectClassComponent,
+    SelectDepartmentComponent
   ]
 })
 export class ClassesWindowsModule { }

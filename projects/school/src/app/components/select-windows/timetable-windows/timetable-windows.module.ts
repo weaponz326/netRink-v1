@@ -14,6 +14,9 @@ import { SelectTimetableComponent } from './select-timetable/select-timetable.co
   imports: [
     CommonModule,
     ModuleUtilitiesModule,
+  ],
+  exports: [
+    SelectTimetableComponent
   ]
 })
 export class TimetableWindowsModule { }

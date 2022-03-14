@@ -14,6 +14,9 @@ import { SelectParentComponent } from './select-parent/select-parent.component';
   imports: [
     CommonModule,
     ModuleUtilitiesModule,
+  ],
+  exports: [
+    SelectParentComponent
   ]
 })
 export class ParentsWindowsModule { }

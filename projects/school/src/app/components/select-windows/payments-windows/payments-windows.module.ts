@@ -14,6 +14,9 @@ import { SelectPaymentComponent } from './select-payment/select-payment.componen
   imports: [
     CommonModule,
     ModuleUtilitiesModule,
+  ],
+  exports: [
+    SelectPaymentComponent
   ]
 })
 export class PaymentsWindowsModule { }

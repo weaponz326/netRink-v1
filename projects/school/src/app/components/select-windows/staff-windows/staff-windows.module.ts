@@ -14,6 +14,9 @@ import { SelectStaffComponent } from './select-staff/select-staff.component';
   imports: [
     CommonModule,
     ModuleUtilitiesModule,
+  ],
+  exports: [
+    SelectStaffComponent
   ]
 })
 export class StaffWindowsModule { }

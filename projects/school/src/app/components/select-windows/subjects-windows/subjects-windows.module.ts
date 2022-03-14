@@ -14,6 +14,9 @@ import { SelectSubjectComponent } from './select-subject/select-subject.componen
   imports: [
     CommonModule,
     ModuleUtilitiesModule,
+  ],
+  exports: [
+    SelectSubjectComponent
   ]
 })
 export class SubjectsWindowsModule { }

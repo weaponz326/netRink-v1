@@ -14,6 +14,9 @@ import { SelectAttendanceComponent } from './select-attendance/select-attendance
   imports: [
     CommonModule,
     ModuleUtilitiesModule,
+  ],
+  exports: [
+    SelectAttendanceComponent
   ]
 })
 export class AttendanceWindowsModule { }

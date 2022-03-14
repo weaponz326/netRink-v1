@@ -14,6 +14,9 @@ import { SelectTeacherComponent } from './select-teacher/select-teacher.componen
   imports: [
     CommonModule,
     ModuleUtilitiesModule,
+  ],
+  exports: [
+    SelectTeacherComponent
   ]
 })
 export class TeachersWindowsModule { }

@@ -14,6 +14,9 @@ import { SelectLessonPlanComponent } from './select-lesson-plan/select-lesson-pl
   imports: [
     CommonModule,
     ModuleUtilitiesModule,
+  ],
+  exports: [
+    SelectLessonPlanComponent
   ]
 })
 export class LessonPlanWindowsModule { }

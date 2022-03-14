@@ -14,6 +14,9 @@ import { SelectAssessmentComponent } from './select-assessment/select-assessment
   imports: [
     CommonModule,
     ModuleUtilitiesModule,
+  ],
+  exports: [
+    SelectAssessmentComponent
   ]
 })
 export class AssessmentWindowsModule { }

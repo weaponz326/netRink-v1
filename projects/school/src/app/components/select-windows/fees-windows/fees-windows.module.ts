@@ -16,6 +16,10 @@ import { SelectBillComponent } from './select-bill/select-bill.component';
   imports: [
     CommonModule,
     ModuleUtilitiesModule,
+  ],
+  exports: [
+    SelectFeesComponent,
+    SelectBillComponent
   ]
 })
 export class FeesWindowsModule { }

@@ -14,6 +14,9 @@ import { SelectSectionComponent } from './select-section/select-section.componen
   imports: [
     CommonModule,
     ModuleUtilitiesModule,
+  ],
+  exports: [
+    SelectSectionComponent
   ]
 })
 export class SectionsWindowsModule { }
