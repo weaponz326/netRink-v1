@@ -24,7 +24,7 @@ export class AccessFormComponent implements OnInit {
     admin_access: false,
     assessment_access: false,
     attendance_access: false,
-    classes_stock_access: false,
+    classes_access: false,
     fees_access: false,
     lesson_plan_access: false,
     parents_access: false,
@@ -41,9 +41,6 @@ export class AccessFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-  }
-
-  ngAfterViewInit(): void {
     this.getUserAccess();
   }
 
@@ -51,9 +48,25 @@ export class AccessFormComponent implements OnInit {
     this.adminApi.getUserAccess()
       .then(
         (res: any) => {
-          console.log(res);
+          console.log(res.data());
 
           this.accessForm.admin_access = res.data().admin_access;
+          this.accessForm.assessment_access = res.data().assessment_access;
+          this.accessForm.attendance_access = res.data().attendance_access;
+          this.accessForm.classes_access = res.data().classes_access;
+          this.accessForm.fees_access = res.data().fees_access;
+          this.accessForm.lesson_plan_access = res.data().lesson_plan_access;
+          this.accessForm.parents_access = res.data().parents_access;
+          this.accessForm.payments_access = res.data().payments_access;
+          this.accessForm.portal_access = res.data().portal_access;
+          this.accessForm.reports_access = res.data().reports_access;
+          this.accessForm.sections_access = res.data().sections_access;
+          this.accessForm.settings_access = res.data().settings_access;
+          this.accessForm.students_access = res.data().students_access;
+          this.accessForm.subjects_access = res.data().subjects_access;
+          this.accessForm.teachers_access = res.data().teachers_access;
+          this.accessForm.terms_access = res.data().terms_access;
+          this.accessForm.timetable_access = res.data().timetable_access;
         },
         (err: any) => {
           console.log(err);
@@ -67,7 +80,7 @@ export class AccessFormComponent implements OnInit {
       admin_access: this.accessForm.admin_access,
       assessment_access: this.accessForm.assessment_access,
       attendance_access: this.accessForm.attendance_access,
-      classes_stock_access: this.accessForm.classes_stock_access,
+      classes_access: this.accessForm.classes_access,
       fees_access: this.accessForm.fees_access,
       lesson_plan_access: this.accessForm.lesson_plan_access,
       parents_access: this.accessForm.parents_access,
@@ -102,7 +115,7 @@ export class AccessFormComponent implements OnInit {
       this.accessForm.admin_access = true;
       this.accessForm.assessment_access = true;
       this.accessForm.attendance_access = true;
-      this.accessForm.classes_stock_access = true;
+      this.accessForm.classes_access = true;
       this.accessForm.fees_access = true;
       this.accessForm.lesson_plan_access = true;
       this.accessForm.parents_access = true;
@@ -121,7 +134,7 @@ export class AccessFormComponent implements OnInit {
       this.accessForm.admin_access = false;
       this.accessForm.assessment_access = true;
       this.accessForm.attendance_access = true;
-      this.accessForm.classes_stock_access = true;
+      this.accessForm.classes_access = true;
       this.accessForm.fees_access = true;
       this.accessForm.lesson_plan_access = true;
       this.accessForm.parents_access = true;
@@ -140,7 +153,7 @@ export class AccessFormComponent implements OnInit {
       this.accessForm.admin_access = false;
       this.accessForm.assessment_access = false;
       this.accessForm.attendance_access = false;
-      this.accessForm.classes_stock_access = false;
+      this.accessForm.classes_access = false;
       this.accessForm.fees_access = false;
       this.accessForm.lesson_plan_access = false;
       this.accessForm.parents_access = false;

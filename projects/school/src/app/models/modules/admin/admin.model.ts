@@ -28,7 +28,7 @@ export class UserAccess {
   admin_access!: boolean;
   assessment_access!: boolean;
   attendance_access!: boolean;
-  classes_stock_access!: boolean;
+  classes_access!: boolean;
   fees_access!: boolean;
   lesson_plan_access!: boolean;
   parents_access!: boolean;

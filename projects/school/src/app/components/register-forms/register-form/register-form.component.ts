@@ -137,7 +137,7 @@ export class RegisterFormComponent implements OnInit {
       admin_access: true,
       assessment_access: true,
       attendance_access: true,
-      classes_stock_access: true,
+      classes_access: true,
       fees_access: true,
       lesson_plan_access: true,
       parents_access: true,

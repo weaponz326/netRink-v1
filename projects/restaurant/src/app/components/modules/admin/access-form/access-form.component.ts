@@ -37,9 +37,6 @@ export class AccessFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-  }
-
-  ngAfterViewInit(): void {
     this.getUserAccess();
   }
 
