@@ -6,6 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ChartsModule } from 'ng2-charts';
 
 import { ModuleUtilitiesModule } from 'projects/personal/src/app/components/module-utilities/module-utilities.module';
+import { StudentsWindowsModule } from '../../select-windows/students-windows/students-windows.module';
 
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { SettingsComponent } from './settings/settings.component';
@@ -34,6 +35,7 @@ import { ParentWardsComponent } from './parent-wards/parent-wards.component';
     ReactiveFormsModule,
     ChartsModule,
     ModuleUtilitiesModule,
+    StudentsWindowsModule
   ]
 })
 export class ParentsModule { }

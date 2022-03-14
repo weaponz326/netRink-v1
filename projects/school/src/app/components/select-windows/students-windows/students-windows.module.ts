@@ -14,6 +14,9 @@ import { SelectStudentComponent } from './select-student/select-student.componen
   imports: [
     CommonModule,
     ModuleUtilitiesModule,
+  ],
+  exports: [
+    SelectStudentComponent
   ]
 })
 export class StudentsWindowsModule { }

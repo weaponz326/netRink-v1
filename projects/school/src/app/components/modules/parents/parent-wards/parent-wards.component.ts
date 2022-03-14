@@ -5,7 +5,7 @@ import { serverTimestamp } from 'firebase/firestore';
 
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 import { DeleteModalComponent } from 'projects/personal/src/app/components/module-utilities/delete-modal/delete-modal.component'
-// import { SelectStudentComponent } from '../../../select-windows/wards-windows/select-student/select-student.component';
+import { SelectStudentComponent } from '../../../select-windows/students-windows/select-student/select-student.component';
 
 import { ParentsApiService } from 'projects/school/src/app/services/modules/parents-api/parents-api.service';
 
@@ -26,7 +26,7 @@ export class ParentWardsComponent implements OnInit {
 
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
   @ViewChild('deleteModalTwoComponentReference', { read: DeleteModalComponent, static: false }) deleteModal!: DeleteModalComponent;
-  // @ViewChild('selectStudentComponentReference', { read: SelectStudentComponent, static: false }) selectStudent!: SelectStudentComponent;
+  @ViewChild('selectStudentComponentReference', { read: SelectStudentComponent, static: false }) selectStudent!: SelectStudentComponent;
 
   parentWardsGridData: any[] = [];
 
@@ -85,7 +85,7 @@ export class ParentWardsComponent implements OnInit {
       )
   }
 
-  deleteParentWard(id: any){
+  deleteParentWard(){
     this.isWardDeleting = true;
 
     this.parentsApi.deleteParentWard()

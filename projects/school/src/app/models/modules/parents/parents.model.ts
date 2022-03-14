@@ -14,6 +14,7 @@ export class Parent {
   address!: string;
   state!: string;
   city!: string;
+  country!: string;
   post_code!: string;
 }
 

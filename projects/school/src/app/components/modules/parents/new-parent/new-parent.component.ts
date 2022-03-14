@@ -59,7 +59,8 @@ export class NewParentComponent implements OnInit {
       address: this.parentForm.parentForm.controls.address.value,
       state: this.parentForm.parentForm.controls.state.value,
       city: this.parentForm.parentForm.controls.city.value,
-      post_code: this.parentForm.parentForm.controls.post_code.value,
+      country: this.parentForm.parentForm.controls.city.value,
+      post_code: this.parentForm.parentForm.controls.postCode.value,
     }
 
     console.log(data);
@@ -73,7 +74,7 @@ export class NewParentComponent implements OnInit {
 
           if (!this.parentForm.photo.isImageSet){
             this.isParentSaving = false;
-            this.router.navigateByUrl('/home/parentx/view-parent');
+            this.router.navigateByUrl('/home/parents/view-parent');
           }
           else{
             const storagePath = this.storageBasePath + res.id;

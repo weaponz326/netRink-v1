@@ -36,6 +36,7 @@ export class ParentFormComponent implements OnInit {
       address: new FormControl(''),
       state: new FormControl(''),
       city: new FormControl(''),
+      country: new FormControl(''),
       postCode: new FormControl(''),
     });
   }

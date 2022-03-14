@@ -66,7 +66,7 @@ export class ViewParentComponent implements OnInit {
           this.parentForm.parentForm.controls.lastName.setValue(this.parentData.data().last_name);
           this.parentForm.parentForm.controls.sex.setValue(this.parentData.data().sex);
           this.parentForm.parentForm.controls.photo.setValue(this.parentData.data().photo);
-          this.parentForm.parentForm.controls.nationalty.setValue(this.parentData.data().nationality);
+          this.parentForm.parentForm.controls.nationality.setValue(this.parentData.data().nationality);
           this.parentForm.parentForm.controls.religion.setValue(this.parentData.data().religion);
           this.parentForm.parentForm.controls.occupation.setValue(this.parentData.data().occupation);
           this.parentForm.parentForm.controls.phone.setValue(this.parentData.data().phone);
@@ -74,7 +74,8 @@ export class ViewParentComponent implements OnInit {
           this.parentForm.parentForm.controls.address.setValue(this.parentData.data().address);
           this.parentForm.parentForm.controls.state.setValue(this.parentData.data().state);
           this.parentForm.parentForm.controls.city.setValue(this.parentData.data().city);
-          this.parentForm.parentForm.controls.post_code.setValue(this.parentData.data().post_code);
+          this.parentForm.parentForm.controls.country.setValue(this.parentData.data().country);
+          this.parentForm.parentForm.controls.postCode.setValue(this.parentData.data().post_code);
 
           if (this.parentData.data().photo != ""){
             this.parentForm.photo.imgSrc = this.parentData.data().photo;
@@ -105,7 +106,8 @@ export class ViewParentComponent implements OnInit {
       address: this.parentForm.parentForm.controls.address.value,
       state: this.parentForm.parentForm.controls.state.value,
       city: this.parentForm.parentForm.controls.city.value,
-      post_code: this.parentForm.parentForm.controls.post_code.value,
+      country: this.parentForm.parentForm.controls.country.value,
+      post_code: this.parentForm.parentForm.controls.postCode.value,
     }
 
     console.log(data);
