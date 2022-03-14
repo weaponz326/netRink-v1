@@ -21,7 +21,7 @@ export class DashboardComponent implements OnInit {
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
 
   navHeading: any[] = [
-    { text: "Dashboard", url: "/home/customers/dashboard" },
+    { text: "Dashboard", url: "/home/assessment/dashboard" },
   ];
 
   weekAssessmentData: any;

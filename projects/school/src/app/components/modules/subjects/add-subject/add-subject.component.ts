@@ -38,14 +38,20 @@ export class AddSubjectComponent implements OnInit {
   createSubject(){
     console.log('u are saving a new subject');
 
-    var data: Subject = {
+    let data: Subject = {
       created_at: serverTimestamp(),
       account: localStorage.getItem('school_id') as string,
       subject_code: this.subjectForm.subjectForm.controls.subjectCode.value,
       subject_name: this.subjectForm.subjectForm.controls.subjectName.value,
-      term: this.subjectForm.subjectForm.controls.term.value,
-      department: this.subjectForm.subjectForm.controls.department.value,
       description: this.subjectForm.subjectForm.controls.description.value,
+      term: {
+        id: this.subjectForm.selectedTermId,
+        data: this.subjectForm.selectedTermData,
+      },
+      department: {
+        id: this.subjectForm.selectedDepartmentId,
+        data: this.subjectForm.selectedDepartmentData,
+      }
     }
 
     console.log(data);

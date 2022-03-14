@@ -5,7 +5,7 @@ import { serverTimestamp } from 'firebase/firestore';
 
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 import { DeleteModalComponent } from 'projects/personal/src/app/components/module-utilities/delete-modal/delete-modal.component'
-// import { SelectTeacherComponent } from '../../../select-windows/teachers-windows/select-teacher/select-teacher.component';
+import { SelectTeacherComponent } from '../../../select-windows/teachers-windows/select-teacher/select-teacher.component';
 
 import { SubjectsApiService } from 'projects/school/src/app/services/modules/subjects-api/subjects-api.service';
 
@@ -26,9 +26,12 @@ export class SubjectTeachersComponent implements OnInit {
 
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
   @ViewChild('deleteModalTwoComponentReference', { read: DeleteModalComponent, static: false }) deleteModal!: DeleteModalComponent;
-  // @ViewChild('selectTeacherComponentReference', { read: SelectTeacherComponent, static: false }) selectTeacher!: SelectTeacherComponent;
+  @ViewChild('selectTeacherComponentReference', { read: SelectTeacherComponent, static: false }) selectTeacher!: SelectTeacherComponent;
 
   subjectTeachersGridData: any[] = [];
+
+  selectedTeacherId = "";
+  selectedTeacherData = {};
 
   deleteId = "";
 
@@ -84,7 +87,7 @@ export class SubjectTeachersComponent implements OnInit {
       )
   }
 
-  deleteSubjectTeacher(id: any){
+  deleteSubjectTeacher(){
     this.isTeacherDeleting = true;
 
     this.subjectsApi.deleteSubjectTeacher()
@@ -100,6 +103,18 @@ export class SubjectTeachersComponent implements OnInit {
           this.connectionToast.openToast();
         }
       )
+  }
+
+  openTeacherWindow(){
+    console.log("You are opening select teacher window")
+    this.selectTeacher.openModal();
+  }
+
+  onTeacherSelected(teacherData: any){
+    console.log(teacherData);
+
+    this.selectedTeacherId = teacherData.id;
+    this.selectedTeacherData = teacherData.data();
   }
 
   confirmDelete(id: any){

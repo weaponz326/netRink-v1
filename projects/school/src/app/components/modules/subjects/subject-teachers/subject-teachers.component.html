@@ -12,7 +12,7 @@
                         <th width="30%" class="min-width-2">Teacher ID</th>
                         <th width="62%" class="min-width-4">Teacher Name</th>
                         <th width="8%" class="p-0 min-width-1">
-                            <button class="btn btn-secondary btn-sm w-100">
+                            <button class="btn btn-secondary btn-sm w-100" (click)="openTeacherWindow()">
                                 <i class="bi bi-plus"></i>
                             </button>
                         </th>
@@ -46,8 +46,8 @@
 
 <!-- delete confirmation modal component -->
 
-<!-- <app-delete-modal #deleteModalTwoComponentReference (confirmEventTwo)="deleteReservationWard()"></app-delete-modal> -->
+<app-delete-modal #deleteModalTwoComponentReference (confirmEvent)="deleteSubjectTeacher()"></app-delete-modal>
 
 <!-- select table window component -->
 
-<!-- <app-select-teacher #selectTeacherComponentReference (rowSelected)="createReservationWard($event)"></app-select-teacher> -->
+<app-select-teacher #selectTeacherComponentReference (rowSelected)="createSubjectTeacher($event)"></app-select-teacher>

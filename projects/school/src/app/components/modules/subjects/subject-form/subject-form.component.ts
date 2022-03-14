@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 
+import { SelectTermComponent } from '../../../select-windows/terms-windows/select-term/select-term.component';
+import { SelectDepartmentComponent } from '../../../select-windows/classes-windows/select-department/select-department.component';
 
 @Component({
   selector: 'app-subject-form',
@@ -11,10 +13,15 @@ export class SubjectFormComponent implements OnInit {
 
   constructor() { }
 
+  @ViewChild('selectTermComponentReference', { read: SelectTermComponent, static: false }) selectTerm!: SelectTermComponent;
+  @ViewChild('selectDepartmentComponentReference', { read: SelectDepartmentComponent, static: false }) selectDepartment!: SelectDepartmentComponent;
+
   subjectForm: FormGroup = new FormGroup({});
 
   selectedTermId = "";
   selectedTermData = {};
+  selectedDepartmentId = "";
+  selectedDepartmentData = {};
 
   ngOnInit(): void {
     this.initSubjectForm();
@@ -32,7 +39,7 @@ export class SubjectFormComponent implements OnInit {
 
   openTermWindow(){
     console.log("You are opening select term window")
-    // this.selectTerm.openModal();
+    this.selectTerm.openModal();
   }
 
   onTermSelected(termData: any){
@@ -40,6 +47,18 @@ export class SubjectFormComponent implements OnInit {
 
     this.selectedTermId = termData.id;
     this.selectedTermData = termData.data();
+  }
+
+  openDepartmentWindow(){
+    console.log("You are opening select department window")
+    this.selectDepartment.openModal();
+  }
+
+  onDepartmentSelected(departmentData: any){
+    console.log(departmentData);
+
+    this.selectedDepartmentId = departmentData.id;
+    this.selectedDepartmentData = departmentData.data();
   }
 
 }

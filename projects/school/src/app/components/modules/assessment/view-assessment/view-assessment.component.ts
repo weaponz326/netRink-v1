@@ -6,8 +6,8 @@ import { ConnectionToastComponent } from 'projects/personal/src/app/components/m
 import { DeleteModalComponent } from 'projects/personal/src/app/components/module-utilities/delete-modal/delete-modal.component'
 import { AssessmentTableComponent } from '../assessment-table/assessment-table.component';
 import { AssessmentClassesComponent } from '../assessment-classes/assessment-classes.component';
-// import { SelectTermComponent } from '../../../select-windows/terms-windows/select-term/select-term.component';
-// import { SelectSubjectComponent } from '../../../select-windows/subjects-windows/select-subject/select-subject.component';
+import { SelectTermComponent } from '../../../select-windows/terms-windows/select-term/select-term.component';
+import { SelectSubjectComponent } from '../../../select-windows/subjects-windows/select-subject/select-subject.component';
 
 import { AssessmentApiService } from 'projects/school/src/app/services/modules/assessment-api/assessment-api.service';
 // import { AssessmentPrintService } from 'projects/school/src/app/services/printing/assessment-print/assessment-print.service';
@@ -32,8 +32,8 @@ export class ViewAssessmentComponent implements OnInit {
   @ViewChild('deleteModalComponentReference', { read: DeleteModalComponent, static: false }) deleteModal!: DeleteModalComponent;
   @ViewChild('assessmentTableComponentReference', { read: AssessmentTableComponent, static: false }) assessmentTable!: AssessmentTableComponent;
   @ViewChild('assessmentClassesComponentReference', { read: AssessmentClassesComponent, static: false }) assessmentClasses!: AssessmentClassesComponent;
-  // @ViewChild('selectTermComponentReference', { read: SelectTermComponent, static: false }) selectTerm!: SelectTermComponent;
-  // @ViewChild('selectSubjectComponentReference', { read: SelectSubjectComponent, static: false }) selectSubject!: SelectSubjectComponent;
+  @ViewChild('selectTermComponentReference', { read: SelectTermComponent, static: false }) selectTerm!: SelectTermComponent;
+  @ViewChild('selectSubjectComponentReference', { read: SelectSubjectComponent, static: false }) selectSubject!: SelectSubjectComponent;
 
   navHeading: any[] = [
     { text: "All Assessment", url: "/home/assessment/all-assessment" },
@@ -83,10 +83,10 @@ export class ViewAssessmentComponent implements OnInit {
 
           this.selectedTermId = this.assessmentFormData.data().term.id;
           this.selectedTermData = this.assessmentFormData.data().term.data;
-          this.assessmentForm.controls.termName.setValue(this.assessmentFormData.data().term.term_name);
+          this.assessmentForm.controls.term.setValue(this.assessmentFormData.data().term.term_name);
           this.selectedSubjectId = this.assessmentFormData.data().subject.id;
           this.selectedSubjectData = this.assessmentFormData.data().subject.data;
-          this.assessmentForm.controls.subjectName.setValue(this.assessmentFormData.data().subject.subject_name);
+          this.assessmentForm.controls.subject.setValue(this.assessmentFormData.data().subject.subject_name);
         },
         (err: any) => {
           console.log(err);
@@ -151,7 +151,7 @@ export class ViewAssessmentComponent implements OnInit {
 
   openTermWindow(){
     console.log("You are opening select term window")
-    // this.selectTerm.openModal();
+    this.selectTerm.openModal();
   }
 
   onTermSelected(termData: any){
@@ -164,7 +164,7 @@ export class ViewAssessmentComponent implements OnInit {
 
   openSubjectWindow(){
     console.log("You are opening select term window")
-    // this.selectSubject.openModal();
+    this.selectSubject.openModal();
   }
 
   onSubjectSelected(subjectData: any){

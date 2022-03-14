@@ -5,7 +5,7 @@
                 <th width="25%" class="min-width-2">Class ID</th>
                 <th width="65%" class="min-width-3">Class Name</th>
                 <th width="10%" class="p-0 min-width-1">
-                    <button class="btn btn-secondary btn-sm w-100">
+                    <button class="btn btn-secondary btn-sm w-100" (click)="selectClass.openModal()">
                         <i class="bi bi-plus"></i>
                     </button>
                 </th>
@@ -29,3 +29,11 @@
         </tbody>
     </table>
 </div>
+
+<!-- connection error prompt component -->
+
+<app-connection-toast #connectionToastComponentReference></app-connection-toast>
+
+<!-- selec class component -->
+
+<app-select-class #selectClassComponentReference></app-select-class>

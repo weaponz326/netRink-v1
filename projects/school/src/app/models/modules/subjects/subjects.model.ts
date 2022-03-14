@@ -3,9 +3,14 @@ export class Subject {
   account!: string;
   subject_code!: string;
   subject_name!: string;
-  department!: string;
   description!: string;
   term!: {
+    id: string;
+    data: {
+
+    }
+  };
+  department!: {
     id: string;
     data: {
 
