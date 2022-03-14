@@ -81,6 +81,8 @@ export class ModuleHomeComponent implements OnInit {
       this.accessToast.openToast();
     else if ("teachers_access"  && !this.access.teachers_access)
       this.accessToast.openToast();
+    else if ("terms_access"  && !this.access.terms_access)
+      this.accessToast.openToast();
     else if ("timetable_access"  && !this.access.timetable_access)
       this.accessToast.openToast();
     else

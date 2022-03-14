@@ -33,10 +33,10 @@ export class AccessFormComponent implements OnInit {
     reports_access: false,
     sections_access: false,
     settings_access: false,
-    staff_access: false,
     students_access: false,
     subjects_access: false,
     teachers_access: false,
+    terms_access: false,
     timetable_access: false,
   }
 
@@ -76,10 +76,10 @@ export class AccessFormComponent implements OnInit {
       reports_access: this.accessForm.reports_access,
       sections_access: this.accessForm.sections_access,
       settings_access: this.accessForm.settings_access,
-      staff_access: this.accessForm.staff_access,
       students_access: this.accessForm.students_access,
       subjects_access: this.accessForm.subjects_access,
       teachers_access: this.accessForm.teachers_access,
+      terms_access: this.accessForm.terms_access,
       timetable_access: this.accessForm.timetable_access,
     }
 
@@ -111,10 +111,10 @@ export class AccessFormComponent implements OnInit {
       this.accessForm.reports_access = true;
       this.accessForm.sections_access = true;
       this.accessForm.settings_access = true;
-      this.accessForm.staff_access = true;
       this.accessForm.students_access = true;
       this.accessForm.subjects_access = true;
       this.accessForm.teachers_access = true;
+      this.accessForm.terms_access = true;
       this.accessForm.timetable_access = true;
     }
     else if (level == 'Manager'){
@@ -130,10 +130,10 @@ export class AccessFormComponent implements OnInit {
       this.accessForm.reports_access = true;
       this.accessForm.sections_access = false;
       this.accessForm.settings_access = true;
-      this.accessForm.staff_access = true;
       this.accessForm.students_access = true;
       this.accessForm.subjects_access = true;
       this.accessForm.teachers_access = true;
+      this.accessForm.terms_access = true;
       this.accessForm.timetable_access = true;
     }
     else if (level == 'Staff'){
@@ -149,10 +149,10 @@ export class AccessFormComponent implements OnInit {
       this.accessForm.reports_access = false;
       this.accessForm.sections_access = false;
       this.accessForm.settings_access = false;
-      this.accessForm.staff_access = false;
       this.accessForm.students_access = false;
       this.accessForm.subjects_access = false;
       this.accessForm.teachers_access = false;
+      this.accessForm.terms_access = false;
       this.accessForm.timetable_access = false;
     }
   }

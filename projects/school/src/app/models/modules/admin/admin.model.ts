@@ -37,9 +37,9 @@ export class UserAccess {
   reports_access!: boolean;
   sections_access!: boolean;
   settings_access!: boolean;
-  staff_access!: boolean;
   students_access!: boolean;
   subjects_access!: boolean;
   teachers_access!: boolean;
+  terms_access!: boolean;
   timetable_access!: boolean;
 }

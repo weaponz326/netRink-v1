@@ -146,10 +146,10 @@ export class RegisterFormComponent implements OnInit {
       reports_access: true,
       sections_access: true,
       settings_access: true,
-      staff_access: true,
       students_access: true,
       subjects_access: true,
       teachers_access: true,
+      terms_access: true,
       timetable_access: true,
     }
 
@@ -182,7 +182,7 @@ export class RegisterFormComponent implements OnInit {
       subscription_type: "Individual",
       billing_frequency: "",
       number_users: 1,
-      email: "school." + localStorage.getItem('school_id') + "@netrink.com",
+      email: "",
       status: "",
     }
 
