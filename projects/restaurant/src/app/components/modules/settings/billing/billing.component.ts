@@ -71,6 +71,7 @@ export class BillingComponent implements OnInit {
 
   metadata = {
     account: localStorage.getItem('restaurant_id'),
+    suite: "Restaurant",
     subscription_type: "",
     billing_frequency: "",
     number_users: 0,
