@@ -74,21 +74,21 @@ export class DashboardComponent implements OnInit {
 
   setDeliveryChartData(){
     this.deliveriesLineChartLabels = [];
-    for (let i = 7; i > 0; i--) {
+    for (let i = 6; i >= 0; i--) {
       var d = moment(this.today).add(-i, 'days');
       this.deliveriesLineChartLabels.push(d.toDate().toISOString().slice(0, 10));
     }
     console.log(this.deliveriesLineChartLabels);
 
     let dataCount: any[] = [];
-    for (let i = 7; i > 0; i--) {
+    for (let i = 6; i >= 0; i--) {
       dataCount.push(0);
     }
     console.log(dataCount);
 
     this.weekDeliveriesData.forEach((delivery: any) => {
       var deliveryDate = delivery.data().created_at.toDate().toISOString().slice(0, 10);
-      for (let i = 7; i > 0; i--){
+      for (let i = 6; i >= 0; i--){
         if (this.deliveriesLineChartLabels[i] == deliveryDate){
           dataCount[i]++;
         }

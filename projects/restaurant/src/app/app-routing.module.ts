@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { AuthGuard } from 'projects/personal/src/app/guards/auth/auth.guard';
+import { BlockingGuard } from 'projects/personal/src/app/guards/blocking/blocking.guard';
 import { AccountGuard } from 'projects/restaurant/src/app/guards/account/account.guard';
 import { AdminGuard } from 'projects/restaurant/src/app/guards/access/admin/admin.guard';
 import { PortalGuard } from 'projects/restaurant/src/app/guards/access/portal/portal.guard';
@@ -105,8 +106,8 @@ const routes: Routes = [
       },
       {
         path: "roster",
-        canActivate: [RosterGuard],
-        canActivateChild: [RosterGuard],
+        canActivate: [RosterGuard, BlockingGuard],
+        canActivateChild: [RosterGuard, BlockingGuard],
         loadChildren: () => import("./pages/modules/roster-page/roster-page.module").then(m => m.RosterPageModule)
       },
       {

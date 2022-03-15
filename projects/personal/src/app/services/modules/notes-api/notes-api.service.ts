@@ -70,7 +70,7 @@ export class NotesApiService {
   getWeekNote(startDate: any, endDate: any){
     return this.noteRef.ref
       .where("user", "==", localStorage.getItem('personal_id'))
-      .where("created_at", "<", startDate).where("created_at", ">", endDate)
+      .where("created_at", "<=", startDate).where("created_at", ">=", endDate)
       .get();
   }
 

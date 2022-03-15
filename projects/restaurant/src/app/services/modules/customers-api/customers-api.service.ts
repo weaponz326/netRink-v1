@@ -70,7 +70,7 @@ export class CustomersApiService {
   getWeekCustomer(startDate: any, endDate: any){
     return this.customerRef.ref
       .where("account", "==", localStorage.getItem('restaurant_id'))
-      .where("created_at", "<", startDate).where("created_at", ">", endDate)
+      .where("created_at", "<=", startDate).where("created_at", ">=", endDate)
       .get();
   }
 

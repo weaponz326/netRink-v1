@@ -74,21 +74,21 @@ export class DashboardComponent implements OnInit {
 
   setReservationChartData(){
     this.reservationsLineChartLabels = [];
-    for (let i = 7; i > 0; i--) {
+    for (let i = 6; i >= 0; i--) {
       var d = moment(this.today).add(-i, 'days');
       this.reservationsLineChartLabels.push(d.toDate().toISOString().slice(0, 10));
     }
     console.log(this.reservationsLineChartLabels);
 
     let dataCount: any[] = [];
-    for (let i = 7; i > 0; i--) {
+    for (let i = 6; i >= 0; i--) {
       dataCount.push(0);
     }
     console.log(dataCount);
 
     this.weekReservationsData.forEach((reservation: any) => {
       var reservationDate = reservation.data().created_at.toDate().toISOString().slice(0, 10);
-      for (let i = 7; i > 0; i--){
+      for (let i = 6; i >= 0; i--){
         if (this.reservationsLineChartLabels[i] == reservationDate){
           dataCount[i]++;
         }

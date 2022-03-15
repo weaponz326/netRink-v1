@@ -112,7 +112,7 @@ export class DashboardComponent implements OnInit {
 
   setIEBarChartLabels(data: any){
     this.ieBarChartLabels = [];
-    for (let i = 7; i > 0; i--) {
+    for (let i = 6; i >= 0; i--) {
       var d = moment(this.today).add(-i, 'days');
       this.ieBarChartLabels.push(d.toDate().toISOString().slice(0, 10));
     }

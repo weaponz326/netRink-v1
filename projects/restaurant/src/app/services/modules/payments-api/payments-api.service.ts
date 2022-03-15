@@ -70,7 +70,7 @@ export class PaymentsApiService {
   getWeekPayment(startDate: any, endDate: any){
     return this.paymentRef.ref
       .where("account", "==", localStorage.getItem('restaurant_id'))
-      .where("created_at", "<", startDate).where("created_at", ">", endDate)
+      .where("created_at", "<=", startDate).where("created_at", ">=", endDate)
       .get();
   }
 

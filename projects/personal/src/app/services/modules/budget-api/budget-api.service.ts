@@ -114,21 +114,21 @@ export class BudgetApiService {
   getMonthBudget(startDate: any, endDate: any){
     return this.budgetRef.ref
       .where("user", "==", localStorage.getItem('personal_id'))
-      .where("created_at", "<", startDate).where("created_at", ">", endDate)
+      .where("created_at", "<=", startDate).where("created_at", ">=", endDate)
       .get();
   }
 
   getWeekIncome(startDate: any, endDate: any){
     return this.incomeRef.ref
       .where("budget.data.user", "==", localStorage.getItem('personal_id'))
-      .where("created_at", "<", startDate).where("created_at", ">", endDate)
+      .where("created_at", "<=", startDate).where("created_at", ">=", endDate)
       .get();
   }
 
   getWeekExpenditure(startDate: any, endDate: any){
     return this.expenditureRef.ref
       .where("budget.data.user", "==", localStorage.getItem('personal_id'))
-      .where("created_at", "<", startDate).where("created_at", ">", endDate)
+      .where("created_at", "<=", startDate).where("created_at", ">=", endDate)
       .get();
   }
 

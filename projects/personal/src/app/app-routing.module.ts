@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { AuthGuard } from './guards/auth/auth.guard';
+import { BlockingGuard } from 'projects/personal/src/app/guards/blocking/blocking.guard';
 
 const routes: Routes = [
   {
@@ -39,6 +40,8 @@ const routes: Routes = [
       },
       {
         path: "calendar",
+        canActivate: [BlockingGuard],
+        canActivateChild: [ BlockingGuard],
         loadChildren: () => import("./pages/modules/calendar-page/calendar-page.module").then(m => m.CalendarPageModule)
       },
       {
@@ -55,6 +58,8 @@ const routes: Routes = [
       },
       {
         path: "tasks",
+        canActivate: [BlockingGuard],
+        canActivateChild: [ BlockingGuard],
         loadChildren: () => import("./pages/modules/tasks-page/tasks-page.module").then(m => m.TasksPageModule)
       },
     ]

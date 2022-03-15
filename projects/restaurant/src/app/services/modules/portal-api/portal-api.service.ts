@@ -39,7 +39,7 @@ export class PortalApiService {
   getSearchResult(searchQuery: string, searchFilter: string){
     return this.restaurantAccountSearchRef.ref
       .where("name", ">=", searchQuery)
-      .where("name", "<", searchQuery + "z")
+      .where("name", "<=", searchQuery + "z")
       .get();
   }
 
@@ -52,14 +52,14 @@ export class PortalApiService {
   getWeekRinkIn(startDate: any, endDate: any){
     return this.rinkRef.ref
       .where("recipent.id", "==", localStorage.getItem('personal_id'))
-      .where("created_at", "<", startDate).where("created_at", ">", endDate)
+      .where("created_at", "<=", startDate).where("created_at", ">=", endDate)
       .get();
   }
 
   getWeekRinkOut(startDate: any, endDate: any){
     return this.rinkRef.ref
       .where("recipent.id", "==", localStorage.getItem('personal_id'))
-      .where("created_at", "<", startDate).where("created_at", ">", endDate)
+      .where("created_at", "<=", startDate).where("created_at", ">=", endDate)
       .get();
   }
 

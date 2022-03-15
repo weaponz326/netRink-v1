@@ -97,21 +97,21 @@ export class DashboardComponent implements OnInit {
 
   setTaskGroupChartData(){
     this.taskGroupsLineChartLabels = [];
-    for (let i = 7; i > 0; i--) {
+    for (let i = 6; i >= 0; i--) {
       var d = moment(this.today).add(-i, 'days');
       this.taskGroupsLineChartLabels.push(d.toDate().toISOString().slice(0, 10));
     }
     console.log(this.taskGroupsLineChartLabels);
 
     let dataCount: any[] = [];
-    for (let i = 7; i > 0; i--) {
+    for (let i = 6; i >= 0; i--) {
       dataCount.push(0);
     }
     console.log(dataCount);
 
     this.weekTaskGroupsData.forEach((taskGroup: any) => {
       var taskGroupDate = taskGroup.data().created_at.toDate().toISOString().slice(0, 10);
-      for (let i = 7; i > 0; i--){
+      for (let i = 6; i >= 0; i--){
         if (this.taskGroupsLineChartLabels[i] == taskGroupDate){
           dataCount[i]++;
         }
@@ -123,21 +123,21 @@ export class DashboardComponent implements OnInit {
 
   setTaskItemChartData(){
     this.taskItemsLineChartLabels = [];
-    for (let i = 7; i > 0; i--) {
+    for (let i = 6; i >= 0; i--) {
       var d = moment(this.today).add(-i, 'days');
       this.taskItemsLineChartLabels.push(d.toDate().toISOString().slice(0, 10));
     }
     console.log(this.taskItemsLineChartLabels);
 
     let dataCount: any[] = [];
-    for (let i = 7; i > 0; i--) {
+    for (let i = 6; i >= 0; i--) {
       dataCount.push(0);
     }
     console.log(dataCount);
 
     this.weekTaskItemsData.forEach((taskItem: any) => {
       var taskItemDate = taskItem.data().created_at.toDate().toISOString().slice(0, 10);
-      for (let i = 7; i > 0; i--){
+      for (let i = 6; i >= 0; i--){
         if (this.taskItemsLineChartLabels[i] == taskItemDate){
           dataCount[i]++;
         }

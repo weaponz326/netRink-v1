@@ -125,7 +125,7 @@ export class AccountsApiService {
   getWeekTransaction(startDate: any, endDate: any){
     return this.transactionRef.ref
       .where("account.data.user", "==", localStorage.getItem('personal_id'))
-      .where("created_at", "<", startDate).where("created_at", ">", endDate)
+      .where("created_at", "<=", startDate).where("created_at", ">=", endDate)
       .get();
   }
 
