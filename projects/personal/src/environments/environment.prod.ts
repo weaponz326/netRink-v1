@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
 
-  baseUrl: "https://netrink.com/",
+  baseUrl: "https://www.netrink.com/",
   personalUrl: "https://personal.netrink.com/",
   restaurantUrl: "https://restaurant.netrink.com/",
   schoolUrl: "https://school.netrink.com/",

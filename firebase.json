@@ -1,7 +1,7 @@
 {
   "hosting": [
     {
-      "site": "netrink-test-v1",
+      "site": "netrink-18",
       "public": "dist/application",
       "ignore": [
         "firebase.json",
@@ -16,7 +16,7 @@
       ]
     },
     {
-      "site": "netrink-test-personal-v1",
+      "site": "netrink-personal-18",
       "public": "dist/personal",
       "ignore": [
         "firebase.json",
@@ -31,7 +31,7 @@
       ]
     },
     {
-      "site": "netrink-test-restaurant-v1",
+      "site": "netrink-restaurant-18",
       "public": "dist/restaurant",
       "ignore": [
         "firebase.json",
