@@ -38,7 +38,7 @@
                     <tbody>
                         <tr *ngFor="let data of termsGridData" (dblclick)="selectRow(data)" class="table-pointer">
                             <td>{{data?.data().term_code}}</td>
-                            <td>{{data?.data().first_name}} {{data?.data().last_name}}</td>
+                            <td>{{data?.data().term_name}}</td>
                             <td>{{data?.data().academic_year}}</td>
                         </tr>
                         <tr *ngIf="isFetchingGridData" class="text-center">

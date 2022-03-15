@@ -62,7 +62,7 @@ export class UserLandingPageComponent implements OnInit {
           console.log(res.data());
           this.isAccountChecking = false;
 
-          if (res.data().status == "Active" || res.data().status == "Active" && data.data().created_by == localStorage.getItem('personal_id')){
+          if (res.data().status == "Active" || res.data().status == "Active" && data.data().account.data.created_by == localStorage.getItem('personal_id')){
             sessionStorage.setItem('restaurant_account_user_id', data.id);
             this.router.navigateByUrl('/home');
           }

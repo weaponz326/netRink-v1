@@ -6,7 +6,7 @@
                 <th width="50%" class="min-width-3">Assessment Name</th>
                 <th width="25%" class="min-width-2">Assessment Date</th>
                 <th width="7%" class="p-0 min-width-1">
-                    <button class="btn btn-secondary btn-sm w-100">
+                    <button class="btn btn-secondary btn-sm w-100" (click)="selectAssessment.openModal()">
                         <i class="bi bi-plus"></i>
                     </button>
                 </th>
@@ -31,3 +31,11 @@
         </tbody>
     </table>
 </div>
+
+<!-- select assessment window component -->
+
+<app-select-assessment #selectAssessmentComponentReference (rowSelected)="createReportAssessment($event)"></app-select-assessment>
+
+<!-- connection error prompt component -->
+
+<app-connection-toast #connectionToastComponentReference></app-connection-toast>

@@ -4,8 +4,8 @@ import { FormControl, FormGroup } from '@angular/forms';
 
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 import { DeleteModalComponent } from 'projects/personal/src/app/components/module-utilities/delete-modal/delete-modal.component'
-// import { SelectTermComponent } from '../../../select-windows/terms-windows/select-term/select-term.component';
-// import { SelectClassComponent } from '../../../select-windows/classes-windows/select-class/select-class.component';
+import { SelectTermComponent } from '../../../select-windows/terms-windows/select-term/select-term.component';
+import { SelectClassComponent } from '../../../select-windows/classes-windows/select-class/select-class.component';
 
 import { AttendanceApiService } from 'projects/school/src/app/services/modules/attendance-api/attendance-api.service';
 // import { AttendancePrintService } from 'projects/school/src/app/services/printing/attendance-print/attendance-print.service';
@@ -28,8 +28,8 @@ export class ViewAttendanceComponent implements OnInit {
 
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
   @ViewChild('deleteModalComponentReference', { read: DeleteModalComponent, static: false }) deleteModal!: DeleteModalComponent;
-  // @ViewChild('selectTermComponentReference', { read: SelectTermComponent, static: false }) selectTerm!: SelectTermComponent;
-  // @ViewChild('selectClassComponentReference', { read: SelectClassComponent, static: false }) selectClass!: SelectClassComponent;
+  @ViewChild('selectTermComponentReference', { read: SelectTermComponent, static: false }) selectTerm!: SelectTermComponent;
+  @ViewChild('selectClassComponentReference', { read: SelectClassComponent, static: false }) selectClass!: SelectClassComponent;
 
   navHeading: any[] = [
     { text: "All Attendance", url: "/home/attendance/all-attendance" },
@@ -150,7 +150,7 @@ export class ViewAttendanceComponent implements OnInit {
 
   openTermWindow(){
     console.log("You are opening select term window")
-    // this.selectTerm.openModal();
+    this.selectTerm.openModal();
   }
 
   onTermSelected(termData: any){
@@ -163,7 +163,7 @@ export class ViewAttendanceComponent implements OnInit {
 
   openClassWindow(){
     console.log("You are opening select term window")
-    // this.selectClass.openModal();
+    this.selectClass.openModal();
   }
 
   onClassSelected(classData: any){

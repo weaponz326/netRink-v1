@@ -6,9 +6,9 @@ import { ClassStudentsComponent } from '../class-students/class-students.compone
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 import { DeleteModalComponent } from 'projects/personal/src/app/components/module-utilities/delete-modal/delete-modal.component'
 
-// import { SelectTermComponent } from '../../../select-windows/terms-windows/select-term/select-term.component';
-// import { SelectDepartmentComponent } from '../../../select-windows/classes-windows/select-department/select-department.component';
-// import { SelectTeacherComponent } from '../../../select-windows/teachers-windows/select-teacher/select-teacher.component';
+import { SelectTermComponent } from '../../../select-windows/terms-windows/select-term/select-term.component';
+import { SelectDepartmentComponent } from '../../../select-windows/classes-windows/select-department/select-department.component';
+import { SelectTeacherComponent } from '../../../select-windows/teachers-windows/select-teacher/select-teacher.component';
 
 import { ClassesApiService } from 'projects/school/src/app/services/modules/classes-api/classes-api.service';
 // import { ClassesPrintService } from 'projects/school/src/app/services/printing/classes-print/classes-print.service';
@@ -33,9 +33,9 @@ export class ViewClassComponent implements OnInit {
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
   @ViewChild('deleteModalComponentReference', { read: DeleteModalComponent, static: false }) deleteModal!: DeleteModalComponent;
 
-  // @ViewChild('selectTermComponentReference', { read: SelectTermComponent, static: false }) selectTerm!: SelectTermComponent;
-  // @ViewChild('selectDepartmentComponentReference', { read: SelectDepartmentComponent, static: false }) selectDepartment!: SelectDepartmentComponent;
-  // @ViewChild('selectTeacherComponentReference', { read: SelectTeacherComponent, static: false }) selectTeacher!: SelectTeacherComponent;
+  @ViewChild('selectTermComponentReference', { read: SelectTermComponent, static: false }) selectTerm!: SelectTermComponent;
+  @ViewChild('selectDepartmentComponentReference', { read: SelectDepartmentComponent, static: false }) selectDepartment!: SelectDepartmentComponent;
+  @ViewChild('selectTeacherComponentReference', { read: SelectTeacherComponent, static: false }) selectTeacher!: SelectTeacherComponent;
 
   navHeading: any[] = [
     { text: "All Classes", url: "/home/classes/all-classes" },
@@ -92,8 +92,8 @@ export class ViewClassComponent implements OnInit {
 
           this.selectedTermId = this.classData.data().term.id;
           this.selectedTermData = this.classData.data().term.data;
-          this.selectedTeacherId = this.classData.data().teacher.id;
-          this.selectedTeacherData = this.classData.data().teacher.data;
+          this.selectedTeacherId = this.classData.data().class_teacher.id;
+          this.selectedTeacherData = this.classData.data().class_teacher.data;
           this.selectedDepartmentId = this.classData.data().department.id;
           this.selectedDepartmentData = this.classData.data().department.data;
         },
@@ -165,7 +165,7 @@ export class ViewClassComponent implements OnInit {
 
   openTermWindow(){
     console.log("You are opening select term window")
-    // this.selectTerm.openModal();
+    this.selectTerm.openModal();
   }
 
   onTermSelected(termData: any){
@@ -178,7 +178,7 @@ export class ViewClassComponent implements OnInit {
 
   openDepartmentWindow(){
     console.log("You are opening select term window")
-    // this.selectDepartment.openModal();
+    this.selectDepartment.openModal();
   }
 
   onDepartmentSelected(departmentData: any){
@@ -191,7 +191,7 @@ export class ViewClassComponent implements OnInit {
 
   openTeacherWindow(){
     console.log("You are opening select term window")
-    // this.selectTeacher.openModal();
+    this.selectTeacher.openModal();
   }
 
   onTeacherSelected(teacherData: any){

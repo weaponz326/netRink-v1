@@ -26,7 +26,7 @@ export class ViewPlanComponent implements OnInit {
   ) { }
 
   @ViewChild('planFormComponentReference', { read: PlanFormComponent, static: false }) planForm!: PlanFormComponent;
-  @ViewChild('PlanSheetComponentReference', { read: PlanSheetComponent, static: false }) planSheet!: PlanSheetComponent;
+  @ViewChild('planSheetComponentReference', { read: PlanSheetComponent, static: false }) planSheet!: PlanSheetComponent;
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
   @ViewChild('deleteModalComponentReference', { read: DeleteModalComponent, static: false }) deleteModal!: DeleteModalComponent;
 
@@ -51,12 +51,22 @@ export class ViewPlanComponent implements OnInit {
     this.lessonPlanApi.getLessonPlan()
       .then(
         (res: any) => {
-          console.log(res);
+          console.log(res.data());
           this.planData = res;
           this.isPlanLoading = false;
 
           this.planForm.planForm.controls.planCode.setValue(this.planData.data().plan_code);
           this.planForm.planForm.controls.planName.setValue(this.planData.data().plan_name);
+          this.planForm.planForm.controls.term.setValue(this.planData.data().term.data.term_name);
+          this.planForm.planForm.controls.subject.setValue(this.planData.data().subject.data.subject_name);
+          this.planForm.planForm.controls.teacher.setValue(this.planData.data().teacher.data.teacher_name);
+
+          this.planForm.selectedTermId = this.planData.data().term.id;
+          this.planForm.selectedTermData = this.planData.data().term.data;
+          this.planForm.selectedSubjectId = this.planData.data().subject.id;
+          this.planForm.selectedSubjectData = this.planData.data().subject.data;
+          this.planForm.selectedTeacherId = this.planData.data().teacher.id;
+          this.planForm.selectedTeacherData = this.planData.data().teacher.data;
         },
         (err: any) => {
           console.log(err);

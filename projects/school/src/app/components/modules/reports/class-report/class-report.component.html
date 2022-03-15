@@ -31,7 +31,7 @@
                 </div>
 
                 <div class="row mb-1">
-                    <div class="col-md-4"><label class="float-md-end float-sm-start mt-1">Term Name :</label></div>
+                    <div class="col-md-4"><label class="float-md-end float-sm-start mt-1">Term :</label></div>
                     <div class="col-md-8">
                         <div class="input-group input-group-sm w-100">
                             <input formControlName="term" class="form-control">
@@ -56,7 +56,7 @@
 
                 <div *ngIf="!isReportLoading" class="row">
                     <div class="col-md-12">
-                        <button type="button" class="btn btn-secondary btn-sm float-end ms-1 page-form-btn" routerLink="/home/report/all-report">Cancel</button>
+                        <button type="button" class="btn btn-secondary btn-sm float-end ms-1 page-form-btn" routerLink="/home/reports/all-reports">Cancel</button>
                         <button [disabled]="isReportDeleting" type="button" class="btn btn-secondary btn-sm float-end ms-1 page-form-btn" (click)="confirmDelete()">Delete</button>
                         <button [disabled]="isReportSaving" type="submit" class="btn btn-secondary btn-sm float-end ms-1 page-form-btn">Save</button>
                     </div>
@@ -104,8 +104,8 @@
 
 <!-- select term window component -->
 
-<!-- <app-select-term #selectTermComponentReference (rowSelected)="onTermSelected($event)"></app-select-term> -->
+<app-select-term #selectTermComponentReference (rowSelected)="onTermSelected($event)"></app-select-term>
 
 <!-- select class window component -->
 
-<!-- <app-select-class #selectClassComponentReference (rowSelected)="onClassSelected($event)"></app-select-class> -->
+<app-select-class #selectClassComponentReference (rowSelected)="onClassSelected($event)"></app-select-class>

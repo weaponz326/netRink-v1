@@ -59,8 +59,8 @@ export class ViewPaymentComponent implements OnInit {
 
           this.paymentForm.paymentForm.controls.term.setValue(res.data().term.data.term_name);
           this.paymentForm.paymentForm.controls.billCode.setValue(res.data().bill.data.bill_code);
-          this.paymentForm.paymentForm.controls.studentCode.setValue(res.data().bill.data.student.student_code);
-          this.paymentForm.paymentForm.controls.studentName.setValue(res.data().bill.data.student.student_name);
+          this.paymentForm.paymentForm.controls.studentCode.setValue(res.data().bill.data.student?.data.student_code);
+          this.paymentForm.paymentForm.controls.studentName.setValue(res.data().bill.data.student?.data.student_name);
           this.paymentForm.paymentForm.controls.totalAmount.setValue(res.data().bill.data.total_amount);
 
           this.paymentForm.selectedBillId = res.data().bill.id;

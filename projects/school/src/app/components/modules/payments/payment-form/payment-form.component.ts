@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 
-// import { SelectBillComponent } from '../../../select-windows/bills-windows/select-bill/select-bill.component';
-// import { SelectTermComponent } from '../../../select-windows/terms-windows/select-term/select-term.component';
+import { SelectBillComponent } from '../../../select-windows/fees-windows/select-bill/select-bill.component';
+import { SelectTermComponent } from '../../../select-windows/terms-windows/select-term/select-term.component';
 
 
 @Component({
@@ -14,15 +14,15 @@ export class PaymentFormComponent implements OnInit {
 
   constructor() { }
 
-  // @ViewChild('selectBillComponentReference', { read: SelectBillComponent, static: false }) selectBill!: SelectBillComponent;
-  // @ViewChild('selectTermComponentReference', { read: SelectTermComponent, static: false }) selectTerm!: SelectTermComponent;
+  @ViewChild('selectBillComponentReference', { read: SelectBillComponent, static: false }) selectBill!: SelectBillComponent;
+  @ViewChild('selectTermComponentReference', { read: SelectTermComponent, static: false }) selectTerm!: SelectTermComponent;
 
   paymentForm: FormGroup = new FormGroup({});
 
-  selectedBillId: any;
-  selectedBillData: any;
-  selectedTermId: any;
-  selectedTermData: any;
+  selectedBillId = "";
+  selectedBillData = {};
+  selectedTermId = "";
+  selectedTermData = {};
 
   ngOnInit(): void {
     this.initPaymentForm();
@@ -42,6 +42,11 @@ export class PaymentFormComponent implements OnInit {
     })
   }
 
+  openBillWindow(){
+    console.log("You are opening select bill window")
+    this.selectBill.openModal();
+  }
+
   onBillSelected(billData: any){
     console.log(billData);
 
@@ -49,14 +54,14 @@ export class PaymentFormComponent implements OnInit {
     this.selectedBillData = billData.data();
 
     this.paymentForm.controls.billCode.setValue(billData.data().bill_code);
-    this.paymentForm.controls.studentCode.setValue(billData.data().student.student_code);
-    this.paymentForm.controls.studentName.setValue(billData.data().student.student_name);
+    this.paymentForm.controls.studentCode.setValue(billData.data().student.data.student_code);
+    this.paymentForm.controls.studentName.setValue(billData.data().student.data.student_name);
     this.paymentForm.controls.totalAmount.setValue(billData.data().total_amount);
   }
 
   openTermWindow(){
     console.log("You are opening select term window")
-    // this.selectTerm.openModal();
+    this.selectTerm.openModal();
   }
 
   onTermSelected(termData: any){
@@ -65,11 +70,6 @@ export class PaymentFormComponent implements OnInit {
     this.selectedTermId = termData.id;
     this.selectedTermData = termData.data();
     this.paymentForm.controls.termCode.setValue(termData.data().term_name);
-  }
-
-  openBillWindow(){
-    console.log("You are opening select bill window")
-    // this.selectBill.openModal();
   }
 
   setBalance(){

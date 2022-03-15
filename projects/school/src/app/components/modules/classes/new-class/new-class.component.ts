@@ -5,9 +5,9 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { serverTimestamp } from 'firebase/firestore';
 
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
-// import { SelectTermComponent } from '../../../select-windows/terms-windows/select-term/select-term.component';
-// import { SelectDepartmentComponent } from '../../../select-windows/classes-windows/select-department/select-department.component';
-// import { SelectTeacherComponent } from '../../../select-windows/teachers-windows/select-teacher/select-teacher.component';
+import { SelectTermComponent } from '../../../select-windows/terms-windows/select-term/select-term.component';
+import { SelectDepartmentComponent } from '../../../select-windows/classes-windows/select-department/select-department.component';
+import { SelectTeacherComponent } from '../../../select-windows/teachers-windows/select-teacher/select-teacher.component';
 
 import { ClassesApiService } from 'projects/school/src/app/services/modules/classes-api/classes-api.service';
 
@@ -30,9 +30,9 @@ export class NewClassComponent implements OnInit {
   @ViewChild('dismissButtonElementReference', { read: ElementRef, static: false }) dismissButton!: ElementRef;
 
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
-  // @ViewChild('selectTermComponentReference', { read: SelectTermComponent, static: false }) selectTerm!: SelectTermComponent;
-  // @ViewChild('selectDepartmentComponentReference', { read: SelectDepartmentComponent, static: false }) selectDepartment!: SelectDepartmentComponent;
-  // @ViewChild('selectTeacherComponentReference', { read: SelectTeacherComponent, static: false }) selectTeacher!: SelectTeacherComponent;
+  @ViewChild('selectTermComponentReference', { read: SelectTermComponent, static: false }) selectTerm!: SelectTermComponent;
+  @ViewChild('selectDepartmentComponentReference', { read: SelectDepartmentComponent, static: false }) selectDepartment!: SelectDepartmentComponent;
+  @ViewChild('selectTeacherComponentReference', { read: SelectTeacherComponent, static: false }) selectTeacher!: SelectTeacherComponent;
 
   classForm: FormGroup = new FormGroup({});
 
@@ -70,7 +70,7 @@ export class NewClassComponent implements OnInit {
       account: localStorage.getItem('school_id') as string,
       class_code: this.classForm.controls.classCode.value,
       class_name: this.classForm.controls.className.value,
-      location: this.classForm.controls.toDate.value,
+      location: this.classForm.controls.location.value,
       term: {
         id: this.selectedTermId,
         data: this.selectedTermData,
@@ -107,7 +107,7 @@ export class NewClassComponent implements OnInit {
 
   openTermWindow(){
     console.log("You are opening select term window")
-    // this.selectTerm.openModal();
+    this.selectTerm.openModal();
   }
 
   onTermSelected(termData: any){
@@ -120,7 +120,7 @@ export class NewClassComponent implements OnInit {
 
   openDepartmentWindow(){
     console.log("You are opening select term window")
-    // this.selectDepartment.openModal();
+    this.selectDepartment.openModal();
   }
 
   onDepartmentSelected(departmentData: any){
@@ -133,7 +133,7 @@ export class NewClassComponent implements OnInit {
 
   openTeacherWindow(){
     console.log("You are opening select term window")
-    // this.selectTeacher.openModal();
+    this.selectTeacher.openModal();
   }
 
   onTeacherSelected(teacherData: any){

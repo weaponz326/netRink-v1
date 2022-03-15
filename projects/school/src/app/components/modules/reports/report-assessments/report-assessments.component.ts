@@ -5,7 +5,7 @@ import { serverTimestamp } from 'firebase/firestore';
 
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 import { DeleteModalComponent } from 'projects/personal/src/app/components/module-utilities/delete-modal/delete-modal.component'
-// import { SelectClassComponent } from '../../../select-windows/assessments-windows/select-class/select-class.component';
+import { SelectAssessmentComponent } from '../../../select-windows/assessment-windows/select-assessment/select-assessment.component';
 
 import { ReportsApiService } from 'projects/school/src/app/services/modules/reports-api/reports-api.service';
 
@@ -26,7 +26,7 @@ export class ReportAssessmentsComponent implements OnInit {
 
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
   @ViewChild('deleteModalTwoComponentReference', { read: DeleteModalComponent, static: false }) deleteModal!: DeleteModalComponent;
-  // @ViewChild('selectStudentComponentReference', { read: SelectStudentComponent, static: false }) selectStudent!: SelectStudentComponent;
+  @ViewChild('selectAssessmentComponentReference', { read: SelectAssessmentComponent, static: false }) selectAssessment!: SelectAssessmentComponent;
 
   reportAssessmentsGridData: any[] = [];
 

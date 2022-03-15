@@ -5,8 +5,8 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { serverTimestamp } from 'firebase/firestore';
 
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
-// import { SelectTermComponent } from '../../../select-windows/terms-windows/select-term/select-term.component';
-// import { SelectClassComponent } from '../../../select-windows/classes-windows/select-class/select-class.component';
+import { SelectTermComponent } from '../../../select-windows/terms-windows/select-term/select-term.component';
+import { SelectClassComponent } from '../../../select-windows/classes-windows/select-class/select-class.component';
 
 import { ReportsApiService } from 'projects/school/src/app/services/modules/reports-api/reports-api.service';
 
@@ -29,8 +29,8 @@ export class NewReportComponent implements OnInit {
   @ViewChild('dismissButtonElementReference', { read: ElementRef, static: false }) dismissButton!: ElementRef;
 
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
-  // @ViewChild('selectTermComponentReference', { read: SelectTermComponent, static: false }) selectTerm!: SelectTermComponent;
-  // @ViewChild('selectClassComponentReference', { read: SelectClassComponent, static: false }) selectClass!: SelectClassComponent;
+  @ViewChild('selectTermComponentReference', { read: SelectTermComponent, static: false }) selectTerm!: SelectTermComponent;
+  @ViewChild('selectClassComponentReference', { read: SelectClassComponent, static: false }) selectClass!: SelectClassComponent;
 
   reportForm: FormGroup = new FormGroup({});
 
@@ -97,7 +97,7 @@ export class NewReportComponent implements OnInit {
 
   openTermWindow(){
     console.log("You are opening select term window")
-    // this.selectTerm.openModal();
+    this.selectTerm.openModal();
   }
 
   onTermSelected(termData: any){
@@ -110,7 +110,7 @@ export class NewReportComponent implements OnInit {
 
   openClassWindow(){
     console.log("You are opening select term window")
-    // this.selectClass.openModal();
+    this.selectClass.openModal();
   }
 
   onClassSelected(classData: any){

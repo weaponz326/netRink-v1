@@ -57,7 +57,7 @@ export class ViewTermComponent implements OnInit {
 
           this.termForm.termForm.controls.termCode.setValue(this.termData.data().term_code);
           this.termForm.termForm.controls.termName.setValue(this.termData.data().term_name);
-          this.termForm.termForm.controls.academmicYear.setValue(this.termData.data().academic_year);
+          this.termForm.termForm.controls.academicYear.setValue(this.termData.data().academic_year);
           this.termForm.termForm.controls.startDate.setValue(this.termData.data().start_date);
           this.termForm.termForm.controls.endDate.setValue(this.termData.data().end_date);
           this.termForm.termForm.controls.termStatus.setValue(this.termData.data().term_status);

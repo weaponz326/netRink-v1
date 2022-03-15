@@ -66,15 +66,14 @@ export class ViewStudentComponent implements OnInit {
           this.studentForm.studentForm.controls.studentCode.setValue(this.studentData.data().student_code);
           this.studentForm.studentForm.controls.admissionDate.setValue(this.studentData.data().admission_date);
           this.studentForm.studentForm.controls.previousSchool.setValue(this.studentData.data().previous_school);
-          this.studentForm.studentForm.controls.photo.setValue(this.studentData.data().photo);
-          this.studentForm.studentForm.controls.nationalty.setValue(this.studentData.data().nationality);
+          this.studentForm.studentForm.controls.nationality.setValue(this.studentData.data().nationality);
           this.studentForm.studentForm.controls.religion.setValue(this.studentData.data().religion);
           this.studentForm.studentForm.controls.phone.setValue(this.studentData.data().phone);
           this.studentForm.studentForm.controls.email.setValue(this.studentData.data().email);
           this.studentForm.studentForm.controls.address.setValue(this.studentData.data().address);
           this.studentForm.studentForm.controls.state.setValue(this.studentData.data().state);
           this.studentForm.studentForm.controls.city.setValue(this.studentData.data().city);
-          this.studentForm.studentForm.controls.post_code.setValue(this.studentData.data().post_code);
+          this.studentForm.studentForm.controls.postCode.setValue(this.studentData.data().post_code);
 
           if (this.studentData.data().photo != ""){
             this.studentForm.photo.imgSrc = this.studentData.data().photo;
@@ -83,10 +82,10 @@ export class ViewStudentComponent implements OnInit {
 
           this.studentForm.selectedTermId = this.studentData.data().term.id;
           this.studentForm.selectedTermData = this.studentData.data().term.data;
-          this.studentForm.studentForm.controls.termName.setValue(this.studentData.data().term.term_name);
+          this.studentForm.studentForm.controls.term.setValue(this.studentData.data().term.term_name);
           this.studentForm.selectedClassId = this.studentData.data().clase.id;
           this.studentForm.selectedClassData = this.studentData.data().clase.data;
-          this.studentForm.studentForm.controls.className.setValue(this.studentData.data().clase.class_name);
+          this.studentForm.studentForm.controls.clase.setValue(this.studentData.data().clase.class_name);
         },
         (err: any) => {
           console.log(err);
@@ -115,7 +114,7 @@ export class ViewStudentComponent implements OnInit {
       address: this.studentForm.studentForm.controls.address.value,
       state: this.studentForm.studentForm.controls.state.value,
       city: this.studentForm.studentForm.controls.city.value,
-      post_code: this.studentForm.studentForm.controls.post_code.value,
+      post_code: this.studentForm.studentForm.controls.postCode.value,
       term: {
         id: this.studentForm.selectedTermId,
         data: this.studentForm.selectedTermData,

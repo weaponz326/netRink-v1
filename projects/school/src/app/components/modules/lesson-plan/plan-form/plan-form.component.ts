@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 
-// import { SelectTermComponent } from '../../../select-windows/terms-windows/select-term/select-term.component';
-// import { SelectSubjectComponent } from '../../../select-windows/subjects-windows/select-subject/select-subject.component';
-// import { SelectTeacherComponent } from '../../../select-windows/teachers-windows/select-teacher/select-teacher.component';
+import { SelectTermComponent } from '../../../select-windows/terms-windows/select-term/select-term.component';
+import { SelectSubjectComponent } from '../../../select-windows/subjects-windows/select-subject/select-subject.component';
+import { SelectTeacherComponent } from '../../../select-windows/teachers-windows/select-teacher/select-teacher.component';
 
 
 @Component({
@@ -14,6 +14,10 @@ import { FormControl, FormGroup } from '@angular/forms';
 export class PlanFormComponent implements OnInit {
 
   constructor() { }
+
+  @ViewChild('selectTermComponentReference', { read: SelectTermComponent, static: false }) selectTerm!: SelectTermComponent;
+  @ViewChild('selectSubjectComponentReference', { read: SelectSubjectComponent, static: false }) selectSubject!: SelectSubjectComponent;
+  @ViewChild('selectTeacherComponentReference', { read: SelectTeacherComponent, static: false }) selectTeacher!: SelectTeacherComponent;
 
   planForm: FormGroup = new FormGroup({});
 
@@ -43,7 +47,7 @@ export class PlanFormComponent implements OnInit {
 
   openTermWindow(){
     console.log("You are opening select term window")
-    // this.selectTerm.openModal();
+    this.selectTerm.openModal();
   }
 
   onTermSelected(termData: any){
@@ -56,7 +60,7 @@ export class PlanFormComponent implements OnInit {
 
   openSubjectWindow(){
     console.log("You are opening select subject window")
-    // this.selectSubject.openModal();
+    this.selectSubject.openModal();
   }
 
   onSubjectSelected(subjectData: any){
@@ -69,7 +73,7 @@ export class PlanFormComponent implements OnInit {
 
   openTeacherWindow(){
     console.log("You are opening select teacher window")
-    // this.selectTeacher.openModal();
+    this.selectTeacher.openModal();
   }
 
   onTeacherSelected(teacherData: any){

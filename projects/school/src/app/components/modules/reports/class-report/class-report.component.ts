@@ -7,8 +7,8 @@ import { ClassSheetComponent } from '../class-sheet/class-sheet.component';
 
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 import { DeleteModalComponent } from 'projects/personal/src/app/components/module-utilities/delete-modal/delete-modal.component'
-// import { SelectTermComponent } from '../../../select-windows/terms-windows/select-term/select-term.component';
-// import { SelectClassComponent } from '../../../select-windows/classes-windows/select-class/select-class.component';
+import { SelectTermComponent } from '../../../select-windows/terms-windows/select-term/select-term.component';
+import { SelectClassComponent } from '../../../select-windows/classes-windows/select-class/select-class.component';
 
 import { ReportsApiService } from 'projects/school/src/app/services/modules/reports-api/reports-api.service';
 // import { ReportsPrintService } from 'projects/school/src/app/services/printing/reports-print/reports-print.service';
@@ -31,8 +31,8 @@ export class ClassReportComponent implements OnInit {
 
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
   @ViewChild('deleteModalComponentReference', { read: DeleteModalComponent, static: false }) deleteModal!: DeleteModalComponent;
-  // @ViewChild('selectTermComponentReference', { read: SelectTermComponent, static: false }) selectTerm!: SelectTermComponent;
-  // @ViewChild('selectClassComponentReference', { read: SelectClassComponent, static: false }) selectClass!: SelectClassComponent;
+  @ViewChild('selectTermComponentReference', { read: SelectTermComponent, static: false }) selectTerm!: SelectTermComponent;
+  @ViewChild('selectClassComponentReference', { read: SelectClassComponent, static: false }) selectClass!: SelectClassComponent;
   @ViewChild('reportAssessmentsComponentReference', { read: ReportAssessmentsComponent, static: false }) reportAssessments!: ReportAssessmentsComponent;
   @ViewChild('classSheetComponentReference', { read: ClassSheetComponent, static: false }) classSheet!: ClassSheetComponent;
 
@@ -62,8 +62,7 @@ export class ClassReportComponent implements OnInit {
     this.reportForm = new FormGroup({
       reportCode: new FormControl(''),
       reportName: new FormControl(''),
-      fromDate: new FormControl(''),
-      toDate: new FormControl(''),
+      reportDate: new FormControl(''),
       term: new FormControl({value: "", disabled: true}),
       clase: new FormControl({value: "", disabled: true}),
     })
@@ -85,10 +84,10 @@ export class ClassReportComponent implements OnInit {
 
           this.selectedTermId = this.reportFormData.data().term.id;
           this.selectedTermData = this.reportFormData.data().term.data;
-          this.reportForm.controls.termName.setValue(this.reportFormData.data().term.term_name);
-          this.selectedClassId = this.reportFormData.data().source.id;
-          this.selectedClassData = this.reportFormData.data().source.data;
-          this.reportForm.controls.className.setValue(this.reportFormData.data().source.class_name);
+          this.reportForm.controls.term.setValue(this.reportFormData.data().term.term_name);
+          this.selectedClassId = this.reportFormData.data().clase.id;
+          this.selectedClassData = this.reportFormData.data().clase.data;
+          this.reportForm.controls.clase.setValue(this.reportFormData.data().clase.class_name);
         },
         (err: any) => {
           console.log(err);
@@ -153,7 +152,7 @@ export class ClassReportComponent implements OnInit {
 
   openTermWindow(){
     console.log("You are opening select term window")
-    // this.selectTerm.openModal();
+    this.selectTerm.openModal();
   }
 
   onTermSelected(termData: any){
@@ -166,7 +165,7 @@ export class ClassReportComponent implements OnInit {
 
   openClassWindow(){
     console.log("You are opening select term window")
-    // this.selectClass.openModal();
+    this.selectClass.openModal();
   }
 
   onClassSelected(classData: any){

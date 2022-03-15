@@ -155,8 +155,8 @@ export class AllPlansComponent implements OnInit {
   viewLessonPlan(lessonPlanId: any){
     console.log(lessonPlanId);
 
-    sessionStorage.setItem('school_lessonPlan_id', lessonPlanId);
-    this.router.navigateByUrl('/home/lessonPlan/view-lessonPlan');
+    sessionStorage.setItem('school_lesson_plan_id', lessonPlanId);
+    this.router.navigateByUrl('/home/lesson-plan/view-plan');
   }
 
   onPrint(){

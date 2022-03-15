@@ -1,6 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 
+import { SelectTermComponent } from '../../../select-windows/terms-windows/select-term/select-term.component';
+import { SelectTeacherComponent } from '../../../select-windows/teachers-windows/select-teacher/select-teacher.component';
+
 
 @Component({
   selector: 'app-department-form',
@@ -10,6 +13,9 @@ import { FormControl, FormGroup } from '@angular/forms';
 export class DepartmentFormComponent implements OnInit {
 
   constructor() { }
+
+  @ViewChild('selectTermComponentReference', { read: SelectTermComponent, static: false }) selectTerm!: SelectTermComponent;
+  @ViewChild('selectTeacherComponentReference', { read: SelectTeacherComponent, static: false }) selectTeacher!: SelectTeacherComponent;
 
   departmentForm: FormGroup = new FormGroup({});
 
@@ -34,7 +40,7 @@ export class DepartmentFormComponent implements OnInit {
 
   openTermWindow(){
     console.log("You are opening select term window")
-    // this.selectTerm.openModal();
+    this.selectTerm.openModal();
   }
 
   onTermSelected(termData: any){
@@ -47,7 +53,7 @@ export class DepartmentFormComponent implements OnInit {
 
   openTeacherWindow(){
     console.log("You are opening select teacher window")
-    // this.selectTeacher.openModal();
+    this.selectTeacher.openModal();
   }
 
   onTeacherSelected(teacherData: any){

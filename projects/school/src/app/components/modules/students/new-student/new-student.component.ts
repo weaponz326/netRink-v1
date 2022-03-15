@@ -61,7 +61,7 @@ export class NewStudentComponent implements OnInit {
       address: this.studentForm.studentForm.controls.address.value,
       state: this.studentForm.studentForm.controls.state.value,
       city: this.studentForm.studentForm.controls.city.value,
-      post_code: this.studentForm.studentForm.controls.post_code.value,
+      post_code: this.studentForm.studentForm.controls.postCode.value,
       term: {
         id: this.studentForm.selectedTermId,
         data: this.studentForm.selectedTermData,
@@ -83,7 +83,7 @@ export class NewStudentComponent implements OnInit {
 
           if (!this.studentForm.photo.isImageSet){
             this.isStudentSaving = false;
-            this.router.navigateByUrl('/home/studentx/view-student');
+            this.router.navigateByUrl('/home/students/view-student');
           }
           else{
             const storagePath = this.storageBasePath + res.id;

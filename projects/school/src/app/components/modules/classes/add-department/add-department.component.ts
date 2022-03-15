@@ -37,7 +37,7 @@ export class AddDepartmentComponent implements OnInit {
   saveDepartment(){
     let data: Department = {
       created_at: serverTimestamp(),
-      account: localStorage.getItem('restaurant_id') as string,
+      account: localStorage.getItem('school_id') as string,
       department_code: this.departmentForm.departmentForm.controls.departmentCode.value,
       department_name: this.departmentForm.departmentForm.controls.departmentName.value,
       department_description: this.departmentForm.departmentForm.controls.departmentDescription.value,
