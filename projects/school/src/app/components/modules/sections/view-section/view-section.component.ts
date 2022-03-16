@@ -5,7 +5,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { SectionStudentsComponent } from '../section-students/section-students.component';
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 import { DeleteModalComponent } from 'projects/personal/src/app/components/module-utilities/delete-modal/delete-modal.component'
-// import { SelectTermComponent } from '../../../select-windows/terms-windows/select-term/select-term.component';
+import { SelectTermComponent } from '../../../select-windows/terms-windows/select-term/select-term.component';
 
 import { SectionsApiService } from 'projects/school/src/app/services/modules/sections-api/sections-api.service';
 // import { SectionsPrintService } from 'projects/school/src/app/services/printing/sections-print/sections-print.service';
@@ -29,7 +29,7 @@ export class ViewSectionComponent implements OnInit {
   @ViewChild('sectionStudentsComponentReference', { read: SectionStudentsComponent, static: false }) sectionStudents!: SectionStudentsComponent;
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
   @ViewChild('deleteModalComponentReference', { read: DeleteModalComponent, static: false }) deleteModal!: DeleteModalComponent;
-  // @ViewChild('selectTermComponentReference', { read: SelectTermComponent, static: false }) selectTerm!: SelectTermComponent;
+  @ViewChild('selectTermComponentReference', { read: SelectTermComponent, static: false }) selectTerm!: SelectTermComponent;
 
   navHeading: any[] = [
     { text: "All Sections", url: "/home/sections/all-sections" },
@@ -53,8 +53,8 @@ export class ViewSectionComponent implements OnInit {
 
   initSectionsForm(){
     this.sectionForm = new FormGroup({
-      sectionsCode: new FormControl(''),
-      sectionsName: new FormControl(''),
+      sectionCode: new FormControl(''),
+      sectionName: new FormControl(''),
       term: new FormControl({value: "", disabled: true}),
     })
   }
@@ -69,12 +69,12 @@ export class ViewSectionComponent implements OnInit {
           this.sectionFormData = res;
           this.isSectionLoading = false;
 
-          this.sectionForm.controls.sectionsCode.setValue(this.sectionFormData.data().sections_code);
-          this.sectionForm.controls.sectionsName.setValue(this.sectionFormData.data().sections_name);
+          this.sectionForm.controls.sectionCode.setValue(this.sectionFormData.data().section_code);
+          this.sectionForm.controls.sectionName.setValue(this.sectionFormData.data().section_name);
 
           this.selectedTermId = this.sectionFormData.data().term.id;
           this.selectedTermData = this.sectionFormData.data().term.data;
-          this.sectionForm.controls.termName.setValue(this.sectionFormData.data().term.term_name);
+          this.sectionForm.controls.term.setValue(this.sectionFormData.data().term.term_name);
         },
         (err: any) => {
           console.log(err);
@@ -86,8 +86,8 @@ export class ViewSectionComponent implements OnInit {
 
   updateSection(){
     let data = {
-      sections_code: this.sectionForm.controls.sectionsCode.value,
-      sections_name: this.sectionForm.controls.sectionsName.value,
+      section_code: this.sectionForm.controls.sectionCode.value,
+      section_name: this.sectionForm.controls.sectionName.value,
       term: {
         id: this.selectedTermId,
         data: this.selectedTermData,
@@ -134,7 +134,7 @@ export class ViewSectionComponent implements OnInit {
 
   openTermWindow(){
     console.log("You are opening select term window")
-    // this.selectTerm.openModal();
+    this.selectTerm.openModal();
   }
 
   onTermSelected(termData: any){

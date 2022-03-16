@@ -3,8 +3,8 @@ import { FormControl, FormGroup } from '@angular/forms';
 
 import { ImageInputComponent } from 'projects/personal/src/app/components/module-utilities/image-input/image-input.component';
 import { BdayInputComponent } from 'projects/personal/src/app/components/module-utilities/bday-input/bday-input.component'
-// import { SelectTermComponent } from '../../../select-windows/terms-windows/select-term/select-term.component';
-// import { SelectDepartmentComponent } from '../../../select-windows/classes-windows/select-class/select-class.component';
+import { SelectTermComponent } from '../../../select-windows/terms-windows/select-term/select-term.component';
+import { SelectDepartmentComponent } from '../../../select-windows/classes-windows/select-department/select-department.component';
 
 
 @Component({
@@ -19,8 +19,8 @@ export class TeacherFormComponent implements OnInit {
   @ViewChild('imageInputComponentReference', { read: ImageInputComponent, static: false }) photo!: ImageInputComponent;
   @ViewChild('bdayInputComponentReference', { read: BdayInputComponent, static: false }) bday!: BdayInputComponent;
 
-  // @ViewChild('selectTermComponentReference', { read: SelectTermComponent, static: false }) selectTerm!: SelectTermComponent;
-  // @ViewChild('selectDepartmentComponentReference', { read: SelectDepartmentComponent, static: false }) selectDepartment!: SelectDepartmentComponent;
+  @ViewChild('selectTermComponentReference', { read: SelectTermComponent, static: false }) selectTerm!: SelectTermComponent;
+  @ViewChild('selectDepartmentComponentReference', { read: SelectDepartmentComponent, static: false }) selectDepartment!: SelectDepartmentComponent;
 
   ngOnInit(): void {
     this.initParentForm();
@@ -53,7 +53,7 @@ export class TeacherFormComponent implements OnInit {
 
   openTermWindow(){
     console.log("You are opening select term window")
-    // this.selectTerm.openModal();
+    this.selectTerm.openModal();
   }
 
   onTermSelected(termData: any){
@@ -66,7 +66,7 @@ export class TeacherFormComponent implements OnInit {
 
   openDepartmentWindow(){
     console.log("You are opening select term window")
-    // this.selectDepartment.openModal();
+    this.selectDepartment.openModal();
   }
 
   onDepartmentSelected(classData: any){

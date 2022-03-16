@@ -156,7 +156,7 @@ export class AllSectionsComponent implements OnInit {
     console.log(sectionId);
 
     sessionStorage.setItem('school_section_id', sectionId);
-    this.router.navigateByUrl('/home/sections/class-section');
+    this.router.navigateByUrl('/home/sections/view-section');
   }
 
   onPrint(){

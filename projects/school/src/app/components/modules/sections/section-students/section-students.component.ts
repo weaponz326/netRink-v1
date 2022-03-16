@@ -5,7 +5,7 @@ import { serverTimestamp } from 'firebase/firestore';
 
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 import { DeleteModalComponent } from 'projects/personal/src/app/components/module-utilities/delete-modal/delete-modal.component'
-// import { SelectStudentComponent } from '../../../select-windows/students-windows/select-student/select-student.component';
+import { SelectStudentComponent } from '../../../select-windows/students-windows/select-student/select-student.component';
 
 import { SectionsApiService } from 'projects/school/src/app/services/modules/sections-api/sections-api.service';
 
@@ -26,7 +26,7 @@ export class SectionStudentsComponent implements OnInit {
 
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
   @ViewChild('deleteModalTwoComponentReference', { read: DeleteModalComponent, static: false }) deleteModal!: DeleteModalComponent;
-  // @ViewChild('selectStudentComponentReference', { read: SelectStudentComponent, static: false }) selectStudent!: SelectStudentComponent;
+  @ViewChild('selectStudentComponentReference', { read: SelectStudentComponent, static: false }) selectStudent!: SelectStudentComponent;
 
   classStudentsGridData: any[] = [];
 
@@ -90,7 +90,7 @@ export class SectionStudentsComponent implements OnInit {
       )
   }
 
-  deleteSectionStudent(id: any){
+  deleteSectionStudent(){
     this.isStudentDeleting = true;
 
     this.sectionsApi.deleteSectionStudent()

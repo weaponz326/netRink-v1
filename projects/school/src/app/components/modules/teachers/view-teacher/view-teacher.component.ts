@@ -65,15 +65,14 @@ export class ViewTeacherComponent implements OnInit {
           this.teacherForm.teacherForm.controls.sex.setValue(this.teacherData.data().sex);
           this.teacherForm.teacherForm.controls.teacherCode.setValue(this.teacherData.data().teacher_code);
           this.teacherForm.teacherForm.controls.grade.setValue(this.teacherData.data().grade);
-          this.teacherForm.teacherForm.controls.photo.setValue(this.teacherData.data().photo);
-          this.teacherForm.teacherForm.controls.nationalty.setValue(this.teacherData.data().nationality);
+          this.teacherForm.teacherForm.controls.nationality.setValue(this.teacherData.data().nationality);
           this.teacherForm.teacherForm.controls.religion.setValue(this.teacherData.data().religion);
           this.teacherForm.teacherForm.controls.phone.setValue(this.teacherData.data().phone);
           this.teacherForm.teacherForm.controls.email.setValue(this.teacherData.data().email);
           this.teacherForm.teacherForm.controls.address.setValue(this.teacherData.data().address);
           this.teacherForm.teacherForm.controls.state.setValue(this.teacherData.data().state);
           this.teacherForm.teacherForm.controls.city.setValue(this.teacherData.data().city);
-          this.teacherForm.teacherForm.controls.post_code.setValue(this.teacherData.data().post_code);
+          this.teacherForm.teacherForm.controls.postCode.setValue(this.teacherData.data().post_code);
 
           if (this.teacherData.data().photo != ""){
             this.teacherForm.photo.imgSrc = this.teacherData.data().photo;
@@ -82,10 +81,10 @@ export class ViewTeacherComponent implements OnInit {
 
           this.teacherForm.selectedTermId = this.teacherData.data().term.id;
           this.teacherForm.selectedTermData = this.teacherData.data().term.data;
-          this.teacherForm.teacherForm.controls.termName.setValue(this.teacherData.data().term.term_name);
+          this.teacherForm.teacherForm.controls.term.setValue(this.teacherData.data().term?.data.term_name);
           this.teacherForm.selectedDepartmentId = this.teacherData.data().department.id;
           this.teacherForm.selectedDepartmentData = this.teacherData.data().department.data;
-          this.teacherForm.teacherForm.controls.className.setValue(this.teacherData.data().department.class_name);
+          this.teacherForm.teacherForm.controls.department.setValue(this.teacherData.data().department?.data.department_name);
         },
         (err: any) => {
           console.log(err);
@@ -113,7 +112,7 @@ export class ViewTeacherComponent implements OnInit {
       address: this.teacherForm.teacherForm.controls.address.value,
       state: this.teacherForm.teacherForm.controls.state.value,
       city: this.teacherForm.teacherForm.controls.city.value,
-      post_code: this.teacherForm.teacherForm.controls.post_code.value,
+      post_code: this.teacherForm.teacherForm.controls.postCode.value,
       term: {
         id: this.teacherForm.selectedTermId,
         data: this.teacherForm.selectedTermData,

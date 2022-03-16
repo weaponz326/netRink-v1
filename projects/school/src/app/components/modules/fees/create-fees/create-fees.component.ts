@@ -5,7 +5,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { serverTimestamp } from 'firebase/firestore';
 
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
-// import { SelectTermComponent } from '../../../select-windows/terms-windows/select-term/select-term.component';
+import { SelectTermComponent } from '../../../select-windows/terms-windows/select-term/select-term.component';
 
 import { FeesApiService } from 'projects/school/src/app/services/modules/fees-api/fees-api.service';
 
@@ -28,7 +28,7 @@ export class CreateFeesComponent implements OnInit {
   @ViewChild('dismissButtonElementReference', { read: ElementRef, static: false }) dismissButton!: ElementRef;
 
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
-  // @ViewChild('selectTermComponentReference', { read: SelectTermComponent, static: false }) selectTerm!: SelectTermComponent;
+  @ViewChild('selectTermComponentReference', { read: SelectTermComponent, static: false }) selectTerm!: SelectTermComponent;
 
   feesForm: FormGroup = new FormGroup({});
 
@@ -92,7 +92,7 @@ export class CreateFeesComponent implements OnInit {
 
   openTermWindow(){
     console.log("You are opening select term window")
-    // this.selectTerm.openModal();
+    this.selectTerm.openModal();
   }
 
   onTermSelected(termData: any){

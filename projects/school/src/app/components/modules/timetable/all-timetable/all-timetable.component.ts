@@ -156,7 +156,7 @@ export class AllTimetableComponent implements OnInit {
     console.log(timetableId);
 
     sessionStorage.setItem('school_timetable_id', timetableId);
-    this.router.navigateByUrl('/home/timetable/view-timetable');
+    this.router.navigateByUrl('/home/timetable/full-timetable');
   }
 
   onPrint(){

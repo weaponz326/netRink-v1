@@ -5,8 +5,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { serverTimestamp } from 'firebase/firestore';
 
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
-// import { SelectTermComponent } from '../../../select-windows/terms-windows/select-term/select-term.component';
-// import { SelectSubjectComponent } from '../../../select-windows/subjects-windows/select-subject/select-subject.component';
+import { SelectTermComponent } from '../../../select-windows/terms-windows/select-term/select-term.component';
 
 import { TimetableApiService } from 'projects/school/src/app/services/modules/timetable-api/timetable-api.service';
 
@@ -29,8 +28,7 @@ export class NewTimetableComponent implements OnInit {
   @ViewChild('dismissButtonElementReference', { read: ElementRef, static: false }) dismissButton!: ElementRef;
 
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
-  // @ViewChild('selectTermComponentReference', { read: SelectTermComponent, static: false }) selectTerm!: SelectTermComponent;
-  // @ViewChild('selectSubjectComponentReference', { read: SelectSubjectComponent, static: false }) selectSubject!: SelectSubjectComponent;
+  @ViewChild('selectTermComponentReference', { read: SelectTermComponent, static: false }) selectTerm!: SelectTermComponent;
 
   timetableForm: FormGroup = new FormGroup({});
 
@@ -79,7 +77,8 @@ export class NewTimetableComponent implements OnInit {
         (res: any) => {
           console.log(res);
           sessionStorage.setItem('school_timetable_id', res.id);
-          this.router.navigateByUrl('/home/timetable/view-timetable');
+
+          this.router.navigateByUrl('/home/timetable/full-timetable');
           this.dismissButton.nativeElement.click();
           this.isTimetableSaving = true;
         },
@@ -93,7 +92,7 @@ export class NewTimetableComponent implements OnInit {
 
   openTermWindow(){
     console.log("You are opening select term window")
-    // this.selectTerm.openModal();
+    this.selectTerm.openModal();
   }
 
   onTermSelected(termData: any){
@@ -102,19 +101,6 @@ export class NewTimetableComponent implements OnInit {
     this.timetableForm.controls.term.setValue(termData.data().term_name);
     this.selectedTermId = termData.id;
     this.selectedTermData = termData.data();
-  }
-
-  openSubjectWindow(){
-    console.log("You are opening select term window")
-    // this.selectSubject.openModal();
-  }
-
-  onSubjectSelected(subjectData: any){
-    console.log(subjectData);
-
-    this.timetableForm.controls.subject.setValue(subjectData.data().subject_name);
-    this.selectedSubjectId = subjectData.id;
-    this.selectedSubjectData = subjectData.data();
   }
 
 }

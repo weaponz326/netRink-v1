@@ -6,6 +6,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ChartsModule } from 'ng2-charts';
 
 import { ModuleUtilitiesModule } from 'projects/personal/src/app/components/module-utilities/module-utilities.module';
+import { TermsWindowsModule } from '../../select-windows/terms-windows/terms-windows.module';
+import { SubjectsWindowsModule } from '../../select-windows/subjects-windows/subjects-windows.module';
+import { ClassesWindowsModule } from '../../select-windows/classes-windows/classes-windows.module';
 
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { SettingsComponent } from './settings/settings.component';
@@ -36,6 +39,9 @@ import { AddPeriodComponent } from './add-period/add-period.component';
     ReactiveFormsModule,
     ChartsModule,
     ModuleUtilitiesModule,
+    TermsWindowsModule,
+    SubjectsWindowsModule,
+    ClassesWindowsModule
   ]
 })
 export class TimetableModule { }

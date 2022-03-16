@@ -60,7 +60,7 @@ export class NewTeacherComponent implements OnInit {
       address: this.teacherForm.teacherForm.controls.address.value,
       state: this.teacherForm.teacherForm.controls.state.value,
       city: this.teacherForm.teacherForm.controls.city.value,
-      post_code: this.teacherForm.teacherForm.controls.post_code.value,
+      post_code: this.teacherForm.teacherForm.controls.postCode.value,
       term: {
         id: this.teacherForm.selectedTermId,
         data: this.teacherForm.selectedTermData,
@@ -82,7 +82,7 @@ export class NewTeacherComponent implements OnInit {
 
           if (!this.teacherForm.photo.isImageSet){
             this.isTeacherSaving = false;
-            this.router.navigateByUrl('/home/teacherx/view-teacher');
+            this.router.navigateByUrl('/home/teachers/view-teacher');
           }
           else{
             const storagePath = this.storageBasePath + res.id;

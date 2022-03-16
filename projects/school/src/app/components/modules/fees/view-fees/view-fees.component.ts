@@ -6,7 +6,7 @@ import { ConnectionToastComponent } from 'projects/personal/src/app/components/m
 import { DeleteModalComponent } from 'projects/personal/src/app/components/module-utilities/delete-modal/delete-modal.component'
 import { FeesTargetComponent } from '../fees-target/fees-target.component';
 import { FeesItemsComponent } from '../fees-items/fees-items.component';
-// import { SelectTermComponent } from '../../../select-windows/terms-windows/select-term/select-term.component';
+import { SelectTermComponent } from '../../../select-windows/terms-windows/select-term/select-term.component';
 
 import { FeesApiService } from 'projects/school/src/app/services/modules/fees-api/fees-api.service';
 // import { FeesPrintService } from 'projects/school/src/app/services/printing/fees-print/fees-print.service';
@@ -31,8 +31,7 @@ export class ViewFeesComponent implements OnInit {
   @ViewChild('deleteModalComponentReference', { read: DeleteModalComponent, static: false }) deleteModal!: DeleteModalComponent;
   @ViewChild('feesTargetComponentReference', { read: FeesTargetComponent, static: false }) feesTarget!: FeesTargetComponent;
   @ViewChild('feesItemsComponentReference', { read: FeesItemsComponent, static: false }) feesItems!: FeesItemsComponent;
-  // @ViewChild('selectTermComponentReference', { read: SelectTermComponent, static: false }) selectTerm!: SelectTermComponent;
-  // @ViewChild('selectSubjectComponentReference', { read: SelectSubjectComponent, static: false }) selectSubject!: SelectSubjectComponent;
+  @ViewChild('selectTermComponentReference', { read: SelectTermComponent, static: false }) selectTerm!: SelectTermComponent;
 
   navHeading: any[] = [
     { text: "All Fees", url: "/home/fees/all-fees" },
@@ -77,7 +76,7 @@ export class ViewFeesComponent implements OnInit {
           this.feesForm.controls.feesCode.setValue(this.feesFormData.data().fees_code);
           this.feesForm.controls.feesName.setValue(this.feesFormData.data().fees_name);
           this.feesForm.controls.feesDate.setValue(this.feesFormData.data().fees_date);
-          this.feesForm.controls.termName.setValue(this.feesFormData.data().term.term_name);
+          this.feesForm.controls.term.setValue(this.feesFormData.data().term.data.term_name);
           this.feesForm.controls.feesDescription.setValue(this.feesFormData.data().fees_description);
 
           this.selectedTermId = this.feesFormData.data().term.id;
@@ -143,7 +142,7 @@ export class ViewFeesComponent implements OnInit {
 
   openTermWindow(){
     console.log("You are opening select term window")
-    // this.selectTerm.openModal();
+    this.selectTerm.openModal();
   }
 
   onTermSelected(termData: any){

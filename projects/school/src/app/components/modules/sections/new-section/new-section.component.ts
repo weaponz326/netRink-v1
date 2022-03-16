@@ -5,7 +5,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { serverTimestamp } from 'firebase/firestore';
 
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
-// import { SelectTermComponent } from '../../../select-windows/terms-windows/select-term/select-term.component';
+import { SelectTermComponent } from '../../../select-windows/terms-windows/select-term/select-term.component';
 
 import { SectionsApiService } from 'projects/school/src/app/services/modules/sections-api/sections-api.service';
 
@@ -28,7 +28,7 @@ export class NewSectionComponent implements OnInit {
   @ViewChild('dismissButtonElementReference', { read: ElementRef, static: false }) dismissButton!: ElementRef;
 
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
-  // @ViewChild('selectTermComponentReference', { read: SelectTermComponent, static: false }) selectTerm!: SelectTermComponent;
+  @ViewChild('selectTermComponentReference', { read: SelectTermComponent, static: false }) selectTerm!: SelectTermComponent;
 
   sectionForm: FormGroup = new FormGroup({});
 
@@ -75,7 +75,7 @@ export class NewSectionComponent implements OnInit {
           console.log(res);
           sessionStorage.setItem('school_section_id', res.id);
 
-          this.router.navigateByUrl('/home/sections/class-section');
+          this.router.navigateByUrl('/home/sections/view-section');
           this.dismissButton.nativeElement.click();
           this.isSectionSaving = true;
         },
@@ -89,7 +89,7 @@ export class NewSectionComponent implements OnInit {
 
   openTermWindow(){
     console.log("You are opening select term window")
-    // this.selectTerm.openModal();
+    this.selectTerm.openModal();
   }
 
   onTermSelected(termData: any){
