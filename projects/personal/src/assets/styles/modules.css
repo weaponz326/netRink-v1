@@ -165,3 +165,15 @@ table.page-table .disabled .page-link{
 .form-check-input {
   margin-left: 0;
 }
+
+/* school select active term */
+
+.active-term-label-col {
+  flex: 130px;
+  max-width: 130px;
+}
+
+.active-term-form-control-col {
+  flex: 400px;
+  max-width: 400px;
+}

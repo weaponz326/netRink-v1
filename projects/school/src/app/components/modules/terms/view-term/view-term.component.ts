@@ -8,7 +8,7 @@ import { DeleteModalComponent } from 'projects/personal/src/app/components/modul
 import { TermsApiService } from 'projects/school/src/app/services/modules/terms-api/terms-api.service';
 // import { TermsPrintService } from 'projects/school/src/app/services/printing/terms-print/terms-print.service';
 
-import { Term } from 'projects/school/src/app/models/modules/terms/terms.model';
+import { ActiveTerm } from 'projects/school/src/app/models/modules/terms/terms.model';
 
 
 @Component({
@@ -122,7 +122,15 @@ export class ViewTermComponent implements OnInit {
   createActiveTerm(){
     this.isActiveTermSaving = true;
 
-    let data = { active: true };
+    let data: ActiveTerm = {
+      id: sessionStorage.getItem('school_term_id') as string,
+      data: {
+        term_code: this.termForm.termForm.controls.termCode.value,
+        term_name: this.termForm.termForm.controls.termName.value,
+      }
+    };
+
+    console.log(data);
 
     this.termsApi.createActiveTerm(data)
       .then(

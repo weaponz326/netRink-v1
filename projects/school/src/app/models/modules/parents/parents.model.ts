@@ -1,6 +1,7 @@
 export class Parent {
   created_at!: any;
   account!: string;
+  terms!: any;
   parent_code!: string;
   first_name!: string;
   last_name!: string;

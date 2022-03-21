@@ -4,6 +4,7 @@ import { AccessToastComponent } from 'projects/personal/src/app/components/modul
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 
 import { AdminApiService } from 'projects/school/src/app/services/modules/admin-api/admin-api.service';
+import { TermsApiService } from 'projects/school/src/app/services/modules/terms-api/terms-api.service';
 
 
 @Component({
@@ -13,7 +14,10 @@ import { AdminApiService } from 'projects/school/src/app/services/modules/admin-
 })
 export class ModuleHomeComponent implements OnInit {
 
-  constructor(private adminApi: AdminApiService) { }
+  constructor(
+    private adminApi: AdminApiService,
+    private termsApi: TermsApiService,
+  ) { }
 
   @ViewChild('accessToastComponentReference', { read: AccessToastComponent, static: false }) accessToast!: AccessToastComponent;
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
@@ -24,6 +28,7 @@ export class ModuleHomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.getUserAccess();
+    this.getActiveTerm();
   }
 
   getUserAccess() {
@@ -43,6 +48,21 @@ export class ModuleHomeComponent implements OnInit {
         (err: any) => {
           console.log(err);
           this.isAccessLoading = false;
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  getActiveTerm(){
+    this.termsApi.getActiveTerm()
+      .then(
+        (res: any) => {
+          console.log(res);
+          const data = JSON.stringify(res.data());
+          localStorage.setItem('schoolActiveTerm', data);
+        },
+        (err: any) => {
+          console.log(err);
           this.connectionToast.openToast();
         }
       )

@@ -12,6 +12,18 @@
         <div class="col-md-6">
 
             <div class="row mb-1">
+                <div class="col-md-4"><label class="float-md-end float-sm-start mt-1">Term :</label></div>
+                <div class="col-md-8">
+                    <div class="input-group input-group-sm w-100">
+                        <input formControlName="term" class="form-control">
+                        <button type="button" class="btn btn-secondary" (click)="openTermWindow()">
+                            <i class="bi bi-three-dots"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-1">
                 <div class="col-md-4"><label class="float-md-end float-sm-start mt-1">Parent ID :</label></div>
                 <div class="col-md-8">
                     <input formControlName="parentCode" class="form-control form-control-sm w-100">
@@ -164,3 +176,7 @@
     <hr />
 
 </form>
+
+<!-- select term window component -->
+
+<app-select-term #selectTermComponentReference (rowSelected)="onTermSelected($event)"></app-select-term>

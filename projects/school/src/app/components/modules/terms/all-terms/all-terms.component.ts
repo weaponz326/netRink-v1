@@ -26,8 +26,11 @@ export class AllTermsComponent implements OnInit {
     { text: "All Terms", url: "/home/terms/all-terms" },
   ];
 
-  termsGridData: any[] = [];
+  activeTermId = "";
+  activeTermName = "";
+  isLoadingActiveTerm = false;
 
+  termsGridData: any[] = [];
   isFetchingGridData: boolean =  false;
   isDataAvailable: boolean =  true;
 
@@ -45,7 +48,27 @@ export class AllTermsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getActiveTerm();
     this.getAccountTerm();
+  }
+
+  getActiveTerm(){
+    this.isLoadingActiveTerm = true;
+
+    this.termsApi.getActiveTerm()
+      .then(
+        (res: any) => {
+          console.log(res);
+          this.activeTermId = res.data().id;
+          this.activeTermName = res.data().data.term_name;
+          this.isLoadingActiveTerm = false;
+        },
+        (err: any) => {
+          console.log(err);
+          this.connectionToast.openToast();
+          this.isLoadingActiveTerm = false;
+        }
+      )
   }
 
   getAccountTerm(){
@@ -154,6 +177,13 @@ export class AllTermsComponent implements OnInit {
     console.log(termId);
 
     sessionStorage.setItem('school_term_id', termId);
+    this.router.navigateByUrl('/home/terms/view-term');
+  }
+
+  gotoActiveTerm(){
+    console.log(this.activeTermId);
+
+    sessionStorage.setItem('school_term_id', this.activeTermId);
     this.router.navigateByUrl('/home/terms/view-term');
   }
 

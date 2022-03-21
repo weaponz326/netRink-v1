@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { finalize } from 'rxjs/operators';
 
 import { AngularFireStorage } from '@angular/fire/compat/storage';
+import { arrayUnion } from 'firebase/firestore';
 
 import { ParentFormComponent } from '../parent-form/parent-form.component';
 import { ParentWardsComponent } from '../parent-wards/parent-wards.component';
@@ -114,37 +115,87 @@ export class ViewParentComponent implements OnInit {
     this.isParentSaving = true;
 
     this.parentsApi.updateParent(data)
-    .then(
-      (res: any) => {
-        console.log(res);
+      .then(
+        (res: any) => {
+          console.log(res);
 
-        if (this.parentForm.photo.isImageSet && !this.parentForm.photo.isImageChanged){
+          this.updateTerm();
+          this.updateImage();
+        },
+        (err: any) => {
+          console.log(err);
           this.isParentSaving = false;
+          this.connectionToast.openToast();
         }
-        else{
-          const storagePath = this.storageBasePath + res.id;
-          const storageRef = this.storage.ref(storagePath);
-          const task = this.storage.upload(storagePath, this.parentForm.photo.image);
-
-          task.snapshotChanges().pipe(
-            finalize(() => {
-              storageRef.getDownloadURL().subscribe(downloadUrl => {
-                this.updateImage({photo: downloadUrl});
-              });
-            })
-          ).subscribe();
-        }
-      },
-      (err: any) => {
-        console.log(err);
-        this.isParentSaving = false;
-        this.connectionToast.openToast();
-      }
-    )
+      )
   }
 
   confirmDelete(){
     this.deleteModal.openModal();
+  }
+
+  updateTerm(){
+    console.log('u are adding new term to term');
+
+    if (this.parentData.data().terms.include({id: this.parentForm.selectedTermId})){
+      console.log('lets go ahead with term update');
+
+      let data = {
+        terms: {
+          id: this.parentForm.selectedTermId,
+          data: arrayUnion(this.parentForm.selectedTermData),
+        }
+      }
+
+      this.parentsApi.updateParent(data)
+        .then(
+          (res: any) => {
+            console.log(res);
+            this.isParentSaving = false;
+          },
+          (err: any) => {
+            console.log(err);
+            this.isParentSaving = false;
+            this.connectionToast.openToast();
+          }
+        )
+
+    }
+  }
+
+  updateImage(){
+    console.log('u are updating parent photo url');
+
+    if (this.parentForm.photo.isImageSet && !this.parentForm.photo.isImageChanged){
+      this.isParentSaving = false;
+    }
+    else{
+      const storagePath = this.storageBasePath + sessionStorage.getItem('school_parent_id');
+      const storageRef = this.storage.ref(storagePath);
+      const task = this.storage.upload(storagePath, this.parentForm.photo.image);
+
+      task.snapshotChanges().pipe(
+        finalize(() => {
+          storageRef.getDownloadURL().subscribe(downloadUrl => {
+            console.log(downloadUrl);
+            let data = { photo: downloadUrl };
+
+            this.parentsApi.updateParent(data)
+              .then(
+                (res: any) => {
+                  console.log(res);
+                  this.isParentSaving = false;
+                },
+                (err: any) => {
+                  console.log(err);
+                  this.isParentSaving = false;
+                  this.connectionToast.openToast();
+                }
+              )
+          });
+        })
+      ).subscribe();
+    }
   }
 
   deleteParent(){
@@ -158,24 +209,6 @@ export class ViewParentComponent implements OnInit {
         },
         (err: any) => {
           console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
-  }
-
-  updateImage(data: any){
-    console.log('u are updating parent photo url');
-    console.log(data);
-
-    this.parentsApi.updateParent(data)
-      .then(
-        (res: any) => {
-          console.log(res);
-          this.isParentSaving = false;
-        },
-        (err: any) => {
-          console.log(err);
-          this.isParentSaving = false;
           this.connectionToast.openToast();
         }
       )

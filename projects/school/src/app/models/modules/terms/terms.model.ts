@@ -8,3 +8,11 @@ export class Term {
   end_date!: Date;
   term_status!: string;
 }
+
+export class ActiveTerm {
+  id!: string;
+  data!: {
+    term_code: string;
+    term_name: string;
+  }
+}

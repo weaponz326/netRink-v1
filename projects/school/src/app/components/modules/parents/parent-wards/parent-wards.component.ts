@@ -64,10 +64,14 @@ export class ParentWardsComponent implements OnInit {
       ward: {
         id: wardData.id,
         data: {
-
+          student_code: wardData.data().student_code,
+          first_name: wardData.data().first_name,
+          last_name: wardData.data().last_name,
         }
       }
     }
+
+    console.log(data);
 
     this.parentsApi.createParentWard(data)
       .then(
@@ -104,6 +108,7 @@ export class ParentWardsComponent implements OnInit {
   }
 
   gotoStudent(id: any){
+    console.log(id);
     sessionStorage.setItem('school_student_id', id);
     this.router.navigateByUrl('/home/students/view-student');
   }

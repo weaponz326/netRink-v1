@@ -67,19 +67,19 @@ export class TermsApiService {
   // active term
 
   createActiveTerm(active_term: any){
-    return this.activeTermRef.doc(String(sessionStorage.getItem('school_term_id'))).set(active_term);
+    return this.activeTermRef.doc(String(localStorage.getItem('school_id'))).set(active_term);
   }
 
   getActiveTerm(){
-    return this.activeTermRef.doc(String(sessionStorage.getItem('school_term_id'))).ref.get();
+    return this.activeTermRef.doc(String(localStorage.getItem('school_id'))).ref.get();
   }
 
   updateActiveTerm(active_term: any){
-    return this.activeTermRef.doc(String(sessionStorage.getItem('school_term_id'))).update(active_term);
+    return this.activeTermRef.doc(String(localStorage.getItem('school_id'))).update(active_term);
   }
 
   deleteActiveTerm(){
-    return this.activeTermRef.doc(String(sessionStorage.getItem('school_term_id'))).delete();
+    return this.activeTermRef.doc(String(localStorage.getItem('school_id'))).delete();
   }
 
 }

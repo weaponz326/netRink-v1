@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
+import { SelectTermComponent } from '../../../select-windows/terms-windows/select-term/select-term.component';
 
 import { ParentsApiService } from 'projects/school/src/app/services/modules/parents-api/parents-api.service';
 // import { ParentsPrintService } from 'projects/school/src/app/services/printing/parents-print/parents-print.service';
@@ -21,12 +22,15 @@ export class AllParentsComponent implements OnInit {
   ) { }
 
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
+  @ViewChild('selectTermComponentReference', { read: SelectTermComponent, static: false }) selectTerm!: SelectTermComponent;
 
   navHeading: any[] = [
     { text: "All Parents", url: "/home/parents/all-parents" },
   ];
 
   parentsGridData: any[] = [];
+
+  activeTerm: any;
 
   isFetchingGridData: boolean =  false;
   isDataAvailable: boolean =  true;
@@ -45,7 +49,12 @@ export class AllParentsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getActiveTerm();
     this.getAccountParent();
+  }
+
+  getActiveTerm(){
+    this.activeTerm = JSON.parse(String(localStorage.getItem('schoolActiveTerm')));
   }
 
   getAccountParent(){
@@ -155,6 +164,18 @@ export class AllParentsComponent implements OnInit {
 
     sessionStorage.setItem('school_parent_id', parentId);
     this.router.navigateByUrl('/home/parents/view-parent');
+  }
+
+  openTermWindow(){
+    console.log("You are opening select term window")
+    this.selectTerm.openModal();
+  }
+
+  onTermSelected(termData: any){
+    console.log(termData);
+
+    this.activeTerm = termData.data();
+    this.getAccountParent();
   }
 
   onPrint(){

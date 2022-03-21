@@ -61,6 +61,10 @@ export class NewParentComponent implements OnInit {
       city: this.parentForm.parentForm.controls.city.value,
       country: this.parentForm.parentForm.controls.city.value,
       post_code: this.parentForm.parentForm.controls.postCode.value,
+      terms: [{
+        id: this.parentForm.selectedTermId,
+        data: this.parentForm.selectedTermData,
+      }],
     }
 
     console.log(data);
@@ -68,27 +72,11 @@ export class NewParentComponent implements OnInit {
 
     this.parentsApi.createParent(data)
       .then(
-        async (res: any) => {
+        (res: any) => {
           console.log(res);
-          sessionStorage.setItem('restaurant_parent_id', res.id);
+          sessionStorage.setItem('school_parent_id', res.id);
 
-          if (!this.parentForm.photo.isImageSet){
-            this.isParentSaving = false;
-            this.router.navigateByUrl('/home/parents/view-parent');
-          }
-          else{
-            const storagePath = this.storageBasePath + res.id;
-            const storageRef = this.storage.ref(storagePath);
-            const task = this.storage.upload(storagePath, this.parentForm.photo.image);
-
-            task.snapshotChanges().pipe(
-                finalize(() => {
-                  storageRef.getDownloadURL().subscribe(downloadUrl => {
-                    this.updateImage({photo: downloadUrl});
-                  });
-                })
-              ).subscribe();
-          }
+          this.updateImage();
         },
         (err: any) => {
           console.log(err);
@@ -98,23 +86,41 @@ export class NewParentComponent implements OnInit {
       )
   }
 
-  updateImage(data: any){
+  updateImage(){
     console.log('u are updating parent photo url');
-    console.log(data);
 
-    this.parentsApi.updateParent(data)
-      .then(
-        (res: any) => {
-          console.log(res);
-          this.router.navigateByUrl('/home/parents/view-parent');
-          this.isParentSaving = false;
-        },
-        (err: any) => {
-          console.log(err);
-          this.isParentSaving = false;
-          this.connectionToast.openToast();
-        }
-      )
+    if (!this.parentForm.photo.isImageSet){
+      this.isParentSaving = false;
+      this.router.navigateByUrl('/home/parents/view-parent');
+    }
+    else{
+      const storagePath = this.storageBasePath + sessionStorage.getItem('school_parent_id');
+      const storageRef = this.storage.ref(storagePath);
+      const task = this.storage.upload(storagePath, this.parentForm.photo.image);
+
+      task.snapshotChanges().pipe(
+          finalize(() => {
+            storageRef.getDownloadURL().subscribe(downloadUrl => {
+              console.log(downloadUrl);
+              let data = { photo: downloadUrl };
+
+              this.parentsApi.updateParent(data)
+                .then(
+                  (res: any) => {
+                    console.log(res);
+                    this.router.navigateByUrl('/home/parents/view-parent');
+                    this.isParentSaving = false;
+                  },
+                  (err: any) => {
+                    console.log(err);
+                    this.isParentSaving = false;
+                    this.connectionToast.openToast();
+                  }
+                )
+            });
+          })
+        ).subscribe();
+    }
   }
 
 }
