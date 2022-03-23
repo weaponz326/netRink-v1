@@ -16,11 +16,11 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let data of assessmentTableGridData; index as i">
-                        <td>{{data?.data().student.data.student_code}}</td>
-                        <td>{{data?.data().student.data.student_name}}</td>
-                        <td>{{data?.data().score}}</td>
-                        <td>{{data?.data().grade}}</td>
-                        <td>{{data?.data().remarks}}</td>
+                        <td>{{data?.student.data.student_code}}</td>
+                        <td>{{data?.student.data.student_name}}</td>
+                        <td>{{data?.score}}</td>
+                        <td>{{data?.grade}}</td>
+                        <td>{{data?.remarks}}</td>
                     </tr>
                     <tr *ngIf="isFetchingGridData" class="text-center">
                         <td colspan="5">

@@ -44,9 +44,9 @@ export class ViewAssessmentComponent implements OnInit {
   assessmentFormData: any;
 
   selectedTermId = "";
-  selectedTermData = {};
+  selectedTermData: any;
   selectedSubjectId = "";
-  selectedSubjectData = {};
+  selectedSubjectData: any;
 
   isAssessmentLoading = false;
   isAssessmentSaving = false;
@@ -83,10 +83,10 @@ export class ViewAssessmentComponent implements OnInit {
 
           this.selectedTermId = this.assessmentFormData.data().term.id;
           this.selectedTermData = this.assessmentFormData.data().term.data;
-          this.assessmentForm.controls.term.setValue(this.assessmentFormData.data().term.term_name);
+          this.assessmentForm.controls.term.setValue(this.assessmentFormData.data().term.data.term_name);
           this.selectedSubjectId = this.assessmentFormData.data().subject.id;
           this.selectedSubjectData = this.assessmentFormData.data().subject.data;
-          this.assessmentForm.controls.subject.setValue(this.assessmentFormData.data().subject.subject_name);
+          this.assessmentForm.controls.subject.setValue(this.assessmentFormData.data().subject.data.subject_name);
         },
         (err: any) => {
           console.log(err);
@@ -103,11 +103,17 @@ export class ViewAssessmentComponent implements OnInit {
       assessment_date: this.assessmentForm.controls.assessmentDate.value,
       term: {
         id: this.selectedTermId,
-        data: this.selectedTermData,
+        data: {
+          term_code: this.selectedTermData.term_code,
+          term_name: this.selectedTermData.term_name,
+        }
       },
       subject: {
         id: this.selectedSubjectId,
-        data: this.selectedSubjectData,
+        data: {
+          subject_code: this.selectedSubjectData.subject_code,
+          subject_name: this.selectedSubjectData.subject_name,
+        }
       }
     }
 

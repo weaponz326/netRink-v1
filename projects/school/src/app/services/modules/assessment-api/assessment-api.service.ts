@@ -35,6 +35,7 @@ export class AssessmentApiService {
   getAccountAssessment(sorting: any, pageSize: any){
     return this.assessmentRef.ref
       .where("account", "==", localStorage.getItem('school_id'))
+      .where("term.id", "==", JSON.parse(String(localStorage.getItem('schoolActiveTerm'))).id)
       .orderBy(sorting?.field, sorting?.direction)
       .limit(pageSize)
       .get();
@@ -43,6 +44,7 @@ export class AssessmentApiService {
   getAccountAssessmentNext(sorting: any, pageSize: any, pageStart: any){
     return this.assessmentRef.ref
       .where("account", "==", localStorage.getItem('school_id'))
+      .where("term.id", "==", JSON.parse(String(localStorage.getItem('schoolActiveTerm'))).id)
       .orderBy(sorting?.field, sorting?.direction)
       .startAfter(pageStart)
       .limit(pageSize)
@@ -52,6 +54,7 @@ export class AssessmentApiService {
   getAccountAssessmentPrev(sorting: any, pageSize: any, pageStart: any){
     return this.assessmentRef.ref
       .where("account", "==", localStorage.getItem('school_id'))
+      .where("term.id", "==", JSON.parse(String(localStorage.getItem('schoolActiveTerm'))).id)
       .orderBy(sorting?.field, sorting?.direction)
       .startAt(pageStart)
       .limit(pageSize)
@@ -92,8 +95,8 @@ export class AssessmentApiService {
 
   // assessment sheet
 
-  createAssessmentSheet(sheet: any){
-    return this.assessmentSheetRef.add(sheet);
+  createAssessmentSheet(assessmentId: any){
+    return this.assessmentSheetRef.doc(assessmentId).set({sheet: []});
   }
 
   getAssessmentSheet(){
@@ -106,13 +109,6 @@ export class AssessmentApiService {
 
   deleteAssessmentSheet(){
     return this.assessmentSheetRef.doc(String(sessionStorage.getItem('school_assessment_sheet_id'))).delete();
-  }
-
-  getAssessmentAssessmentSheet(){
-    return this.assessmentSheetRef.ref
-      .where("assessment", "==", sessionStorage.getItem('school_assessment_id'))
-      .orderBy("student.data.last_name", "asc")
-      .get();
   }
 
   // dashboard

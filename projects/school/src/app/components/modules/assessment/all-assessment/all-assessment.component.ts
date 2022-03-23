@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 import { NewAssessmentComponent } from '../new-assessment/new-assessment.component'
+import { SelectTermComponent } from '../../../select-windows/terms-windows/select-term/select-term.component';
 
 import { AssessmentApiService } from 'projects/school/src/app/services/modules/assessment-api/assessment-api.service';
 // import { AssessmentPrintService } from 'projects/school/src/app/services/printing/assessment-print/assessment-print.service';
@@ -23,10 +24,13 @@ export class AllAssessmentComponent implements OnInit {
 
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
   @ViewChild('newAssessmentComponentReference', { read: NewAssessmentComponent, static: false }) newAssessment!: NewAssessmentComponent;
+  @ViewChild('selectTermComponentReference', { read: SelectTermComponent, static: false }) selectTerm!: SelectTermComponent;
 
   navHeading: any[] = [
     { text: "All Assessment", url: "/home/assessment/all-assessment" },
   ];
+
+  activeTerm: any;
 
   assessmentGridData: any[] = [];
 
@@ -47,7 +51,12 @@ export class AllAssessmentComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getActiveTerm();
     this.getAccountAssessment();
+  }
+
+  getActiveTerm(){
+    this.activeTerm = JSON.parse(String(localStorage.getItem('schoolActiveTerm')));
   }
 
   getAccountAssessment(){
@@ -157,6 +166,18 @@ export class AllAssessmentComponent implements OnInit {
 
     sessionStorage.setItem('school_assessment_id', assessmentId);
     this.router.navigateByUrl('/home/assessment/view-assessment');
+  }
+
+  openTermWindow(){
+    console.log("You are opening select term window")
+    this.selectTerm.openModal();
+  }
+
+  onTermSelected(termData: any){
+    console.log(termData);
+
+    this.activeTerm = termData.data();
+    this.getAccountAssessment();
   }
 
   onPrint(){

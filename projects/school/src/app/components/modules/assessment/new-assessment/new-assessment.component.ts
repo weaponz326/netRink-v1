@@ -35,9 +35,9 @@ export class NewAssessmentComponent implements OnInit {
   assessmentForm: FormGroup = new FormGroup({});
 
   selectedTermId = "";
-  selectedTermData = {};
+  selectedTermData: any;
   selectedSubjectId = "";
-  selectedSubjectData = {};
+  selectedSubjectData: any;
 
   isAssessmentSaving = false;
 
@@ -69,11 +69,17 @@ export class NewAssessmentComponent implements OnInit {
       assessment_date: this.assessmentForm.controls.assessmentDate.value,
       term: {
         id: this.selectedTermId,
-        data: this.selectedTermData,
+        data: {
+          term_code: this.selectedTermData.term_code,
+          term_name: this.selectedTermData.term_name,
+        }
       },
       subject: {
         id: this.selectedSubjectId,
-        data: this.selectedSubjectData,
+        data: {
+          subject_code: this.selectedSubjectData.subject_code,
+          subject_name: this.selectedSubjectData.subject_name,
+        }
       }
     }
 
@@ -84,6 +90,8 @@ export class NewAssessmentComponent implements OnInit {
         (res: any) => {
           console.log(res);
           sessionStorage.setItem('school_assessment_id', res.id);
+          this.createAssessmentSheet(res.id);
+
           this.router.navigateByUrl('/home/assessment/view-assessment');
           this.dismissButton.nativeElement.click();
           this.isAssessmentSaving = true;
@@ -96,8 +104,21 @@ export class NewAssessmentComponent implements OnInit {
       )
   }
 
+  createAssessmentSheet(assessmentId: any){
+    this.assessmentApi.createAssessmentSheet(assessmentId)
+      .then(
+        (res: any) => {
+          console.log(res);
+        },
+        (err: any) => {
+          console.log(err);
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
   openTermWindow(){
-    console.log("You are opening select term window")
+    console.log("You are opening select term window");
     this.selectTerm.openModal();
   }
 

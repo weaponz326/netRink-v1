@@ -36,12 +36,12 @@ export class AssessmentTableComponent implements OnInit {
   getAssessmentAssessmentSheet(){
     this.isFetchingGridData = true;
 
-    this.assessmentApi.getAssessmentAssessmentSheet()
+    this.assessmentApi.getAssessmentSheet()
       .then(
         (res: any) => {
           console.log(res);
           this.isFetchingGridData = false;
-          this.assessmentTableGridData = res.docs;
+          this.assessmentTableGridData = res.data();
         },
         (err: any) => {
           console.log(err);
