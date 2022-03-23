@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 
+import { ActiveTermService } from 'projects/school/src/app/services/active-term/active-term.service';
 import { ImageInputComponent } from 'projects/personal/src/app/components/module-utilities/image-input/image-input.component';
 import { SelectTermComponent } from '../../../select-windows/terms-windows/select-term/select-term.component';
 
@@ -12,7 +13,7 @@ import { SelectTermComponent } from '../../../select-windows/terms-windows/selec
 })
 export class ParentFormComponent implements OnInit {
 
-  constructor() { }
+  constructor(private activeTerm: ActiveTermService) { }
 
   parentForm: FormGroup = new FormGroup({});
 
@@ -52,7 +53,7 @@ export class ParentFormComponent implements OnInit {
   }
 
   setActiveTerm(){
-    let activeTermData = JSON.parse(String(localStorage.getItem('schoolActiveTerm')));
+    let activeTermData = this.activeTerm.getActiveTerm();
 
     this.selectedTermId = activeTermData.id;
     this.selectedTermData = activeTermData.data;

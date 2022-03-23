@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 import { SelectTermComponent } from '../../../select-windows/terms-windows/select-term/select-term.component';
 
+import { ActiveTermService } from 'projects/school/src/app/services/active-term/active-term.service';
 import { ParentsApiService } from 'projects/school/src/app/services/modules/parents-api/parents-api.service';
 // import { ParentsPrintService } from 'projects/school/src/app/services/printing/parents-print/parents-print.service';
 
@@ -17,6 +18,7 @@ export class AllParentsComponent implements OnInit {
 
   constructor(
     private router: Router,
+    private activeTerm: ActiveTermService,
     private parentsApi: ParentsApiService,
     // private parentsPrint: ParentsPrintService,
   ) { }
@@ -30,7 +32,7 @@ export class AllParentsComponent implements OnInit {
 
   parentsGridData: any[] = [];
 
-  activeTerm: any;
+  activeTermName: any;
 
   isFetchingGridData: boolean =  false;
   isDataAvailable: boolean =  true;
@@ -54,7 +56,7 @@ export class AllParentsComponent implements OnInit {
   }
 
   getActiveTerm(){
-    this.activeTerm = JSON.parse(String(localStorage.getItem('schoolActiveTerm')));
+    this.activeTermName = this.activeTerm.getActiveTerm().data.term_name;
   }
 
   getAccountParent(){
@@ -174,7 +176,8 @@ export class AllParentsComponent implements OnInit {
   onTermSelected(termData: any){
     console.log(termData);
 
-    this.activeTerm = termData.data();
+    this.activeTerm.setActiveTerm(termData);
+    this.getActiveTerm();
     this.getAccountParent();
   }
 

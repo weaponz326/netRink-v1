@@ -58,8 +58,19 @@ export class ModuleHomeComponent implements OnInit {
       .then(
         (res: any) => {
           console.log(res);
-          const data = JSON.stringify(res.data());
-          localStorage.setItem('schoolActiveTerm', data);
+
+          let data = {
+            id: res.data().id,
+            data: {
+              term_code: res.data().data.term_code,
+              term_name: res.data().data.term_name,
+            }
+          }
+
+          console.log(data);
+
+          const dataString = JSON.stringify(data);
+          localStorage.setItem('schoolActiveTerm', dataString);
         },
         (err: any) => {
           console.log(err);

@@ -5,6 +5,7 @@ import { ConnectionToastComponent } from 'projects/personal/src/app/components/m
 import { NewAssessmentComponent } from '../new-assessment/new-assessment.component'
 import { SelectTermComponent } from '../../../select-windows/terms-windows/select-term/select-term.component';
 
+import { ActiveTermService } from 'projects/school/src/app/services/active-term/active-term.service';
 import { AssessmentApiService } from 'projects/school/src/app/services/modules/assessment-api/assessment-api.service';
 // import { AssessmentPrintService } from 'projects/school/src/app/services/printing/assessment-print/assessment-print.service';
 
@@ -18,6 +19,7 @@ export class AllAssessmentComponent implements OnInit {
 
   constructor(
     private router: Router,
+    private activeTerm: ActiveTermService,
     private assessmentApi: AssessmentApiService,
     // private assessmentPrint: AssessmentPrintService,
   ) { }
@@ -30,7 +32,7 @@ export class AllAssessmentComponent implements OnInit {
     { text: "All Assessment", url: "/home/assessment/all-assessment" },
   ];
 
-  activeTerm: any;
+  activeTermName: any;
 
   assessmentGridData: any[] = [];
 
@@ -56,7 +58,7 @@ export class AllAssessmentComponent implements OnInit {
   }
 
   getActiveTerm(){
-    this.activeTerm = JSON.parse(String(localStorage.getItem('schoolActiveTerm')));
+    this.activeTermName = this.activeTerm.getActiveTerm().data.term_name;
   }
 
   getAccountAssessment(){
@@ -176,7 +178,8 @@ export class AllAssessmentComponent implements OnInit {
   onTermSelected(termData: any){
     console.log(termData);
 
-    this.activeTerm = termData.data();
+    this.activeTerm.setActiveTerm(termData);
+    this.getActiveTerm();
     this.getAccountAssessment();
   }
 
