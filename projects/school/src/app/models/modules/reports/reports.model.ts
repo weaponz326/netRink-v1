@@ -7,13 +7,15 @@ export class Report {
   term!: {
     id: string;
     data: {
-
+      term_code: string;
+      term_code: string;
     }
   };
   clase!: {
     id: string;
     data: {
-
+      class_code: string;
+      class_name: string;
     }
   };
 }
@@ -23,7 +25,8 @@ export class ReportAssessment {
   assessment!: {
     id: string;
     data: {
-
+      assessment_code: string;
+      assessment_name: string;
     }
   };
 }

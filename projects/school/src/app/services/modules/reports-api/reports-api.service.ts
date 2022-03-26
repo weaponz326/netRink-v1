@@ -34,6 +34,7 @@ export class ReportsApiService {
   getAccountReport(sorting: any, pageSize: any){
     return this.reportRef.ref
       .where("account", "==", localStorage.getItem('school_id'))
+      .where("term.id", "==", JSON.parse(String(localStorage.getItem('schoolActiveTerm'))).id)
       .orderBy(sorting?.field, sorting?.direction)
       .limit(pageSize)
       .get();
@@ -42,6 +43,7 @@ export class ReportsApiService {
   getAccountReportNext(sorting: any, pageSize: any, pageStart: any){
     return this.reportRef.ref
       .where("account", "==", localStorage.getItem('school_id'))
+      .where("term.id", "==", JSON.parse(String(localStorage.getItem('schoolActiveTerm'))).id)
       .orderBy(sorting?.field, sorting?.direction)
       .startAfter(pageStart)
       .limit(pageSize)
@@ -60,6 +62,7 @@ export class ReportsApiService {
   getAllAccountReport(){
     return this.reportRef.ref
       .where("account", "==", localStorage.getItem('school_id'))
+      .where("term.id", "==", JSON.parse(String(localStorage.getItem('schoolActiveTerm'))).id)
       .orderBy("created_by" ,"desc")
       .get();
   }
