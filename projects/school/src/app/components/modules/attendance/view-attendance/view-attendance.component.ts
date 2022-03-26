@@ -81,10 +81,10 @@ export class ViewAttendanceComponent implements OnInit {
 
           this.selectedTermId = this.attendanceFormData.data().term.id;
           this.selectedTermData = this.attendanceFormData.data().term.data;
-          this.attendanceForm.controls.termName.setValue(this.attendanceFormData.data().term.term_name);
+          this.attendanceForm.controls.term.setValue(this.attendanceFormData.data().term.data.term_name);
           this.selectedClassId = this.attendanceFormData.data().source.id;
           this.selectedClassData = this.attendanceFormData.data().source.data;
-          this.attendanceForm.controls.className.setValue(this.attendanceFormData.data().source.class_name);
+          this.attendanceForm.controls.source.setValue(this.attendanceFormData.data().source.data.class_name);
         },
         (err: any) => {
           console.log(err);
@@ -156,7 +156,7 @@ export class ViewAttendanceComponent implements OnInit {
   onTermSelected(termData: any){
     console.log(termData);
 
-    this.attendanceForm.controls.term.setValue(termData.data().term.term_name);
+    this.attendanceForm.controls.term.setValue(termData.data().term_name);
     this.selectedTermId = termData.id;
     this.selectedTermData = termData.data();
   }
@@ -169,7 +169,7 @@ export class ViewAttendanceComponent implements OnInit {
   onClassSelected(classData: any){
     console.log(classData);
 
-    this.attendanceForm.controls.class.setValue(classData.data().source.class_name);
+    this.attendanceForm.controls.class.setValue(classData.data().class_name);
     this.selectedClassId = classData.id;
     this.selectedClassData = classData.data();
   }

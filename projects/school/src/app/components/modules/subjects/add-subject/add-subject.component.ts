@@ -6,6 +6,7 @@ import { serverTimestamp } from 'firebase/firestore';
 import { SubjectFormComponent } from '../subject-form/subject-form.component';
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 
+import { ActiveTermService } from 'projects/school/src/app/services/active-term/active-term.service';
 import { SubjectsApiService } from 'projects/school/src/app/services/modules/subjects-api/subjects-api.service';
 
 import { Subject } from 'projects/school/src/app/models/modules/subjects/subjects.model';
@@ -20,6 +21,7 @@ export class AddSubjectComponent implements OnInit {
 
   constructor(
     private router: Router,
+    private activeTerm: ActiveTermService,
     private subjectsApi: SubjectsApiService
   ) { }
 
@@ -35,6 +37,18 @@ export class AddSubjectComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  ngAfterViewInit(){
+    this.setActiveTerm()
+  }
+
+  setActiveTerm(){
+    let activeTermData = this.activeTerm.getActiveTerm();
+
+    this.subjectForm.selectedTermId = activeTermData.id;
+    this.subjectForm.selectedTermData = activeTermData.data;
+    this.subjectForm.subjectForm.controls.term.setValue(activeTermData.data.term_name);
+  }
+
   createSubject(){
     console.log('u are saving a new subject');
 
@@ -44,14 +58,17 @@ export class AddSubjectComponent implements OnInit {
       subject_code: this.subjectForm.subjectForm.controls.subjectCode.value,
       subject_name: this.subjectForm.subjectForm.controls.subjectName.value,
       description: this.subjectForm.subjectForm.controls.description.value,
-      term: {
-        id: this.subjectForm.selectedTermId,
-        data: this.subjectForm.selectedTermData,
-      },
       department: {
         id: this.subjectForm.selectedDepartmentId,
-        data: this.subjectForm.selectedDepartmentData,
-      }
+        data: {
+          department_code: this.subjectForm.selectedDepartmentData.department_code,
+          department_name: this.subjectForm.selectedDepartmentData.department_name,
+        }
+      },
+      terms: [{
+        id: this.subjectForm.selectedTermId,
+        data: this.subjectForm.selectedTermData,
+      }],
     }
 
     console.log(data);

@@ -78,7 +78,7 @@ export class AssessmentClassesComponent implements OnInit {
           this.getAssessmentAssessmentClass();
 
           sessionStorage.setItem('school_class_id', classData.id);
-          this.getStudentClass();
+          this.getClassClassStudent();
         },
         (err: any) => {
           console.log(err);
@@ -110,7 +110,7 @@ export class AssessmentClassesComponent implements OnInit {
     this.deleteModal.openModal();
   }
 
-  getStudentClass(){
+  getClassClassStudent(){
     this.classesApi.getClassClassStudent()
       .then(
         (res: any) => {

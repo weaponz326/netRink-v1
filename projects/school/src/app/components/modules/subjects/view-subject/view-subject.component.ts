@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { arrayUnion } from 'firebase/firestore';
+
 import { SubjectFormComponent } from '../subject-form/subject-form.component';
 import { SubjectTeachersComponent } from '../subject-teachers/subject-teachers.component';
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
@@ -81,10 +83,6 @@ export class ViewSubjectComponent implements OnInit {
       subject_code: this.subjectForm.subjectForm.controls.subjectCode.value,
       subject_name: this.subjectForm.subjectForm.controls.subjectName.value,
       description: this.subjectForm.subjectForm.controls.description.value,
-      term: {
-        id: this.subjectForm.selectedTermId,
-        data: this.subjectForm.selectedTermData,
-      },
       department: {
         id: this.subjectForm.selectedDepartmentId,
         data: this.subjectForm.selectedDepartmentData,
@@ -98,7 +96,7 @@ export class ViewSubjectComponent implements OnInit {
       .then(
         (res: any) => {
           console.log(res);
-          this.isSubjectSaving = false;
+          this.updateTerm();
         },
         (err: any) => {
           console.log(err);
@@ -106,6 +104,38 @@ export class ViewSubjectComponent implements OnInit {
           this.connectionToast.openToast();
         }
       )
+  }
+
+  updateTerm(){
+    console.log('u are adding new term to term');
+
+    if (this.subjectData.data().terms.include({id: this.subjectForm.selectedTermId})){
+      console.log('lets go ahead with term update');
+
+      let data = {
+        terms: {
+          id: this.subjectForm.selectedTermId,
+          data: arrayUnion(this.subjectForm.selectedTermData),
+        }
+      }
+
+      this.subjectsApi.updateSubject(data)
+        .then(
+          (res: any) => {
+            console.log(res);
+            this.isSubjectSaving = false;
+          },
+          (err: any) => {
+            console.log(err);
+            this.isSubjectSaving = false;
+            this.connectionToast.openToast();
+          }
+        )
+    }
+    else{
+      console.log('no need to update term');
+      this.isSubjectSaving = false;
+    }
   }
 
   confirmDelete(){

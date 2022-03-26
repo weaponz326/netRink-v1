@@ -2,13 +2,18 @@ import { Injectable } from '@angular/core';
 
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 
+import { ActiveTermService } from 'projects/school/src/app/services/active-term/active-term.service';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class SubjectsApiService {
 
-  constructor(private afs: AngularFirestore) { }
+  constructor(
+    private afs: AngularFirestore,
+    private activeTerm: ActiveTermService
+  ) { }
 
   subjectRef = this.afs.collection('school/module_subjects/school_subject');
   subjectTeacherRef = this.afs.collection('school/module_subjects/school_subject_teacher');
@@ -34,6 +39,7 @@ export class SubjectsApiService {
   getAccountSubject(sorting: any, pageSize: any){
     return this.subjectRef.ref
       .where("account", "==", localStorage.getItem('school_id'))
+      .where("terms", "array-contains", this.activeTerm.getActiveTerm())
       .orderBy(sorting?.field, sorting?.direction)
       .limit(pageSize)
       .get();
@@ -42,6 +48,7 @@ export class SubjectsApiService {
   getAccountSubjectNext(sorting: any, pageSize: any, pageStart: any){
     return this.subjectRef.ref
       .where("account", "==", localStorage.getItem('school_id'))
+      .where("terms", "array-contains", this.activeTerm.getActiveTerm())
       .orderBy(sorting?.field, sorting?.direction)
       .startAfter(pageStart)
       .limit(pageSize)
@@ -51,6 +58,7 @@ export class SubjectsApiService {
   getAccountSubjectPrev(sorting: any, pageSize: any, pageStart: any){
     return this.subjectRef.ref
       .where("account", "==", localStorage.getItem('school_id'))
+      .where("terms", "array-contains", this.activeTerm.getActiveTerm())
       .orderBy(sorting?.field, sorting?.direction)
       .startAt(pageStart)
       .limit(pageSize)

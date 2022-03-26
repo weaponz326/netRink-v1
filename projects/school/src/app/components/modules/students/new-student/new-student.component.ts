@@ -8,6 +8,7 @@ import { serverTimestamp } from 'firebase/firestore';
 import { StudentFormComponent } from '../student-form/student-form.component';
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 
+import { ActiveTermService } from 'projects/school/src/app/services/active-term/active-term.service';
 import { StudentsApiService } from 'projects/school/src/app/services/modules/students-api/students-api.service';
 
 import { Student } from 'projects/school/src/app/models/modules/students/students.model';
@@ -23,6 +24,7 @@ export class NewStudentComponent implements OnInit {
   constructor(
     private router: Router,
     private storage: AngularFireStorage,
+    private activeTerm: ActiveTermService,
     private studentsApi: StudentsApiService
   ) { }
 
@@ -38,6 +40,18 @@ export class NewStudentComponent implements OnInit {
   isStudentSaving = false;
 
   ngOnInit(): void {
+  }
+
+  ngAfterViewInit(){
+    this.setActiveTerm()
+  }
+
+  setActiveTerm(){
+    let activeTermData = this.activeTerm.getActiveTerm();
+
+    this.studentForm.selectedTermId = activeTermData.id;
+    this.studentForm.selectedTermData = activeTermData.data;
+    this.studentForm.studentForm.controls.term.setValue(activeTermData.data.term_name);
   }
 
   createStudent(){
@@ -62,14 +76,17 @@ export class NewStudentComponent implements OnInit {
       state: this.studentForm.studentForm.controls.state.value,
       city: this.studentForm.studentForm.controls.city.value,
       post_code: this.studentForm.studentForm.controls.postCode.value,
-      term: {
-        id: this.studentForm.selectedTermId,
-        data: this.studentForm.selectedTermData,
-      },
       clase: {
         id: this.studentForm.selectedClassId,
-        data: this.studentForm.selectedClassData,
-      }
+        data: {
+          class_code: this.studentForm.selectedClassData.class_code,
+          class_name: this.studentForm.selectedClassData.class_name,
+        }
+      },
+      terms: [{
+        id: this.studentForm.selectedTermId,
+        data: this.studentForm.selectedTermData,
+      }],
     }
 
     console.log(data);
@@ -79,25 +96,9 @@ export class NewStudentComponent implements OnInit {
       .then(
         async (res: any) => {
           console.log(res);
-          sessionStorage.setItem('restaurant_student_id', res.id);
+          sessionStorage.setItem('school_student_id', res.id);
 
-          if (!this.studentForm.photo.isImageSet){
-            this.isStudentSaving = false;
-            this.router.navigateByUrl('/home/students/view-student');
-          }
-          else{
-            const storagePath = this.storageBasePath + res.id;
-            const storageRef = this.storage.ref(storagePath);
-            const task = this.storage.upload(storagePath, this.studentForm.photo.image);
-
-            task.snapshotChanges().pipe(
-                finalize(() => {
-                  storageRef.getDownloadURL().subscribe(downloadUrl => {
-                    this.updateImage({photo: downloadUrl});
-                  });
-                })
-              ).subscribe();
-          }
+          this.updateImage();
         },
         (err: any) => {
           console.log(err);
@@ -107,23 +108,41 @@ export class NewStudentComponent implements OnInit {
       )
   }
 
-  updateImage(data: any){
+  updateImage(){
     console.log('u are updating student photo url');
-    console.log(data);
 
-    this.studentsApi.updateStudent(data)
-      .then(
-        (res: any) => {
-          console.log(res);
-          this.router.navigateByUrl('/home/students/view-student');
-          this.isStudentSaving = false;
-        },
-        (err: any) => {
-          console.log(err);
-          this.isStudentSaving = false;
-          this.connectionToast.openToast();
-        }
-      )
+    if (!this.studentForm.photo.isImageSet){
+      this.isStudentSaving = false;
+      this.router.navigateByUrl('/home/students/view-student');
+    }
+    else{
+      const storagePath = this.storageBasePath + sessionStorage.getItem('school_student_id');
+      const storageRef = this.storage.ref(storagePath);
+      const task = this.storage.upload(storagePath, this.studentForm.photo.image);
+
+      task.snapshotChanges().pipe(
+          finalize(() => {
+            storageRef.getDownloadURL().subscribe(downloadUrl => {
+              console.log(downloadUrl);
+              let data = { photo: downloadUrl };
+
+              this.studentsApi.updateStudent(data)
+                .then(
+                  (res: any) => {
+                    console.log(res);
+                    this.router.navigateByUrl('/home/students/view-student');
+                    this.isStudentSaving = false;
+                  },
+                  (err: any) => {
+                    console.log(err);
+                    this.isStudentSaving = false;
+                    this.connectionToast.openToast();
+                  }
+                )
+            });
+          })
+        ).subscribe();
+    }
   }
 
 }

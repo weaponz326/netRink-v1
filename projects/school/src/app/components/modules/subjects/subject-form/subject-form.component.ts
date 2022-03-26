@@ -19,9 +19,9 @@ export class SubjectFormComponent implements OnInit {
   subjectForm: FormGroup = new FormGroup({});
 
   selectedTermId = "";
-  selectedTermData = {};
+  selectedTermData: any;
   selectedDepartmentId = "";
-  selectedDepartmentData = {};
+  selectedDepartmentData: any;
 
   ngOnInit(): void {
     this.initSubjectForm();
@@ -31,8 +31,8 @@ export class SubjectFormComponent implements OnInit {
     this.subjectForm = new FormGroup({
       subjectCode: new FormControl(''),
       subjectName: new FormControl(''),
-      term: new FormControl(''),
-      department: new FormControl(''),
+      term: new FormControl({value: '', disabled: true}),
+      department: new FormControl({value: '', disabled: true}),
       description: new FormControl(''),
     });
   }
@@ -47,6 +47,12 @@ export class SubjectFormComponent implements OnInit {
 
     this.selectedTermId = termData.id;
     this.selectedTermData = termData.data();
+
+    let termObject = {
+      id: this.selectedTermId,
+      data: this.selectedTermData,
+    }
+    localStorage.setItem('schoolActiveTerm', JSON.stringify(termObject));
   }
 
   openDepartmentWindow(){

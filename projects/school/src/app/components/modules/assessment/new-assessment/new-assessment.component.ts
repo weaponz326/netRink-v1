@@ -8,6 +8,7 @@ import { ConnectionToastComponent } from 'projects/personal/src/app/components/m
 import { SelectTermComponent } from '../../../select-windows/terms-windows/select-term/select-term.component';
 import { SelectSubjectComponent } from '../../../select-windows/subjects-windows/select-subject/select-subject.component';
 
+import { ActiveTermService } from 'projects/school/src/app/services/active-term/active-term.service';
 import { AssessmentApiService } from 'projects/school/src/app/services/modules/assessment-api/assessment-api.service';
 
 import { Assessment } from 'projects/school/src/app/models/modules/assessment/assessment.model';
@@ -22,6 +23,7 @@ export class NewAssessmentComponent implements OnInit {
 
   constructor(
     private router: Router,
+    private activeTerm: ActiveTermService,
     private assessmentApi: AssessmentApiService
   ) { }
 
@@ -57,7 +59,13 @@ export class NewAssessmentComponent implements OnInit {
 
   openModal(){
     this.addButton.nativeElement.click();
-    this.assessmentForm.controls.assessmentDate.setValue(new Date().toISOString().slice(0, 10))
+
+    this.assessmentForm.controls.assessmentDate.setValue(new Date().toISOString().slice(0, 10));
+
+    let activeTerm = this.activeTerm.getActiveTerm();
+    this.assessmentForm.controls.term.setValue(activeTerm.data.term_name);
+    this.selectedTermId = activeTerm.id;
+    this.selectedTermData = activeTerm.data;
   }
 
   createAssessment(){

@@ -159,7 +159,10 @@ export class ViewParentComponent implements OnInit {
             this.connectionToast.openToast();
           }
         )
-
+    }
+    else{
+      console.log('no need to update term');
+      this.isParentSaving = false;
     }
   }
 

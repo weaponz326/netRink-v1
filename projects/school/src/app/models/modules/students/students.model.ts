@@ -1,6 +1,7 @@
 export class Student {
   created_at: any;
   account!: string;
+  terms!: any;
   first_name!: string;
   last_name!: string;
   date_of_birth!: string;
@@ -17,16 +18,11 @@ export class Student {
   student_code!: string;
   admission_date!: string;
   previous_school!: string;
-  term!: {
-    id: string;
-    data: {
-
-    }
-  };
   clase!: {
     id: string;
     data: {
-
+      class_code: string;
+      class_name: string;
     }
   };
 }

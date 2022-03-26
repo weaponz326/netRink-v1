@@ -2,29 +2,21 @@ import { Injectable } from '@angular/core';
 
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 
+import { ActiveTermService } from 'projects/school/src/app/services/active-term/active-term.service';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class ParentsApiService {
 
-  constructor(private afs: AngularFirestore) { }
+  constructor(
+    private afs: AngularFirestore,
+    private activeTerm: ActiveTermService
+  ) { }
 
   parentRef = this.afs.collection('school/module_parents/school_parent');
   parentWardRef = this.afs.collection('school/module_parents/school_parent_ward');
-
-  getTerm(){
-    const termData = JSON.parse(String(localStorage.getItem('schoolActiveTerm')));
-    const termObject = {
-      id: termData.id,
-      data: {
-        term_code: termData.data.term_code,
-        term_name: termData.data.term_name,
-      }
-    }
-
-    return termObject;
-  }
 
   // parents
 
@@ -47,7 +39,7 @@ export class ParentsApiService {
   getAccountParent(sorting: any, pageSize: any){
     return this.parentRef.ref
       .where("account", "==", localStorage.getItem('school_id'))
-      .where("terms", "array-contains", this.getTerm())
+      .where("terms", "array-contains", this.activeTerm.getActiveTerm())
       .orderBy(sorting?.field, sorting?.direction)
       .limit(pageSize)
       .get();
@@ -56,7 +48,7 @@ export class ParentsApiService {
   getAccountParentNext(sorting: any, pageSize: any, pageStart: any){
     return this.parentRef.ref
       .where("account", "==", localStorage.getItem('school_id'))
-      .where("terms", "array-contains", this.getTerm())
+      .where("terms", "array-contains", this.activeTerm.getActiveTerm())
       .orderBy(sorting?.field, sorting?.direction)
       .startAfter(pageStart)
       .limit(pageSize)
@@ -66,7 +58,7 @@ export class ParentsApiService {
   getAccountParentPrev(sorting: any, pageSize: any, pageStart: any){
     return this.parentRef.ref
       .where("account", "==", localStorage.getItem('school_id'))
-      .where("terms", "array-contains", this.getTerm())
+      .where("terms", "array-contains", this.activeTerm.getActiveTerm())
       .orderBy(sorting?.field, sorting?.direction)
       .startAt(pageStart)
       .limit(pageSize)

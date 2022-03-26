@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 
-import { ActiveTermService } from 'projects/school/src/app/services/active-term/active-term.service';
 import { ImageInputComponent } from 'projects/personal/src/app/components/module-utilities/image-input/image-input.component';
 import { SelectTermComponent } from '../../../select-windows/terms-windows/select-term/select-term.component';
 
@@ -13,7 +12,7 @@ import { SelectTermComponent } from '../../../select-windows/terms-windows/selec
 })
 export class ParentFormComponent implements OnInit {
 
-  constructor(private activeTerm: ActiveTermService) { }
+  constructor() { }
 
   parentForm: FormGroup = new FormGroup({});
 
@@ -25,10 +24,6 @@ export class ParentFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.initParentForm();
-  }
-
-  ngAfterViewInit(){
-    this.setActiveTerm()
   }
 
   initParentForm(){
@@ -52,16 +47,8 @@ export class ParentFormComponent implements OnInit {
     });
   }
 
-  setActiveTerm(){
-    let activeTermData = this.activeTerm.getActiveTerm();
-
-    this.selectedTermId = activeTermData.id;
-    this.selectedTermData = activeTermData.data;
-    this.parentForm.controls.term.setValue(activeTermData.data.term_name);
-  }
-
   openTermWindow(){
-    console.log("You are opening select term window")
+    console.log("You are opening select term window");
     this.selectTerm.openModal();
   }
 

@@ -8,14 +8,20 @@ export class Attendance {
   term!: {
     id: string;
     data: {
-
+      term_code: string;
+      term_name: string;
     }
   };
   source!: {
     id: string;
     data: {
-
+      class_code: string;
+      class_name: string;
     }
   };
 
+}
+
+export class AttendanceSheet {
+  sheet!: any;
 }

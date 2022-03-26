@@ -29,9 +29,9 @@ export class StudentFormComponent implements OnInit {
   }
 
   selectedTermId = "";
-  selectedTermData = {};
+  selectedTermData: any;
   selectedClassId = "";
-  selectedClassData = {};
+  selectedClassData: any;
 
   initParentForm(){
     this.studentForm = new FormGroup({
@@ -41,8 +41,8 @@ export class StudentFormComponent implements OnInit {
       nationality: new FormControl(''),
       religion: new FormControl(''),
       studentCode: new FormControl(''),
-      term: new FormControl(''),
-      clase: new FormControl(''),
+      term: new FormControl({value: '', disabled: true}),
+      clase: new FormControl({value: '', disabled: true}),
       admissionDate: new FormControl(''),
       previousSchool: new FormControl(''),
       phone: new FormControl(''),

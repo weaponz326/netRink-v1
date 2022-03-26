@@ -1,19 +1,15 @@
 export class Subject {
   created_at!: any;
   account!: string;
+  terms!: any;
   subject_code!: string;
   subject_name!: string;
   description!: string;
-  term!: {
-    id: string;
-    data: {
-
-    }
-  };
   department!: {
     id: string;
     data: {
-
+      department_code: string;
+      department_name: string;
     }
   };
 }

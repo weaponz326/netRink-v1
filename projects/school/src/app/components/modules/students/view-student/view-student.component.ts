@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { finalize } from 'rxjs/operators';
 
 import { AngularFireStorage } from '@angular/fire/compat/storage';
+import { arrayUnion } from 'firebase/firestore';
 
 import { StudentFormComponent } from '../student-form/student-form.component';
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
@@ -133,22 +134,8 @@ export class ViewStudentComponent implements OnInit {
       (res: any) => {
         console.log(res);
 
-        if (this.studentForm.photo.isImageSet && !this.studentForm.photo.isImageChanged){
-          this.isStudentSaving = false;
-        }
-        else{
-          const storagePath = this.storageBasePath + res.id;
-          const storageRef = this.storage.ref(storagePath);
-          const task = this.storage.upload(storagePath, this.studentForm.photo.image);
-
-          task.snapshotChanges().pipe(
-              finalize(() => {
-                storageRef.getDownloadURL().subscribe(downloadUrl => {
-                  this.updateImage({photo: downloadUrl});
-                });
-              })
-            ).subscribe();
-        }
+        this.updateTerm();
+        this.updateImage();
       },
       (err: any) => {
         console.log(err);
@@ -156,6 +143,73 @@ export class ViewStudentComponent implements OnInit {
         this.connectionToast.openToast();
       }
     )
+  }
+
+  updateTerm(){
+    console.log('u are adding new term to term');
+
+    if (this.studentData.data().terms.include({id: this.studentForm.selectedTermId})){
+      console.log('lets go ahead with term update');
+
+      let data = {
+        terms: {
+          id: this.studentForm.selectedTermId,
+          data: arrayUnion(this.studentForm.selectedTermData),
+        }
+      }
+
+      this.studentsApi.updateStudent(data)
+        .then(
+          (res: any) => {
+            console.log(res);
+            this.isStudentSaving = false;
+          },
+          (err: any) => {
+            console.log(err);
+            this.isStudentSaving = false;
+            this.connectionToast.openToast();
+          }
+        )
+    }
+    else{
+      console.log('no need to update term');
+      this.isStudentSaving = false;
+    }
+  }
+
+  updateImage(){
+    console.log('u are updating student photo url');
+
+    if (this.studentForm.photo.isImageSet && !this.studentForm.photo.isImageChanged){
+      this.isStudentSaving = false;
+    }
+    else{
+      const storagePath = this.storageBasePath + sessionStorage.getItem('school_student_id');
+      const storageRef = this.storage.ref(storagePath);
+      const task = this.storage.upload(storagePath, this.studentForm.photo.image);
+
+      task.snapshotChanges().pipe(
+        finalize(() => {
+          storageRef.getDownloadURL().subscribe(downloadUrl => {
+            console.log(downloadUrl);
+            let data = { photo: downloadUrl };
+
+            this.studentsApi.updateStudent(data)
+              .then(
+                (res: any) => {
+                  console.log(res);
+                  this.isStudentSaving = false;
+                },
+                (err: any) => {
+                  console.log(err);
+                  this.isStudentSaving = false;
+                  this.connectionToast.openToast();
+                }
+              )
+          });
+        })
+      ).subscribe();
+    }
   }
 
   confirmDelete(){
@@ -173,24 +227,6 @@ export class ViewStudentComponent implements OnInit {
         },
         (err: any) => {
           console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
-  }
-
-  updateImage(data: any){
-    console.log('u are updating student photo url');
-    console.log(data);
-
-    this.studentsApi.updateStudent(data)
-      .then(
-        (res: any) => {
-          console.log(res);
-          this.isStudentSaving = false;
-        },
-        (err: any) => {
-          console.log(err);
-          this.isStudentSaving = false;
           this.connectionToast.openToast();
         }
       )
