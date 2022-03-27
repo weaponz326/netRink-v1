@@ -87,8 +87,8 @@ export class ViewPaymentComponent implements OnInit {
       amount_paid: this.paymentForm.paymentForm.controls.amountPaid.value,
       bill: {
         id: this.paymentForm.selectedBillId,
-        data: this.paymentForm.selectedBillData,
-      }
+        data: this.paymentForm.selectedBillData
+      },
     }
 
     console.log(data);

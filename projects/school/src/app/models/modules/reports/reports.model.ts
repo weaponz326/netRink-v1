@@ -7,7 +7,7 @@ export class Report {
   term!: {
     id: string;
     data: {
-      term_code: string;
+      term_name: string;
       term_code: string;
     }
   };

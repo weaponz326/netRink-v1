@@ -20,9 +20,9 @@ export class PaymentFormComponent implements OnInit {
   paymentForm: FormGroup = new FormGroup({});
 
   selectedBillId = "";
-  selectedBillData = {};
+  selectedBillData: any = {};
   selectedTermId = "";
-  selectedTermData = {};
+  selectedTermData: any = {};
 
   ngOnInit(): void {
     this.initPaymentForm();

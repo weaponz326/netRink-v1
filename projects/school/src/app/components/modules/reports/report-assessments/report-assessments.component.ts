@@ -63,7 +63,8 @@ export class ReportAssessmentsComponent implements OnInit {
       assessment: {
         id: assessmentData.id,
         data: {
-
+          assessment_code: assessmentData.data.assessment_code,
+          assessment_name: assessmentData.data.assessment_name,
         }
       }
     }

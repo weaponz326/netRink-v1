@@ -2,13 +2,18 @@ import { Injectable } from '@angular/core';
 
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 
+import { ActiveTermService } from 'projects/school/src/app/services/active-term/active-term.service';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class ClassesApiService {
 
-  constructor(private afs: AngularFirestore) { }
+  constructor(
+    private afs: AngularFirestore,
+    private activeTerm: ActiveTermService
+  ) { }
 
   classRef = this.afs.collection('school/module_classes/school_class');
   classStudentRef = this.afs.collection('school/module_classes/school_class_student');
@@ -35,6 +40,7 @@ export class ClassesApiService {
   getAccountClass(sorting: any, pageSize: any){
     return this.classRef.ref
       .where("account", "==", localStorage.getItem('school_id'))
+      .where("terms", "array-contains", this.activeTerm.getActiveTerm())
       .orderBy(sorting?.field, sorting?.direction)
       .limit(pageSize)
       .get();
@@ -43,6 +49,7 @@ export class ClassesApiService {
   getAccountClassNext(sorting: any, pageSize: any, pageStart: any){
     return this.classRef.ref
       .where("account", "==", localStorage.getItem('school_id'))
+      .where("terms", "array-contains", this.activeTerm.getActiveTerm())
       .orderBy(sorting?.field, sorting?.direction)
       .startAfter(pageStart)
       .limit(pageSize)
@@ -52,6 +59,7 @@ export class ClassesApiService {
   getAccountClassPrev(sorting: any, pageSize: any, pageStart: any){
     return this.classRef.ref
       .where("account", "==", localStorage.getItem('school_id'))
+      .where("terms", "array-contains", this.activeTerm.getActiveTerm())
       .orderBy(sorting?.field, sorting?.direction)
       .startAt(pageStart)
       .limit(pageSize)
@@ -61,6 +69,7 @@ export class ClassesApiService {
   getAllAccountClass(){
     return this.classRef.ref
       .where("account", "==", localStorage.getItem('school_id'))
+      .where("terms", "array-contains", this.activeTerm.getActiveTerm())
       .orderBy("created_by" ,"desc")
       .get();
   }
@@ -111,6 +120,7 @@ export class ClassesApiService {
   getAccountDepartment(sorting: any, pageSize: any){
     return this.departmentRef.ref
       .where("account", "==", localStorage.getItem('school_id'))
+      .where("terms", "array-contains", this.activeTerm.getActiveTerm())
       .orderBy(sorting?.field, sorting?.direction)
       .limit(pageSize)
       .get();
@@ -119,6 +129,7 @@ export class ClassesApiService {
   getAccountDepartmentNext(sorting: any, pageSize: any, pageStart: any){
     return this.departmentRef.ref
       .where("account", "==", localStorage.getItem('school_id'))
+      .where("terms", "array-contains", this.activeTerm.getActiveTerm())
       .orderBy(sorting?.field, sorting?.direction)
       .startAfter(pageStart)
       .limit(pageSize)
@@ -128,6 +139,7 @@ export class ClassesApiService {
   getAccountDepartmentPrev(sorting: any, pageSize: any, pageStart: any){
     return this.departmentRef.ref
       .where("account", "==", localStorage.getItem('school_id'))
+      .where("terms", "array-contains", this.activeTerm.getActiveTerm())
       .orderBy(sorting?.field, sorting?.direction)
       .startAt(pageStart)
       .limit(pageSize)
@@ -137,6 +149,7 @@ export class ClassesApiService {
   getAllAccountDepartment(){
     return this.departmentRef.ref
       .where("account", "==", localStorage.getItem('school_id'))
+      .where("terms", "array-contains", this.activeTerm.getActiveTerm())
       .orderBy("created_by" ,"desc")
       .get();
   }

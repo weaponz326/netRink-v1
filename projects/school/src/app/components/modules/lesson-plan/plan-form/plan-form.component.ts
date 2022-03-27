@@ -22,11 +22,11 @@ export class PlanFormComponent implements OnInit {
   planForm: FormGroup = new FormGroup({});
 
   selectedTermId = "";
-  selectedTermData = {};
+  selectedTermData: any = {};
   selectedSubjectId = "";
-  selectedSubjectData = {};
+  selectedSubjectData: any = {};
   selectedTeacherId = "";
-  selectedTeacherData = {};
+  selectedTeacherData: any = {};
 
   isPlanSaving = false;
 
@@ -53,7 +53,7 @@ export class PlanFormComponent implements OnInit {
   onTermSelected(termData: any){
     console.log(termData);
 
-    this.planForm.controls.term.setValue(termData.data().data.term_name);
+    this.planForm.controls.term.setValue(termData.data().term_name);
     this.selectedTermId = termData.id;
     this.selectedTermData = termData.data();
   }
@@ -66,7 +66,7 @@ export class PlanFormComponent implements OnInit {
   onSubjectSelected(subjectData: any){
     console.log(subjectData);
 
-    this.planForm.controls.subject.setValue(subjectData.data().data.subject_name);
+    this.planForm.controls.subject.setValue(subjectData.data().subject_name);
     this.selectedSubjectId = subjectData.id;
     this.selectedSubjectData = subjectData.data();
   }
@@ -79,7 +79,7 @@ export class PlanFormComponent implements OnInit {
   onTeacherSelected(teacherData: any){
     console.log(teacherData);
 
-    this.planForm.controls.subject.setValue(teacherData.data().data.teacher_name);
+    this.planForm.controls.subject.setValue(teacherData.data().teacher_name);
     this.selectedTeacherId = teacherData.id;
     this.selectedTeacherData = teacherData.data();
   }

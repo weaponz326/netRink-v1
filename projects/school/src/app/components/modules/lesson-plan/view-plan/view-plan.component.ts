@@ -85,15 +85,24 @@ export class ViewPlanComponent implements OnInit {
       plan_date: this.planForm.planForm.controls.planDate.value,
       term: {
         id: this.planForm.selectedTermId,
-        data: this.planForm.selectedTermData,
+        data: {
+          term_code: this.planForm.selectedTermData.term_code,
+          term_name: this.planForm.selectedTermData.term_name,
+        }
       },
       subject: {
         id: this.planForm.selectedSubjectId,
-        data: this.planForm.selectedSubjectData,
+        data: {
+          subject_code: this.planForm.selectedSubjectData.subject_code,
+          subject_name: this.planForm.selectedSubjectData.subject_name,
+        }
       },
       teacher: {
         id: this.planForm.selectedTeacherId,
-        data: this.planForm.selectedTeacherData,
+        data: {
+          teacher_code: this.planForm.selectedTeacherData.teacher_code,
+          teacher_name: this.planForm.selectedTeacherData.teacher_name,
+        }
       },
       objectives: this.planSheet.sheetForm.controls.objectives.value,
       materials: this.planSheet.sheetForm.controls.materials.value,

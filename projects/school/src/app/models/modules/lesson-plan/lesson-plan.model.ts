@@ -7,19 +7,22 @@ export class LessonPlan {
   term!: {
     id: string;
     data: {
-
+      term_code: string;
+      term_name: string;
     }
   };
   subject!: {
     id: string;
     data: {
-
+      subject_code: string;
+      subject_name: string;
     }
   };
   teacher!: {
     id: string;
     data: {
-
+      teacher_code: string;
+      teacher_name: string;
     }
   };
   objectives!: string;

@@ -1,3 +1,5 @@
+import { Bill } from '../fees/fees.model';
+
 export class Payment {
   created_at!: any;
   account!: string;
@@ -6,14 +8,13 @@ export class Payment {
   amount_paid!: string;
   bill!: {
     id: string;
-    data: {
-
-    }
+    data: Bill;
   };
   term!: {
     id: string;
     data: {
-
+      term_code: string;
+      term_name: string;
     }
   };
 }

@@ -35,6 +35,7 @@ export class PaymentsApiService {
   getAccountPayment(sorting: any, pageSize: any){
     return this.paymentRef.ref
       .where("account", "==", localStorage.getItem('school_id'))
+      .where("term.id", "==", JSON.parse(String(localStorage.getItem('schoolActiveTerm'))).id)
       .orderBy(sorting?.field, sorting?.direction)
       .limit(pageSize)
       .get();
@@ -43,6 +44,7 @@ export class PaymentsApiService {
   getAccountPaymentNext(sorting: any, pageSize: any, pageStart: any){
     return this.paymentRef.ref
       .where("account", "==", localStorage.getItem('school_id'))
+      .where("term.id", "==", JSON.parse(String(localStorage.getItem('schoolActiveTerm'))).id)
       .orderBy(sorting?.field, sorting?.direction)
       .startAfter(pageStart)
       .limit(pageSize)
@@ -52,6 +54,7 @@ export class PaymentsApiService {
   getAccountPaymentPrev(sorting: any, pageSize: any, pageStart: any){
     return this.paymentRef.ref
       .where("account", "==", localStorage.getItem('school_id'))
+      .where("term.id", "==", JSON.parse(String(localStorage.getItem('schoolActiveTerm'))).id)
       .orderBy(sorting?.field, sorting?.direction)
       .startAt(pageStart)
       .limit(pageSize)
@@ -60,6 +63,7 @@ export class PaymentsApiService {
 
   getAllAccountPayment(){
     return this.paymentRef.ref
+      .where("term.id", "==", JSON.parse(String(localStorage.getItem('schoolActiveTerm'))).id)
       .where("account", "==", localStorage.getItem('school_id'))
       .orderBy("created_at", "desc")
       .get();

@@ -12,6 +12,7 @@ export class ReportsApiService {
 
   reportRef = this.afs.collection('school/module_reports/school_report');
   reportAssessmentRef = this.afs.collection('school/module_reports/school_report_assessment');
+  reportSheetRef = this.afs.collection('school/module_reports/school_report_sheet');
 
   // report
 
@@ -90,6 +91,24 @@ export class ReportsApiService {
       .where("report", "==", sessionStorage.getItem('school_report_id'))
       .orderBy("class.data.assessment_name", "asc")
       .get();
+  }
+
+  // report sheet
+
+  createReportSheet(sheet: any){
+    return this.reportSheetRef.doc(String(sessionStorage.getItem('school_report_id'))).set({sheet: sheet});
+  }
+
+  getReportSheet(){
+    return this.reportSheetRef.doc(String(sessionStorage.getItem('school_report_sheet_id'))).ref.get();
+  }
+
+  updateReportSheet(sheet: any){
+    return this.reportSheetRef.doc(String(sessionStorage.getItem('school_report_sheet_id'))).update(sheet);
+  }
+
+  deleteReportSheet(){
+    return this.reportSheetRef.doc(String(sessionStorage.getItem('school_report_sheet_id'))).delete();
   }
 
 }

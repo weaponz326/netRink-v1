@@ -3,7 +3,9 @@ import { Router } from '@angular/router';
 
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 import { NewClassComponent } from '../new-class/new-class.component';
+import { SelectTermComponent } from '../../../select-windows/terms-windows/select-term/select-term.component';
 
+import { ActiveTermService } from 'projects/school/src/app/services/active-term/active-term.service';
 import { ClassesApiService } from 'projects/school/src/app/services/modules/classes-api/classes-api.service';
 // import { ClassesPrintService } from 'projects/school/src/app/services/printing/classes-print/classes-print.service';
 
@@ -17,16 +19,20 @@ export class AllClassesComponent implements OnInit {
 
   constructor(
     private router: Router,
+    private activeTerm: ActiveTermService,
     private classesApi: ClassesApiService,
     // private classesPrint: ClassesPrintService,
   ) { }
 
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
   @ViewChild('newClassComponentReference', { read: NewClassComponent, static: false }) newClass!: NewClassComponent;
+  @ViewChild('selectTermComponentReference', { read: SelectTermComponent, static: false }) selectTerm!: SelectTermComponent;
 
   navHeading: any[] = [
     { text: "All Classes", url: "/home/classes/all-classes" },
   ];
+
+  activeTermName: any;
 
   classesGridData: any[] = [];
 
@@ -47,7 +53,12 @@ export class AllClassesComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getActiveTerm();
     this.getAccountClass();
+  }
+
+  getActiveTerm(){
+    this.activeTermName = this.activeTerm.getActiveTerm().data.term_name;
   }
 
   getAccountClass(){
@@ -157,6 +168,19 @@ export class AllClassesComponent implements OnInit {
 
     sessionStorage.setItem('school_class_id', classId);
     this.router.navigateByUrl('/home/classes/view-class');
+  }
+
+  openTermWindow(){
+    console.log("You are opening select term window")
+    this.selectTerm.openModal();
+  }
+
+  onTermSelected(termData: any){
+    console.log(termData);
+
+    this.activeTerm.setActiveTerm(termData);
+    this.getActiveTerm();
+    this.getAccountClass();
   }
 
   onPrint(){

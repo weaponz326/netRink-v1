@@ -1,25 +1,23 @@
 export class Clase {
   created_at!: any;
   account!: string;
+  terms!: any;
   class_code!: string;
   class_name!: string;
   location!: string;
-  term!: {
-    id: string;
-    data: {
-
-    }
-  };
   department!: {
     id: string;
     data: {
-
+      department_code: string;
+      department_name: string;
     }
   };
   class_teacher!: {
     id: string;
     data: {
-
+      teacher_code: string;
+      first_name: string;
+      last_name: string;
     }
   };
 }
@@ -30,7 +28,9 @@ export class ClassStudent {
   student!: {
     id: string;
     data: {
-
+      student_code: string;
+      first_name: string;
+      last_name: string;
     }
   }
 }
@@ -38,19 +38,16 @@ export class ClassStudent {
 export class Department {
   created_at!: any;
   account!: string;
+  terms!: any;
   department_code!: string;
   department_name!: string;
   department_description!: string;
-  term!: {
-    id: string;
-    data: {
-
-    }
-  }
   department_head!: {
     id: string;
     data: {
-
+      teacher_code: string;
+      first_name: string;
+      last_name: string;
     }
   }
 }

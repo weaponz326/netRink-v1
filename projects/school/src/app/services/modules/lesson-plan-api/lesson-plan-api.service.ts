@@ -34,6 +34,7 @@ export class LessonPlanApiService {
   getAccountLessonPlan(sorting: any, pageSize: any){
     return this.lessonPlanRef.ref
       .where("account", "==", localStorage.getItem('school_id'))
+      .where("term.id", "==", JSON.parse(String(localStorage.getItem('schoolActiveTerm'))).id)
       .orderBy(sorting?.field, sorting?.direction)
       .limit(pageSize)
       .get();
@@ -42,6 +43,7 @@ export class LessonPlanApiService {
   getAccountLessonPlanNext(sorting: any, pageSize: any, pageStart: any){
     return this.lessonPlanRef.ref
       .where("account", "==", localStorage.getItem('school_id'))
+      .where("term.id", "==", JSON.parse(String(localStorage.getItem('schoolActiveTerm'))).id)
       .orderBy(sorting?.field, sorting?.direction)
       .startAfter(pageStart)
       .limit(pageSize)
@@ -51,6 +53,7 @@ export class LessonPlanApiService {
   getAccountLessonPlanPrev(sorting: any, pageSize: any, pageStart: any){
     return this.lessonPlanRef.ref
       .where("account", "==", localStorage.getItem('school_id'))
+      .where("term.id", "==", JSON.parse(String(localStorage.getItem('schoolActiveTerm'))).id)
       .orderBy(sorting?.field, sorting?.direction)
       .startAt(pageStart)
       .limit(pageSize)
@@ -60,6 +63,7 @@ export class LessonPlanApiService {
   getAllAccountLessonPlan(){
     return this.lessonPlanRef.ref
       .where("account", "==", localStorage.getItem('school_id'))
+      .where("term.id", "==", JSON.parse(String(localStorage.getItem('schoolActiveTerm'))).id)
       .orderBy("created_by" ,"desc")
       .get();
   }

@@ -8,7 +8,9 @@ import { ConnectionToastComponent } from 'projects/personal/src/app/components/m
 import { SelectTermComponent } from '../../../select-windows/terms-windows/select-term/select-term.component';
 import { SelectClassComponent } from '../../../select-windows/classes-windows/select-class/select-class.component';
 
+import { ActiveTermService } from 'projects/school/src/app/services/active-term/active-term.service';
 import { ReportsApiService } from 'projects/school/src/app/services/modules/reports-api/reports-api.service';
+import { ClassesApiService } from 'projects/school/src/app/services/modules/classes-api/classes-api.service';
 
 import { Report } from 'projects/school/src/app/models/modules/reports/reports.model';
 
@@ -22,7 +24,9 @@ export class NewReportComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private reportsApi: ReportsApiService
+    private activeTerm: ActiveTermService,
+    private reportsApi: ReportsApiService,
+    private classesApi: ClassesApiService,
   ) { }
 
   @ViewChild('addButtonElementReference', { read: ElementRef, static: false }) addButton!: ElementRef;
@@ -35,9 +39,9 @@ export class NewReportComponent implements OnInit {
   reportForm: FormGroup = new FormGroup({});
 
   selectedTermId = "";
-  selectedTermData = {};
+  selectedTermData: any;
   selectedClassId = "";
-  selectedClassData = {};
+  selectedClassData: any;
 
   isReportSaving = false;
 
@@ -57,6 +61,13 @@ export class NewReportComponent implements OnInit {
 
   openModal(){
     this.addButton.nativeElement.click();
+
+    this.reportForm.controls.reportDate.setValue(new Date().toISOString().slice(0, 10));
+
+    let activeTerm = this.activeTerm.getActiveTerm();
+    this.reportForm.controls.term.setValue(activeTerm.data.term_name);
+    this.selectedTermId = activeTerm.id;
+    this.selectedTermData = activeTerm.data;
   }
 
   createReport(){
@@ -68,11 +79,17 @@ export class NewReportComponent implements OnInit {
       report_date: this.reportForm.controls.reportDate.value,
       term: {
         id: this.selectedTermId,
-        data: this.selectedTermData,
+        data: {
+          term_code: this.selectedTermData.term_code,
+          term_name: this.selectedTermData.term_name,
+        }
       },
       clase: {
         id: this.selectedClassId,
-        data: this.selectedClassData,
+        data: {
+          class_code: this.selectedClassData.class_code,
+          class_name: this.selectedClassData.class_name,
+        }
       }
     }
 
@@ -83,13 +100,82 @@ export class NewReportComponent implements OnInit {
         (res: any) => {
           console.log(res);
           sessionStorage.setItem('school_report_id', res.id);
-          this.router.navigateByUrl('/home/reports/class-report');
-          this.dismissButton.nativeElement.click();
-          this.isReportSaving = true;
+          sessionStorage.setItem('school_class_id', this.selectedClassId);
+          this.getClassClassStudent();
         },
         (err: any) => {
           console.log(err);
           this.isReportSaving = true;
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  getClassClassStudent(){
+    this.classesApi.getClassClassStudent()
+      .then(
+        (res: any) => {
+          console.log(res);
+          this.setReportSheet(res.docs);
+        },
+        (err: any) => {
+          console.log(err);
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  setReportSheet(classStudents: any){
+    let classSheet: any = [];
+
+    let sheetDateRange: any = [];
+    var fromDate = this.reportForm.controls.fromDate.value
+    var toDate = this.reportForm.controls.fromDate.value
+
+    while(fromDate != toDate) {
+      fromDate.add(1, 'days');
+      var checks = {
+        date: fromDate.toDate(),
+        check: ""
+      }
+
+      sheetDateRange.push(fromDate.toDate());
+    }
+    console.log(sheetDateRange);
+
+    classStudents.forEach((student: any) => {
+      let sheetRow = {
+        student: {
+          id: student.id,
+          data: {
+            student_code: student.data().student_code,
+            first_name: student.data().first_name,
+            last_name: student.data().last_name,
+          }
+        },
+        checks: checks
+      };
+
+      classSheet.push(sheetRow);
+    });
+
+    console.log(classSheet);
+    this.createReportSheet(classSheet);
+  }
+
+  createReportSheet(classSheet: any){
+    this.reportsApi.createReportSheet(classSheet)
+      .then(
+        (res: any) => {
+          console.log(res);
+
+          this.router.navigateByUrl('/home/report/view-report');
+          this.dismissButton.nativeElement.click();
+          this.isReportSaving = false;
+        },
+        (err: any) => {
+          console.log(err);
+          this.isReportSaving = false;
           this.connectionToast.openToast();
         }
       )

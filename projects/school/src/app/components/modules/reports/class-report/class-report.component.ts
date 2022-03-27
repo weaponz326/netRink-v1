@@ -45,9 +45,9 @@ export class ClassReportComponent implements OnInit {
   reportFormData: any;
 
   selectedTermId = "";
-  selectedTermData = {};
+  selectedTermData: any;
   selectedClassId = "";
-  selectedClassData = {};
+  selectedClassData: any;
 
   isReportLoading = false;
   isReportSaving = false;
@@ -104,11 +104,17 @@ export class ClassReportComponent implements OnInit {
       report_date: this.reportForm.controls.reportDate.value,
       term: {
         id: this.selectedTermId,
-        data: this.selectedTermData,
+        data: {
+          term_code: this.selectedTermData.term_code,
+          term_name: this.selectedTermData.term_name,
+        }
       },
-      source: {
+      clase: {
         id: this.selectedClassId,
-        data: this.selectedClassData,
+        data: {
+          class_code: this.selectedClassData.class_code,
+          class_name: this.selectedClassData.class_name,
+        }
       }
     }
 

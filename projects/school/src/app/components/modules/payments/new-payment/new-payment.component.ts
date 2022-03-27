@@ -6,6 +6,7 @@ import { serverTimestamp } from 'firebase/firestore';
 import { PaymentFormComponent } from '../payment-form/payment-form.component';
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 
+import { ActiveTermService } from 'projects/school/src/app/services/active-term/active-term.service';
 import { PaymentsApiService } from 'projects/school/src/app/services/modules/payments-api/payments-api.service';
 
 import { Payment } from 'projects/school/src/app/models/modules/payments/payments.model';
@@ -20,6 +21,7 @@ export class NewPaymentComponent implements OnInit {
 
   constructor(
     private router: Router,
+    private activeTerm: ActiveTermService,
     private paymentsApi: PaymentsApiService
   ) { }
 
@@ -36,7 +38,12 @@ export class NewPaymentComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    this.paymentForm.paymentForm.controls.paymentDate.setValue(new Date().toISOString().slice(0, 16))
+    this.paymentForm.paymentForm.controls.paymentDate.setValue(new Date().toISOString().slice(0, 16));
+
+    let activeTerm = this.activeTerm.getActiveTerm();
+    this.paymentForm.paymentForm.controls.term.setValue(activeTerm.data.term_name);
+    this.paymentForm.selectedTermId = activeTerm.id;
+    this.paymentForm.selectedTermData = activeTerm.data;
   }
 
   createPayment(){
@@ -54,7 +61,10 @@ export class NewPaymentComponent implements OnInit {
       },
       term: {
         id: this.paymentForm.selectedTermId,
-        data: this.paymentForm.selectedTermData
+        data: {
+          term_code: this.paymentForm.selectedTermData.term_code,
+          term_name: this.paymentForm.selectedTermData.term_name,
+        }
       }
     }
 

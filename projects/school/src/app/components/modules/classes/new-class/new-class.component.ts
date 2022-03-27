@@ -10,6 +10,7 @@ import { SelectDepartmentComponent } from '../../../select-windows/classes-windo
 import { SelectTeacherComponent } from '../../../select-windows/teachers-windows/select-teacher/select-teacher.component';
 
 import { ClassesApiService } from 'projects/school/src/app/services/modules/classes-api/classes-api.service';
+import { ActiveTermService } from 'projects/school/src/app/services/active-term/active-term.service';
 
 import { Clase } from 'projects/school/src/app/models/modules/classes/classes.model';
 
@@ -23,6 +24,7 @@ export class NewClassComponent implements OnInit {
 
   constructor(
     private router: Router,
+    private activeTerm: ActiveTermService,
     private classesApi: ClassesApiService
   ) { }
 
@@ -37,11 +39,11 @@ export class NewClassComponent implements OnInit {
   classForm: FormGroup = new FormGroup({});
 
   selectedTermId = "";
-  selectedTermData = {};
+  selectedTermData: any = {};
   selectedDepartmentId = "";
-  selectedDepartmentData = {};
+  selectedDepartmentData: any = {};
   selectedTeacherId = "";
-  selectedTeacherData = {};
+  selectedTeacherData: any = {};
 
   isClassSaving = false;
 
@@ -62,6 +64,15 @@ export class NewClassComponent implements OnInit {
 
   openModal(){
     this.addButton.nativeElement.click();
+    this.setActiveTerm();
+  }
+
+  setActiveTerm(){
+    let activeTermData = this.activeTerm.getActiveTerm();
+
+    this.selectedTermId = activeTermData.id;
+    this.selectedTermData = activeTermData.data;
+    this.classForm.controls.term.setValue(activeTermData.data.term_name);
   }
 
   createClass(){
@@ -71,17 +82,24 @@ export class NewClassComponent implements OnInit {
       class_code: this.classForm.controls.classCode.value,
       class_name: this.classForm.controls.className.value,
       location: this.classForm.controls.location.value,
-      term: {
+      terms: [{
         id: this.selectedTermId,
         data: this.selectedTermData,
-      },
+      }],
       department: {
         id: this.selectedDepartmentId,
-        data: this.selectedDepartmentData,
+        data: {
+          department_code: this.selectedDepartmentData.department_code,
+          department_name: this.selectedDepartmentData.department_name,
+        }
       },
       class_teacher: {
         id: this.selectedTeacherId,
-        data: this.selectedTeacherData,
+        data: {
+          teacher_code: this.selectedTeacherData.teacher_code,
+          first_name: this.selectedTeacherData.first_name,
+          last_name: this.selectedTeacherData.last_name,
+        }
       }
     }
 
@@ -113,7 +131,7 @@ export class NewClassComponent implements OnInit {
   onTermSelected(termData: any){
     console.log(termData);
 
-    this.classForm.controls.term.setValue(termData.data().term.term_name);
+    this.classForm.controls.term.setValue(termData.data().term_name);
     this.selectedTermId = termData.id;
     this.selectedTermData = termData.data();
   }
@@ -126,7 +144,7 @@ export class NewClassComponent implements OnInit {
   onDepartmentSelected(departmentData: any){
     console.log(departmentData);
 
-    this.classForm.controls.department.setValue(departmentData.data().clase.department_name);
+    this.classForm.controls.department.setValue(departmentData.data().department_name);
     this.selectedDepartmentId = departmentData.id;
     this.selectedDepartmentData = departmentData.data();
   }
@@ -139,7 +157,7 @@ export class NewClassComponent implements OnInit {
   onTeacherSelected(teacherData: any){
     console.log(teacherData);
 
-    this.classForm.controls.teacher.setValue(teacherData.data().class_teacher.teacher_name);
+    this.classForm.controls.classTeacher.setValue(teacherData.data().first_name + " "+ teacherData.data().last_name);
     this.selectedTeacherId = teacherData.id;
     this.selectedTeacherData = teacherData.data();
   }

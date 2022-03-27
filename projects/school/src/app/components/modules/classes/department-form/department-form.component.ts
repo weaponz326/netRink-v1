@@ -20,9 +20,9 @@ export class DepartmentFormComponent implements OnInit {
   departmentForm: FormGroup = new FormGroup({});
 
   selectedTermId = "";
-  selectedTermData = {};
+  selectedTermData: any = {};
   selectedTeacherId = "";
-  selectedTeacherData = {};
+  selectedTeacherData: any = {};
 
   ngOnInit(): void {
     this.initDepartmentForm();
@@ -59,7 +59,7 @@ export class DepartmentFormComponent implements OnInit {
   onTeacherSelected(teacherData: any){
     console.log(teacherData);
 
-    this.departmentForm.controls.departmentHead.setValue(teacherData.data().dpartment_head.teacher_name);
+    this.departmentForm.controls.departmentHead.setValue(teacherData.data().first_name + " " + teacherData.data().last_name);
     this.selectedTeacherId = teacherData.id;
     this.selectedTeacherData = teacherData.data();
   }

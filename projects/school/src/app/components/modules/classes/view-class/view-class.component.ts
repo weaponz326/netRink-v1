@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormControl, FormGroup } from '@angular/forms';
 
+import { arrayUnion } from 'firebase/firestore';
+
 import { ClassStudentsComponent } from '../class-students/class-students.component';
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 import { DeleteModalComponent } from 'projects/personal/src/app/components/module-utilities/delete-modal/delete-modal.component'
@@ -45,11 +47,11 @@ export class ViewClassComponent implements OnInit {
   classForm: FormGroup = new FormGroup({});
 
   selectedTermId = "";
-  selectedTermData = {};
+  selectedTermData: any = {};
   selectedDepartmentId = "";
-  selectedDepartmentData = {};
+  selectedDepartmentData: any = {};
   selectedTeacherId = "";
-  selectedTeacherData = {};
+  selectedTeacherData: any = {};
 
   classData: any;
 
@@ -112,17 +114,19 @@ export class ViewClassComponent implements OnInit {
       class_code: this.classForm.controls.classCode.value,
       class_name: this.classForm.controls.className.value,
       location: this.classForm.controls.toDate.value,
-      term: {
-        id: this.selectedTermId,
-        data: this.selectedTermData,
-      },
       department: {
         id: this.selectedDepartmentId,
-        data: this.selectedDepartmentData,
+        data: {
+          department_code: this.selectedDepartmentData.department_code,
+          department_name: this.selectedDepartmentData.department_name,
+        }
       },
       class_teacher: {
         id: this.selectedTeacherId,
-        data: this.selectedTeacherData,
+        data: {
+          teacher_code: this.selectedTeacherData.teacher_code,
+          teacher_name: this.selectedTeacherData.teacher_name,
+        }
       }
     }
 
@@ -133,7 +137,7 @@ export class ViewClassComponent implements OnInit {
       .then(
         (res: any) => {
           console.log(res);
-          this.isClassSaving = false;
+          this.updateTerm();
         },
         (err: any) => {
           console.log(err);
@@ -141,6 +145,38 @@ export class ViewClassComponent implements OnInit {
           this.connectionToast.openToast();
         }
       )
+  }
+
+  updateTerm(){
+    console.log('u are adding new term to term');
+
+    if (this.classData.data().terms.include({id: this.selectedTermId})){
+      console.log('lets go ahead with term update');
+
+      let data = {
+        terms: {
+          id: this.selectedTermId,
+          data: arrayUnion(this.selectedTermData),
+        }
+      }
+
+      this.classesApi.updateClass(data)
+        .then(
+          (res: any) => {
+            console.log(res);
+            this.isClassSaving = false;
+          },
+          (err: any) => {
+            console.log(err);
+            this.isClassSaving = false;
+            this.connectionToast.openToast();
+          }
+        )
+    }
+    else{
+      console.log('no need to update term');
+      this.isClassSaving = false;
+    }
   }
 
   confirmDelete(){
@@ -171,7 +207,7 @@ export class ViewClassComponent implements OnInit {
   onTermSelected(termData: any){
     console.log(termData);
 
-    this.classForm.controls.term.setValue(termData.data().term.term_name);
+    this.classForm.controls.term.setValue(termData.data().term_name);
     this.selectedTermId = termData.id;
     this.selectedTermData = termData.data();
   }
@@ -184,7 +220,7 @@ export class ViewClassComponent implements OnInit {
   onDepartmentSelected(departmentData: any){
     console.log(departmentData);
 
-    this.classForm.controls.department.setValue(departmentData.data().clase.department_name);
+    this.classForm.controls.department.setValue(departmentData.data().department_name);
     this.selectedDepartmentId = departmentData.id;
     this.selectedDepartmentData = departmentData.data();
   }
@@ -197,7 +233,7 @@ export class ViewClassComponent implements OnInit {
   onTeacherSelected(teacherData: any){
     console.log(teacherData);
 
-    this.classForm.controls.teacher.setValue(teacherData.data().clase.teacher_name);
+    this.classForm.controls.classTeacher.setValue(teacherData.data().first_name + " "+ teacherData.data().last_name);
     this.selectedTeacherId = teacherData.id;
     this.selectedTeacherData = teacherData.data();
   }

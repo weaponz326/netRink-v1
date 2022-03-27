@@ -8,6 +8,7 @@ import { serverTimestamp } from 'firebase/firestore';
 import { PlanFormComponent } from '../plan-form/plan-form.component';
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 
+import { ActiveTermService } from 'projects/school/src/app/services/active-term/active-term.service';
 import { LessonPlanApiService } from 'projects/school/src/app/services/modules/lesson-plan-api/lesson-plan-api.service';
 
 import { LessonPlan } from 'projects/school/src/app/models/modules/lesson-plan/lesson-plan.model';
@@ -22,7 +23,7 @@ export class NewPlanComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private storage: AngularFireStorage,
+    private activeTerm: ActiveTermService,
     private lessonPlanApi: LessonPlanApiService
   ) { }
 
@@ -38,6 +39,15 @@ export class NewPlanComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  ngAfterViewInit(): void {
+    this.planForm.planForm.controls.planDate.setValue(new Date().toISOString().slice(0, 10));
+
+    let activeTerm = this.activeTerm.getActiveTerm();
+    this.planForm.planForm.controls.term.setValue(activeTerm.data.term_name);
+    this.planForm.selectedTermId = activeTerm.id;
+    this.planForm.selectedTermData = activeTerm.data;
+  }
+
   createLessonPlan(){
     console.log('u are saving a new plan');
 
@@ -49,15 +59,24 @@ export class NewPlanComponent implements OnInit {
       plan_date: this.planForm.planForm.controls.planDate.value,
       term: {
         id: this.planForm.selectedTermId,
-        data: this.planForm.selectedTermData,
+        data: {
+          term_code: this.planForm.selectedTermData.term_code,
+          term_name: this.planForm.selectedTermData.term_name,
+        }
       },
       subject: {
         id: this.planForm.selectedSubjectId,
-        data: this.planForm.selectedSubjectData,
+        data: {
+          subject_code: this.planForm.selectedSubjectData.subject_code,
+          subject_name: this.planForm.selectedSubjectData.subject_name,
+        }
       },
       teacher: {
         id: this.planForm.selectedTeacherId,
-        data: this.planForm.selectedTeacherData,
+        data: {
+          teacher_code: this.planForm.selectedTeacherData.teacher_code,
+          teacher_name: this.planForm.selectedTeacherData.teacher_name,
+        }
       },
       objectives: "",
       materials: "",

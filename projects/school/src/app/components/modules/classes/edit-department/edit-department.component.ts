@@ -38,7 +38,7 @@ export class EditDepartmentComponent implements OnInit {
     this.departmentForm.departmentForm.controls.departmentName.setValue(data.data().department_name);
     this.departmentForm.departmentForm.controls.departmentDescription.setValue(data.data().department_description);
     this.departmentForm.departmentForm.controls.term.setValue(data.data().term.data.term_name);
-    this.departmentForm.departmentForm.controls.departmentHead.setValue(data.data().department_head.data.teacher_name);
+    this.departmentForm.departmentForm.controls.departmentHead.setValue(data.data().department_head.data.first_name + " " + data.data().department_head.data.last_name);
 
     this.departmentForm.selectedTermId = data.data().term.id
     this.departmentForm.selectedTermData = data.data().term.data
@@ -53,13 +53,12 @@ export class EditDepartmentComponent implements OnInit {
       department_code: this.departmentForm.departmentForm.controls.departmentCode.value,
       department_name: this.departmentForm.departmentForm.controls.departmentName.value,
       department_description: this.departmentForm.departmentForm.controls.departmentDescription.value,
-      term: {
-        id: this.departmentForm.selectedTermId,
-        data: this.departmentForm.selectedTermData,
-      },
       department_head: {
         id: this.departmentForm.selectedTeacherId,
-        data: this.departmentForm.selectedTeacherData,
+        data: {
+          teacher_code: this.departmentForm.selectedTeacherData.teacher_code,
+          teacher_name: this.departmentForm.selectedTeacherData.teacher_name,
+        }
       }
     }
 
