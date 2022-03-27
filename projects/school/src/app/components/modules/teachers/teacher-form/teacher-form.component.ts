@@ -27,9 +27,9 @@ export class TeacherFormComponent implements OnInit {
   }
 
   selectedTermId = "";
-  selectedTermData = {};
+  selectedTermData: any = {};
   selectedDepartmentId = "";
-  selectedDepartmentData = {};
+  selectedDepartmentData: any = { department_code: "", department_name: "" };
 
   initParentForm(){
     this.teacherForm = new FormGroup({

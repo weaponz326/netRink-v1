@@ -33,6 +33,7 @@ export class TimetableApiService {
   getAccountTimetable(sorting: any, pageSize: any){
     return this.timetableRef.ref
       .where("account", "==", localStorage.getItem('school_id'))
+      .where("term.id", "==", JSON.parse(String(localStorage.getItem('schoolActiveTerm'))).id)
       .orderBy(sorting?.field, sorting?.direction)
       .limit(pageSize)
       .get();
@@ -41,6 +42,7 @@ export class TimetableApiService {
   getAccountTimetableNext(sorting: any, pageSize: any, pageStart: any){
     return this.timetableRef.ref
       .where("account", "==", localStorage.getItem('school_id'))
+      .where("term.id", "==", JSON.parse(String(localStorage.getItem('schoolActiveTerm'))).id)
       .orderBy(sorting?.field, sorting?.direction)
       .startAfter(pageStart)
       .limit(pageSize)
@@ -50,6 +52,7 @@ export class TimetableApiService {
   getAccountTimetablePrev(sorting: any, pageSize: any, pageStart: any){
     return this.timetableRef.ref
       .where("account", "==", localStorage.getItem('school_id'))
+      .where("term.id", "==", JSON.parse(String(localStorage.getItem('schoolActiveTerm'))).id)
       .orderBy(sorting?.field, sorting?.direction)
       .startAt(pageStart)
       .limit(pageSize)

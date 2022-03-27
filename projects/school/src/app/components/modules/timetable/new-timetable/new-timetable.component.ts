@@ -7,6 +7,7 @@ import { serverTimestamp } from 'firebase/firestore';
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 import { SelectTermComponent } from '../../../select-windows/terms-windows/select-term/select-term.component';
 
+import { ActiveTermService } from 'projects/school/src/app/services/active-term/active-term.service';
 import { TimetableApiService } from 'projects/school/src/app/services/modules/timetable-api/timetable-api.service';
 
 import { Timetable } from 'projects/school/src/app/models/modules/timetable/timetable.model';
@@ -21,6 +22,7 @@ export class NewTimetableComponent implements OnInit {
 
   constructor(
     private router: Router,
+    private activeTerm: ActiveTermService,
     private timetableApi: TimetableApiService
   ) { }
 
@@ -33,9 +35,7 @@ export class NewTimetableComponent implements OnInit {
   timetableForm: FormGroup = new FormGroup({});
 
   selectedTermId = "";
-  selectedTermData = {};
-  selectedSubjectId = "";
-  selectedSubjectData = {};
+  selectedTermData: any = {};
 
   isTimetableSaving = false;
 
@@ -55,7 +55,13 @@ export class NewTimetableComponent implements OnInit {
 
   openModal(){
     this.addButton.nativeElement.click();
-    this.timetableForm.controls.timetableDate.setValue(new Date().toISOString().slice(0, 10))
+
+    this.timetableForm.controls.timetableDate.setValue(new Date().toISOString().slice(0, 10));
+
+    let activeTerm = this.activeTerm.getActiveTerm();
+    this.timetableForm.controls.term.setValue(activeTerm.data.term_name);
+    this.selectedTermId = activeTerm.id;
+    this.selectedTermData = activeTerm.data;
   }
 
   createTimetable(){
@@ -66,7 +72,10 @@ export class NewTimetableComponent implements OnInit {
       timetable_name: this.timetableForm.controls.timetableName.value,
       term: {
         id: this.selectedTermId,
-        data: this.selectedTermData,
+        data: {
+          term_code: this.selectedTermData.term_code,
+          term_name: this.selectedTermData.term_name,
+        }
       },
     }
 

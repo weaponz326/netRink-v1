@@ -69,7 +69,9 @@ export class SectionStudentsComponent implements OnInit {
       student: {
         id: studentData.id,
         data: {
-
+          student_code: studentData.data().student_code,
+          first_name: studentData.data().first_name,
+          last_name: studentData.data().last_name,
         }
       }
     }

@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormControl, FormGroup } from '@angular/forms';
 
+import { arrayUnion } from 'firebase/firestore';
+
 import { SectionStudentsComponent } from '../section-students/section-students.component';
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 import { DeleteModalComponent } from 'projects/personal/src/app/components/module-utilities/delete-modal/delete-modal.component'
@@ -88,10 +90,6 @@ export class ViewSectionComponent implements OnInit {
     let data = {
       section_code: this.sectionForm.controls.sectionCode.value,
       section_name: this.sectionForm.controls.sectionName.value,
-      term: {
-        id: this.selectedTermId,
-        data: this.selectedTermData,
-      },
     }
 
     console.log(data);
@@ -101,7 +99,8 @@ export class ViewSectionComponent implements OnInit {
       .then(
         (res: any) => {
           console.log(res);
-          this.isSectionSaving = false;
+
+          this.updateTerm();
         },
         (err: any) => {
           console.log(err);
@@ -109,6 +108,38 @@ export class ViewSectionComponent implements OnInit {
           this.connectionToast.openToast();
         }
       )
+  }
+
+  updateTerm(){
+    console.log('u are adding new term to term');
+
+    if (this.sectionFormData.data().terms.include({id: this.selectedTermId})){
+      console.log('lets go ahead with term update');
+
+      let data = {
+        terms: {
+          id: this.selectedTermId,
+          data: arrayUnion(this.selectedTermData),
+        }
+      }
+
+      this.sectionsApi.updateSection(data)
+        .then(
+          (res: any) => {
+            console.log(res);
+            this.isSectionSaving = false;
+          },
+          (err: any) => {
+            console.log(err);
+            this.isSectionSaving = false;
+            this.connectionToast.openToast();
+          }
+        )
+    }
+    else{
+      console.log('no need to update term');
+      this.isSectionSaving = false;
+    }
   }
 
   confirmDelete(){

@@ -8,6 +8,7 @@ import { ConnectionToastComponent } from 'projects/personal/src/app/components/m
 import { SelectTermComponent } from '../../../select-windows/terms-windows/select-term/select-term.component';
 
 import { SectionsApiService } from 'projects/school/src/app/services/modules/sections-api/sections-api.service';
+import { ActiveTermService } from 'projects/school/src/app/services/active-term/active-term.service';
 
 import { Section } from 'projects/school/src/app/models/modules/sections/sections.model';
 
@@ -21,6 +22,7 @@ export class NewSectionComponent implements OnInit {
 
   constructor(
     private router: Router,
+    private activeTerm: ActiveTermService,
     private sectionsApi: SectionsApiService
   ) { }
 
@@ -33,7 +35,7 @@ export class NewSectionComponent implements OnInit {
   sectionForm: FormGroup = new FormGroup({});
 
   selectedTermId = "";
-  selectedTermData = {};
+  selectedTermData: any = {};
 
   isSectionSaving = false;
 
@@ -53,6 +55,11 @@ export class NewSectionComponent implements OnInit {
 
   openModal(){
     this.addButton.nativeElement.click();
+
+    let activeTerm = this.activeTerm.getActiveTerm();
+    this.sectionForm.controls.term.setValue(activeTerm.data.term_name);
+    this.selectedTermId = activeTerm.id;
+    this.selectedTermData = activeTerm.data;
   }
 
   createSection(){
@@ -61,10 +68,10 @@ export class NewSectionComponent implements OnInit {
       account: localStorage.getItem('school_id') as string,
       section_code: this.sectionForm.controls.sectionCode.value,
       section_name: this.sectionForm.controls.sectionName.value,
-      term: {
+      terms: [{
         id: this.selectedTermId,
         data: this.selectedTermData,
-      },
+      }],
     }
 
     this.isSectionSaving = true;

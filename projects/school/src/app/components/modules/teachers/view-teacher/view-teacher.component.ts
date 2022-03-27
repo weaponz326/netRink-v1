@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { finalize } from 'rxjs/operators';
 
 import { AngularFireStorage } from '@angular/fire/compat/storage';
+import { arrayUnion } from 'firebase/firestore';
 
 import { TeacherFormComponent } from '../teacher-form/teacher-form.component';
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
@@ -113,14 +114,13 @@ export class ViewTeacherComponent implements OnInit {
       state: this.teacherForm.teacherForm.controls.state.value,
       city: this.teacherForm.teacherForm.controls.city.value,
       post_code: this.teacherForm.teacherForm.controls.postCode.value,
-      term: {
-        id: this.teacherForm.selectedTermId,
-        data: this.teacherForm.selectedTermData,
-      },
       department: {
         id: this.teacherForm.selectedDepartmentId,
-        data: this.teacherForm.selectedDepartmentData,
-      }
+        data: {
+          department_code: this.teacherForm.selectedDepartmentData.department_code,
+          department_name: this.teacherForm.selectedDepartmentData.department_name,
+        }
+      },
     }
 
     console.log(data);
@@ -131,22 +131,8 @@ export class ViewTeacherComponent implements OnInit {
       (res: any) => {
         console.log(res);
 
-        if (this.teacherForm.photo.isImageSet && !this.teacherForm.photo.isImageChanged){
-          this.isTeacherSaving = false;
-        }
-        else{
-          const storagePath = this.storageBasePath + res.id;
-          const storageRef = this.storage.ref(storagePath);
-          const task = this.storage.upload(storagePath, this.teacherForm.photo.image);
-
-          task.snapshotChanges().pipe(
-              finalize(() => {
-                storageRef.getDownloadURL().subscribe(downloadUrl => {
-                  this.updateImage({photo: downloadUrl});
-                });
-              })
-            ).subscribe();
-        }
+        this.updateTerm();
+        this.updateImage();
       },
       (err: any) => {
         console.log(err);
@@ -176,22 +162,71 @@ export class ViewTeacherComponent implements OnInit {
       )
   }
 
-  updateImage(data: any){
-    console.log('u are updating teacher photo url');
-    console.log(data);
+  updateTerm(){
+    console.log('u are adding new term to term');
 
-    this.teachersApi.updateTeacher(data)
-      .then(
-        (res: any) => {
-          console.log(res);
-          this.isTeacherSaving = false;
-        },
-        (err: any) => {
-          console.log(err);
-          this.isTeacherSaving = false;
-          this.connectionToast.openToast();
+    if (this.teacherData.data().terms.include({id: this.teacherForm.selectedTermId})){
+      console.log('lets go ahead with term update');
+
+      let data = {
+        terms: {
+          id: this.teacherForm.selectedTermId,
+          data: arrayUnion(this.teacherForm.selectedTermData),
         }
-      )
+      }
+
+      this.teachersApi.updateTeacher(data)
+        .then(
+          (res: any) => {
+            console.log(res);
+            this.isTeacherSaving = false;
+          },
+          (err: any) => {
+            console.log(err);
+            this.isTeacherSaving = false;
+            this.connectionToast.openToast();
+          }
+        )
+    }
+    else{
+      console.log('no need to update term');
+      this.isTeacherSaving = false;
+    }
+  }
+
+  updateImage(){
+    console.log('u are updating teacher photo url');
+
+    if (this.teacherForm.photo.isImageSet && !this.teacherForm.photo.isImageChanged){
+      this.isTeacherSaving = false;
+    }
+    else{
+      const storagePath = this.storageBasePath + sessionStorage.getItem('school_teacher_id');
+      const storageRef = this.storage.ref(storagePath);
+      const task = this.storage.upload(storagePath, this.teacherForm.photo.image);
+
+      task.snapshotChanges().pipe(
+        finalize(() => {
+          storageRef.getDownloadURL().subscribe(downloadUrl => {
+            console.log(downloadUrl);
+            let data = { photo: downloadUrl };
+
+            this.teachersApi.updateTeacher(data)
+              .then(
+                (res: any) => {
+                  console.log(res);
+                  this.isTeacherSaving = false;
+                },
+                (err: any) => {
+                  console.log(err);
+                  this.isTeacherSaving = false;
+                  this.connectionToast.openToast();
+                }
+              )
+          });
+        })
+      ).subscribe();
+    }
   }
 
   onPrint(){

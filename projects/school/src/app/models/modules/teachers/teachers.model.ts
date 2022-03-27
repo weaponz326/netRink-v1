@@ -1,6 +1,7 @@
 export class Teacher {
   created_at: any;
   account!: string;
+  terms!: any;
   first_name!: string;
   last_name!: string;
   date_of_birth!: string;
@@ -19,13 +20,8 @@ export class Teacher {
   department!: {
     id: string;
     data: {
-
-    }
-  };
-  term!: {
-    id: string;
-    data: {
-
+      department_code: string;
+      department_name: string;
     }
   };
 }

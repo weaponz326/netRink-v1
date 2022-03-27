@@ -1,14 +1,9 @@
 export class Section {
   created_at!: any;
   account!: string;
+  terms!: any;
   section_code!: string;
   section_name!: string;
-  term!: {
-    id: string;
-    data: {
-
-    }
-  }
 }
 
 export class SectionStudent {
@@ -17,7 +12,9 @@ export class SectionStudent {
   student!: {
     id: string;
     data: {
-
+      student_code: string;
+      first_name: string;
+      last_name: string;
     }
   };
 }
