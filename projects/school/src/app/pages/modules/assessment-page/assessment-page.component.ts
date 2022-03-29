@@ -10,7 +10,7 @@ export class AssessmentPageComponent implements OnInit {
   constructor() { }
 
   navLinks: any[] = [
-    { text: "All Assessment", url: "/home/assessment/all-assessment", icon: "fa fa-fw fa-list" },
+    { text: "All Assessment", url: "/home/assessment/all-assessment", icon: "bi bi-list-ul" },
   ]
 
   ngOnInit(): void {

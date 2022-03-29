@@ -4,6 +4,8 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { ImageInputComponent } from 'projects/personal/src/app/components/module-utilities/image-input/image-input.component';
 import { SelectTermComponent } from '../../../select-windows/terms-windows/select-term/select-term.component';
 
+import { ActiveTermService } from 'projects/school/src/app/services/active-term/active-term.service';
+
 
 @Component({
   selector: 'app-parent-form',
@@ -12,7 +14,7 @@ import { SelectTermComponent } from '../../../select-windows/terms-windows/selec
 })
 export class ParentFormComponent implements OnInit {
 
-  constructor() { }
+  constructor(private activeTerm: ActiveTermService) { }
 
   parentForm: FormGroup = new FormGroup({});
 
@@ -24,6 +26,18 @@ export class ParentFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.initParentForm();
+  }
+
+  ngAfterViewInit(){
+    this.setActiveTerm()
+  }
+
+  setActiveTerm(){
+    let activeTermData = this.activeTerm.getActiveTerm();
+
+    this.selectedTermId = activeTermData.id;
+    this.selectedTermData = activeTermData.data;
+    this.parentForm.controls.term.setValue(activeTermData.data.term_name);
   }
 
   initParentForm(){

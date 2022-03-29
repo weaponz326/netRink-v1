@@ -78,16 +78,16 @@ export class ParentsApiService {
     return this.parentWardRef.add(parent_ward);
   }
 
-  getParentWard(){
-    return this.parentWardRef.doc(String(sessionStorage.getItem('school_parent_ward_id'))).ref.get();
+  getParentWard(wardId: any){
+    return this.parentWardRef.doc(wardId).ref.get();
   }
 
-  updateParentWard(parent_ward: any){
-    return this.parentWardRef.doc(String(sessionStorage.getItem('school_parent_ward_id'))).update(parent_ward);
+  updateParentWard(wardId: any, wardData: any){
+    return this.parentWardRef.doc(wardId).update(wardData);
   }
 
-  deleteParentWard(){
-    return this.parentWardRef.doc(String(sessionStorage.getItem('school_parent_ward_id'))).delete();
+  deleteParentWard(wardId: any){
+    return this.parentWardRef.doc(wardId).delete();
   }
 
   getParentParentWard(){

@@ -8,7 +8,6 @@ import { serverTimestamp } from 'firebase/firestore';
 import { ParentFormComponent } from '../parent-form/parent-form.component';
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 
-import { ActiveTermService } from 'projects/school/src/app/services/active-term/active-term.service';
 import { ParentsApiService } from 'projects/school/src/app/services/modules/parents-api/parents-api.service';
 
 import { Parent } from 'projects/school/src/app/models/modules/parents/parents.model';
@@ -24,7 +23,6 @@ export class NewParentComponent implements OnInit {
   constructor(
     private router: Router,
     private storage: AngularFireStorage,
-    private activeTerm: ActiveTermService,
     private parentsApi: ParentsApiService
   ) { }
 
@@ -40,18 +38,6 @@ export class NewParentComponent implements OnInit {
   isParentSaving = false;
 
   ngOnInit(): void {
-  }
-
-  ngAfterViewInit(){
-    this.setActiveTerm()
-  }
-
-  setActiveTerm(){
-    let activeTermData = this.activeTerm.getActiveTerm();
-
-    this.parentForm.selectedTermId = activeTermData.id;
-    this.parentForm.selectedTermData = activeTermData.data;
-    this.parentForm.parentForm.controls.term.setValue(activeTermData.data.term_name);
   }
 
   createParent(){

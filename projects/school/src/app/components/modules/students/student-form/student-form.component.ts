@@ -31,7 +31,7 @@ export class StudentFormComponent implements OnInit {
   selectedTermId = "";
   selectedTermData: any;
   selectedClassId = "";
-  selectedClassData: any;
+  selectedClassData: any = { class_code: "", class_name: "" };
 
   initParentForm(){
     this.studentForm = new FormGroup({

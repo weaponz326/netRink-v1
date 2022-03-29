@@ -76,7 +76,9 @@
 
     <!-- class students component -->
 
-    <app-class-students #classStudentsComponentReference></app-class-students>
+    <app-class-students #classStudentsComponentReference
+    [classCode]="classForm.controls.classCode.value" [className]="classForm.controls.className.value"
+    ></app-class-students>
 
 
 </div>

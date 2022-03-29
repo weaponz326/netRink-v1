@@ -1,10 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { serverTimestamp } from 'firebase/firestore';
 
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
-import { DeleteModalComponent } from 'projects/personal/src/app/components/module-utilities/delete-modal/delete-modal.component'
 import { SelectStudentComponent } from '../../../select-windows/students-windows/select-student/select-student.component';
 
 import { ParentsApiService } from 'projects/school/src/app/services/modules/parents-api/parents-api.service';
@@ -24,8 +23,8 @@ export class ParentWardsComponent implements OnInit {
     private parentsApi: ParentsApiService,
   ) { }
 
+  @ViewChild('modalButtonElementReference', { read: ElementRef, static: false }) modalButton!: ElementRef;
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
-  @ViewChild('deleteModalTwoComponentReference', { read: DeleteModalComponent, static: false }) deleteModal!: DeleteModalComponent;
   @ViewChild('selectStudentComponentReference', { read: SelectStudentComponent, static: false }) selectStudent!: SelectStudentComponent;
 
   parentWardsGridData: any[] = [];
@@ -92,7 +91,7 @@ export class ParentWardsComponent implements OnInit {
   deleteParentWard(){
     this.isWardDeleting = true;
 
-    this.parentsApi.deleteParentWard()
+    this.parentsApi.deleteParentWard(this.deleteId)
       .then(
         (res: any) => {
           console.log(res);
@@ -115,7 +114,7 @@ export class ParentWardsComponent implements OnInit {
 
   confirmDelete(id: any){
     this.deleteId = id;
-    this.deleteModal.openModal();
+    this.modalButton.nativeElement.click();
   }
 
 }

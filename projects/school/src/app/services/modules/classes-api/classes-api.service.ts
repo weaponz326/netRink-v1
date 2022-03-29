@@ -94,7 +94,7 @@ export class ClassesApiService {
 
   getClassClassStudent(){
     return this.classStudentRef.ref
-      .where("class", "==", sessionStorage.getItem('school_class_id'))
+      .where("clase", "==", sessionStorage.getItem('school_class_id'))
       .orderBy("created_at", "desc")
       .get();
   }

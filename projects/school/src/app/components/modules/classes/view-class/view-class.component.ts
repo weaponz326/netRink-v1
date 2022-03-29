@@ -12,6 +12,7 @@ import { SelectTermComponent } from '../../../select-windows/terms-windows/selec
 import { SelectDepartmentComponent } from '../../../select-windows/classes-windows/select-department/select-department.component';
 import { SelectTeacherComponent } from '../../../select-windows/teachers-windows/select-teacher/select-teacher.component';
 
+import { ActiveTermService } from 'projects/school/src/app/services/active-term/active-term.service';
 import { ClassesApiService } from 'projects/school/src/app/services/modules/classes-api/classes-api.service';
 // import { ClassesPrintService } from 'projects/school/src/app/services/printing/classes-print/classes-print.service';
 
@@ -27,6 +28,7 @@ export class ViewClassComponent implements OnInit {
 
   constructor(
     private router: Router,
+    private activeTerm: ActiveTermService,
     private classesApi: ClassesApiService,
     // private classesPrint: ClassesPrintService,
   ) { }
@@ -61,6 +63,7 @@ export class ViewClassComponent implements OnInit {
 
   ngOnInit(): void {
     this.initClassForm();
+    this.setActiveTerm();
     this.getClass();
   }
 
@@ -75,6 +78,14 @@ export class ViewClassComponent implements OnInit {
     })
   }
 
+  setActiveTerm(){
+    let activeTermData = this.activeTerm.getActiveTerm();
+
+    this.selectedTermId = activeTermData.id;
+    this.selectedTermData = activeTermData.data;
+    this.classForm.controls.term.setValue(activeTermData.data.term_name);
+  }
+
   getClass(){
     this.isClassLoading = true;
 
@@ -87,13 +98,10 @@ export class ViewClassComponent implements OnInit {
 
           this.classForm.controls.classCode.setValue(this.classData.data().class_code);
           this.classForm.controls.className.setValue(this.classData.data().class_name);
-          this.classForm.controls.term.setValue(this.classData.data().term.data.term_name);
           this.classForm.controls.department.setValue(this.classData.data().department.data.department_name);
           this.classForm.controls.classTeacher.setValue(this.classData.data().class_teacher.data.teacher_name);
           this.classForm.controls.location.setValue(this.classData.data().location);
 
-          this.selectedTermId = this.classData.data().term.id;
-          this.selectedTermData = this.classData.data().term.data;
           this.selectedTeacherId = this.classData.data().class_teacher.id;
           this.selectedTeacherData = this.classData.data().class_teacher.data;
           this.selectedDepartmentId = this.classData.data().department.id;

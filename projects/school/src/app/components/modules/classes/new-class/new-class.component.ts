@@ -41,9 +41,9 @@ export class NewClassComponent implements OnInit {
   selectedTermId = "";
   selectedTermData: any = {};
   selectedDepartmentId = "";
-  selectedDepartmentData: any = {};
+  selectedDepartmentData: any = { department_code: "", department_name: "" };
   selectedTeacherId = "";
-  selectedTeacherData: any = {};
+  selectedTeacherData: any = { teacher_code: "", first_name: "", last_name: "" };
 
   isClassSaving = false;
 
