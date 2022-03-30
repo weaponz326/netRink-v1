@@ -16,6 +16,7 @@ import { NewAttendanceComponent } from './new-attendance/new-attendance.componen
 import { ViewAttendanceComponent } from './view-attendance/view-attendance.component';
 import { ViewSheetComponent } from './view-sheet/view-sheet.component';
 import { CheckAttendanceComponent } from './check-attendance/check-attendance.component';
+import { AttendanceFormComponent } from './attendance-form/attendance-form.component';
 
 
 
@@ -27,7 +28,8 @@ import { CheckAttendanceComponent } from './check-attendance/check-attendance.co
     NewAttendanceComponent,
     ViewAttendanceComponent,
     ViewSheetComponent,
-    CheckAttendanceComponent
+    CheckAttendanceComponent,
+    AttendanceFormComponent
   ],
   imports: [
     CommonModule,

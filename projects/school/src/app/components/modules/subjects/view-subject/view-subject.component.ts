@@ -59,12 +59,9 @@ export class ViewSubjectComponent implements OnInit {
 
           this.subjectForm.subjectForm.controls.subjectCode.setValue(this.subjectData.data().subject_code);
           this.subjectForm.subjectForm.controls.subjectName.setValue(this.subjectData.data().subject_name);
-          this.subjectForm.subjectForm.controls.term.setValue(this.subjectData.data().term.data.term_name);
           this.subjectForm.subjectForm.controls.department.setValue(this.subjectData.data().department.data.department_name);
           this.subjectForm.subjectForm.controls.description.setValue(this.subjectData.data().description);
 
-          this.subjectForm.selectedTermId = this.subjectData.data().term.id;
-          this.subjectForm.selectedTermData = this.subjectData.data().term.data;
           this.subjectForm.selectedDepartmentId = this.subjectData.data().department.id;
           this.subjectForm.selectedDepartmentData = this.subjectData.data().department.data;
         },

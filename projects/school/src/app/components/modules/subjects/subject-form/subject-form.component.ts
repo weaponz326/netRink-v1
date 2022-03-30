@@ -4,6 +4,9 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { SelectTermComponent } from '../../../select-windows/terms-windows/select-term/select-term.component';
 import { SelectDepartmentComponent } from '../../../select-windows/classes-windows/select-department/select-department.component';
 
+import { ActiveTermService } from 'projects/school/src/app/services/active-term/active-term.service';
+
+
 @Component({
   selector: 'app-subject-form',
   templateUrl: './subject-form.component.html',
@@ -11,7 +14,7 @@ import { SelectDepartmentComponent } from '../../../select-windows/classes-windo
 })
 export class SubjectFormComponent implements OnInit {
 
-  constructor() { }
+  constructor(private activeTerm: ActiveTermService) { }
 
   @ViewChild('selectTermComponentReference', { read: SelectTermComponent, static: false }) selectTerm!: SelectTermComponent;
   @ViewChild('selectDepartmentComponentReference', { read: SelectDepartmentComponent, static: false }) selectDepartment!: SelectDepartmentComponent;
@@ -19,12 +22,16 @@ export class SubjectFormComponent implements OnInit {
   subjectForm: FormGroup = new FormGroup({});
 
   selectedTermId = "";
-  selectedTermData: any;
+  selectedTermData: any = {};
   selectedDepartmentId = "";
-  selectedDepartmentData: any;
+  selectedDepartmentData: any = { department_code: "", department_name: "" };
 
   ngOnInit(): void {
     this.initSubjectForm();
+  }
+
+  ngAfterViewInit(){
+    this.setActiveTerm()
   }
 
   initSubjectForm(){
@@ -35,6 +42,14 @@ export class SubjectFormComponent implements OnInit {
       department: new FormControl({value: '', disabled: true}),
       description: new FormControl(''),
     });
+  }
+
+  setActiveTerm(){
+    let activeTermData = this.activeTerm.getActiveTerm();
+
+    this.selectedTermId = activeTermData.id;
+    this.selectedTermData = activeTermData.data;
+    this.subjectForm.controls.term.setValue(activeTermData.data.term_name);
   }
 
   openTermWindow(){

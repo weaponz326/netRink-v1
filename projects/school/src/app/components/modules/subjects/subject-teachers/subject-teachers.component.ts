@@ -1,10 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { serverTimestamp } from 'firebase/firestore';
 
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
-import { DeleteModalComponent } from 'projects/personal/src/app/components/module-utilities/delete-modal/delete-modal.component'
 import { SelectTeacherComponent } from '../../../select-windows/teachers-windows/select-teacher/select-teacher.component';
 
 import { SubjectsApiService } from 'projects/school/src/app/services/modules/subjects-api/subjects-api.service';
@@ -24,8 +23,8 @@ export class SubjectTeachersComponent implements OnInit {
     private subjectsApi: SubjectsApiService,
   ) { }
 
+  @ViewChild('modalButtonElementReference', { read: ElementRef, static: false }) modalButton!: ElementRef;
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
-  @ViewChild('deleteModalTwoComponentReference', { read: DeleteModalComponent, static: false }) deleteModal!: DeleteModalComponent;
   @ViewChild('selectTeacherComponentReference', { read: SelectTeacherComponent, static: false }) selectTeacher!: SelectTeacherComponent;
 
   subjectTeachersGridData: any[] = [];
@@ -119,7 +118,7 @@ export class SubjectTeachersComponent implements OnInit {
 
   confirmDelete(id: any){
     this.deleteId = id;
-    this.deleteModal.openModal();
+    this.modalButton.nativeElement.click();
   }
 
 }

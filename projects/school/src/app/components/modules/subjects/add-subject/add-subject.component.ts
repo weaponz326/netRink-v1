@@ -6,7 +6,6 @@ import { serverTimestamp } from 'firebase/firestore';
 import { SubjectFormComponent } from '../subject-form/subject-form.component';
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 
-import { ActiveTermService } from 'projects/school/src/app/services/active-term/active-term.service';
 import { SubjectsApiService } from 'projects/school/src/app/services/modules/subjects-api/subjects-api.service';
 
 import { Subject } from 'projects/school/src/app/models/modules/subjects/subjects.model';
@@ -21,7 +20,6 @@ export class AddSubjectComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private activeTerm: ActiveTermService,
     private subjectsApi: SubjectsApiService
   ) { }
 
@@ -35,18 +33,6 @@ export class AddSubjectComponent implements OnInit {
   isSubjectSaving = false;
 
   ngOnInit(): void {
-  }
-
-  ngAfterViewInit(){
-    this.setActiveTerm()
-  }
-
-  setActiveTerm(){
-    let activeTermData = this.activeTerm.getActiveTerm();
-
-    this.subjectForm.selectedTermId = activeTermData.id;
-    this.subjectForm.selectedTermData = activeTermData.data;
-    this.subjectForm.subjectForm.controls.term.setValue(activeTermData.data.term_name);
   }
 
   createSubject(){

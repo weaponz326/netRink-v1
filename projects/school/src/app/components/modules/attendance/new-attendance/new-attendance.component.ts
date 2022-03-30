@@ -1,15 +1,12 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormControl, FormGroup } from '@angular/forms';
 
 import { serverTimestamp } from 'firebase/firestore';
 import moment from 'moment/moment';
 
+import { AttendanceFormComponent } from '../attendance-form/attendance-form.component'
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
-import { SelectTermComponent } from '../../../select-windows/terms-windows/select-term/select-term.component';
-import { SelectClassComponent } from '../../../select-windows/classes-windows/select-class/select-class.component';
 
-import { ActiveTermService } from 'projects/school/src/app/services/active-term/active-term.service';
 import { AttendanceApiService } from 'projects/school/src/app/services/modules/attendance-api/attendance-api.service';
 import { ClassesApiService } from 'projects/school/src/app/services/modules/classes-api/classes-api.service';
 
@@ -25,72 +22,44 @@ export class NewAttendanceComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private activeTerm: ActiveTermService,
     private attendanceApi: AttendanceApiService,
     private classesApi: ClassesApiService,
   ) { }
 
   @ViewChild('addButtonElementReference', { read: ElementRef, static: false }) addButton!: ElementRef;
-  @ViewChild('dismissButtonElementReference', { read: ElementRef, static: false }) dismissButton!: ElementRef;
 
+  @ViewChild('attendanceFormComponentReference', { read: AttendanceFormComponent, static: false }) attendanceForm!: AttendanceFormComponent;
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
-  @ViewChild('selectTermComponentReference', { read: SelectTermComponent, static: false }) selectTerm!: SelectTermComponent;
-  @ViewChild('selectClassComponentReference', { read: SelectClassComponent, static: false }) selectClass!: SelectClassComponent;
 
-  attendanceForm: FormGroup = new FormGroup({});
-
-  selectedTermId = "";
-  selectedTermData: any;
-  selectedClassId = "";
-  selectedClassData: any;
+  navHeading: any[] = [
+    { text: "New Attendance", url: "/home/attendance/new-attendance" },
+  ];
 
   isAttendanceSaving = false;
 
   ngOnInit(): void {
-    this.initAttendanceForm();
-  }
-
-  initAttendanceForm(){
-    this.attendanceForm = new FormGroup({
-      attendanceCode: new FormControl(''),
-      attendanceName: new FormControl(''),
-      fromDate: new FormControl(''),
-      toDate: new FormControl(''),
-      term: new FormControl({value: "", disabled: true}),
-      source: new FormControl({value: "", disabled: true}),
-    })
-  }
-
-  openModal(){
-    this.addButton.nativeElement.click();
-
-    let activeTerm = this.activeTerm.getActiveTerm()
-
-    this.attendanceForm.controls.term.setValue(activeTerm.data.term_name);
-    this.selectedTermId = activeTerm.id;
-    this.selectedTermData = activeTerm.data;
   }
 
   createAttendance(){
     let data: Attendance = {
       created_at: serverTimestamp(),
       account: localStorage.getItem('school_id') as string,
-      attendance_code: this.attendanceForm.controls.attendanceCode.value,
-      attendance_name: this.attendanceForm.controls.attendanceName.value,
-      from_date: this.attendanceForm.controls.fromDate.value,
-      to_date: this.attendanceForm.controls.toDate.value,
+      attendance_code: this.attendanceForm.attendanceForm.controls.attendanceCode.value,
+      attendance_name: this.attendanceForm.attendanceForm.controls.attendanceName.value,
+      from_date: this.attendanceForm.attendanceForm.controls.fromDate.value,
+      to_date: this.attendanceForm.attendanceForm.controls.toDate.value,
       term: {
-        id: this.selectedTermId,
+        id: this.attendanceForm.selectedTermId,
         data: {
-          term_code: this.selectedTermData.term_code,
-          term_name: this.selectedTermData.term_name,
+          term_code: this.attendanceForm.selectedTermData.term_code,
+          term_name: this.attendanceForm.selectedTermData.term_name,
         }
       },
       source: {
-        id: this.selectedClassId,
+        id: this.attendanceForm.selectedClassId,
         data: {
-          class_name: this.selectedClassData.class_code,
-          class_code: this.selectedClassData.class_name,
+          class_name: this.attendanceForm.selectedClassData.class_code,
+          class_code: this.attendanceForm.selectedClassData.class_name,
         }
       }
     }
@@ -102,7 +71,7 @@ export class NewAttendanceComponent implements OnInit {
         (res: any) => {
           console.log(res);
           sessionStorage.setItem('school_attendance_id', res.id);
-          sessionStorage.setItem('school_class_id', this.selectedClassId);
+          sessionStorage.setItem('school_class_id', this.attendanceForm.selectedClassId);
           this.getClassClassStudent();
         },
         (err: any) => {
@@ -130,32 +99,27 @@ export class NewAttendanceComponent implements OnInit {
   setAttendanceSheet(classStudents: any){
     let classSheet: any = [];
 
-    let sheetDateRange: any = [];
-    var fromDate = this.attendanceForm.controls.fromDate.value
-    var toDate = this.attendanceForm.controls.fromDate.value
+    let sheetDateChecks: {[key: string]: any} = {};
+    var fromDate = moment(this.attendanceForm.attendanceForm.controls.fromDate.value);
+    var toDate = moment(this.attendanceForm.attendanceForm.controls.toDate.value);
 
-    while(fromDate != toDate) {
+    while(fromDate <= toDate) {
       fromDate.add(1, 'days');
-      var checks = {
-        date: fromDate.toDate(),
-        check: ""
-      }
-
-      sheetDateRange.push(fromDate.toDate());
+      sheetDateChecks[fromDate.toDate().toISOString().slice(0, 10)] = "";
     }
-    console.log(sheetDateRange);
+    console.log(sheetDateChecks);
 
-    classStudents.forEach((student: any) => {
+    classStudents.forEach((data: any) => {
       let sheetRow = {
         student: {
-          id: student.id,
+          id: data.data().student.id,
           data: {
-            student_code: student.data().student_code,
-            first_name: student.data().first_name,
-            last_name: student.data().last_name,
+            student_code: data.data().student.data.student_code,
+            first_name: data.data().student.data.first_name,
+            last_name: data.data().student.data.last_name,
           }
         },
-        checks: checks
+        checks: sheetDateChecks
       };
 
       classSheet.push(sheetRow);
@@ -166,13 +130,13 @@ export class NewAttendanceComponent implements OnInit {
   }
 
   createAttendanceSheet(classSheet: any){
-    this.attendanceApi.createAttendanceSheet(classSheet)
+    let data = { sheet: classSheet };
+
+    this.attendanceApi.createAttendanceSheet(data)
       .then(
         (res: any) => {
           console.log(res);
-
           this.router.navigateByUrl('/home/attendance/view-attendance');
-          this.dismissButton.nativeElement.click();
           this.isAttendanceSaving = false;
         },
         (err: any) => {
@@ -181,32 +145,6 @@ export class NewAttendanceComponent implements OnInit {
           this.connectionToast.openToast();
         }
       )
-  }
-
-  openTermWindow(){
-    console.log("You are opening select term window")
-    this.selectTerm.openModal();
-  }
-
-  onTermSelected(termData: any){
-    console.log(termData);
-
-    this.attendanceForm.controls.term.setValue(termData.data().term_name);
-    this.selectedTermId = termData.id;
-    this.selectedTermData = termData.data();
-  }
-
-  openClassWindow(){
-    console.log("You are opening select term window")
-    this.selectClass.openModal();
-  }
-
-  onClassSelected(classData: any){
-    console.log(classData);
-
-    this.attendanceForm.controls.source.setValue(classData.data().class_name);
-    this.selectedClassId = classData.id;
-    this.selectedClassData = classData.data();
   }
 
 }

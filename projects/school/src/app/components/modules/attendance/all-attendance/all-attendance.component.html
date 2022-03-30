@@ -7,7 +7,7 @@
 
             <div class="row mb-3">
                 <div class="col-md-12">
-                    <button class="btn btn-secondary page-add-btn" (click)="newAttendance.openModal()">New Attendance</button>
+                    <button class="btn btn-secondary page-add-btn" routerLink="/home/attendance/new-attendance">New Attendance</button>
                     <button [disabled]="isFetchingGridData" class="btn btn-light border float-end page-refresh-btn" (click)="getAccountAttendance()">
                         <i class="bi bi-arrow-clockwise"></i>
                     </button>
@@ -108,10 +108,6 @@
     </div>
 
 </div>
-
-<!-- new attendance modal component -->
-
-<app-new-attendance #newAttendanceComponentReference></app-new-attendance>
 
 <!-- connection error prompt component -->
 

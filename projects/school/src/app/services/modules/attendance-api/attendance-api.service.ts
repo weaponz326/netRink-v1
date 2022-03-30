@@ -70,19 +70,19 @@ export class AttendanceApiService {
   // attendance sheet
 
   createAttendanceSheet(sheet: any){
-    return this.attendanceSheetRef.doc(String(sessionStorage.getItem('school_attendance_id'))).set({sheet: sheet});
+    return this.attendanceSheetRef.doc(String(sessionStorage.getItem('school_attendance_id'))).set(sheet);
   }
 
   getAttendanceSheet(){
-    return this.attendanceSheetRef.doc(String(sessionStorage.getItem('school_attendance_sheet_id'))).ref.get();
+    return this.attendanceSheetRef.doc(String(sessionStorage.getItem('school_attendance_id'))).ref.get();
   }
 
   updateAttendanceSheet(sheet: any){
-    return this.attendanceSheetRef.doc(String(sessionStorage.getItem('school_attendance_sheet_id'))).update(sheet);
+    return this.attendanceSheetRef.doc(String(sessionStorage.getItem('school_attendance_id'))).update(sheet);
   }
 
   deleteAttendanceSheet(){
-    return this.attendanceSheetRef.doc(String(sessionStorage.getItem('school_attendance_sheet_id'))).delete();
+    return this.attendanceSheetRef.doc(String(sessionStorage.getItem('school_attendance_id'))).delete();
   }
 
 }

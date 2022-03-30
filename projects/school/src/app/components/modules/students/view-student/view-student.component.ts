@@ -136,6 +136,7 @@ export class ViewStudentComponent implements OnInit {
 
         this.updateTerm();
         this.updateImage();
+        this.updateClass();
       },
       (err: any) => {
         console.log(err);
@@ -209,6 +210,12 @@ export class ViewStudentComponent implements OnInit {
           });
         })
       ).subscribe();
+    }
+  }
+
+  updateClass(){
+    if(this.studentForm.selectedClassId != this.studentData.data().clase.id){
+      // TODO:
     }
   }
 

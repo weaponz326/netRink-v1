@@ -10,8 +10,10 @@ import { ConnectionToastComponent } from 'projects/personal/src/app/components/m
 
 import { ActiveTermService } from 'projects/school/src/app/services/active-term/active-term.service';
 import { StudentsApiService } from 'projects/school/src/app/services/modules/students-api/students-api.service';
+import { ClassesApiService } from 'projects/school/src/app/services/modules/classes-api/classes-api.service';
 
 import { Student } from 'projects/school/src/app/models/modules/students/students.model';
+import { ClassStudent } from 'projects/school/src/app/models/modules/classes/classes.model';
 
 
 @Component({
@@ -25,7 +27,8 @@ export class NewStudentComponent implements OnInit {
     private router: Router,
     private storage: AngularFireStorage,
     private activeTerm: ActiveTermService,
-    private studentsApi: StudentsApiService
+    private studentsApi: StudentsApiService,
+    private classesApi: ClassesApiService
   ) { }
 
   @ViewChild('studentFormComponentReference', { read: StudentFormComponent, static: false }) studentForm!: StudentFormComponent;
@@ -99,6 +102,7 @@ export class NewStudentComponent implements OnInit {
           sessionStorage.setItem('school_student_id', res.id);
 
           this.updateImage();
+          this.updateClass(res.id);
         },
         (err: any) => {
           console.log(err);
@@ -142,6 +146,34 @@ export class NewStudentComponent implements OnInit {
             });
           })
         ).subscribe();
+    }
+  }
+
+  updateClass(studentId: any){
+    if(this.studentForm.selectedClassId != ""){
+      let data: ClassStudent = {
+        created_at: serverTimestamp(),
+        clase: this.studentForm.selectedClassId,
+        student: {
+          id: studentId,
+          data: {
+            student_code: this.studentForm.studentForm.controls.studentCode.value,
+            first_name: this.studentForm.studentForm.controls.firstName.value,
+            last_name: this.studentForm.studentForm.controls.lastName.value,
+          }
+        }
+      }
+
+      this.classesApi.createClassStudent(data)
+        .then(
+          (res: any) => {
+            console.log(res);
+          },
+          (err: any) => {
+            console.log(err);
+            this.connectionToast.openToast();
+          }
+        )
     }
   }
 
