@@ -24,10 +24,9 @@ export class AssessmentTableComponent implements OnInit {
 
   assessmentTableGridData: any[] = [];
 
-  deleteId = "";
 
   isFetchingGridData = false;
-  isTableDeleting = false;
+  isTableSaving = false;
 
   ngOnInit(): void {
     this.getAssessmentAssessmentSheet();
@@ -41,7 +40,7 @@ export class AssessmentTableComponent implements OnInit {
         (res: any) => {
           console.log(res);
           this.isFetchingGridData = false;
-          this.assessmentTableGridData = res.data();
+          this.assessmentTableGridData = res.data().sheet;
         },
         (err: any) => {
           console.log(err);
@@ -51,50 +50,39 @@ export class AssessmentTableComponent implements OnInit {
       )
   }
 
-  createAssessmentSheet(tableData: any){
-    // let data: AssessmentSheet = {
-    //   assessment: sessionStorage.getItem('school_assessment_id') as string,
-    // }
+  updateAssessmentSheet(){
+    let data = { sheet: this.assessmentTableGridData };
 
-    let data = {}
+    this.isTableSaving = true;
 
     this.assessmentApi.createAssessmentSheet(data)
       .then(
         (res: any) => {
           console.log(res);
-
-          if(res.id){
-            this.getAssessmentAssessmentSheet();
-          }
-        },
-        (err: any) => {
-          console.log(err);
-          this.connectionToast.openToast();
-        }
-      )
-  }
-
-  deleteAssessmentSheet(id: any){
-    this.isTableDeleting = true;
-
-    this.assessmentApi.deleteAssessmentSheet()
-      .then(
-        (res: any) => {
-          console.log(res);
-          this.isTableDeleting = false;
           this.getAssessmentAssessmentSheet();
+          this.isTableSaving = false;
         },
         (err: any) => {
           console.log(err);
-          this.isTableDeleting = false;
+          this.isTableSaving = false;
           this.connectionToast.openToast();
         }
       )
   }
 
-  confirmDelete(id: any){
-    this.deleteId = id;
-    this.deleteModal.openModal();
+  onScoreChange(event: any, index: any){
+    console.log(event.target.value);
+    this.assessmentTableGridData[index].score = event.target.value;
+  }
+
+  onGradeChange(event: any, index: any){
+    console.log(event.target.value);
+    this.assessmentTableGridData[index].grade = event.target.value;
+  }
+
+  onRemarksChange(event: any, index: any){
+    console.log(event.target.value);
+    this.assessmentTableGridData[index].remarks = event.target.value;
   }
 
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { arrayUnion } from 'firebase/firestore';
@@ -25,6 +25,8 @@ export class AssessmentClassesComponent implements OnInit {
     private assessmentApi: AssessmentApiService,
     private classesApi: ClassesApiService,
   ) { }
+
+  @Output() refreshSheet = new EventEmitter<any>();
 
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
   @ViewChild('deleteModalTwoComponentReference', { read: DeleteModalComponent, static: false }) deleteModal!: DeleteModalComponent;
@@ -127,17 +129,18 @@ export class AssessmentClassesComponent implements OnInit {
   setClassSheet(classStudents: any){
     let classSheet: any = [];
 
-    classStudents.forEach((student: any) => {
+    classStudents.forEach((data: any) => {
+      console.log(data.data())
       let sheetRow = {
         score: "",
         grade: "",
         remarks: "",
         student: {
-          id: student.id,
+          id: data.data().student.id,
           data: {
-            student_code: student.data().student_code,
-            first_name: student.data().first_name,
-            last_name: student.data().last_name,
+            student_code: data.data().student.data.student_code,
+            first_name: data.data().student.data.first_name,
+            last_name: data.data().student.data.last_name,
           }
         }
       };
@@ -145,6 +148,7 @@ export class AssessmentClassesComponent implements OnInit {
       classSheet.push(sheetRow);
     });
 
+    console.log(classSheet);
     this.updateAssessmentSheet(classSheet);
   }
 
@@ -155,6 +159,7 @@ export class AssessmentClassesComponent implements OnInit {
       .then(
         (res: any) => {
           console.log(res);
+          this.refreshSheet.emit();
         },
         (err: any) => {
           console.log(err);

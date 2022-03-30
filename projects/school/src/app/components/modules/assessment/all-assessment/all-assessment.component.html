@@ -7,7 +7,7 @@
 
             <div class="row mb-3">
                 <div class="col-md-12">
-                    <button class="btn btn-secondary page-add-btn" (click)="newAssessment.openModal()">New Assessment</button>
+                    <button class="btn btn-secondary page-add-btn" routerLink="/home/assessment/new-assessment">New Assessment</button>
                     <button [disabled]="isFetchingGridData" class="btn btn-light border float-end page-refresh-btn" (click)="getAccountAssessment()">
                         <i class="bi bi-arrow-clockwise"></i>
                     </button>
@@ -115,10 +115,6 @@
     </div>
 
 </div>
-
-<!-- new assessment modal component -->
-
-<app-new-assessment #newAssessmentComponentReference></app-new-assessment>
 
 <!-- connection error prompt component -->
 

@@ -89,26 +89,26 @@ export class AssessmentApiService {
   getAssessmentAssessmentClass(){
     return this.assessmentClassRef.ref
       .where("assessment", "==", sessionStorage.getItem('school_assessment_id'))
-      .orderBy("class.data.class_name", "asc")
+      .orderBy("clase.data.class_name", "asc")
       .get();
   }
 
   // assessment sheet
 
-  createAssessmentSheet(assessmentId: any){
-    return this.assessmentSheetRef.doc(assessmentId).set({sheet: []});
+  createAssessmentSheet(sheetData: any){
+    return this.assessmentSheetRef.doc(String(sessionStorage.getItem('school_assessment_id'))).set(sheetData);
   }
 
   getAssessmentSheet(){
-    return this.assessmentSheetRef.doc(String(sessionStorage.getItem('school_assessment_sheet_id'))).ref.get();
+    return this.assessmentSheetRef.doc(String(sessionStorage.getItem('school_assessment_id'))).ref.get();
   }
 
   updateAssessmentSheet(sheet: any){
-    return this.assessmentSheetRef.doc(String(sessionStorage.getItem('school_assessment_sheet_id'))).update(sheet);
+    return this.assessmentSheetRef.doc(String(sessionStorage.getItem('school_assessment_id'))).update(sheet);
   }
 
   deleteAssessmentSheet(){
-    return this.assessmentSheetRef.doc(String(sessionStorage.getItem('school_assessment_sheet_id'))).delete();
+    return this.assessmentSheetRef.doc(String(sessionStorage.getItem('school_assessment_id'))).delete();
   }
 
   // dashboard
