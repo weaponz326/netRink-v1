@@ -7,7 +7,7 @@
 
             <div class="row mb-3">
                 <div class="col-md-12">
-                    <button class="btn btn-secondary page-add-btn" (click)="newReport.openModal()">New Report</button>
+                    <button class="btn btn-secondary page-add-btn" routerLink="/home/reports/new-report">New Report</button>
                     <button [disabled]="isFetchingGridData" class="btn btn-light border float-end page-refresh-btn" (click)="getAccountReport()">
                         <i class="bi bi-arrow-clockwise"></i>
                     </button>
@@ -108,10 +108,6 @@
     </div>
 
 </div>
-
-<!-- new report modal component -->
-
-<app-new-report #newReportComponentReference></app-new-report>
 
 <!-- connection error prompt component -->
 

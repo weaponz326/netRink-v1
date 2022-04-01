@@ -29,7 +29,7 @@ export class AllReportsComponent implements OnInit {
   @ViewChild('selectTermComponentReference', { read: SelectTermComponent, static: false }) selectTerm!: SelectTermComponent;
 
   navHeading: any[] = [
-    { text: "All Report", url: "/home/reports/all-reports" },
+    { text: "All Reports", url: "/home/reports/all-reports" },
   ];
 
   activeTermName: any;

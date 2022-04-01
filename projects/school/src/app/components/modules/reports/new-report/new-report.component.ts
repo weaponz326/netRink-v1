@@ -29,12 +29,13 @@ export class NewReportComponent implements OnInit {
     private classesApi: ClassesApiService,
   ) { }
 
-  @ViewChild('addButtonElementReference', { read: ElementRef, static: false }) addButton!: ElementRef;
-  @ViewChild('dismissButtonElementReference', { read: ElementRef, static: false }) dismissButton!: ElementRef;
-
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
   @ViewChild('selectTermComponentReference', { read: SelectTermComponent, static: false }) selectTerm!: SelectTermComponent;
   @ViewChild('selectClassComponentReference', { read: SelectClassComponent, static: false }) selectClass!: SelectClassComponent;
+
+  navHeading: any[] = [
+    { text: "New Report", url: "/home/report/new-report" },
+  ];
 
   reportForm: FormGroup = new FormGroup({});
 
@@ -49,6 +50,15 @@ export class NewReportComponent implements OnInit {
     this.initReportForm();
   }
 
+  ngAfterViewInit(){
+    this.reportForm.controls.reportDate.setValue(new Date().toISOString().slice(0, 10));
+
+    let activeTerm = this.activeTerm.getActiveTerm();
+    this.reportForm.controls.term.setValue(activeTerm.data.term_name);
+    this.selectedTermId = activeTerm.id;
+    this.selectedTermData = activeTerm.data;
+  }
+
   initReportForm(){
     this.reportForm = new FormGroup({
       reportCode: new FormControl(''),
@@ -57,17 +67,6 @@ export class NewReportComponent implements OnInit {
       term: new FormControl({value: "", disabled: true}),
       clase: new FormControl({value: "", disabled: true}),
     })
-  }
-
-  openModal(){
-    this.addButton.nativeElement.click();
-
-    this.reportForm.controls.reportDate.setValue(new Date().toISOString().slice(0, 10));
-
-    let activeTerm = this.activeTerm.getActiveTerm();
-    this.reportForm.controls.term.setValue(activeTerm.data.term_name);
-    this.selectedTermId = activeTerm.id;
-    this.selectedTermData = activeTerm.data;
   }
 
   createReport(){
@@ -128,21 +127,6 @@ export class NewReportComponent implements OnInit {
   setReportSheet(classStudents: any){
     let classSheet: any = [];
 
-    let sheetDateRange: any = [];
-    var fromDate = this.reportForm.controls.fromDate.value
-    var toDate = this.reportForm.controls.fromDate.value
-
-    while(fromDate != toDate) {
-      fromDate.add(1, 'days');
-      var checks = {
-        date: fromDate.toDate(),
-        check: ""
-      }
-
-      sheetDateRange.push(fromDate.toDate());
-    }
-    console.log(sheetDateRange);
-
     classStudents.forEach((student: any) => {
       let sheetRow = {
         student: {
@@ -153,7 +137,7 @@ export class NewReportComponent implements OnInit {
             last_name: student.data().last_name,
           }
         },
-        checks: checks
+        assessments: {}
       };
 
       classSheet.push(sheetRow);
@@ -168,9 +152,7 @@ export class NewReportComponent implements OnInit {
       .then(
         (res: any) => {
           console.log(res);
-
-          this.router.navigateByUrl('/home/report/view-report');
-          this.dismissButton.nativeElement.click();
+          this.router.navigateByUrl('/home/reports/class-report');
           this.isReportSaving = false;
         },
         (err: any) => {

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { serverTimestamp } from 'firebase/firestore';
@@ -27,6 +27,8 @@ export class ReportAssessmentsComponent implements OnInit {
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
   @ViewChild('deleteModalTwoComponentReference', { read: DeleteModalComponent, static: false }) deleteModal!: DeleteModalComponent;
   @ViewChild('selectAssessmentComponentReference', { read: SelectAssessmentComponent, static: false }) selectAssessment!: SelectAssessmentComponent;
+
+  @Output() assessmentSelected = new EventEmitter<any>();
 
   reportAssessmentsGridData: any[] = [];
 
@@ -73,10 +75,8 @@ export class ReportAssessmentsComponent implements OnInit {
       .then(
         (res: any) => {
           console.log(res);
-
-          if(res.id){
-            this.getReportReportAssessment();
-          }
+          this.getReportReportAssessment();
+          this.assessmentSelected.emit(assessmentData.id);
         },
         (err: any) => {
           console.log(err);
@@ -107,6 +107,5 @@ export class ReportAssessmentsComponent implements OnInit {
     this.deleteId = id;
     this.deleteModal.openModal();
   }
-
 
 }

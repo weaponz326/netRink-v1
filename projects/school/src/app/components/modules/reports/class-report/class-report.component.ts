@@ -10,6 +10,7 @@ import { DeleteModalComponent } from 'projects/personal/src/app/components/modul
 import { SelectTermComponent } from '../../../select-windows/terms-windows/select-term/select-term.component';
 import { SelectClassComponent } from '../../../select-windows/classes-windows/select-class/select-class.component';
 
+import { ActiveTermService } from 'projects/school/src/app/services/active-term/active-term.service';
 import { ReportsApiService } from 'projects/school/src/app/services/modules/reports-api/reports-api.service';
 // import { ReportsPrintService } from 'projects/school/src/app/services/printing/reports-print/reports-print.service';
 
@@ -25,6 +26,7 @@ export class ClassReportComponent implements OnInit {
 
   constructor(
     private router: Router,
+    private activeTerm: ActiveTermService,
     private reportsApi: ReportsApiService,
     // private reportPrint: ReportPrintService
   ) { }
@@ -56,6 +58,15 @@ export class ClassReportComponent implements OnInit {
   ngOnInit(): void {
     this.initReportForm();
     this.getReport();
+  }
+
+  ngAfterViewInit(){
+    this.reportForm.controls.reportDate.setValue(new Date().toISOString().slice(0, 10));
+
+    let activeTerm = this.activeTerm.getActiveTerm();
+    this.reportForm.controls.term.setValue(activeTerm.data.term_name);
+    this.selectedTermId = activeTerm.id;
+    this.selectedTermData = activeTerm.data;
   }
 
   initReportForm(){
@@ -154,6 +165,11 @@ export class ClassReportComponent implements OnInit {
           this.connectionToast.openToast();
         }
       )
+  }
+
+  onAssessmentSelected(assessmentId: any){
+    sessionStorage.setItem('school_assessment_id', assessmentId);
+    this.classSheet.getAssessmentSheet();
   }
 
   openTermWindow(){

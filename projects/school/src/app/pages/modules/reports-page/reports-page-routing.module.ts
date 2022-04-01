@@ -7,6 +7,7 @@ import { ClassReportComponent } from '../../../components/modules/reports/class-
 import { StudentReportComponent } from '../../../components/modules/reports/student-report/student-report.component';
 import { DashboardComponent } from '../../../components/modules/reports/dashboard/dashboard.component';
 import { SettingsComponent } from '../../../components/modules/reports/settings/settings.component';
+import { NewReportComponent } from '../../../components/modules/reports/new-report/new-report.component';
 
 const routes: Routes = [
   {
@@ -17,6 +18,7 @@ const routes: Routes = [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'settings', component: SettingsComponent },
       { path: "all-reports", component: AllReportsComponent },
+      { path: "new-report", component: NewReportComponent },
       { path: "class-report", component: ClassReportComponent },
       { path: "student-report", component: StudentReportComponent }
     ]

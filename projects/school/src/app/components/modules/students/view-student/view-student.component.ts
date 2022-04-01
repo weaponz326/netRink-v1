@@ -215,7 +215,7 @@ export class ViewStudentComponent implements OnInit {
 
   updateClass(){
     if(this.studentForm.selectedClassId != this.studentData.data().clase.id){
-      // TODO:
+      // TODO: delete previous student class and crete new student class
     }
   }
 
