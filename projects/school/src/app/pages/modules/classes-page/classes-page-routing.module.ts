@@ -7,6 +7,7 @@ import { ViewClassComponent } from '../../../components/modules/classes/view-cla
 import { DashboardComponent } from '../../../components/modules/classes/dashboard/dashboard.component';
 import { SettingsComponent } from '../../../components/modules/classes/settings/settings.component';
 import { AllDepartmentsComponent } from '../../../components/modules/classes/all-departments/all-departments.component';
+import { NewClassComponent } from '../../../components/modules/classes/new-class/new-class.component';
 
 
 const routes: Routes = [
@@ -18,6 +19,7 @@ const routes: Routes = [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'settings', component: SettingsComponent },
       { path: "all-classes", component: AllClassesComponent },
+      { path: "new-class", component: NewClassComponent },
       { path: "view-class", component: ViewClassComponent },
       { path: "all-departments", component: AllDepartmentsComponent }
     ]

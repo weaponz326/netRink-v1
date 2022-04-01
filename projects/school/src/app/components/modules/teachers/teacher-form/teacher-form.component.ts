@@ -6,6 +6,8 @@ import { BdayInputComponent } from 'projects/personal/src/app/components/module-
 import { SelectTermComponent } from '../../../select-windows/terms-windows/select-term/select-term.component';
 import { SelectDepartmentComponent } from '../../../select-windows/classes-windows/select-department/select-department.component';
 
+import { ActiveTermService } from 'projects/school/src/app/services/active-term/active-term.service';
+
 
 @Component({
   selector: 'app-teacher-form',
@@ -13,6 +15,8 @@ import { SelectDepartmentComponent } from '../../../select-windows/classes-windo
   styleUrls: ['./teacher-form.component.scss']
 })
 export class TeacherFormComponent implements OnInit {
+
+  constructor(private activeTerm: ActiveTermService) { }
 
   teacherForm: FormGroup = new FormGroup({});
 
@@ -22,14 +26,26 @@ export class TeacherFormComponent implements OnInit {
   @ViewChild('selectTermComponentReference', { read: SelectTermComponent, static: false }) selectTerm!: SelectTermComponent;
   @ViewChild('selectDepartmentComponentReference', { read: SelectDepartmentComponent, static: false }) selectDepartment!: SelectDepartmentComponent;
 
-  ngOnInit(): void {
-    this.initParentForm();
-  }
-
   selectedTermId = "";
   selectedTermData: any = {};
   selectedDepartmentId = "";
   selectedDepartmentData: any = { department_code: "", department_name: "" };
+
+  ngOnInit(): void {
+    this.initParentForm();
+  }
+
+  ngAfterViewInit(){
+    this.setActiveTerm()
+  }
+
+  setActiveTerm(){
+    let activeTermData = this.activeTerm.getActiveTerm();
+
+    this.selectedTermId = activeTermData.id;
+    this.selectedTermData = activeTermData.data;
+    this.teacherForm.controls.term.setValue(activeTermData.data.term_name);
+  }
 
   initParentForm(){
     this.teacherForm = new FormGroup({
@@ -39,7 +55,7 @@ export class TeacherFormComponent implements OnInit {
       nationality: new FormControl(''),
       religion: new FormControl(''),
       teacherCode: new FormControl(''),
-      term: new FormControl(''),
+      term: new FormControl({value: '', disabled: true}),
       department: new FormControl(''),
       grade: new FormControl(''),
       phone: new FormControl(''),

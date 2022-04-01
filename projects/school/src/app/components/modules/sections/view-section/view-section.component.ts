@@ -1,13 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormControl, FormGroup } from '@angular/forms';
 
 import { arrayUnion } from 'firebase/firestore';
 
+import { SectionFormComponent } from '../section-form/section-form.component';
 import { SectionStudentsComponent } from '../section-students/section-students.component';
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 import { DeleteModalComponent } from 'projects/personal/src/app/components/module-utilities/delete-modal/delete-modal.component'
-import { SelectTermComponent } from '../../../select-windows/terms-windows/select-term/select-term.component';
 
 import { SectionsApiService } from 'projects/school/src/app/services/modules/sections-api/sections-api.service';
 // import { SectionsPrintService } from 'projects/school/src/app/services/printing/sections-print/sections-print.service';
@@ -28,37 +27,24 @@ export class ViewSectionComponent implements OnInit {
     // private sectionsPrint: SectionsPrintService
   ) { }
 
+  @ViewChild('sectionFormComponentReference', { read: SectionFormComponent, static: false }) sectionForm!: SectionFormComponent;
   @ViewChild('sectionStudentsComponentReference', { read: SectionStudentsComponent, static: false }) sectionStudents!: SectionStudentsComponent;
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
   @ViewChild('deleteModalComponentReference', { read: DeleteModalComponent, static: false }) deleteModal!: DeleteModalComponent;
-  @ViewChild('selectTermComponentReference', { read: SelectTermComponent, static: false }) selectTerm!: SelectTermComponent;
 
   navHeading: any[] = [
     { text: "All Sections", url: "/home/sections/all-sections" },
     { text: "View Section", url: "/home/sections/view-section" },
   ];
 
-  sectionForm: FormGroup = new FormGroup({});
-  sectionFormData: any;
-
-  selectedTermId = "";
-  selectedTermData = {};
+  sectionData: any;
 
   isSectionLoading = false;
   isSectionSaving = false;
   isSectionDeleting = false;
 
   ngOnInit(): void {
-    this.initSectionsForm();
     this.getSection();
-  }
-
-  initSectionsForm(){
-    this.sectionForm = new FormGroup({
-      sectionCode: new FormControl(''),
-      sectionName: new FormControl(''),
-      term: new FormControl({value: "", disabled: true}),
-    })
   }
 
   getSection(){
@@ -68,15 +54,15 @@ export class ViewSectionComponent implements OnInit {
       .then(
         (res: any) => {
           console.log(res);
-          this.sectionFormData = res;
+          this.sectionData = res;
           this.isSectionLoading = false;
 
-          this.sectionForm.controls.sectionCode.setValue(this.sectionFormData.data().section_code);
-          this.sectionForm.controls.sectionName.setValue(this.sectionFormData.data().section_name);
+          this.sectionForm.sectionForm.controls.sectionCode.setValue(this.sectionData.data().section_code);
+          this.sectionForm.sectionForm.controls.sectionName.setValue(this.sectionData.data().section_name);
 
-          this.selectedTermId = this.sectionFormData.data().term.id;
-          this.selectedTermData = this.sectionFormData.data().term.data;
-          this.sectionForm.controls.term.setValue(this.sectionFormData.data().term.term_name);
+          this.sectionForm.selectedTermId = this.sectionData.data().term.id;
+          this.sectionForm.selectedTermData = this.sectionData.data().term.data;
+          this.sectionForm.sectionForm.controls.term.setValue(this.sectionData.data().term.term_name);
         },
         (err: any) => {
           console.log(err);
@@ -88,8 +74,8 @@ export class ViewSectionComponent implements OnInit {
 
   updateSection(){
     let data = {
-      section_code: this.sectionForm.controls.sectionCode.value,
-      section_name: this.sectionForm.controls.sectionName.value,
+      section_code: this.sectionForm.sectionForm.controls.sectionCode.value,
+      section_name: this.sectionForm.sectionForm.controls.sectionName.value,
     }
 
     console.log(data);
@@ -113,13 +99,13 @@ export class ViewSectionComponent implements OnInit {
   updateTerm(){
     console.log('u are adding new term to term');
 
-    if (this.sectionFormData.data().terms.include({id: this.selectedTermId})){
+    if (this.sectionData.data().terms.include({id: this.sectionForm.selectedTermId})){
       console.log('lets go ahead with term update');
 
       let data = {
         terms: {
-          id: this.selectedTermId,
-          data: arrayUnion(this.selectedTermData),
+          id: this.sectionForm.selectedTermId,
+          data: arrayUnion(this.sectionForm.selectedTermData),
         }
       }
 
@@ -161,19 +147,6 @@ export class ViewSectionComponent implements OnInit {
           this.connectionToast.openToast();
         }
       )
-  }
-
-  openTermWindow(){
-    console.log("You are opening select term window")
-    this.selectTerm.openModal();
-  }
-
-  onTermSelected(termData: any){
-    console.log(termData);
-
-    this.sectionForm.controls.term.setValue(termData.data().term.term_name);
-    this.selectedTermId = termData.id;
-    this.selectedTermData = termData.data();
   }
 
   onPrint(){

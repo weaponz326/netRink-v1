@@ -8,7 +8,6 @@ import { serverTimestamp } from 'firebase/firestore';
 import { TeacherFormComponent } from '../teacher-form/teacher-form.component';
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 
-import { ActiveTermService } from 'projects/school/src/app/services/active-term/active-term.service';
 import { TeachersApiService } from 'projects/school/src/app/services/modules/teachers-api/teachers-api.service';
 
 import { Teacher } from 'projects/school/src/app/models/modules/teachers/teachers.model';
@@ -24,7 +23,6 @@ export class NewTeacherComponent implements OnInit {
   constructor(
     private router: Router,
     private storage: AngularFireStorage,
-    private activeTerm: ActiveTermService,
     private teachersApi: TeachersApiService
   ) { }
 
@@ -40,18 +38,6 @@ export class NewTeacherComponent implements OnInit {
   isTeacherSaving = false;
 
   ngOnInit(): void {
-  }
-
-  ngAfterViewInit(){
-    this.setActiveTerm()
-  }
-
-  setActiveTerm(){
-    let activeTermData = this.activeTerm.getActiveTerm();
-
-    this.teacherForm.selectedTermId = activeTermData.id;
-    this.teacherForm.selectedTermData = activeTermData.data;
-    this.teacherForm.teacherForm.controls.term.setValue(activeTermData.data.term_name);
   }
 
   createTeacher(){

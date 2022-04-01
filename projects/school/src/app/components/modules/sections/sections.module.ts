@@ -15,6 +15,7 @@ import { AllSectionsComponent } from './all-sections/all-sections.component';
 import { NewSectionComponent } from './new-section/new-section.component';
 import { ViewSectionComponent } from './view-section/view-section.component';
 import { SectionStudentsComponent } from './section-students/section-students.component';
+import { SectionFormComponent } from './section-form/section-form.component';
 
 
 
@@ -25,7 +26,8 @@ import { SectionStudentsComponent } from './section-students/section-students.co
     AllSectionsComponent,
     NewSectionComponent,
     ViewSectionComponent,
-    SectionStudentsComponent
+    SectionStudentsComponent,
+    SectionFormComponent
   ],
   imports: [
     CommonModule,

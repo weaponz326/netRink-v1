@@ -2,83 +2,33 @@
 
 <div class="container">
 
-    <form class="page-form" [formGroup]="classForm" (ngSubmit)="updateClass()">
+    <!-- class page form -->
 
-        <h4 class="mb-3">Class Details</h4>
+    <app-class-form #classFormComponentReference></app-class-form>
 
-        <div class="row">
-            <div class="col-md-6">
-
-                <div class="row mb-1">
-                    <div class="col-md-4"><label class="float-md-end float-sm-start mt-1">Class ID :</label></div>
-                    <div class="col-md-8">
-                        <input formControlName="classCode" class="form-control form-control-sm w-100">
-                    </div>
-                </div>
-
-                <div class="row mb-1">
-                    <div class="col-md-4"><label class="float-md-end float-sm-start mt-1">Class Name :</label></div>
-                    <div class="col-md-8">
-                        <input formControlName="className" class="form-control form-control-sm w-100">
-                    </div>
-                </div>
-
-                <div class="row mb-1">
-                    <div class="col-md-4"><label class="float-md-end float-sm-start mt-1">Term :</label></div>
-                    <div class="col-md-8">
-                        <div class="input-group input-group-sm w-100">
-                            <input formControlName="term" class="form-control">
-                            <button type="button" class="btn btn-secondary" (click)="openTermWindow()">
-                                <i class="bi bi-three-dots"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row mb-1">
-                    <div class="col-md-4"><label class="float-md-end float-sm-start mt-1">Department :</label></div>
-                    <div class="col-md-8">
-                        <div class="input-group input-group-sm w-100">
-                            <input formControlName="department" class="form-control">
-                            <button type="button" class="btn btn-secondary" (click)="openDepartmentWindow()">
-                                <i class="bi bi-three-dots"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row mb-1">
-                    <div class="col-md-4"><label class="float-md-end float-sm-start mt-1">Class Teacher :</label></div>
-                    <div class="col-md-8">
-                        <div class="input-group input-group-sm w-100">
-                            <input formControlName="classTeacher" class="form-control">
-                            <button type="button" class="btn btn-secondary" (click)="openTeacherWindow()">
-                                <i class="bi bi-three-dots"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row mb-1">
-                    <div class="col-md-4"><label class="float-md-end float-sm-start mt-1">Location :</label></div>
-                    <div class="col-md-8">
-                        <input formControlName="location" class="form-control form-control-sm w-100">
-                    </div>
-                </div>
-
-            </div>
+    <div *ngIf="!isClassLoading" class="row page-form">
+        <div class="col-md-6">
+            <button type="button" class="btn btn-secondary btn-sm float-end ms-1 page-form-btn" routerLink="/home/classes/all-classes">Cancel</button>
+            <button [disabled]="isClassDeleting" type="button" class="btn btn-secondary btn-sm float-end ms-1 page-form-btn" (click)="confirmDelete()">Delete</button>
+            <button [disabled]="isClassSaving" class="btn btn-secondary btn-sm float-end ms-1 page-form-btn" (click)="updateClass()">Save</button>
         </div>
+    </div>
+    <div *ngIf="isClassLoading" class="row page-form">
+        <div class="col-md-6">
+            <button type="button" class="btn btn-sm float-end ms-1 btn-light page-form-btn">
+                <div class="spinner-grow spinner-grow-sm" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </button>
+        </div>
+    </div>
 
-        <hr class="top-divider" />
-        <hr class="bottom-divider" />
-
-    </form>
+    <hr class="top-divider" />
+    <hr class="bottom-divider" />
 
     <!-- class students component -->
 
-    <app-class-students #classStudentsComponentReference
-    [classCode]="classForm.controls.classCode.value" [className]="classForm.controls.className.value"
-    ></app-class-students>
+    <app-class-students #classStudentsComponentReference></app-class-students>
 
 
 </div>
@@ -90,15 +40,3 @@
 <!-- delete confirmation modal component -->
 
 <app-delete-modal #deleteModalComponentReference (confirmEvent)="deleteClass()"></app-delete-modal>
-
-<!-- select term window component -->
-
-<app-select-term #selectTermComponentReference (rowSelected)="onTermSelected($event)"></app-select-term>
-
-<!-- select department window component -->
-
-<app-select-department #selectDepartmentComponentReference (rowSelected)="onDepartmentSelected($event)"></app-select-department>
-
-<!-- select teacher window component -->
-
-<app-select-teacher #selectTeacherComponentReference (rowSelected)="onTeacherSelected($event)"></app-select-teacher>

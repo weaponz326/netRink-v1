@@ -8,7 +8,6 @@ import { serverTimestamp } from 'firebase/firestore';
 import { StudentFormComponent } from '../student-form/student-form.component';
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 
-import { ActiveTermService } from 'projects/school/src/app/services/active-term/active-term.service';
 import { StudentsApiService } from 'projects/school/src/app/services/modules/students-api/students-api.service';
 import { ClassesApiService } from 'projects/school/src/app/services/modules/classes-api/classes-api.service';
 
@@ -26,7 +25,6 @@ export class NewStudentComponent implements OnInit {
   constructor(
     private router: Router,
     private storage: AngularFireStorage,
-    private activeTerm: ActiveTermService,
     private studentsApi: StudentsApiService,
     private classesApi: ClassesApiService
   ) { }
@@ -43,18 +41,6 @@ export class NewStudentComponent implements OnInit {
   isStudentSaving = false;
 
   ngOnInit(): void {
-  }
-
-  ngAfterViewInit(){
-    this.setActiveTerm()
-  }
-
-  setActiveTerm(){
-    let activeTermData = this.activeTerm.getActiveTerm();
-
-    this.studentForm.selectedTermId = activeTermData.id;
-    this.studentForm.selectedTermData = activeTermData.data;
-    this.studentForm.studentForm.controls.term.setValue(activeTermData.data.term_name);
   }
 
   createStudent(){

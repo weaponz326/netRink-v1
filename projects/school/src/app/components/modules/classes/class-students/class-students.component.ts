@@ -1,10 +1,9 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { serverTimestamp } from 'firebase/firestore';
 
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
-import { DeleteModalComponent } from 'projects/personal/src/app/components/module-utilities/delete-modal/delete-modal.component'
 import { SelectStudentComponent } from '../../../select-windows/students-windows/select-student/select-student.component';
 
 import { ClassesApiService } from 'projects/school/src/app/services/modules/classes-api/classes-api.service';
@@ -26,11 +25,8 @@ export class ClassStudentsComponent implements OnInit {
     private studentsApi: StudentsApiService,
   ) { }
 
-  @Input() classCode = "";
-  @Input() className = "";
-
+  @ViewChild('modalButtonElementReference', { read: ElementRef, static: false }) modalButton!: ElementRef;
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
-  @ViewChild('deleteModalTwoComponentReference', { read: DeleteModalComponent, static: false }) deleteModal!: DeleteModalComponent;
   @ViewChild('selectStudentComponentReference', { read: SelectStudentComponent, static: false }) selectStudent!: SelectStudentComponent;
 
   classStudentsGridData: any[] = [];
@@ -39,6 +35,9 @@ export class ClassStudentsComponent implements OnInit {
 
   isFetchingGridData = false;
   isStudentDeleting = false;
+
+  classCode = "";
+  className = "";
 
   ngOnInit(): void {
     this.getClassClassStudent();
@@ -142,7 +141,7 @@ export class ClassStudentsComponent implements OnInit {
 
   confirmDelete(id: any){
     this.deleteId = id;
-    this.deleteModal.openModal();
+    this.modalButton.nativeElement.click();
   }
 
 }

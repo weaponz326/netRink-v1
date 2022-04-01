@@ -6,6 +6,8 @@ import { BdayInputComponent } from 'projects/personal/src/app/components/module-
 import { SelectTermComponent } from '../../../select-windows/terms-windows/select-term/select-term.component';
 import { SelectClassComponent } from '../../../select-windows/classes-windows/select-class/select-class.component';
 
+import { ActiveTermService } from 'projects/school/src/app/services/active-term/active-term.service';
+
 
 @Component({
   selector: 'app-student-form',
@@ -14,7 +16,7 @@ import { SelectClassComponent } from '../../../select-windows/classes-windows/se
 })
 export class StudentFormComponent implements OnInit {
 
-  constructor() { }
+  constructor(private activeTerm: ActiveTermService) { }
 
   studentForm: FormGroup = new FormGroup({});
 
@@ -24,14 +26,26 @@ export class StudentFormComponent implements OnInit {
   @ViewChild('selectTermComponentReference', { read: SelectTermComponent, static: false }) selectTerm!: SelectTermComponent;
   @ViewChild('selectClassComponentReference', { read: SelectClassComponent, static: false }) selectClass!: SelectClassComponent;
 
-  ngOnInit(): void {
-    this.initParentForm();
-  }
-
   selectedTermId = "";
   selectedTermData: any;
   selectedClassId = "";
   selectedClassData: any = { class_code: "", class_name: "" };
+
+  ngOnInit(): void {
+    this.initParentForm();
+  }
+
+  ngAfterViewInit(){
+    this.setActiveTerm()
+  }
+
+  setActiveTerm(){
+    let activeTermData = this.activeTerm.getActiveTerm();
+
+    this.selectedTermId = activeTermData.id;
+    this.selectedTermData = activeTermData.data;
+    this.studentForm.controls.term.setValue(activeTermData.data.term_name);
+  }
 
   initParentForm(){
     this.studentForm = new FormGroup({
