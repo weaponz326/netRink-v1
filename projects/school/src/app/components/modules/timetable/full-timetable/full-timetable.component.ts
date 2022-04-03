@@ -1,11 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormControl, FormGroup } from '@angular/forms';
 
+import { TimetableFormComponent } from '../timetable-form/timetable-form.component'
+import { EditTimetableComponent } from '../edit-timetable/edit-timetable.component'
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 import { DeleteModalComponent } from 'projects/personal/src/app/components/module-utilities/delete-modal/delete-modal.component'
-import { SelectTermComponent } from '../../../select-windows/terms-windows/select-term/select-term.component';
-import { SelectClassComponent } from '../../../select-windows/classes-windows/select-class/select-class.component';
 
 import { TimetableApiService } from 'projects/school/src/app/services/modules/timetable-api/timetable-api.service';
 // import { TimetablePrintService } from 'projects/school/src/app/services/printing/timetable-print/timetable-print.service';
@@ -26,37 +25,24 @@ export class FullTimetableComponent implements OnInit {
     // private timetablePrint: TimetablePrintService
   ) { }
 
+  @ViewChild('timetableFormComponentReference', { read: TimetableFormComponent, static: false }) timetableForm!: TimetableFormComponent;
+  @ViewChild('editTimetableComponentReference', { read: EditTimetableComponent, static: false }) editTimetable!: EditTimetableComponent;
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
   @ViewChild('deleteModalComponentReference', { read: DeleteModalComponent, static: false }) deleteModal!: DeleteModalComponent;
-  @ViewChild('selectTermComponentReference', { read: SelectTermComponent, static: false }) selectTerm!: SelectTermComponent;
-  @ViewChild('selectClassComponentReference', { read: SelectClassComponent, static: false }) selectClass!: SelectClassComponent;
 
   navHeading: any[] = [
     { text: "All Timetable", url: "/home/timetable/all-timetable" },
     { text: "Full Timetable", url: "/home/timetable/full-timetable" },
   ];
 
-  timetableForm: FormGroup = new FormGroup({});
-  timetableFormData: any;
-
-  selectedTermId = "";
-  selectedTermData = {};
+  timetableData: any;
 
   isTimetableLoading = false;
   isTimetableSaving = false;
   isTimetableDeleting = false;
 
   ngOnInit(): void {
-    this.initTimetableForm();
     this.getTimetable();
-  }
-
-  initTimetableForm(){
-    this.timetableForm = new FormGroup({
-      timetableCode: new FormControl(''),
-      timetableName: new FormControl(''),
-      term: new FormControl({value: "", disabled: true}),
-    })
   }
 
   getTimetable(){
@@ -66,15 +52,11 @@ export class FullTimetableComponent implements OnInit {
       .then(
         (res: any) => {
           console.log(res);
-          this.timetableFormData = res;
+          this.timetableData = res;
           this.isTimetableLoading = false;
 
-          this.timetableForm.controls.timetableCode.setValue(this.timetableFormData.data().timetable_code);
-          this.timetableForm.controls.timetableName.setValue(this.timetableFormData.data().timetable_name);
-
-          this.selectedTermId = this.timetableFormData.data().term.id;
-          this.selectedTermData = this.timetableFormData.data().term.data;
-          this.timetableForm.controls.term.setValue(this.timetableFormData.data().term.term_name);
+          this.timetableForm.timetableForm.controls.timetableCode.setValue(this.timetableData.data().timetable_code);
+          this.timetableForm.timetableForm.controls.timetableName.setValue(this.timetableData.data().timetable_name);
         },
         (err: any) => {
           console.log(err);
@@ -86,11 +68,11 @@ export class FullTimetableComponent implements OnInit {
 
   updateTimetable(){
     let data = {
-      timetable_code: this.timetableForm.controls.timetableCode.value,
-      timetable_name: this.timetableForm.controls.timetableName.value,
+      timetable_code: this.timetableForm.timetableForm.controls.timetableCode.value,
+      timetable_name: this.timetableForm.timetableForm.controls.timetableName.value,
       term: {
-        id: this.selectedTermId,
-        data: this.selectedTermData,
+        id: this.timetableForm.selectedTermId,
+        data: this.timetableForm.selectedTermData,
       },
     }
 
@@ -130,19 +112,6 @@ export class FullTimetableComponent implements OnInit {
           this.connectionToast.openToast();
         }
       )
-  }
-
-  openTermWindow(){
-    console.log("You are opening select term window")
-    this.selectTerm.openModal();
-  }
-
-  onTermSelected(termData: any){
-    console.log(termData);
-
-    this.timetableForm.controls.term.setValue(termData.data().term.term_name);
-    this.selectedTermId = termData.id;
-    this.selectedTermData = termData.data();
   }
 
   onPrint(){

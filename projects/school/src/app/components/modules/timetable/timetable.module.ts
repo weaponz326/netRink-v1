@@ -18,6 +18,8 @@ import { ClassTimetableComponent } from './class-timetable/class-timetable.compo
 import { EditTimetableComponent } from './edit-timetable/edit-timetable.component';
 import { FullTimetableComponent } from './full-timetable/full-timetable.component';
 import { AddPeriodComponent } from './add-period/add-period.component';
+import { TimetableFormComponent } from './timetable-form/timetable-form.component';
+import { TimetableClassesComponent } from './timetable-classes/timetable-classes.component';
 
 
 
@@ -30,7 +32,9 @@ import { AddPeriodComponent } from './add-period/add-period.component';
     ClassTimetableComponent,
     EditTimetableComponent,
     FullTimetableComponent,
-    AddPeriodComponent
+    AddPeriodComponent,
+    TimetableFormComponent,
+    TimetableClassesComponent
   ],
   imports: [
     CommonModule,

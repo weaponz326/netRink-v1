@@ -11,6 +11,7 @@ export class TimetableApiService {
   constructor(private afs: AngularFirestore) { }
 
   timetableRef = this.afs.collection('school/module_timetable/school_timetable');
+  timetableSheetRef = this.afs.collection('school/module_timetable/school_timetable_sheet');
 
   // timetable
 
@@ -64,6 +65,24 @@ export class TimetableApiService {
       .where("account", "==", localStorage.getItem('school_id'))
       .orderBy("created_by" ,"desc")
       .get();
+  }
+
+  // sheet
+
+  createTimetableSheet(sheet: any){
+    return this.timetableSheetRef.doc(String(sessionStorage.getItem('school_timetable_id'))).set(sheet);
+  }
+
+  getTimetableSheet(){
+    return this.timetableSheetRef.doc(String(sessionStorage.getItem('school_timetable_id'))).ref.get();
+  }
+
+  updateTimetableSheet(timetable: any){
+    return this.timetableSheetRef.doc(String(sessionStorage.getItem('school_timetable_id'))).update(timetable);
+  }
+
+  deleteTimetableSheet(){
+    return this.timetableSheetRef.doc(String(sessionStorage.getItem('school_timetable_id'))).delete();
   }
 
 }
