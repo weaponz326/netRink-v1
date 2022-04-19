@@ -61,8 +61,6 @@ export class ClassReportComponent implements OnInit {
   }
 
   ngAfterViewInit(){
-    this.reportForm.controls.reportDate.setValue(new Date().toISOString().slice(0, 10));
-
     let activeTerm = this.activeTerm.getActiveTerm();
     this.reportForm.controls.term.setValue(activeTerm.data.term_name);
     this.selectedTermId = activeTerm.id;
@@ -93,12 +91,9 @@ export class ClassReportComponent implements OnInit {
           this.reportForm.controls.reportName.setValue(this.reportFormData.data().report_name);
           this.reportForm.controls.reportDate.setValue(this.reportFormData.data().report_date);
 
-          this.selectedTermId = this.reportFormData.data().term.id;
-          this.selectedTermData = this.reportFormData.data().term.data;
-          this.reportForm.controls.term.setValue(this.reportFormData.data().term.term_name);
           this.selectedClassId = this.reportFormData.data().clase.id;
           this.selectedClassData = this.reportFormData.data().clase.data;
-          this.reportForm.controls.clase.setValue(this.reportFormData.data().clase.class_name);
+          this.reportForm.controls.clase.setValue(this.reportFormData.data().clase.data.class_name);
         },
         (err: any) => {
           console.log(err);
@@ -167,8 +162,8 @@ export class ClassReportComponent implements OnInit {
       )
   }
 
-  onAssessmentSelected(assessmentId: any){
-    sessionStorage.setItem('school_assessment_id', assessmentId);
+  onAssessmentSelected(assessmentData: any){
+    this.classSheet.assessmentData = assessmentData;
     this.classSheet.getAssessmentSheet();
   }
 

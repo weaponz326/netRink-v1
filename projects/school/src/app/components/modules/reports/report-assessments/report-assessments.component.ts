@@ -24,11 +24,11 @@ export class ReportAssessmentsComponent implements OnInit {
     private reportsApi: ReportsApiService,
   ) { }
 
+  @Output() assessmentSelected = new EventEmitter<any>();
+
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
   @ViewChild('deleteModalTwoComponentReference', { read: DeleteModalComponent, static: false }) deleteModal!: DeleteModalComponent;
   @ViewChild('selectAssessmentComponentReference', { read: SelectAssessmentComponent, static: false }) selectAssessment!: SelectAssessmentComponent;
-
-  @Output() assessmentSelected = new EventEmitter<any>();
 
   reportAssessmentsGridData: any[] = [];
 
@@ -76,7 +76,7 @@ export class ReportAssessmentsComponent implements OnInit {
         (res: any) => {
           console.log(res);
           this.getReportReportAssessment();
-          this.assessmentSelected.emit(assessmentData.id);
+          this.assessmentSelected.emit(assessmentData);
         },
         (err: any) => {
           console.log(err);

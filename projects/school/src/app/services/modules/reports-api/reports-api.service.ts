@@ -100,15 +100,15 @@ export class ReportsApiService {
   }
 
   getReportSheet(){
-    return this.reportSheetRef.doc(String(sessionStorage.getItem('school_report_sheet_id'))).ref.get();
+    return this.reportSheetRef.doc(String(sessionStorage.getItem('school_report_id'))).ref.get();
   }
 
   updateReportSheet(sheet: any){
-    return this.reportSheetRef.doc(String(sessionStorage.getItem('school_report_sheet_id'))).update(sheet);
+    return this.reportSheetRef.doc(String(sessionStorage.getItem('school_report_id'))).update(sheet);
   }
 
   deleteReportSheet(){
-    return this.reportSheetRef.doc(String(sessionStorage.getItem('school_report_sheet_id'))).delete();
+    return this.reportSheetRef.doc(String(sessionStorage.getItem('school_report_id'))).delete();
   }
 
 }

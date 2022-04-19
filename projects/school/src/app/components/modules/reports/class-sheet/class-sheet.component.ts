@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 
 import { ConnectionToastComponent } from 'projects/personal/src/app/components/module-utilities/connection-toast/connection-toast.component'
 
@@ -18,16 +18,23 @@ export class ClassSheetComponent implements OnInit {
     private assessmentApi: AssessmentApiService,
   ) { }
 
+    Object = Object;
+
+  reportSheetData: any;
+  assessmentData: any
+
   @ViewChild('connectionToastComponentReference', { read: ConnectionToastComponent, static: false }) connectionToast!: ConnectionToastComponent;
 
   ngOnInit(): void {
+    this.getReportSheet();
   }
 
-  getAssessmentSheet(){
-    this.assessmentApi.getAssessmentSheet()
+  getReportSheet(){
+    this.reportsApi.getReportSheet()
       .then(
         (res: any) => {
-          console.log(res);
+          console.log(res.data());
+          this.reportSheetData = res.data().sheet;
         },
         (err: any) => {
           console.log(err);
@@ -36,8 +43,55 @@ export class ClassSheetComponent implements OnInit {
       )
   }
 
-  setReportAssessment(){
+  updateReportSheet(){
+    let data = { sheet: this.reportSheetData }
 
+    this.reportsApi.updateReportSheet(data)
+      .then(
+        (res: any) => {
+          console.log(res.data());
+        },
+        (err: any) => {
+          console.log(err);
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  getAssessmentSheet(){
+    sessionStorage.setItem('school_assessment_id', this.assessmentData.id);
+
+    this.assessmentApi.getAssessmentSheet()
+      .then(
+        (res: any) => {
+          console.log(res);
+          this.setReportAssessment(res.data());
+        },
+        (err: any) => {
+          console.log(err);
+          this.connectionToast.openToast();
+        }
+      )
+  }
+
+  setReportAssessment(assessmentSheet: any){
+    assessmentSheet.forEach((assessmentRow: any) => {
+      this.reportSheetData.forEach((reportRow: any, index: number) => {
+        if (assessmentRow.student.id == reportRow.student.id){
+          let assessment = {
+            assessment_code: this.assessmentData.data.assessment_code,
+            assessment_name: this.assessmentData.data.assessment_name,
+            score: assessmentRow.score,
+            grade: assessmentRow.grade,
+            remarks: assessmentRow.score,
+          }
+
+          // TODO: data structure here is messed up
+          this.reportSheetData[index].assessment = assessment;
+          this.updateReportSheet();
+        }
+      })
+    })
   }
 
 }

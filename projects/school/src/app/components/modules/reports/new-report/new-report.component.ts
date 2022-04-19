@@ -127,14 +127,14 @@ export class NewReportComponent implements OnInit {
   setReportSheet(classStudents: any){
     let classSheet: any = [];
 
-    classStudents.forEach((student: any) => {
+    classStudents.forEach((data: any) => {
       let sheetRow = {
         student: {
-          id: student.id,
+          id: data.data().student.id,
           data: {
-            student_code: student.data().student_code,
-            first_name: student.data().first_name,
-            last_name: student.data().last_name,
+            student_code: data.data().student.data.student_code,
+            first_name: data.data().student.data.first_name,
+            last_name: data.data().student.data.last_name,
           }
         },
         assessments: {}
@@ -171,7 +171,7 @@ export class NewReportComponent implements OnInit {
   onTermSelected(termData: any){
     console.log(termData);
 
-    this.reportForm.controls.term.setValue(termData.data().term.term_name);
+    this.reportForm.controls.term.setValue(termData.data().term_name);
     this.selectedTermId = termData.id;
     this.selectedTermData = termData.data();
   }
@@ -184,7 +184,7 @@ export class NewReportComponent implements OnInit {
   onClassSelected(classData: any){
     console.log(classData);
 
-    this.reportForm.controls.class.setValue(classData.data().clase.class_name);
+    this.reportForm.controls.clase.setValue(classData.data().class_name);
     this.selectedClassId = classData.id;
     this.selectedClassData = classData.data();
   }
