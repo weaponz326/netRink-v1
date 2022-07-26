@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { environment } from 'projects/enterprise/src/environments/environment';
-import { EndpointsService } from 'projects/application/src/app/services/endpoints/endpoints.service';
+// import { EndpointsService } from 'projects/application/src/app/services/endpoints/endpoints.service';
 
 
 @Injectable({
@@ -13,10 +13,11 @@ export class RegisterApiService {
 
   constructor(
     private http: HttpClient,
-    private endpoints: EndpointsService
+    // private endpoints: EndpointsService
   ) { }
 
-  enterpriseUrl = environment.enterpriseUrl;
+  // enterpriseUrl = environment.enterpriseUrl;
+  enterpriseUrl = "";
 
   public postProfile(profile: any): Observable<any>{
     return this.http.post(this.enterpriseUrl + "accounts/account/", profile);

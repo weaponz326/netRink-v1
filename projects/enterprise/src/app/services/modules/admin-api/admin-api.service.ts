@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs'
 
 import { environment } from 'projects/enterprise/src/environments/environment'
-import { EndpointsService } from 'projects/application/src/app/services/endpoints/endpoints.service';
+// import { EndpointsService } from 'projects/application/src/app/services/endpoints/endpoints.service';
 
 
 @Injectable({
@@ -13,20 +13,22 @@ export class AdminApiService {
 
   constructor(
     private http: HttpClient,
-    private endpoints: EndpointsService
+    // private endpoints: EndpointsService
   ) { }
 
-  enterpriseUrl = environment.enterpriseUrl;
-  personalUrl = environment.personalUrl;
+  // enterpriseUrl = environment.enterpriseUrl;
+  // personalUrl = environment.personalUrl;
+  enterpriseUrl = "";
+  personalUrl = "";
 
   // get search results
   public getSearch(input: string): Observable<any>{
-    return this.http.get(this.personalUrl + "users/search?search=" + input, this.endpoints.headers);
+    return this.http.get(this.personalUrl + "users/search?search=" + input);
   }
 
   // get search detail of selected account
   public getDetail(account: string): Observable<any>{
-    return this.http.get(this.personalUrl + "users/search/" + account, this.endpoints.headers);
+    return this.http.get(this.personalUrl + "users/search/" + account);
   }
 
   // invitations

@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs'
 
 import { environment } from 'projects/enterprise/src/environments/environment'
-import { EndpointsService } from 'projects/application/src/app/services/endpoints/endpoints.service';
+// import { EndpointsService } from 'projects/application/src/app/services/endpoints/endpoints.service';
 
 
 @Injectable({
@@ -13,11 +13,13 @@ export class PortalApiService {
 
   constructor(
     private http: HttpClient,
-    private endpoints: EndpointsService
+    // private endpoints: EndpointsService
   ) { }
 
-  enterpriseUrl = environment.enterpriseUrl;
-  personalUrl = environment.personalUrl;
+  // enterpriseUrl = environment.enterpriseUrl;
+  // personalUrl = environment.personalUrl;
+  enterpriseUrl = "";
+  personalUrl = "";
 
   // create and get all sent and recieved by account
 
